@@ -13,7 +13,7 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Panel
  */
-export const AbcPanel: React.FC<Props> = ({ options, data, width, height }) => {
+export const VariablePanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = Styles();
 
   /**

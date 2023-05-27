@@ -1,6 +1,6 @@
 {
   "author": "Volkov Labs",
-  "description": "Template to create a new Grafana panel plugin",
+  "description": "Update Dashboard Variables",
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@grafana/e2e": "^9.5.2",
@@ -40,7 +40,7 @@
     "node": ">=18"
   },
   "license": "Apache-2.0",
-  "name": "volkovlabs-abc-panel",
+  "name": "volkovlabs-variable-panel",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -c ./.config/webpack/webpack.config.ts --env development",

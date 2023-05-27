@@ -2,7 +2,7 @@ import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
-import { AbcPanel } from './AbcPanel';
+import { VariablePanel } from './VariablePanel';
 
 /**
  * Test Scenario
@@ -55,7 +55,7 @@ describe('Panel', () => {
    * Get Tested Component
    */
   const getComponent = ({ options = { name: 'data' }, ...restProps }: any, scenario: Scenario = Scenario.NoField) => {
-    return <AbcPanel data={getTestData(scenario)} {...restProps} options={options} />;
+    return <VariablePanel data={getTestData(scenario)} {...restProps} options={options} />;
   };
 
   it('Should find component', async () => {
