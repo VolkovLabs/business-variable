@@ -12,10 +12,9 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel).setPanelOptio
    */
   const variables = getTemplateSrv().getVariables();
 
-  builder.addMultiSelect({
-    path: 'variables',
-    name: 'Select Variables',
-    defaultValue: [] as any,
+  builder.addSelect({
+    path: 'variable',
+    name: 'Select Variable to Display',
     settings: {
       options: variables.map((vr) => ({
         label: vr.name,

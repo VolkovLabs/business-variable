@@ -14,7 +14,7 @@ describe('plugin', () => {
      * Builder
      */
     const builder: any = {
-      addMultiSelect: jest.fn().mockImplementation(() => builder),
+      addSelect: jest.fn().mockImplementation(() => builder),
     };
 
     /**
@@ -25,6 +25,6 @@ describe('plugin', () => {
     /**
      * Inputs
      */
-    expect(builder.addMultiSelect).toHaveBeenCalled();
+    expect(builder.addSelect).toHaveBeenCalled();
   });
 });

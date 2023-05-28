@@ -147,14 +147,14 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
      * Get Dashboard variables
      */
     const variables = getTemplateSrv().getVariables();
-    if (!variables || !options.variables.length) {
+    if (!variables || !options.variable) {
       return;
     }
 
     /**
      * Filter selected variables
      */
-    const runtimeVariables = variables.filter((dv) => options.variables.includes(dv.name)) as RuntimeVariable[];
+    const runtimeVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
     if (!runtimeVariables) {
       return;
     }

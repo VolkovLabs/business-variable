@@ -60,6 +60,7 @@
       "options": {
         "heading": "Devices",
         "selectedVariables": ["device"],
+        "variable": "single",
         "variables": ["single"]
       },
       "targets": [
@@ -96,6 +97,7 @@
       "options": {
         "heading": "Devices",
         "selectedVariables": ["device"],
+        "variable": "device",
         "variables": ["device"]
       },
       "targets": [
@@ -163,9 +165,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": ["Device1", "Device2", "Device3"],
-          "value": ["Device1", "Device2", "Device3"]
+          "selected": false,
+          "text": ["Device1", "Device7", "Device8"],
+          "value": ["Device1", "Device7", "Device8"]
         },
         "hide": 0,
         "includeAll": true,
@@ -184,12 +186,12 @@
             "value": "Device1"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "Device2",
             "value": "Device2"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "Device3",
             "value": "Device3"
           },
@@ -209,12 +211,12 @@
             "value": "Device6"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "Device7",
             "value": "Device7"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "Device8",
             "value": "Device8"
           },
