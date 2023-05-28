@@ -38,6 +38,42 @@
         "x": 0,
         "y": 0
       },
+      "id": 7,
+      "options": {
+        "heading": "Devices",
+        "selectedVariables": ["device"],
+        "variables": ["single"]
+      },
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": ["Hello World!"]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 7,
+        "x": 7,
+        "y": 0
+      },
       "id": 6,
       "options": {
         "heading": "Devices",
@@ -61,95 +97,7 @@
           "refId": "A"
         }
       ],
-      "title": "Test",
       "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "grafana",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 17,
-        "w": 17,
-        "x": 7,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "refId": "A"
-        }
-      ],
-      "type": "timeseries"
     }
   ],
   "refresh": "",
@@ -158,6 +106,43 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "single1",
+          "value": "single1"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Single",
+        "multi": false,
+        "name": "single",
+        "options": [
+          {
+            "selected": true,
+            "text": "single1",
+            "value": "single1"
+          },
+          {
+            "selected": false,
+            "text": "single2",
+            "value": "single2"
+          },
+          {
+            "selected": false,
+            "text": "single3",
+            "value": "single3"
+          },
+          {
+            "selected": false,
+            "text": "single4",
+            "value": "single4"
+          }
+        ],
+        "query": "single1, single2, single3, single4",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
       {
         "current": {
           "selected": true,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
 import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
@@ -35,26 +35,11 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   }, [options]);
 
   /**
-   * Check if first render
-   */
-  const ref = useRef(true);
-  const firstRender = ref.current;
-  ref.current = false;
-  const isFirstRender = firstRender;
-
-  /**
    * ?
    */
   useEffect(() => {
     const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
       formatVariableForTableBody();
-
-      /**
-       * Skip if first render
-       */
-      if (isFirstRender) {
-        return;
-      }
 
       /**
        * Check variables
@@ -90,7 +75,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
       subscriber.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventBus, isFirstRender]);
+  }, [eventBus]);
 
   /**
    * Handle Selected State
@@ -107,7 +92,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
      */
     const mapping = runtimeVariable?.options.reduce((acc, opt, i) => {
       acc[opt.value] = {
-        color: isSelectedAll ? '#374151' : opt.selected ? '#374151' : (null as any),
+        color: isSelectedAll || opt.selected ? theme.colors.secondary.main : theme.colors.background.primary,
         index: i,
         text: opt.text,
       };
@@ -248,7 +233,6 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
         type: FieldType.string,
         values: [],
         config: {
-          // filterable: true,
           links: [
             {
               title: `Variable  - ${name}`,
@@ -261,17 +245,8 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
           ],
           custom: {
             displayMode: 'color-background-solid',
-            color: { mode: FieldColorModeId.Fixed, fixedColor: '#1E2125' },
+            color: { mode: FieldColorModeId.Fixed, fixedColor: theme.colors.background.primary },
             filterable: true,
-          },
-          thresholds: {
-            mode: 'percentage' as any,
-            steps: [
-              {
-                color: '#181B1F',
-                value: null as any,
-              },
-            ],
           },
           mappings: [
             {
@@ -300,23 +275,6 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
 
     setTableData(tableDataFrame[0]);
   };
-
-  /**
-   * Only do this on the first render to sync the url to the state all the saved variable.
-   * This is to avoid loops in render
-   */
-  if (isFirstRender) {
-    const variables = getDashboardVariables();
-
-    if (variables) {
-      variables
-        .filter((v) => v.options.find((o) => o.selected === true))
-        .map((vr) => {
-          const selectedOption = vr.options.find((o) => o.selected === true);
-          handleLocationStateChange(vr, vr.name || '', selectedOption?.text || '');
-        });
-    }
-  }
 
   /**
    * Return
