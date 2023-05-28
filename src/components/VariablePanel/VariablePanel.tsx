@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { css, cx } from '@emotion/css';
-import { PanelProps } from '@grafana/data';
-import { TestIds } from '../../constants';
+import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
+import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
+import { Table, useTheme2 } from '@grafana/ui';
 import { Styles } from '../../styles';
-import { PanelOptions } from '../../types';
+import { PanelOptions, RuntimeVariable, RuntimeVariableTableBody } from '../../types';
 
 /**
  * Properties
@@ -13,23 +14,315 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Panel
  */
-export const VariablePanel: React.FC<Props> = ({ options, data, width, height }) => {
+export const VariablePanel: React.FC<Props> = ({ options, data, width, height, eventBus }) => {
+  /**
+   * Styles and Theme
+   */
   const styles = Styles();
+  const theme = useTheme2();
 
   /**
-   * Get Field
+   * States
    */
-  const field = data.series
-    .map((series) => series.fields.find((field) => field.name === options.name))
-    .map((field) => field?.values.get(field.values.length - 1))
-    .toString();
+  const [tableData, setTableData] = useState<any>(null);
+
+  /**
+   * Update table if variable selected
+   */
+  useEffect(() => {
+    formatVariableForTableBody();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options]);
+
+  /**
+   * Check if first render
+   */
+  const ref = useRef(true);
+  const firstRender = ref.current;
+  ref.current = false;
+  const isFirstRender = firstRender;
+
+  /**
+   * ?
+   */
+  useEffect(() => {
+    const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
+      formatVariableForTableBody();
+
+      /**
+       * Skip if first render
+       */
+      if (isFirstRender) {
+        return;
+      }
+
+      /**
+       * Check variables
+       */
+      const variables = getDashboardVariables();
+      if (variables) {
+        const selectedVariables = variables.filter((v) => v.options.find((o) => o.selected === true));
+        const variableNames = selectedVariables.map((v) => v.name);
+
+        /**
+         * Check URL
+         */
+        const locationNames = Object.keys(locationService.getSearchObject())
+          .filter((l) => l !== 'orgId')
+          .map((l) => l.replace('var-', '').trim());
+        const missingVariables = variableNames.filter((v) => !locationNames.includes(v));
+
+        /**
+         * Missing
+         */
+        const missingFields = selectedVariables
+          .filter((l) => missingVariables.includes(l.name))
+          .filter((l) => l.options.find((o) => o.selected === true && o.value.includes('$__all')));
+
+        missingFields.map((vr) => {
+          const selectedOption = vr.options.find((o) => o.selected === true);
+          handleLocationStateChange(vr, vr.name || '', selectedOption?.text || '');
+        });
+      }
+    });
+
+    return () => {
+      subscriber.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventBus, isFirstRender]);
+
+  /**
+   * Handle Selected State
+   */
+  const handleSelectedState = (runtimeVariable: RuntimeVariable | null, selectedItem?: string | null) => {
+    if (!runtimeVariable || !selectedItem) {
+      return;
+    }
+
+    const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
+
+    /**
+     * Mapping
+     */
+    const mapping = runtimeVariable?.options.reduce((acc, opt, i) => {
+      acc[opt.value] = {
+        color: isSelectedAll ? '#374151' : opt.selected ? '#374151' : (null as any),
+        index: i,
+        text: opt.text,
+      };
+
+      return acc;
+    }, {} as Record<string, any>);
+
+    return mapping;
+  };
+
+  /**
+   * Handle Location State Change
+   */
+  const handleLocationStateChange = (
+    runtimeVariable: RuntimeVariable | undefined,
+    name: string,
+    selectedLocationState: string
+  ) => {
+    if (!runtimeVariable) {
+      return;
+    }
+
+    const { multi, includeAll } = runtimeVariable as any;
+
+    /**
+     * Include All
+     */
+    if (includeAll && selectedLocationState?.toLowerCase()?.indexOf('all') === 0) {
+      locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+      return;
+    }
+
+    /**
+     * Search
+     */
+    const searchParams = locationService
+      .getSearch()
+      .getAll(`var-${name}`)
+      .filter((s) => s.toLowerCase().indexOf('all') !== 0);
+
+    /**
+     * Multiselect
+     */
+    if (multi) {
+      const hasSelectedValue = runtimeVariable.options.find((opt) => opt.selected === true);
+
+      /**
+       * Selected
+       */
+      if (hasSelectedValue && !locationService.getSearchObject()[`var-${name}`]) {
+        searchParams.push(hasSelectedValue.value);
+        locationService.partial({ [`var-${name}`]: hasSelectedValue.value }, true);
+      }
+
+      if (searchParams.length >= 1) {
+        const isSelected = searchParams.includes(selectedLocationState);
+
+        if (isSelected) {
+          locationService.partial(
+            {
+              [`var-${name}`]: searchParams.filter((sp) => sp !== selectedLocationState),
+            },
+            true
+          );
+          return;
+        } else {
+          locationService.partial({ [`var-${name}`]: [...searchParams, selectedLocationState] }, true);
+          return;
+        }
+      }
+    }
+
+    locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+  };
+
+  /**
+   * Get Dashboard variables
+   */
+  const getDashboardVariables = () => {
+    const variables = getTemplateSrv().getVariables();
+    if (!variables || !options.variables.length) {
+      return;
+    }
+
+    /**
+     * Filter selected variables
+     */
+    const filtered = variables.filter((dv) => options.variables.includes(dv.name)) as RuntimeVariable[];
+    return filtered;
+  };
+
+  /**
+   * Format Variables
+   */
+  const formatVariableForTableBody = () => {
+    const runtimeVariables = getDashboardVariables();
+    if (!runtimeVariables) {
+      return;
+    }
+
+    const optionCounts = runtimeVariables.map((vr) => vr.options.length).sort();
+    const maxCount = optionCounts[optionCounts.length - 1];
+
+    const tableHeaders: Array<Record<string, any>> = [];
+    const tableBody = [...Array(maxCount).keys()].map((x) => [] as RuntimeVariableTableBody[]);
+
+    for (let i = 0; i < runtimeVariables.length; i++) {
+      const vr = runtimeVariables[i];
+
+      const remainingOptions = maxCount - vr.options.length;
+
+      let filledOptions = [];
+
+      if (remainingOptions !== 0) {
+        const remaningItems = Array(remainingOptions).fill({ value: null, text: '' });
+        filledOptions = [...vr.options];
+        filledOptions.push(...remaningItems);
+      } else {
+        filledOptions = [...vr.options];
+      }
+
+      tableHeaders.push({ name: vr.name, label: (vr as any)?.allValue || vr.label });
+
+      filledOptions.map((fop, idx) => {
+        tableBody[idx].splice(i, 0, {
+          ...fop,
+          onClick: fop.value === null ? null : () => locationService.partial({ [`var-${vr.id}`]: fop.value }),
+        });
+      });
+    }
+
+    /**
+     * Data
+     */
+    const data = new MutableDataFrame({
+      fields: tableHeaders.map(({ name, label }) => ({
+        name: label || name,
+        type: FieldType.string,
+        values: [],
+        config: {
+          // filterable: true,
+          links: [
+            {
+              title: `Variable  - ${name}`,
+              url: '',
+              onClick: ({ e }: { e?: any }) => {
+                const runtimeVariable = runtimeVariables.find((rt) => rt.id === name);
+                handleLocationStateChange(runtimeVariable, name, e?.target?.innerText);
+              },
+            },
+          ],
+          custom: {
+            displayMode: 'color-background-solid',
+            color: { mode: FieldColorModeId.Fixed, fixedColor: '#1E2125' },
+            filterable: true,
+          },
+          thresholds: {
+            mode: 'percentage' as any,
+            steps: [
+              {
+                color: '#181B1F',
+                value: null as any,
+              },
+            ],
+          },
+          mappings: [
+            {
+              type: 'value' as any,
+              options: handleSelectedState(runtimeVariables.find((rt) => rt.id === name) as any, name) as any,
+            },
+          ],
+        },
+      })),
+    });
+
+    /**
+     * Add Rows
+     */
+    tableBody.forEach((td) => data.appendRow(td.map((t) => t.text)));
+
+    const tableDataFrame = applyFieldOverrides({
+      data: [data],
+      fieldConfig: {
+        overrides: [],
+        defaults: {},
+      },
+      theme,
+      replaceVariables: (value: string) => value,
+    });
+
+    setTableData(tableDataFrame[0]);
+  };
+
+  /**
+   * Only do this on the first render to sync the url to the state all the saved variable.
+   * This is to avoid loops in render
+   */
+  if (isFirstRender) {
+    const variables = getDashboardVariables();
+
+    if (variables) {
+      variables
+        .filter((v) => v.options.find((o) => o.selected === true))
+        .map((vr) => {
+          const selectedOption = vr.options.find((o) => o.selected === true);
+          handleLocationStateChange(vr, vr.name || '', selectedOption?.text || '');
+        });
+    }
+  }
 
   /**
    * Return
    */
   return (
     <div
-      data-testid={TestIds.panel.root}
       className={cx(
         styles.wrapper,
         css`
@@ -38,7 +331,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height })
         `
       )}
     >
-      {field}
+      {tableData && <Table data={{ ...tableData }} height={height} width={width} resizable={true} />}
     </div>
   );
 };

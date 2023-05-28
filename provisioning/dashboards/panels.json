@@ -33,18 +33,16 @@
         "uid": "P1D2C73DC01F2359B"
       },
       "gridPos": {
-        "h": 14,
-        "w": 10,
+        "h": 17,
+        "w": 7,
         "x": 0,
         "y": 0
       },
       "id": 6,
       "options": {
-        "height": 0,
-        "heightMode": "auto",
-        "name": "data",
-        "width": 0,
-        "widthMode": "auto"
+        "heading": "Devices",
+        "selectedVariables": ["device"],
+        "variables": ["device"]
       },
       "targets": [
         {
@@ -65,14 +63,174 @@
       ],
       "title": "Test",
       "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 17,
+        "x": 7,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "timeseries"
     }
   ],
   "refresh": "",
-  "schemaVersion": 36,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": ["Device1", "Device2", "Device3"],
+          "value": ["Device1", "Device2", "Device3"]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Device",
+        "multi": true,
+        "name": "device",
+        "options": [
+          {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": true,
+            "text": "Device1",
+            "value": "Device1"
+          },
+          {
+            "selected": true,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": true,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
+          }
+        ],
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
