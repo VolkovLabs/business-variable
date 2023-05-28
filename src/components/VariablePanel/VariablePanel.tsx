@@ -49,7 +49,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   /**
    * Handle Selected State
    */
-  const handleSelectedState = (runtimeVariable: RuntimeVariable | null, selectedItem?: string | null) => {
+  const getMappingOptions = (runtimeVariable: RuntimeVariable | null, selectedItem?: string | null) => {
     if (!runtimeVariable || !selectedItem) {
       return;
     }
@@ -73,13 +73,9 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   };
 
   /**
-   * Handle Location State Change
+   * On Click event
    */
-  const handleLocationStateChange = (
-    runtimeVariable: RuntimeVariable | undefined,
-    name: string,
-    selectedLocationState: string
-  ) => {
+  const onClick = (runtimeVariable: RuntimeVariable | undefined, name: string, selectedLocationState: string) => {
     if (!runtimeVariable) {
       return;
     }
@@ -87,9 +83,17 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
     const { multi, includeAll } = runtimeVariable as any;
 
     /**
-     * Include All
+     * All is selected
      */
     if (includeAll && selectedLocationState?.toLowerCase()?.indexOf('all') === 0) {
+      locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+      return;
+    }
+
+    /**
+     * Select a single value if multi select is not enabled
+     */
+    if (!multi) {
       locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
       return;
     }
@@ -103,38 +107,36 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
       .filter((s) => s.toLowerCase().indexOf('all') !== 0);
 
     /**
-     * Multiselect
+     * Check if any already selected
      */
-    if (multi) {
-      const hasSelectedValue = runtimeVariable.options.find((opt) => opt.selected === true);
+    const hasSelectedValue = runtimeVariable.options.find((opt) => opt.selected);
 
-      /**
-       * Selected
-       */
-      if (hasSelectedValue && !locationService.getSearchObject()[`var-${name}`]) {
-        searchParams.push(hasSelectedValue.value);
-        locationService.partial({ [`var-${name}`]: hasSelectedValue.value }, true);
-      }
-
-      if (searchParams.length >= 1) {
-        const isSelected = searchParams.includes(selectedLocationState);
-
-        if (isSelected) {
-          locationService.partial(
-            {
-              [`var-${name}`]: searchParams.filter((sp) => sp !== selectedLocationState),
-            },
-            true
-          );
-          return;
-        } else {
-          locationService.partial({ [`var-${name}`]: [...searchParams, selectedLocationState] }, true);
-          return;
-        }
-      }
+    /**
+     * Value selected, but not defined in the URL
+     */
+    if (hasSelectedValue && !locationService.getSearchObject()[`var-${name}`]) {
+      searchParams.push(hasSelectedValue.value);
+      locationService.partial({ [`var-${name}`]: hasSelectedValue.value }, true);
     }
 
-    locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+    /**
+     * Already selected value
+     */
+    if (searchParams.length >= 1) {
+      const isSelected = searchParams.includes(selectedLocationState);
+
+      if (!isSelected) {
+        locationService.partial({ [`var-${name}`]: [...searchParams, selectedLocationState] }, true);
+        return;
+      }
+
+      locationService.partial(
+        {
+          [`var-${name}`]: searchParams.filter((sp) => sp !== selectedLocationState),
+        },
+        true
+      );
+    }
   };
 
   /**
@@ -157,20 +159,21 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
       return;
     }
 
+    /**
+     * Get Max Count for Rows
+     */
     const optionCounts = runtimeVariables.map((vr) => vr.options.length).sort();
     const maxCount = optionCounts[optionCounts.length - 1];
 
     const tableHeaders: Array<Record<string, any>> = [];
     const tableBody = [...Array(maxCount).keys()].map((x) => [] as RuntimeVariableTableBody[]);
 
-    for (let i = 0; i < runtimeVariables.length; i++) {
-      const vr = runtimeVariables[i];
-
+    runtimeVariables.forEach((vr, i) => {
       const remainingOptions = maxCount - vr.options.length;
 
       let filledOptions = [];
 
-      if (remainingOptions !== 0) {
+      if (remainingOptions) {
         const remaningItems = Array(remainingOptions).fill({ value: null, text: '' });
         filledOptions = [...vr.options];
         filledOptions.push(...remaningItems);
@@ -178,7 +181,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
         filledOptions = [...vr.options];
       }
 
-      tableHeaders.push({ name: vr.name, label: (vr as any)?.allValue || vr.label });
+      tableHeaders.push({ name: vr.name, label: vr.label });
 
       filledOptions.map((fop, idx) => {
         tableBody[idx].splice(i, 0, {
@@ -186,7 +189,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
           onClick: fop.value === null ? null : () => locationService.partial({ [`var-${vr.id}`]: fop.value }),
         });
       });
-    }
+    });
 
     /**
      * Data
@@ -199,11 +202,11 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
         config: {
           links: [
             {
-              title: `Variable  - ${name}`,
+              title: `Update ${name}`,
               url: '',
-              onClick: ({ e }: { e?: any }) => {
+              onClick: (dataLink) => {
                 const runtimeVariable = runtimeVariables.find((rt) => rt.id === name);
-                handleLocationStateChange(runtimeVariable, name, e?.target?.innerText);
+                onClick(runtimeVariable, name, dataLink.e?.target?.innerText);
               },
             },
           ],
@@ -215,7 +218,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
           mappings: [
             {
               type: 'value' as any,
-              options: handleSelectedState(runtimeVariables.find((rt) => rt.id === name) as any, name) as any,
+              options: getMappingOptions(runtimeVariables.find((rt) => rt.id === name) as any, name) as any,
             },
           ],
         },
@@ -227,6 +230,9 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
      */
     tableBody.forEach((td) => data.appendRow(td.map((t) => t.text)));
 
+    /**
+     * Apply Overrides for Mappings
+     */
     const tableDataFrame = applyFieldOverrides({
       data: [data],
       fieldConfig: {
