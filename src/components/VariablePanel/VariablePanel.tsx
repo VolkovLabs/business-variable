@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
 import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
-import { Table, useTheme2 } from '@grafana/ui';
+import { Alert, Table, useTheme2 } from '@grafana/ui';
+import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions, RuntimeVariable, RuntimeVariableTableBody } from '../../types';
 
@@ -30,13 +31,13 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
    * Set Table on Load
    */
   useEffect(() => {
-    formatVariableForTableBody();
+    updateVariableTable();
 
     /**
      * On Refresh
      */
     const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
-      formatVariableForTableBody();
+      updateVariableTable();
     });
 
     return () => {
@@ -137,9 +138,9 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   };
 
   /**
-   * Format Variables
+   * Update Variable Table
    */
-  const formatVariableForTableBody = () => {
+  const updateVariableTable = () => {
     /**
      * Get Dashboard variables
      */
@@ -244,6 +245,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
    */
   return (
     <div
+      data-testid={TestIds.panel.root}
       className={cx(
         styles.wrapper,
         css`
@@ -252,6 +254,12 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
         `
       )}
     >
+      {!tableData && (
+        <Alert data-testid={TestIds.panel.root} severity="info" title="Variable">
+          Variable is not selected.
+        </Alert>
+      )}
+
       {tableData && <Table data={{ ...tableData }} height={height} width={width} resizable={true} />}
     </div>
   );
