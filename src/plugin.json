@@ -4,22 +4,22 @@
     "grafanaDependency": ">=8.5.0",
     "plugins": []
   },
-  "id": "volkovlabs-abc-panel",
+  "id": "volkovlabs-variable-panel",
   "info": {
     "author": {
       "name": "Volkov Labs",
       "url": "https://volkovlabs.io"
     },
-    "description": "Template to create a new Grafana panel plugin",
-    "keywords": ["template"],
+    "description": "Update Dashboard Variables",
+    "keywords": ["variable"],
     "links": [
       {
         "name": "Documentation",
-        "url": "https://docs.volkovlabs.io/templates"
+        "url": "https://docs.volkovlabs.io/volkovlabs-variable-panel"
       },
       {
         "name": "GitHub",
-        "url": "https://github.com/volkovlabs/volkovlabs-abc-panel"
+        "url": "https://github.com/volkovlabs/volkovlabs-variable-panel"
       }
     ],
     "logos": {
@@ -35,6 +35,6 @@
     "updated": "%TODAY%",
     "version": "%VERSION%"
   },
-  "name": "Abc",
+  "name": "Variable",
   "type": "panel"
 }

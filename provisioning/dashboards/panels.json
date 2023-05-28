@@ -64,7 +64,7 @@
         }
       ],
       "title": "Test",
-      "type": "volkovlabs-abc-panel"
+      "type": "volkovlabs-variable-panel"
     }
   ],
   "refresh": "",

@@ -15,7 +15,7 @@ const getTestIdSelector = (testId: string) => `[data-testid="${testId}"]`;
 /**
  * Panel
  */
-describe('Viewing an Abc panel', () => {
+describe('Viewing an Variable panel', () => {
   beforeEach(() => {
     e2e.flows.openDashboard({
       uid: json.uid,
