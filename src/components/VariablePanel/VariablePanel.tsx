@@ -27,55 +27,23 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   const [tableData, setTableData] = useState<any>(null);
 
   /**
-   * Update table if variable selected
+   * Set Table on Load
    */
   useEffect(() => {
     formatVariableForTableBody();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options]);
 
-  /**
-   * ?
-   */
-  useEffect(() => {
+    /**
+     * On Refresh
+     */
     const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
       formatVariableForTableBody();
-
-      /**
-       * Check variables
-       */
-      const variables = getDashboardVariables();
-      if (variables) {
-        const selectedVariables = variables.filter((v) => v.options.find((o) => o.selected === true));
-        const variableNames = selectedVariables.map((v) => v.name);
-
-        /**
-         * Check URL
-         */
-        const locationNames = Object.keys(locationService.getSearchObject())
-          .filter((l) => l !== 'orgId')
-          .map((l) => l.replace('var-', '').trim());
-        const missingVariables = variableNames.filter((v) => !locationNames.includes(v));
-
-        /**
-         * Missing
-         */
-        const missingFields = selectedVariables
-          .filter((l) => missingVariables.includes(l.name))
-          .filter((l) => l.options.find((o) => o.selected === true && o.value.includes('$__all')));
-
-        missingFields.map((vr) => {
-          const selectedOption = vr.options.find((o) => o.selected === true);
-          handleLocationStateChange(vr, vr.name || '', selectedOption?.text || '');
-        });
-      }
     });
 
     return () => {
       subscriber.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventBus]);
+  }, []);
 
   /**
    * Handle Selected State
@@ -169,9 +137,12 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   };
 
   /**
-   * Get Dashboard variables
+   * Format Variables
    */
-  const getDashboardVariables = () => {
+  const formatVariableForTableBody = () => {
+    /**
+     * Get Dashboard variables
+     */
     const variables = getTemplateSrv().getVariables();
     if (!variables || !options.variables.length) {
       return;
@@ -180,15 +151,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
     /**
      * Filter selected variables
      */
-    const filtered = variables.filter((dv) => options.variables.includes(dv.name)) as RuntimeVariable[];
-    return filtered;
-  };
-
-  /**
-   * Format Variables
-   */
-  const formatVariableForTableBody = () => {
-    const runtimeVariables = getDashboardVariables();
+    const runtimeVariables = variables.filter((dv) => options.variables.includes(dv.name)) as RuntimeVariable[];
     if (!runtimeVariables) {
       return;
     }

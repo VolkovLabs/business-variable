@@ -38,6 +38,24 @@
         "x": 0,
         "y": 0
       },
+      "id": 8,
+      "options": {
+        "variables": []
+      },
+      "title": "Empty",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 7,
+        "x": 7,
+        "y": 0
+      },
       "id": 7,
       "options": {
         "heading": "Devices",
@@ -71,7 +89,7 @@
       "gridPos": {
         "h": 17,
         "w": 7,
-        "x": 7,
+        "x": 14,
         "y": 0
       },
       "id": 6,
