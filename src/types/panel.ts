@@ -3,9 +3,9 @@
  */
 export interface PanelOptions {
   /**
-   * Field name with data
+   * Variable
    *
    * @type {string}
    */
-  name: string;
+  variable: string;
 }

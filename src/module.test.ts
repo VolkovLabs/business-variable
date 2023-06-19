@@ -1,6 +1,16 @@
 import { PanelPlugin } from '@grafana/data';
 import { plugin } from './module';
 
+/**
+ * Mock @grafana/runtime
+ */
+jest.mock('@grafana/runtime', () => ({
+  ...jest.requireActual('@grafana/runtime'),
+  getTemplateSrv: jest.fn(() => ({
+    getVariables: jest.fn(() => []),
+  })),
+}));
+
 /*
  Plugin
  */
@@ -14,7 +24,7 @@ describe('plugin', () => {
      * Builder
      */
     const builder: any = {
-      addFieldNamePicker: jest.fn().mockImplementation(() => builder),
+      addSelect: jest.fn().mockImplementation(() => builder),
     };
 
     /**
@@ -25,6 +35,6 @@ describe('plugin', () => {
     /**
      * Inputs
      */
-    expect(builder.addFieldNamePicker).toHaveBeenCalled();
+    expect(builder.addSelect).toHaveBeenCalled();
   });
 });
