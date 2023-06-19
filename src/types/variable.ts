@@ -4,33 +4,64 @@ import { TypedVariableModel } from '@grafana/data';
  * Runtime Variable Option
  */
 export interface RuntimeVariableOption {
+  /**
+   * Value
+   *
+   * @type {string}
+   */
   value: string;
+
+  /**
+   * Text
+   *
+   * @type {string}
+   */
   text: string;
+
+  /**
+   * Selected
+   *
+   * @type {boolean};
+   */
   selected?: boolean;
+
+  /**
+   * On Click
+   *
+   * @type {Function | null}
+   */
+  onClick?: Function | null;
 }
 
 /**
  * Runtime Variable
  */
 export type RuntimeVariable = TypedVariableModel & {
+  /**
+   * Options
+   *
+   * @type {RuntimeVariableOption[]}
+   */
   options: RuntimeVariableOption[];
+
+  /**
+   * Id
+   *
+   * @type {string}
+   */
   id: string;
-};
 
-/**
- * RunTime Variable Table Body
- */
-export type RuntimeVariableTableBody = {
-  value: string;
-  text: string;
-  onClick?: Function | null;
-  selected?: boolean;
-};
+  /**
+   * Multi
+   *
+   * @type {boolean}
+   */
+  multi: boolean;
 
-/**
- * Runtime Variable Table
- */
-export type RuntimeVariableTable = {
-  headers: string[];
-  body: RuntimeVariableTableBody[][];
+  /**
+   * Include All
+   *
+   * @type {boolean}
+   */
+  includeAll: boolean;
 };

@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
+import {
+  applyFieldOverrides,
+  DataFrame,
+  FieldColorModeId,
+  FieldType,
+  MutableDataFrame,
+  PanelProps,
+} from '@grafana/data';
 import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
 import { Alert, Table, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
-import { PanelOptions, RuntimeVariable, RuntimeVariableTableBody } from '../../types';
+import { PanelOptions, RuntimeVariable, RuntimeVariableOption } from '../../types';
 
 /**
  * Properties
@@ -25,7 +32,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
   /**
    * States
    */
-  const [tableData, setTableData] = useState<any>(null);
+  const [tableData, setTableData] = useState<DataFrame | null>(null);
 
   /**
    * Handle Selected State
@@ -36,13 +43,16 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
         return;
       }
 
+      /**
+       * Check if selected All
+       */
       const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
 
       /**
        * Mapping
        */
       return runtimeVariable?.options.reduce((acc, opt, i) => {
-        acc[opt.value] = {
+        acc[opt.text] = {
           color: isSelectedAll || opt.selected ? theme.colors.secondary.main : theme.colors.background.primary,
           index: i,
           text: opt.text,
@@ -62,12 +72,10 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
       return;
     }
 
-    const { multi, includeAll } = runtimeVariable as any;
-
     /**
      * All is selected
      */
-    if (includeAll && selectedLocationState?.toLowerCase()?.indexOf('all') === 0) {
+    if (runtimeVariable.includeAll && !selectedLocationState?.toLowerCase()?.indexOf('all')) {
       locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
       return;
     }
@@ -75,7 +83,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Select a single value if multi select is not enabled
      */
-    if (!multi) {
+    if (!runtimeVariable.multi) {
       locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
       return;
     }
@@ -91,27 +99,41 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Check if any already selected
      */
-    const selectedValue = runtimeVariable.options.find((opt) => opt.selected);
+    const selectedValues = runtimeVariable.options.filter((opt) => opt.selected).map((opt) => opt.text);
 
     /**
      * Value selected, but not defined in the URL
      */
-    if (selectedValue && !locationService.getSearchObject()[`var-${name}`]) {
-      searchParams.push(selectedValue.value);
-      locationService.partial({ [`var-${name}`]: selectedValue.value }, true);
+    if (selectedValues.length && !locationService.getSearchObject()[`var-${name}`]) {
+      searchParams.push(...selectedValues);
+      locationService.partial({ [`var-${name}`]: [...selectedValues] }, true);
     }
 
     /**
-     * Already selected value
+     * All was selected, changing to the value
+     */
+    if (runtimeVariable.includeAll && selectedValues.find((opt) => opt.toLowerCase() === 'all')) {
+      locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+      return;
+    }
+
+    /**
+     * Already selected value in multi-value
      */
     if (searchParams.length >= 1) {
       const isSelected = searchParams.includes(selectedLocationState);
 
+      /**
+       * Select more
+       */
       if (!isSelected) {
         locationService.partial({ [`var-${name}`]: [...searchParams, selectedLocationState] }, true);
         return;
       }
 
+      /**
+       * Remove from selected
+       */
       locationService.partial(
         {
           [`var-${name}`]: searchParams.filter((sp) => sp !== selectedLocationState),
@@ -137,32 +159,16 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
      * Current variables
      */
     const currentVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
+    const tableHeaders: Array<Record<string, any>> = [];
+    const tableBody: RuntimeVariableOption[][] = [];
 
     /**
-     * Get Max Count for Rows
+     * Fill Table with options
      */
-    const optionCounts = currentVariables.map((vr) => vr.options.length).sort();
-    const maxCount = optionCounts[optionCounts.length - 1];
-
-    const tableHeaders: Array<Record<string, any>> = [];
-    const tableBody = [...Array(maxCount).keys()].map(() => [] as RuntimeVariableTableBody[]);
-
-    currentVariables.forEach((vr, i) => {
-      const remainingOptions = maxCount - vr.options.length;
-
-      const filledOptions = [...vr.options];
-
-      if (remainingOptions) {
-        const remainingItems = Array(remainingOptions).fill({ value: null, text: '' });
-        filledOptions.push(...remainingItems);
-      }
-
+    currentVariables.forEach((vr) => {
       tableHeaders.push({ name: vr.name, label: vr.label });
-
-      filledOptions.forEach((fop, idx) => {
-        tableBody[idx].splice(i, 0, {
-          ...fop,
-        });
+      vr.options.forEach((fop) => {
+        tableBody.push([fop]);
       });
     });
 
@@ -208,7 +214,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Apply Overrides for Mappings
      */
-    const tableDataFrame = applyFieldOverrides({
+    const dataFrame = applyFieldOverrides({
       data: [data],
       fieldConfig: {
         overrides: [],
@@ -218,7 +224,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
       replaceVariables: (value: string) => value,
     });
 
-    setTableData(tableDataFrame[0]);
+    setTableData(dataFrame[0]);
   }, [getMappingOptions, options.variable, theme]);
 
   /**
