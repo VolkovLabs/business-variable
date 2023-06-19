@@ -6,7 +6,7 @@ import { PanelOptions } from './types';
 /**
  * Panel Plugin
  */
-export const plugin = new PanelPlugin<PanelOptions>(VariablePanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<PanelOptions>(VariablePanel).setNoPadding().setPanelOptions((builder) => {
   /**
    * Variables
    */
