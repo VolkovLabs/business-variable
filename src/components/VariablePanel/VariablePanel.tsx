@@ -137,32 +137,16 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
      * Current variables
      */
     const currentVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
+    const tableHeaders: Array<Record<string, any>> = [];
+    const tableBody: RuntimeVariableTableBody[][] = [];
 
     /**
-     * Get Max Count for Rows
+     * Fill Table with options
      */
-    const optionCounts = currentVariables.map((vr) => vr.options.length).sort();
-    const maxCount = optionCounts[optionCounts.length - 1];
-
-    const tableHeaders: Array<Record<string, any>> = [];
-    const tableBody = [...Array(maxCount).keys()].map(() => [] as RuntimeVariableTableBody[]);
-
-    currentVariables.forEach((vr, i) => {
-      const remainingOptions = maxCount - vr.options.length;
-
-      const filledOptions = [...vr.options];
-
-      if (remainingOptions) {
-        const remainingItems = Array(remainingOptions).fill({ value: null, text: '' });
-        filledOptions.push(...remainingItems);
-      }
-
+    currentVariables.forEach((vr) => {
       tableHeaders.push({ name: vr.name, label: vr.label });
-
-      filledOptions.forEach((fop, idx) => {
-        tableBody[idx].splice(i, 0, {
-          ...fop,
-        });
+      vr.options.forEach((fop) => {
+        tableBody.push([fop]);
       });
     });
 
