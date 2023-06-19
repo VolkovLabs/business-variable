@@ -36,13 +36,16 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
         return;
       }
 
+      /**
+       * Check if selected All
+       */
       const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
 
       /**
        * Mapping
        */
       return runtimeVariable?.options.reduce((acc, opt, i) => {
-        acc[opt.value] = {
+        acc[opt.text] = {
           color: isSelectedAll || opt.selected ? theme.colors.secondary.main : theme.colors.background.primary,
           index: i,
           text: opt.text,
