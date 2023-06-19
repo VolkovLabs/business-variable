@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
+import {
+  applyFieldOverrides,
+  DataFrame,
+  FieldColorModeId,
+  FieldType,
+  MutableDataFrame,
+  PanelProps,
+} from '@grafana/data';
 import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
 import { Alert, Table, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
@@ -25,7 +32,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
   /**
    * States
    */
-  const [tableData, setTableData] = useState<any>(null);
+  const [tableData, setTableData] = useState<DataFrame | null>(null);
 
   /**
    * Handle Selected State
@@ -65,12 +72,10 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
       return;
     }
 
-    const { multi, includeAll } = runtimeVariable as any;
-
     /**
      * All is selected
      */
-    if (includeAll && selectedLocationState?.toLowerCase()?.indexOf('all') === 0) {
+    if (runtimeVariable.includeAll && !selectedLocationState?.toLowerCase()?.indexOf('all')) {
       locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
       return;
     }
@@ -78,7 +83,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Select a single value if multi select is not enabled
      */
-    if (!multi) {
+    if (!runtimeVariable.multi) {
       locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
       return;
     }
@@ -94,27 +99,41 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Check if any already selected
      */
-    const selectedValue = runtimeVariable.options.find((opt) => opt.selected);
+    const selectedValues = runtimeVariable.options.filter((opt) => opt.selected).map((opt) => opt.text);
 
     /**
      * Value selected, but not defined in the URL
      */
-    if (selectedValue && !locationService.getSearchObject()[`var-${name}`]) {
-      searchParams.push(selectedValue.value);
-      locationService.partial({ [`var-${name}`]: selectedValue.value }, true);
+    if (selectedValues.length && !locationService.getSearchObject()[`var-${name}`]) {
+      searchParams.push(...selectedValues);
+      locationService.partial({ [`var-${name}`]: [...selectedValues] }, true);
     }
 
     /**
-     * Already selected value
+     * All was selected, changing to the value
+     */
+    if (runtimeVariable.includeAll && selectedValues.find((opt) => opt.toLowerCase() === 'all')) {
+      locationService.partial({ [`var-${name}`]: selectedLocationState }, true);
+      return;
+    }
+
+    /**
+     * Already selected value in multi-value
      */
     if (searchParams.length >= 1) {
       const isSelected = searchParams.includes(selectedLocationState);
 
+      /**
+       * Select more
+       */
       if (!isSelected) {
         locationService.partial({ [`var-${name}`]: [...searchParams, selectedLocationState] }, true);
         return;
       }
 
+      /**
+       * Remove from selected
+       */
       locationService.partial(
         {
           [`var-${name}`]: searchParams.filter((sp) => sp !== selectedLocationState),
@@ -195,7 +214,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
     /**
      * Apply Overrides for Mappings
      */
-    const tableDataFrame = applyFieldOverrides({
+    const dataFrame = applyFieldOverrides({
       data: [data],
       fieldConfig: {
         overrides: [],
@@ -205,7 +224,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
       replaceVariables: (value: string) => value,
     });
 
-    setTableData(tableDataFrame[0]);
+    setTableData(dataFrame[0]);
   }, [getMappingOptions, options.variable, theme]);
 
   /**

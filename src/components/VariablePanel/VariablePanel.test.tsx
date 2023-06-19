@@ -175,7 +175,7 @@ describe('Panel', () => {
 
       fireEvent.click(within(table).getByText('value1'));
 
-      expect(locationService.partial).toHaveBeenCalledWith({ 'var-multi': 'value1' }, true);
+      expect(locationService.partial).toHaveBeenCalledWith({ 'var-multi': ['value1'] }, true);
     });
 
     it('Should render table if __all option selected', () => {

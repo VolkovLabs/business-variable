@@ -50,4 +50,18 @@ export type RuntimeVariable = TypedVariableModel & {
    * @type {string}
    */
   id: string;
+
+  /**
+   * Multi
+   *
+   * @type {boolean}
+   */
+  multi: boolean;
+
+  /**
+   * Include All
+   *
+   * @type {boolean}
+   */
+  includeAll: boolean;
 };
