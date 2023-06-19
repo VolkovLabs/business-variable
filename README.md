@@ -23,7 +23,7 @@ The Variable panel is not included in the Grafana Catalog. It can be downloaded 
 ## Highlights
 
 - Allows changing dashboard variables.
-- Display values in a table to allow sorting and filtering.
+- Displays values in a table to allow sorting and filtering.
 - Supports single and multi-value variables with the All option.
 
 ## Feedback
