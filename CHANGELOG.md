@@ -6,3 +6,4 @@
 
 - Initial release based on Volkov Labs Abc Panel template
 - Update README and configuration (#1)
+- Refactor Legacy Code (#2)

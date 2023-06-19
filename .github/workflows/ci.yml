@@ -24,7 +24,13 @@ jobs:
       - name: Install dependencies
         run: npm install --frozen-lockfile
 
-      - name: Build and test frontend
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test:ci
+
+      - name: Build
         run: npm run build
 
       - name: Sign plugin
