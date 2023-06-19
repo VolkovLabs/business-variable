@@ -234,6 +234,9 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
       updateVariableTable();
     });
 
+    /**
+     * Unsubscribe
+     */
     return () => {
       subscriber.unsubscribe();
     };

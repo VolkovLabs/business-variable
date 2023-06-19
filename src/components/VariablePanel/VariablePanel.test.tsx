@@ -107,6 +107,9 @@ describe('Panel', () => {
     expect(screen.getByTestId(TestIds.panel.infoMessage)).toBeInTheDocument();
   });
 
+  /**
+   * Single variable
+   */
   it('Should render table for single variable', () => {
     const runtimeVariables: Array<Pick<RuntimeVariable, 'id' | 'options' | 'name' | 'label'>> = [
       {
@@ -138,6 +141,9 @@ describe('Panel', () => {
     expect(locationService.partial).toHaveBeenCalledWith({ 'var-single': 'value1' }, true);
   });
 
+  /**
+   * Multi select
+   */
   describe('Multi', () => {
     it('Should render table for multi variable', () => {
       const runtimeVariables: Array<Pick<VariableWithMultiSupport, 'id' | 'options' | 'name' | 'label' | 'multi'>> = [
