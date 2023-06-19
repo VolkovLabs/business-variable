@@ -5,7 +5,7 @@ import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime'
 import { Alert, Table, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
-import { PanelOptions, RuntimeVariable, RuntimeVariableTableBody } from '../../types';
+import { PanelOptions, RuntimeVariable, RuntimeVariableOption } from '../../types';
 
 /**
  * Properties
@@ -138,7 +138,7 @@ export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBu
      */
     const currentVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
     const tableHeaders: Array<Record<string, any>> = [];
-    const tableBody: RuntimeVariableTableBody[][] = [];
+    const tableBody: RuntimeVariableOption[][] = [];
 
     /**
      * Fill Table with options
