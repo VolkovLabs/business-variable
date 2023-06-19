@@ -5,6 +5,6 @@
 export const TestIds = {
   panel: {
     root: 'data-testid panel',
-    error: 'data-testid panel error',
+    infoMessage: 'data-testid panel info',
   },
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
 import { applyFieldOverrides, FieldColorModeId, FieldType, MutableDataFrame, PanelProps } from '@grafana/data';
 import { getTemplateSrv, locationService, RefreshEvent } from '@grafana/runtime';
@@ -15,7 +15,7 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Panel
  */
-export const VariablePanel: React.FC<Props> = ({ options, data, width, height, eventBus }) => {
+export const VariablePanel: React.FC<Props> = ({ options, width, height, eventBus }) => {
   /**
    * Styles and Theme
    */
@@ -28,49 +28,31 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   const [tableData, setTableData] = useState<any>(null);
 
   /**
-   * Set Table on Load
-   */
-  useEffect(() => {
-    updateVariableTable();
-
-    /**
-     * On Refresh
-     */
-    const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
-      updateVariableTable();
-    });
-
-    return () => {
-      subscriber.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
    * Handle Selected State
    */
-  const getMappingOptions = (runtimeVariable: RuntimeVariable | null, selectedItem?: string | null) => {
-    if (!runtimeVariable || !selectedItem) {
-      return;
-    }
+  const getMappingOptions = useCallback(
+    (runtimeVariable: RuntimeVariable | null, selectedItem?: string | null) => {
+      if (!runtimeVariable || !selectedItem) {
+        return;
+      }
 
-    const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
+      const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
 
-    /**
-     * Mapping
-     */
-    const mapping = runtimeVariable?.options.reduce((acc, opt, i) => {
-      acc[opt.value] = {
-        color: isSelectedAll || opt.selected ? theme.colors.secondary.main : theme.colors.background.primary,
-        index: i,
-        text: opt.text,
-      };
+      /**
+       * Mapping
+       */
+      return runtimeVariable?.options.reduce((acc, opt, i) => {
+        acc[opt.value] = {
+          color: isSelectedAll || opt.selected ? theme.colors.secondary.main : theme.colors.background.primary,
+          index: i,
+          text: opt.text,
+        };
 
-      return acc;
-    }, {} as Record<string, any>);
-
-    return mapping;
-  };
+        return acc;
+      }, {} as Record<string, any>);
+    },
+    [theme.colors.background.primary, theme.colors.secondary.main]
+  );
 
   /**
    * On Click event
@@ -109,14 +91,14 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
     /**
      * Check if any already selected
      */
-    const hasSelectedValue = runtimeVariable.options.find((opt) => opt.selected);
+    const selectedValue = runtimeVariable.options.find((opt) => opt.selected);
 
     /**
      * Value selected, but not defined in the URL
      */
-    if (hasSelectedValue && !locationService.getSearchObject()[`var-${name}`]) {
-      searchParams.push(hasSelectedValue.value);
-      locationService.partial({ [`var-${name}`]: hasSelectedValue.value }, true);
+    if (selectedValue && !locationService.getSearchObject()[`var-${name}`]) {
+      searchParams.push(selectedValue.value);
+      locationService.partial({ [`var-${name}`]: selectedValue.value }, true);
     }
 
     /**
@@ -142,7 +124,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
   /**
    * Update Variable Table
    */
-  const updateVariableTable = () => {
+  const updateVariableTable = useCallback(() => {
     /**
      * Get Dashboard variables
      */
@@ -152,41 +134,34 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
     }
 
     /**
-     * Filter selected variables
+     * Current variables
      */
-    const runtimeVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
-    if (!runtimeVariables) {
-      return;
-    }
+    const currentVariables = variables.filter((dv) => options.variable === dv.name) as RuntimeVariable[];
 
     /**
      * Get Max Count for Rows
      */
-    const optionCounts = runtimeVariables.map((vr) => vr.options.length).sort();
+    const optionCounts = currentVariables.map((vr) => vr.options.length).sort();
     const maxCount = optionCounts[optionCounts.length - 1];
 
     const tableHeaders: Array<Record<string, any>> = [];
-    const tableBody = [...Array(maxCount).keys()].map((x) => [] as RuntimeVariableTableBody[]);
+    const tableBody = [...Array(maxCount).keys()].map(() => [] as RuntimeVariableTableBody[]);
 
-    runtimeVariables.forEach((vr, i) => {
+    currentVariables.forEach((vr, i) => {
       const remainingOptions = maxCount - vr.options.length;
 
-      let filledOptions = [];
+      const filledOptions = [...vr.options];
 
       if (remainingOptions) {
-        const remaningItems = Array(remainingOptions).fill({ value: null, text: '' });
-        filledOptions = [...vr.options];
-        filledOptions.push(...remaningItems);
-      } else {
-        filledOptions = [...vr.options];
+        const remainingItems = Array(remainingOptions).fill({ value: null, text: '' });
+        filledOptions.push(...remainingItems);
       }
 
       tableHeaders.push({ name: vr.name, label: vr.label });
 
-      filledOptions.map((fop, idx) => {
+      filledOptions.forEach((fop, idx) => {
         tableBody[idx].splice(i, 0, {
           ...fop,
-          onClick: fop.value === null ? null : () => locationService.partial({ [`var-${vr.id}`]: fop.value }),
         });
       });
     });
@@ -205,7 +180,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
               title: `Update ${name}`,
               url: '',
               onClick: (dataLink) => {
-                const runtimeVariable = runtimeVariables.find((rt) => rt.id === name);
+                const runtimeVariable = currentVariables.find((rt) => rt.id === name);
                 onClick(runtimeVariable, name, dataLink.e?.target?.innerText);
               },
             },
@@ -218,7 +193,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
           mappings: [
             {
               type: 'value' as any,
-              options: getMappingOptions(runtimeVariables.find((rt) => rt.id === name) as any, name) as any,
+              options: getMappingOptions(currentVariables.find((rt) => rt.id === name) || null, name) as any,
             },
           ],
         },
@@ -244,7 +219,25 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
     });
 
     setTableData(tableDataFrame[0]);
-  };
+  }, [getMappingOptions, options.variable, theme]);
+
+  /**
+   * Set Table on Load
+   */
+  useEffect(() => {
+    updateVariableTable();
+
+    /**
+     * On Refresh
+     */
+    const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
+      updateVariableTable();
+    });
+
+    return () => {
+      subscriber.unsubscribe();
+    };
+  }, [eventBus, updateVariableTable]);
 
   /**
    * Return
@@ -261,7 +254,7 @@ export const VariablePanel: React.FC<Props> = ({ options, data, width, height, e
       )}
     >
       {!tableData && (
-        <Alert data-testid={TestIds.panel.root} severity="info" title="Variable">
+        <Alert data-testid={TestIds.panel.infoMessage} severity="info" title="Variable">
           Variable is not selected.
         </Alert>
       )}
