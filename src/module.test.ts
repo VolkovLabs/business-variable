@@ -1,6 +1,16 @@
 import { PanelPlugin } from '@grafana/data';
 import { plugin } from './module';
 
+/**
+ * Mock @grafana/runtime
+ */
+jest.mock('@grafana/runtime', () => ({
+  ...jest.requireActual('@grafana/runtime'),
+  getTemplateSrv: jest.fn(() => ({
+    getVariables: jest.fn(() => []),
+  })),
+}));
+
 /*
  Plugin
  */
