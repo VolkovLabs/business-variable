@@ -174,7 +174,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name, last(value, time) from metrics where name in ($device) group by name;",
+          "rawSql": "select name, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city))\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -371,9 +371,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": ["Singapore", "Russia"],
-          "value": ["Singapore", "Russia"]
+          "selected": false,
+          "text": ["Singapore", "Russia", "USA"],
+          "value": ["Singapore", "Russia", "USA"]
         },
         "datasource": {
           "type": "postgres",
@@ -395,9 +395,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": ["Moscow", "Singapore"],
-          "value": ["Moscow", "Singapore"]
+          "selected": false,
+          "text": ["Moscow", "Singapore", "FL", "NY"],
+          "value": ["Moscow", "Singapore", "FL", "NY"]
         },
         "datasource": {
           "type": "postgres",
@@ -419,9 +419,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": ["Moscow", "Singapore"],
-          "value": ["Moscow", "Singapore"]
+          "selected": false,
+          "text": ["Singapore", "Moscow", "New York", "Tampa"],
+          "value": ["Singapore", "Moscow", "New York", "Tampa"]
         },
         "datasource": {
           "type": "postgres",
@@ -445,8 +445,8 @@
         "allValue": "",
         "current": {
           "selected": true,
-          "text": ["device11", "device12", "device15", "device16"],
-          "value": ["device11", "device12", "device15", "device16"]
+          "text": ["device5", "device8", "device12", "device16"],
+          "value": ["device5", "device8", "device12", "device16"]
         },
         "datasource": {
           "type": "postgres",

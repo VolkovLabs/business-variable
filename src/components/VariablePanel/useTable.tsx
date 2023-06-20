@@ -5,6 +5,9 @@ import { CellProps, Column, useTheme2 } from '@grafana/ui';
 import { RuntimeVariable } from '../../types';
 import { Styles } from '../../styles';
 
+/**
+ * Table Item
+ */
 interface TableItem {
   text: string;
   selected: boolean;
@@ -13,6 +16,9 @@ interface TableItem {
   statusColor?: string;
 }
 
+/**
+ * Use Table
+ */
 export const useTable = ({ data, variable }: { data?: DataFrame; variable: string }) => {
   /**
    * Styles and Theme
@@ -47,8 +53,10 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
     return runtimeVariable.options.map((option) => {
       let statusColor;
       let showStatusForOption = false;
+
       if (showStatus) {
         const index = namesArray.findIndex((value) => value === option.value);
+
         if (index >= 0) {
           showStatusForOption = true;
           const lastValue = data?.fields[1].values.get(index);
@@ -56,6 +64,7 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
           statusColor = displayValue?.color;
         }
       }
+
       return {
         ...option,
         selected: isSelectedAll || !!option.selected,
