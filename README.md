@@ -10,7 +10,7 @@
 
 ## Introduction
 
-The Variable panel allows changing dashboard variables in the panel.
+The Variable panel allows updating dashboard variables in the panel.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ The Variable panel is not included in the Grafana Catalog. It can be downloaded 
 
 ## Highlights
 
-- Allows changing dashboard variables.
+- Allows updating dashboard variables.
 - Displays values in a table to allow sorting and filtering.
 - Supports single and multi-value variables with the All option.
 
