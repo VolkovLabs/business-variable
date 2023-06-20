@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add Variables states based on Threshold (#6)
+
 ## 1.0.0 (2023-06-19)
 
 ### Features / Enhancements
