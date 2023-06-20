@@ -29,8 +29,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
+        "type": "postgres",
+        "uid": "timescale"
       },
       "fieldConfig": {
         "defaults": {
@@ -52,7 +52,7 @@
       },
       "gridPos": {
         "h": 14,
-        "w": 4,
+        "w": 6,
         "x": 0,
         "y": 0
       },
@@ -60,76 +60,36 @@
       "options": {
         "variable": "country"
       },
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select country, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\ngroup by country;",
+          "refId": "A",
+          "sql": {
+            "columns": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
+                "parameters": [],
+                "type": "function"
               }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 14,
-        "w": 4,
-        "x": 4,
-        "y": 0
-      },
-      "id": 4,
-      "options": {
-        "variable": "state"
-      },
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+            ],
+            "groupBy": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
               }
-            ]
+            ],
+            "limit": 50
           }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 14,
-        "w": 4,
-        "x": 8,
-        "y": 0
-      },
-      "id": 5,
-      "options": {
-        "variable": "city"
-      },
+        }
+      ],
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -157,8 +117,138 @@
       },
       "gridPos": {
         "h": 14,
-        "w": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "variable": "state"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select state, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\nwhere country in ($country)\ngroup by state;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescale"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 6,
         "x": 12,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "variable": "city"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select city, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\nwhere country in ($country) and state in ($state)\ngroup by city;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescale"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 6,
+        "x": 18,
         "y": 0
       },
       "id": 6,
@@ -444,7 +534,7 @@
       {
         "allValue": "",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["device5", "device8", "device12", "device16"],
           "value": ["device5", "device8", "device12", "device16"]
         },

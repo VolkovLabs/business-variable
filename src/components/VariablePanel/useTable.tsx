@@ -2,19 +2,8 @@ import React, { useMemo, useCallback } from 'react';
 import { DataFrame } from '@grafana/data';
 import { getTemplateSrv, locationService } from '@grafana/runtime';
 import { CellProps, Column, useTheme2 } from '@grafana/ui';
-import { RuntimeVariable } from '../../types';
+import { RuntimeVariable, TableItem } from '../../types';
 import { Styles } from '../../styles';
-
-/**
- * Table Item
- */
-interface TableItem {
-  text: string;
-  selected: boolean;
-  value: string;
-  showStatus: boolean;
-  statusColor?: string;
-}
 
 /**
  * Use Table
@@ -47,28 +36,25 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
     }
 
     const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
-    const showStatus = runtimeVariable.name === 'device';
-    const namesArray = showStatus && data ? data.fields[0].values.toArray() : [];
+    const namesArray = data ? data.fields[0].values.toArray() : [];
 
     return runtimeVariable.options.map((option) => {
       let statusColor;
-      let showStatusForOption = false;
+      let showStatus = false;
 
-      if (showStatus) {
-        const index = namesArray.findIndex((value) => value === option.value);
+      const index = namesArray.findIndex((value) => value === option.value);
 
-        if (index >= 0) {
-          showStatusForOption = true;
-          const lastValue = data?.fields[1].values.get(index);
-          const displayValue = data?.fields[1].display?.(lastValue);
-          statusColor = displayValue?.color;
-        }
+      if (index >= 0) {
+        showStatus = true;
+        const lastValue = data?.fields[1].values.get(index);
+        const displayValue = data?.fields[1].display?.(lastValue);
+        statusColor = displayValue?.color;
       }
 
       return {
         ...option,
         selected: isSelectedAll || !!option.selected,
-        showStatus: showStatusForOption,
+        showStatus,
         statusColor,
       };
     });
