@@ -6,5 +6,6 @@
 
 - Initial release based on Volkov Labs Abc Panel template
 - Update README and configuration (#1)
-- Refactor Legacy Code (#2)
+- Refactor Legacy Code (#2, #4)
 - Update to Grafana 10.0.0 (#3)
+- Add Provisioning and update README (#5)

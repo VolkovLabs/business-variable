@@ -8,3 +8,17 @@ datasources:
     orgId: 1
     version: 1
     editable: true
+  - name: Timescale
+    type: postgres
+    access: proxy
+    uid: timescale
+    orgId: 1
+    version: 1
+    editable: true
+    url: host.docker.internal:5432
+    user: postgres
+    jsonData:
+      postgresVersion: 1200
+      sslmode: disable
+    secureJsonData:
+      password: postgres
