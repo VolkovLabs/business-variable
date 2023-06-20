@@ -8,4 +8,4 @@
 - Update README and configuration (#1)
 - Refactor Legacy Code (#2, #4)
 - Update to Grafana 10.0.0 (#3)
-- Add Provisioning and update README (#5)
+- Update Provisioning and README (#5)
