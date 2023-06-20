@@ -69,7 +69,7 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
    * Value Cell Select
    */
   const onChange = useCallback(
-    (row) => {
+    (row: TableItem) => {
       if (!runtimeVariable) {
         return;
       }
