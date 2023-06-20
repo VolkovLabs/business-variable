@@ -193,6 +193,35 @@
             ],
             "limit": 50
           }
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select * from devices ;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
         }
       ],
       "type": "volkovlabs-variable-panel"
@@ -342,7 +371,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": ["Singapore", "Russia"],
           "value": ["Singapore", "Russia"]
         },
@@ -366,9 +395,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["Singapore", "Moscow"],
-          "value": ["Singapore", "Moscow"]
+          "selected": true,
+          "text": ["Moscow", "Singapore"],
+          "value": ["Moscow", "Singapore"]
         },
         "datasource": {
           "type": "postgres",
@@ -390,9 +419,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["Singapore", "Moscow"],
-          "value": ["Singapore", "Moscow"]
+          "selected": true,
+          "text": ["Moscow", "Singapore"],
+          "value": ["Moscow", "Singapore"]
         },
         "datasource": {
           "type": "postgres",
@@ -415,9 +444,9 @@
       {
         "allValue": "",
         "current": {
-          "selected": false,
-          "text": ["device16", "device12", "device15", "device11"],
-          "value": ["device16", "device12", "device15", "device11"]
+          "selected": true,
+          "text": ["device11", "device12", "device15", "device16"],
+          "value": ["device11", "device12", "device15", "device16"]
         },
         "datasource": {
           "type": "postgres",
