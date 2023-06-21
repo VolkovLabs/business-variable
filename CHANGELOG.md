@@ -7,6 +7,7 @@
 - Add Variable statuses based on Threshold (#6)
 - Add react-table v8 instead of Table (#8)
 - Add Field options for variable values and statuses (#9)
+- Update Provisioning and README (#10)
 
 ## 1.0.0 (2023-06-19)
 

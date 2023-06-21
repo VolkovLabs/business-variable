@@ -42,6 +42,10 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
                 "color": "red",
                 "value": 80
               }
@@ -51,7 +55,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 10,
         "w": 6,
         "x": 0,
         "y": 0
@@ -69,7 +73,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select country, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\ngroup by country;",
+          "rawSql": "select country, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics where $__timeFilter(time) group by name) mm\non mm.name=dd.name\ngroup by country;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -107,6 +111,10 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
                 "color": "red",
                 "value": 80
               }
@@ -116,7 +124,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 10,
         "w": 6,
         "x": 6,
         "y": 0
@@ -134,7 +142,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select state, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\nwhere country in ($country)\ngroup by state;",
+          "rawSql": "select state, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics where $__timeFilter(time) group by name) mm\non mm.name=dd.name\nwhere country in ($country)\ngroup by state;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -172,6 +180,10 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
                 "color": "red",
                 "value": 80
               }
@@ -181,7 +193,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 10,
         "w": 6,
         "x": 12,
         "y": 0
@@ -199,7 +211,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select city, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics group by name) mm\non mm.name=dd.name\nwhere country in ($country) and state in ($state)\ngroup by city;",
+          "rawSql": "select city, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics where $__timeFilter(time) group by name) mm\non mm.name=dd.name\nwhere country in ($country) and state in ($state)\ngroup by city;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -237,6 +249,10 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
                 "color": "red",
                 "value": 80
               }
@@ -246,7 +262,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 10,
         "w": 6,
         "x": 18,
         "y": 0
@@ -264,7 +280,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city))\ngroup by name;",
+          "rawSql": "select name, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -382,7 +398,7 @@
         "h": 14,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 10
       },
       "id": 2,
       "options": {
@@ -452,7 +468,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5s",
+  "refresh": false,
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -462,15 +478,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["Singapore", "Russia", "USA"],
-          "value": ["Singapore", "Russia", "USA"]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct country from devices;",
-        "hide": 0,
+        "hide": 2,
         "includeAll": true,
         "label": "Country",
         "multi": true,
@@ -486,15 +502,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["Moscow", "Singapore", "FL", "NY"],
-          "value": ["Moscow", "Singapore", "FL", "NY"]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct state from devices where country in ($country);",
-        "hide": 0,
+        "hide": 2,
         "includeAll": true,
         "label": "State",
         "multi": true,
@@ -510,15 +526,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["Singapore", "Moscow", "New York", "Tampa"],
-          "value": ["Singapore", "Moscow", "New York", "Tampa"]
+          "text": ["Moscow", "Stockholm", "Tokyo", "Singapore"],
+          "value": ["Moscow", "Stockholm", "Tokyo", "Singapore"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct city from devices where country in ($country) and state in ($state);",
-        "hide": 0,
+        "hide": 2,
         "includeAll": true,
         "label": "City",
         "multi": true,
@@ -535,8 +551,8 @@
         "allValue": "",
         "current": {
           "selected": false,
-          "text": ["device5", "device8", "device12", "device16"],
-          "value": ["device5", "device8", "device12", "device16"]
+          "text": ["device9", "device11", "device14", "device12"],
+          "value": ["device9", "device11", "device14", "device12"]
         },
         "datasource": {
           "type": "postgres",
@@ -544,7 +560,7 @@
         },
         "definition": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
         "description": "",
-        "hide": 0,
+        "hide": 2,
         "includeAll": true,
         "label": "Device",
         "multi": true,
