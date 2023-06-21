@@ -1,11 +1,12 @@
 # Change Log
 
-## 1.1.0 (IN PROGRESS)
+## 1.1.0 (2023-06-21)
 
 ### Features / Enhancements
 
-- Add Variables states based on Threshold (#6)
+- Add Variable statuses based on Threshold (#6)
 - Add react-table v8 instead of Table (#8)
+- Add Field options for variable values and statuses (#9)
 
 ## 1.0.0 (2023-06-19)
 
