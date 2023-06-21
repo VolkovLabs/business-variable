@@ -1,91 +1,39 @@
 import { useState, useEffect } from 'react';
-import { TypedVariableModel } from '@grafana/data';
-import { getTemplateSrv } from '@grafana/runtime';
+import { TypedVariableModel, EventBus } from '@grafana/data';
+import { getTemplateSrv, RefreshEvent } from '@grafana/runtime';
 import { RuntimeVariable } from '../../types';
 
 /**
- * Optimized variable search
+ * Get Runtime Variable
  * @param variables
  * @param variableName
- * @param previousFoundIndex
  */
-const getRuntimeVariable = (variables: TypedVariableModel[], variableName: string, previousFoundIndex: number) => {
-  /**
-   * For better performance use index if previously was found
-   */
-  if (previousFoundIndex >= 0) {
-    const runtimeVariable = variables[previousFoundIndex] as RuntimeVariable | undefined;
-
-    /**
-     * Verify name
-     */
-    if (runtimeVariable?.name === variableName) {
-      return {
-        index: previousFoundIndex,
-        item: runtimeVariable,
-      };
-    }
-  }
-
-  /**
-   * Find new index if no index or variable with new index
-   */
-  const index = variables.findIndex((dv) => variableName === dv.name);
-
-  return {
-    index,
-    item: variables[index] as RuntimeVariable | undefined,
-  };
+const getRuntimeVariable = (variables: TypedVariableModel[], variableName: string) => {
+  return variables.find((dv) => variableName === dv.name) as RuntimeVariable | undefined;
 };
 
-export const useRuntimeVariable = (variableName: string) => {
+/**
+ * Use Runtime Variable
+ * @param variableName
+ * @param eventBus
+ */
+export const useRuntimeVariable = (variableName: string, eventBus: EventBus) => {
   const [variable, setVariable] = useState<RuntimeVariable>();
 
-  /**
-   * Check variable updates on each frame
-   */
   useEffect(() => {
-    /**
-     * Found index
-     */
-    let foundIndex = -1;
+    setVariable(getRuntimeVariable(getTemplateSrv().getVariables(), variableName));
 
     /**
-     * Variable Checker Id
+     * Update variable on Refresh
      */
-    let variableCheckerId: number;
-
-    const updateVariable = () => {
-      const variables = getTemplateSrv().getVariables();
-      const { index, item } = getRuntimeVariable(variables, variableName, foundIndex);
-
-      /**
-       * Update Found Index
-       */
-      foundIndex = index;
-
-      if (variable !== item) {
-        /**
-         * Update variable if changed
-         */
-        setVariable(item);
-      }
-
-      /**
-       * Run new checker on next frame
-       */
-      variableCheckerId = window.requestAnimationFrame(updateVariable);
-    };
-
-    /**
-     * Run checker
-     */
-    variableCheckerId = window.requestAnimationFrame(updateVariable);
+    const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
+      setVariable(getRuntimeVariable(getTemplateSrv().getVariables(), variableName));
+    });
 
     return () => {
-      window.cancelAnimationFrame(variableCheckerId);
+      subscriber.unsubscribe();
     };
-  }, [variable, variableName]);
+  }, [eventBus, variableName]);
 
   return variable;
 };

@@ -16,8 +16,8 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Panel
  */
-export const VariablePanel: React.FC<Props> = ({ data, options, width, height }) => {
-  const { tableData, getRowId, columns } = useTable({ data: data?.series[0], variable: options.variable });
+export const VariablePanel: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
+  const { tableData, getRowId, columns } = useTable({ data: data?.series[0], variable: options.variable, eventBus });
 
   /**
    * Styles and Theme

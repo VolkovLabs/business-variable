@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { DataFrame } from '@grafana/data';
+import { DataFrame, EventBus } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
@@ -10,7 +10,7 @@ import { useRuntimeVariable } from './useRuntimeVariable';
 /**
  * Use Table
  */
-export const useTable = ({ data, variable }: { data?: DataFrame; variable: string }) => {
+export const useTable = ({ data, variable, eventBus }: { data?: DataFrame; variable: string; eventBus: EventBus }) => {
   /**
    * Styles and Theme
    */
@@ -20,7 +20,7 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
   /**
    * Runtime Variable
    */
-  const runtimeVariable = useRuntimeVariable(variable);
+  const runtimeVariable = useRuntimeVariable(variable, eventBus);
 
   /**
    * Update Table Data
