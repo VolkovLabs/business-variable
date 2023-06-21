@@ -8,6 +8,7 @@
 - Add react-table v8 instead of Table (#8)
 - Add Field options for variable values and statuses (#9)
 - Update Provisioning and README (#10)
+- Add support for Grafana 8.5.0 (#11)
 
 ## 1.0.0 (2023-06-19)
 
