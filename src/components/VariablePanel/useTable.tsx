@@ -48,8 +48,8 @@ export const useTable = ({
       .map((series) =>
         series.fields.find((field) => field.type === FieldType.string && (!options.name || field.name === options.name))
       )
-      .flatMap((field) => field?.values)
-      .toArray();
+      .find((field) => field?.values)
+      ?.values?.toArray();
 
     /**
      * Status values from data source
@@ -69,8 +69,8 @@ export const useTable = ({
       /**
        * Status
        */
-      const index = namesArray.findIndex((value) => value === option.value);
-      if (index >= 0) {
+      const index = namesArray?.findIndex((value: any) => value === option.value);
+      if (index !== undefined && index >= 0) {
         showStatus = true;
         const lastValue = statusArray?.values.get(index);
         const displayValue = statusArray?.display?.(lastValue);
