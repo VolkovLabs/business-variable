@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Add Variables states based on Threshold (#6)
+- Add react-table v8 (#8)
 
 ## 1.0.0 (2023-06-19)
 
