@@ -20,15 +20,22 @@ interface Props<TableData extends object> {
    * Table's columns definition. Must be memoized.
    */
   columns: Array<ColumnDef<TableData>>;
+
   /**
    * The data to display in the table. Must be memoized.
    */
   data: TableData[];
+
   /**
    * Render function for the expanded row. if not provided, the tables rows will not be expandable.
    */
   renderExpandedRow?: (row: TableData) => ReactNode;
+
+  /**
+   * Class Name
+   */
   className?: string;
+
   /**
    * Must return a unique id for each row
    */
