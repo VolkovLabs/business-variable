@@ -1,9 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
 import { DataFrame } from '@grafana/data';
-import { getTemplateSrv, locationService } from '@grafana/runtime';
-import { CellProps, Column, useTheme2 } from '@grafana/ui';
-import { RuntimeVariable, TableItem } from '../../types';
+import { locationService } from '@grafana/runtime';
+import { ColumnDef } from '@tanstack/react-table';
+import { useTheme2 } from '@grafana/ui';
+import { TableItem } from '../../types';
 import { Styles } from '../../styles';
+import { useRuntimeVariable } from './useRuntimeVariable';
 
 /**
  * Use Table
@@ -16,19 +18,12 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
   const styles = Styles(theme);
 
   /**
-   * Get Dashboard Variables
-   */
-  const variables = getTemplateSrv().getVariables();
-
-  /**
    * Runtime Variable
    */
-  const runtimeVariable = useMemo(() => {
-    return variables.find((dv) => variable === dv.name) as RuntimeVariable | undefined;
-  }, [variables, variable]);
+  const runtimeVariable = useRuntimeVariable(variable);
 
   /**
-   * Get Table Data
+   * Update Table Data
    */
   const tableData: TableItem[] = useMemo(() => {
     if (!runtimeVariable) {
@@ -148,11 +143,12 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
   /**
    * Columns
    */
-  const columns: Array<Column<TableItem>> = useMemo(() => {
+  const columns: Array<ColumnDef<TableItem>> = useMemo(() => {
     const prefix = `${runtimeVariable?.name || variable}`;
     return [
       {
         id: 'selected',
+        header: () => null,
         cell: ({ row }) => {
           return (
             <input
@@ -164,12 +160,13 @@ export const useTable = ({ data, variable }: { data?: DataFrame; variable: strin
             />
           );
         },
-        disableGrow: true,
+        enableResizing: false,
       },
       {
         id: 'value',
+        accessorKey: 'value',
         header: runtimeVariable?.label || variable,
-        cell: ({ row }: CellProps<TableItem, void>) => {
+        cell: ({ row }) => {
           return (
             <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
               {row.original.showStatus && (

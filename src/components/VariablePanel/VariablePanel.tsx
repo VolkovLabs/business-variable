@@ -1,10 +1,11 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, useTheme2, InteractiveTable } from '@grafana/ui';
+import { Alert, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
+import { Table } from '../Table';
 import { useTable } from './useTable';
 
 /**
@@ -44,7 +45,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height })
         </Alert>
       )}
 
-      {tableData.length > 0 && <InteractiveTable columns={columns} data={tableData} getRowId={getRowId} />}
+      {tableData.length > 0 && <Table columns={columns} data={tableData} getRowId={getRowId} />}
     </div>
   );
 };
