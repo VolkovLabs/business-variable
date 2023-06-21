@@ -25,6 +25,7 @@ describe('plugin', () => {
      */
     const builder: any = {
       addSelect: jest.fn().mockImplementation(() => builder),
+      addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     };
 
     /**
@@ -36,5 +37,6 @@ describe('plugin', () => {
      * Inputs
      */
     expect(builder.addSelect).toHaveBeenCalled();
+    expect(builder.addFieldNamePicker).toHaveBeenCalled();
   });
 });

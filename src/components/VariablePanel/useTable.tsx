@@ -1,16 +1,24 @@
 import React, { useMemo, useCallback } from 'react';
-import { DataFrame, EventBus } from '@grafana/data';
+import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
-import { TableItem } from '../../types';
+import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
 import { useRuntimeVariable } from './useRuntimeVariable';
 
 /**
  * Use Table
  */
-export const useTable = ({ data, variable, eventBus }: { data?: DataFrame; variable: string; eventBus: EventBus }) => {
+export const useTable = ({
+  data,
+  options,
+  eventBus,
+}: {
+  data: PanelData;
+  options: PanelOptions;
+  eventBus: EventBus;
+}) => {
   /**
    * Styles and Theme
    */
@@ -20,6 +28,7 @@ export const useTable = ({ data, variable, eventBus }: { data?: DataFrame; varia
   /**
    * Runtime Variable
    */
+  const variable = options.variable;
   const runtimeVariable = useRuntimeVariable(variable, eventBus);
 
   /**
@@ -31,18 +40,40 @@ export const useTable = ({ data, variable, eventBus }: { data?: DataFrame; varia
     }
 
     const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
-    const namesArray = data ? data.fields[0].values.toArray() : [];
+
+    /**
+     * Variable values from data source
+     */
+    const namesArray = data.series
+      .map((series) =>
+        series.fields.find((field) => field.type === FieldType.string && (!options.name || field.name === options.name))
+      )
+      .flatMap((field) => field?.values)
+      .toArray();
+
+    /**
+     * Status values from data source
+     */
+    const statusArray = data.series
+      .map((series) =>
+        series.fields.find(
+          (field) => field.type === FieldType.number && (!options.status || field.name === options.status)
+        )
+      )
+      .find((field) => field?.values);
 
     return runtimeVariable.options.map((option) => {
       let statusColor;
       let showStatus = false;
 
+      /**
+       * Status
+       */
       const index = namesArray.findIndex((value) => value === option.value);
-
       if (index >= 0) {
         showStatus = true;
-        const lastValue = data?.fields[1].values.get(index);
-        const displayValue = data?.fields[1].display?.(lastValue);
+        const lastValue = statusArray?.values.get(index);
+        const displayValue = statusArray?.display?.(lastValue);
         statusColor = displayValue?.color;
       }
 
@@ -53,7 +84,7 @@ export const useTable = ({ data, variable, eventBus }: { data?: DataFrame; varia
         statusColor,
       };
     });
-  }, [data, runtimeVariable]);
+  }, [data, runtimeVariable, options]);
 
   /**
    * Value Cell Select
