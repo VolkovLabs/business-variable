@@ -6,6 +6,7 @@ import { useTheme2 } from '@grafana/ui';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
 import { useRuntimeVariable } from './useRuntimeVariable';
+import { getRows } from './utils';
 
 /**
  * Use Table
@@ -62,14 +63,34 @@ export const useTable = ({
       )
       .find((field) => field?.values);
 
-    return runtimeVariable.options.map((option) => {
+    const groupFields =
+      variable === 'device'
+        ? [
+            {
+              name: 'country',
+            },
+            {
+              name: 'state',
+            },
+            {
+              name: 'city',
+            },
+          ]
+        : [];
+    const fields = [
+      ...groupFields,
+      { name: variable === 'device' ? 'name' : variable, source: variable === 'device' ? 'B' : 'A' },
+    ];
+
+    return getRows(data, fields, (item, key) => {
       let statusColor;
       let showStatus = false;
 
       /**
        * Status
        */
-      const index = namesArray?.findIndex((value: any) => value === option.value);
+      const value = item[key as keyof typeof item];
+      const index = namesArray?.findIndex((name: any) => name === value);
       if (index !== undefined && index >= 0) {
         showStatus = true;
         const lastValue = statusArray?.values.get(index);
@@ -78,13 +99,13 @@ export const useTable = ({
       }
 
       return {
-        ...option,
-        selected: isSelectedAll || !!option.selected,
+        value,
+        selected: isSelectedAll || !!runtimeVariable.options.find((option) => option.value === value)?.selected,
         showStatus,
         statusColor,
       };
     });
-  }, [data, runtimeVariable, options]);
+  }, [runtimeVariable, data, variable, options.name, options.status]);
 
   /**
    * Value Cell Select
@@ -96,7 +117,7 @@ export const useTable = ({
       }
 
       const name = runtimeVariable.name;
-      const value = row.text;
+      const value = row.value;
 
       /**
        * All is selected
@@ -178,46 +199,39 @@ export const useTable = ({
     const prefix = `${runtimeVariable?.name || variable}`;
     return [
       {
-        id: 'selected',
-        header: () => null,
-        cell: ({ row }) => {
-          return (
-            <input
-              type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
-              onChange={() => onChange(row.original)}
-              checked={row.original.selected}
-              className={styles.selectControl}
-              id={`${prefix}-${row.original.value}`}
-            />
-          );
-        },
-        enableResizing: false,
-      },
-      {
         id: 'value',
         accessorKey: 'value',
         header: runtimeVariable?.label || variable,
-        cell: ({ row }) => {
+        cell: ({ row, getValue }) => {
           return (
-            <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
-              {row.original.showStatus && (
+            <div style={{ paddingLeft: `${row.depth}rem`, display: 'flex' }}>
+              <input
+                type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
+                onChange={() => onChange(row.original)}
+                checked={row.original.selected}
+                className={styles.selectControl}
+                id={`${prefix}-${row.original.value}`}
+              />
+              <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
+                {row.original.showStatus && (
+                  <span
+                    className={styles.status}
+                    style={{
+                      backgroundColor: row.original.statusColor,
+                    }}
+                  />
+                )}
                 <span
-                  className={styles.status}
                   style={{
-                    backgroundColor: row.original.statusColor,
+                    fontWeight: row.original.selected
+                      ? theme.typography.fontWeightBold
+                      : theme.typography.fontWeightRegular,
                   }}
-                />
-              )}
-              <span
-                style={{
-                  fontWeight: row.original.selected
-                    ? theme.typography.fontWeightBold
-                    : theme.typography.fontWeightRegular,
-                }}
-              >
-                {row.original.text}
-              </span>
-            </label>
+                >
+                  {getValue<TableItem['value']>()}
+                </span>
+              </label>
+            </div>
           );
         },
       },
@@ -242,9 +256,17 @@ export const useTable = ({
     return row.value;
   }, []);
 
+  /**
+   * Get Sub Rows
+   */
+  const getSubRows = useCallback((row: TableItem) => {
+    return row.children;
+  }, []);
+
   return {
     tableData,
     columns,
     getRowId,
+    getSubRows,
   };
 };

@@ -17,6 +17,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     selectControl: css`
       vertical-align: middle;
+      margin-right: ${theme.spacing(1)};
     `,
     status: css`
       display: block;

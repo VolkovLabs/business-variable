@@ -3,13 +3,6 @@
  */
 export interface TableItem {
   /**
-   * Text
-   *
-   * @type {string}
-   */
-  text: string;
-
-  /**
    * Selected
    *
    * @type {boolean}
@@ -36,4 +29,9 @@ export interface TableItem {
    * @type {string}
    */
   statusColor?: string;
+
+  /**
+   * Sub Items
+   */
+  children?: TableItem[];
 }
