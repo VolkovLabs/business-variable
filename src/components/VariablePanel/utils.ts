@@ -6,21 +6,6 @@ interface FieldConfig {
   source?: string;
 }
 
-const createSeriesMapper = (data: PanelData) => {
-  const seriesMap: Record<string, DataFrame> = {};
-
-  return (name: string) => {
-    if (!seriesMap[name]) {
-      const dataFrame = data.series.find((dataFrame) => dataFrame.refId === name);
-      if (dataFrame) {
-        seriesMap[name] = dataFrame;
-      }
-    }
-
-    return seriesMap[name];
-  };
-};
-
 /**
  * Convert Data Frame to objects array
  * @param dataFrame
@@ -90,21 +75,33 @@ export const getRows = (
   data: PanelData,
   fields: FieldConfig[],
   getItem?: (item: object, key: string) => TableItem
-): TableItem[] => {
-  const getDataFrame = createSeriesMapper(data);
-  const directDependencies = fields;
+): TableItem[] | null => {
   const lastField = fields[fields.length - 1];
-  const dataFrame = getDataFrame(lastField.source || '');
+  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastField.source);
+
+  if (!dataFrame) {
+    return null;
+  }
+
+  /**
+   * Data frame as array of objects
+   */
   const objects = convertToObjects(dataFrame);
 
+  /**
+   * Default Get Item
+   * @param item
+   * @param key
+   */
   const defaultGetItem = (item: object, key: string): TableItem => ({
     value: item[key as keyof typeof item],
     selected: false,
     showStatus: false,
   });
+
   return getGroupArray(
     objects,
-    directDependencies.map(({ name }) => name),
+    fields.map(({ name }) => name),
     getItem || defaultGetItem
   );
 };

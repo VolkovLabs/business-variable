@@ -82,7 +82,7 @@ export const useTable = ({
       { name: variable === 'device' ? 'name' : variable, source: variable === 'device' ? 'B' : 'A' },
     ];
 
-    return getRows(data, fields, (item, key) => {
+    const rows = getRows(data, fields, (item, key) => {
       let statusColor;
       let showStatus = false;
 
@@ -101,6 +101,33 @@ export const useTable = ({
       return {
         value,
         selected: isSelectedAll || !!runtimeVariable.options.find((option) => option.value === value)?.selected,
+        showStatus,
+        statusColor,
+      };
+    });
+
+    if (rows) {
+      return rows;
+    }
+
+    return runtimeVariable.options.map((option) => {
+      let statusColor;
+      let showStatus = false;
+
+      /**
+       * Status
+       */
+      const index = namesArray?.findIndex((value: any) => value === option.value);
+      if (index !== undefined && index >= 0) {
+        showStatus = true;
+        const lastValue = statusArray?.values.get(index);
+        const displayValue = statusArray?.display?.(lastValue);
+        statusColor = displayValue?.color;
+      }
+
+      return {
+        value: option.text,
+        selected: isSelectedAll || !!option.selected,
         showStatus,
         statusColor,
       };
