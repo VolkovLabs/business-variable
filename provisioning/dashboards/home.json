@@ -271,10 +271,6 @@
       "options": {
         "groupLevels": [
           {
-            "name": "country",
-            "source": "B"
-          },
-          {
             "name": "state",
             "source": "B"
           },
@@ -283,7 +279,7 @@
             "source": "B"
           },
           {
-            "name": "name",
+            "name": "device",
             "source": "B"
           }
         ],
@@ -298,7 +294,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -327,7 +323,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "select * from devices ;",
+          "rawSql": "select name as device, country, state, city from devices ;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -553,18 +549,12 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
-            "Moscow",
-            "Singapore",
-            "Stockholm",
-            "Tokyo"
+            "All"
           ],
           "value": [
-            "Moscow",
-            "Singapore",
-            "Stockholm",
-            "Tokyo"
+            "$__all"
           ]
         },
         "datasource": {
@@ -590,15 +580,27 @@
         "current": {
           "selected": true,
           "text": [
+            "device5",
+            "device6",
+            "device7",
+            "device8",
             "device9",
+            "device10",
             "device11",
             "device12",
+            "device13",
             "device14"
           ],
           "value": [
+            "device5",
+            "device6",
+            "device7",
+            "device8",
             "device9",
+            "device10",
             "device11",
             "device12",
+            "device13",
             "device14"
           ]
         },
@@ -631,6 +633,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }

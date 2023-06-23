@@ -4,8 +4,15 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
-import { useRuntimeVariable } from './useRuntimeVariable';
-import { getRows, getItemWithStatus, getAllChildrenItems, selectVariableValues } from './utils';
+import { useRuntimeVariables } from './useRuntimeVariables';
+import {
+  getRows,
+  getItemWithStatus,
+  getAllChildrenItems,
+  selectVariableValues,
+  getFilteredTree,
+  convertTreeToPlain,
+} from './utils';
 
 /**
  * Use Table
@@ -28,8 +35,8 @@ export const useTable = ({
   /**
    * Runtime Variable
    */
-  const variable = options.variable;
-  const runtimeVariable = useRuntimeVariable(variable, eventBus);
+  const variable = options.groupLevels ? options.groupLevels[options.groupLevels.length - 1]?.name : options.variable;
+  const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
   /**
    * Update Table Data
@@ -70,10 +77,12 @@ export const useTable = ({
        */
       const rows = getRows(data, groupFields, (item, key, children) => {
         const value = item[key as keyof typeof item];
+        const levelVariable = getRuntimeVariable(key);
         return getItemWithStatus(
           {
             value,
-            selected: !!runtimeVariable.options.find((option) => option.value === value)?.selected,
+            selected: !!runtimeVariable?.options.find((option) => option.value === value)?.selected,
+            variable: levelVariable,
           },
           {
             children,
@@ -94,6 +103,7 @@ export const useTable = ({
               {
                 value: 'all',
                 selected: isSelectedAll,
+                variable: getRuntimeVariable(groupFields[0].name),
               },
               {
                 namesArray,
@@ -110,45 +120,67 @@ export const useTable = ({
     /**
      * Use Variable Options
      */
-    return runtimeVariable.options.map((option) => {
-      return getItemWithStatus(
-        {
-          value: option.text,
-          selected: !!option.selected,
-        },
-        {
-          namesArray,
-          statusField: statusArray,
-          isSelectedAll,
-        }
-      );
-    });
-  }, [runtimeVariable, data, options.groupLevels, options.name, options.status]);
+    return (
+      runtimeVariable?.options.map((option) => {
+        return getItemWithStatus(
+          {
+            value: option.text,
+            selected: !!option.selected,
+            variable: runtimeVariable,
+          },
+          {
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+          }
+        );
+      }) || []
+    );
+  }, [runtimeVariable, data, options.groupLevels, options.name, options.status, getRuntimeVariable]);
 
   /**
    * Value Cell Select
    */
   const onChange = useCallback(
     (row: TableItem) => {
-      if (!runtimeVariable) {
-        return;
-      }
-
+      const values: string[] = [];
       if (row.children) {
         /**
          * Handle Selection for all child items
          */
         const allChildItems = getAllChildrenItems(row);
         const allValues = allChildItems.map((item) => item.value);
-
-        selectVariableValues(allValues, runtimeVariable);
-        return;
+        values.push(...allValues);
+      } else {
+        const value = row.value;
+        values.push(value);
       }
 
-      const value = row.value;
-      selectVariableValues([value], runtimeVariable);
+      const filteredTree = getFilteredTree(tableData, values);
+      const itemsToUpdate = convertTreeToPlain(filteredTree);
+
+      /**
+       * Update All Related Variables
+       */
+      itemsToUpdate
+        .filter((item) => item.variable !== runtimeVariable)
+        .map((item) => ({
+          variable: item.variable,
+          values: item.values.filter((value) =>
+            item.variable?.options.some((option) => option.text === value && !option.selected)
+          ),
+        }))
+        .filter((item) => item.values.length > 0)
+        .forEach(({ variable, values }) => {
+          selectVariableValues(values, variable);
+        });
+
+      /**
+       * Update Variable Values
+       */
+      selectVariableValues(values, runtimeVariable);
     },
-    [runtimeVariable]
+    [runtimeVariable, tableData]
   );
 
   /**

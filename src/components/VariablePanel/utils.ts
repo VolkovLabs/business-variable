@@ -50,12 +50,23 @@ const getGroupArray = (
 ): TableItem[] => {
   const currentKey = fieldKeys[0];
   if (fieldKeys.length === 1) {
-    return items.map((item) => getItem(item, currentKey));
+    return items.map((item) => {
+      const tableItem = getItem(item, currentKey);
+      return {
+        ...tableItem,
+        childValues: [tableItem.value],
+      };
+    });
   }
   return Array.from(groupBy(items, currentKey), ([key, groupItems]): TableItem => {
     const children = getGroupArray(groupItems, fieldKeys.slice(1), getItem);
+    const item = getItem({ [currentKey]: key }, currentKey, children);
     return {
-      ...getItem({ [currentKey]: key }, currentKey, children),
+      ...item,
+      childValues: children.reduce(
+        (acc, child) => acc.concat(child.childValues ? child.childValues : []),
+        item.childValues || []
+      ),
       children,
     };
   });
@@ -111,7 +122,7 @@ export const getRows = (
  * @param isSelectedAll
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean },
+  item: { value: string; selected: boolean; variable?: RuntimeVariable },
   {
     namesArray,
     statusField,
@@ -139,6 +150,7 @@ export const getItemWithStatus = (
     selected: isSelectedAll || item.selected || isAllChildrenSelected,
     showStatus,
     statusColor,
+    variable: item.variable,
   };
 };
 
@@ -159,7 +171,7 @@ export const getAllChildrenItems = (row: TableItem): TableItem[] => {
  * @param values
  * @param runtimeVariable
  */
-export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
+export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable, isToggle = true) => {
   if (!runtimeVariable) {
     return;
   }
@@ -197,7 +209,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
     /**
      * Deselect values
      */
-    if (alreadySelectedValues.length === values.length) {
+    if (isToggle && alreadySelectedValues.length === values.length) {
       locationService.partial(
         { [`var-${name}`]: searchParams.filter((value) => !alreadySelectedValues.includes(value)) },
         true
@@ -216,4 +228,35 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
    */
   const value = values[0];
   locationService.partial({ [`var-${name}`]: value }, true);
+};
+
+/**
+ * Get FilteredTree
+ * @param rows
+ * @param values
+ */
+export const getFilteredTree = (rows: TableItem[], values: string[]): TableItem[] => {
+  const filteredRows = rows.filter((row) => row.childValues?.some((childValue) => values.includes(childValue)));
+  return filteredRows.filter((row) => (row.children ? getFilteredTree(row.children, values) : false));
+};
+
+type TreePlain = {
+  variable?: RuntimeVariable;
+  values: string[];
+};
+
+export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], depth = 0): TreePlain[] => {
+  return rows.reduce((acc, row) => {
+    const levelItem = acc[depth] || {
+      variable: undefined,
+      values: [],
+    };
+    levelItem.variable = row.variable;
+    levelItem.values.push(row.value);
+    const newResult = acc[depth] ? acc : acc.concat(levelItem);
+    if (row.children) {
+      return convertTreeToPlain(row.children, newResult, depth + 1);
+    }
+    return newResult;
+  }, result);
 };

@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { getRows, getAllChildrenItems, selectVariableValues } from './utils';
+import { getRows, getAllChildrenItems, selectVariableValues, convertTreeToPlain } from './utils';
 
 /**
  * Mock @grafana/runtime
@@ -36,10 +36,12 @@ describe('Utils', () => {
         {
           value: 'USA',
           ...defaultItem,
+          childValues: ['USA'],
         },
         {
           value: 'Japan',
           ...defaultItem,
+          childValues: ['Japan'],
         },
       ]);
     });
@@ -68,9 +70,11 @@ describe('Utils', () => {
         {
           value: 'USA',
           ...defaultItem,
+          childValues: ['FL'],
           children: [
             {
               value: 'FL',
+              childValues: ['FL'],
               ...defaultItem,
             },
           ],
@@ -78,9 +82,11 @@ describe('Utils', () => {
         {
           value: 'Japan',
           ...defaultItem,
+          childValues: ['Tokio'],
           children: [
             {
               value: 'Tokio',
+              childValues: ['Tokio'],
               ...defaultItem,
             },
           ],
@@ -122,17 +128,21 @@ describe('Utils', () => {
         {
           value: 'USA',
           ...defaultItem,
+          childValues: ['device1', 'device11'],
           children: [
             {
               value: 'FL',
+              childValues: ['device1'],
               ...defaultItem,
               children: [
                 {
                   value: 'Tampa',
+                  childValues: ['device1'],
                   ...defaultItem,
                   children: [
                     {
                       value: 'device1',
+                      childValues: ['device1'],
                       ...defaultItem,
                     },
                   ],
@@ -142,13 +152,16 @@ describe('Utils', () => {
             {
               value: 'NY',
               ...defaultItem,
+              childValues: ['device11'],
               children: [
                 {
                   value: 'New York',
+                  childValues: ['device11'],
                   ...defaultItem,
                   children: [
                     {
                       value: 'device11',
+                      childValues: ['device11'],
                       ...defaultItem,
                     },
                   ],
@@ -160,17 +173,21 @@ describe('Utils', () => {
         {
           value: 'Japan',
           ...defaultItem,
+          childValues: ['device12'],
           children: [
             {
               value: 'Tokio',
               ...defaultItem,
+              childValues: ['device12'],
               children: [
                 {
                   value: 'Tokio',
                   ...defaultItem,
+                  childValues: ['device12'],
                   children: [
                     {
                       value: 'device12',
+                      childValues: ['device12'],
                       ...defaultItem,
                     },
                   ],
@@ -401,6 +418,64 @@ describe('Utils', () => {
           true
         );
       });
+    });
+  });
+
+  describe('convertTreeToPlain', () => {
+    it('Should Convert tree structure to plain', () => {
+      expect(
+        convertTreeToPlain([
+          {
+            value: '1',
+            children: [
+              {
+                value: '1-2',
+                children: [
+                  {
+                    value: '1-3',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            value: '2',
+            children: [
+              {
+                value: '2-2',
+                children: [
+                  {
+                    value: '2-3',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            value: '3',
+            children: [
+              {
+                value: '3-2',
+                children: [
+                  {
+                    value: '3-3',
+                  },
+                ],
+              },
+            ],
+          },
+        ] as any)
+      ).toEqual([
+        {
+          values: ['1', '2', '3'],
+        },
+        {
+          values: ['1-2', '2-2', '3-2'],
+        },
+        {
+          values: ['1-3', '2-3', '3-3'],
+        },
+      ]);
     });
   });
 });
