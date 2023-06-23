@@ -7,6 +7,7 @@
     "@grafana/ui": "^10.0.0",
     "@tanstack/react-table": "^8.9.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "tslib": "^2.5.3"
   },
@@ -25,6 +26,7 @@
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.14.195",
     "@types/node": "^18.16.18",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",

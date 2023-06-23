@@ -1,6 +1,6 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { VariablePanel } from './components';
+import { VariablePanel, FieldsEditor } from './components';
 import { PanelOptions } from './types';
 
 /**
@@ -54,6 +54,13 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           noFieldsMessage: 'No number fields found',
         },
       });
+
+    builder.addCustomEditor({
+      id: 'levelEditor',
+      path: 'groupLevels',
+      name: 'Field Levels',
+      editor: FieldsEditor,
+    });
 
     return builder;
   });

@@ -1,12 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
-import { locationService } from '@grafana/runtime';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
 import { useRuntimeVariable } from './useRuntimeVariable';
-import { getRows } from './utils';
+import { getRows, getItemWithStatus, getAllChildrenItems, selectVariableValues } from './utils';
 
 /**
  * Use Table
@@ -63,76 +62,68 @@ export const useTable = ({
       )
       .find((field) => field?.values);
 
-    const groupFields =
-      variable === 'device'
-        ? [
-            {
-              name: 'country',
-            },
-            {
-              name: 'state',
-            },
-            {
-              name: 'city',
-            },
-          ]
-        : [];
-    const fields = [
-      ...groupFields,
-      { name: variable === 'device' ? 'name' : variable, source: variable === 'device' ? 'B' : 'A' },
-    ];
+    const groupFields = options.groupLevels || [];
 
-    const rows = getRows(data, fields, (item, key) => {
-      let statusColor;
-      let showStatus = false;
-
+    if (groupFields.length) {
       /**
-       * Status
+       * Use Group levels
        */
-      const value = item[key as keyof typeof item];
-      const index = namesArray?.findIndex((name: any) => name === value);
-      if (index !== undefined && index >= 0) {
-        showStatus = true;
-        const lastValue = statusArray?.values.get(index);
-        const displayValue = statusArray?.display?.(lastValue);
-        statusColor = displayValue?.color;
+      const rows = getRows(data, groupFields, (item, key, children) => {
+        const value = item[key as keyof typeof item];
+        return getItemWithStatus(
+          {
+            value,
+            selected: !!runtimeVariable.options.find((option) => option.value === value)?.selected,
+          },
+          {
+            children,
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+          }
+        );
+      });
+
+      if (rows) {
+        if (groupFields.length === 1) {
+          /**
+           * Add all option if only 1 level
+           */
+          return [
+            getItemWithStatus(
+              {
+                value: 'all',
+                selected: isSelectedAll,
+              },
+              {
+                namesArray,
+                statusField: statusArray,
+                isSelectedAll,
+              }
+            ),
+          ].concat(rows);
+        }
+        return rows;
       }
-
-      return {
-        value,
-        selected: isSelectedAll || !!runtimeVariable.options.find((option) => option.value === value)?.selected,
-        showStatus,
-        statusColor,
-      };
-    });
-
-    if (rows) {
-      return rows;
     }
 
+    /**
+     * Use Variable Options
+     */
     return runtimeVariable.options.map((option) => {
-      let statusColor;
-      let showStatus = false;
-
-      /**
-       * Status
-       */
-      const index = namesArray?.findIndex((value: any) => value === option.value);
-      if (index !== undefined && index >= 0) {
-        showStatus = true;
-        const lastValue = statusArray?.values.get(index);
-        const displayValue = statusArray?.display?.(lastValue);
-        statusColor = displayValue?.color;
-      }
-
-      return {
-        value: option.text,
-        selected: isSelectedAll || !!option.selected,
-        showStatus,
-        statusColor,
-      };
+      return getItemWithStatus(
+        {
+          value: option.text,
+          selected: !!option.selected,
+        },
+        {
+          namesArray,
+          statusField: statusArray,
+          isSelectedAll,
+        }
+      );
     });
-  }, [runtimeVariable, data, variable, options.name, options.status]);
+  }, [runtimeVariable, data, options.groupLevels, options.name, options.status]);
 
   /**
    * Value Cell Select
@@ -143,78 +134,19 @@ export const useTable = ({
         return;
       }
 
-      const name = runtimeVariable.name;
+      if (row.children) {
+        /**
+         * Handle Selection for all child items
+         */
+        const allChildItems = getAllChildrenItems(row);
+        const allValues = allChildItems.map((item) => item.value);
+
+        selectVariableValues(allValues, runtimeVariable);
+        return;
+      }
+
       const value = row.value;
-
-      /**
-       * All is selected
-       */
-      if (runtimeVariable.includeAll && !value?.toLowerCase()?.indexOf('all')) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Select a single value if multi select is not enabled
-       */
-      if (!runtimeVariable.multi) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Search
-       */
-      const searchParams = locationService
-        .getSearch()
-        .getAll(`var-${name}`)
-        .filter((s) => s.toLowerCase().indexOf('all') !== 0);
-
-      /**
-       * Check if any already selected
-       */
-      const selectedValues = runtimeVariable.options.filter((opt) => opt.selected).map((opt) => opt.text);
-
-      /**
-       * Value selected, but not defined in the URL
-       */
-      if (selectedValues.length && !locationService.getSearchObject()[`var-${name}`]) {
-        searchParams.push(...selectedValues);
-        locationService.partial({ [`var-${name}`]: [...selectedValues] }, true);
-      }
-
-      /**
-       * All was selected, changing to the value
-       */
-      if (runtimeVariable.includeAll && selectedValues.find((opt) => opt.toLowerCase() === 'all')) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Already selected value in multi-value
-       */
-      if (searchParams.length >= 1) {
-        const isSelected = searchParams.includes(value);
-
-        /**
-         * Select more
-         */
-        if (!isSelected) {
-          locationService.partial({ [`var-${name}`]: [...searchParams, value] }, true);
-          return;
-        }
-
-        /**
-         * Remove from selected
-         */
-        locationService.partial(
-          {
-            [`var-${name}`]: searchParams.filter((sp) => sp !== value),
-          },
-          true
-        );
-      }
+      selectVariableValues([value], runtimeVariable);
     },
     [runtimeVariable]
   );
@@ -277,13 +209,6 @@ export const useTable = ({
   ]);
 
   /**
-   * Get Row Id
-   */
-  const getRowId = useCallback((row: TableItem) => {
-    return row.value;
-  }, []);
-
-  /**
    * Get Sub Rows
    */
   const getSubRows = useCallback((row: TableItem) => {
@@ -293,7 +218,6 @@ export const useTable = ({
   return {
     tableData,
     columns,
-    getRowId,
     getSubRows,
   };
 };

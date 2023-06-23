@@ -1,0 +1,203 @@
+import React, { useState, useCallback, useMemo } from 'react';
+import { cx } from '@emotion/css';
+import { StandardEditorProps, SelectableValue } from '@grafana/data';
+import { useTheme2, Icon, IconButton, InlineFieldRow, InlineField, Select, Button } from '@grafana/ui';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DraggingStyle,
+  NotDraggingStyle,
+} from 'react-beautiful-dnd';
+import { GroupLevel, PanelOptions } from '../../types';
+import { Styles } from './styles';
+
+/**
+ * Reorder
+ * @param list
+ * @param startIndex
+ * @param endIndex
+ */
+const reorder = (list: GroupLevel[], startIndex: number, endIndex: number) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const getItemStyle = (
+  isDragging: boolean,
+  draggableStyle: DraggingStyle | NotDraggingStyle | undefined,
+  index: number
+) => ({
+  marginLeft: index * 4,
+  /**
+   * styles we need to apply on draggables
+   */
+  ...draggableStyle,
+});
+
+/**
+ * Properties
+ */
+interface Props extends StandardEditorProps<GroupLevel[], any, PanelOptions> {}
+
+/**
+ * Fields Editor
+ * @constructor
+ */
+export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onChange }) => {
+  /**
+   * Styles and Theme
+   */
+  const theme = useTheme2();
+  const styles = Styles(theme);
+
+  /**
+   * Items
+   */
+  const [items, setItems] = useState(options?.groupLevels || []);
+
+  /**
+   * Change Items
+   */
+  const onChangeItems = useCallback(
+    (items: GroupLevel[]) => {
+      setItems(items);
+      onChange(items);
+    },
+    [onChange]
+  );
+
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      /**
+       * Dropped outside the list
+       */
+      if (!result.destination) {
+        return;
+      }
+
+      onChangeItems(reorder(items, result.source.index, result.destination.index));
+    },
+    [items, onChangeItems]
+  );
+
+  const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
+
+  const availableFieldOptions = useMemo(() => {
+    const nameField = items[items.length - 1];
+
+    if (nameField) {
+      const dataFrame = data.find((dataFrame) => dataFrame.refId === nameField?.source);
+
+      return (
+        dataFrame?.fields
+          .map(({ name }) => ({
+            label: name,
+            source: dataFrame.refId,
+            value: name,
+            fieldName: name,
+          }))
+          .filter((option) => !items.some((item) => item.name === option.value)) || []
+      );
+    }
+
+    return data.reduce((acc: SelectableValue[], dataFrame) => {
+      return acc.concat(
+        dataFrame.fields.map((field) => ({
+          value: `${dataFrame.refId}:${field.name}`,
+          fieldName: field.name,
+          label: `${dataFrame.refId}:${field.name}`,
+          source: dataFrame.refId,
+        }))
+      );
+    }, []);
+  }, [data, items]);
+
+  const onAddNewLevel = useCallback(() => {
+    if (newLevel) {
+      onChangeItems([
+        {
+          name: newLevel.name,
+          source: newLevel.source,
+        },
+        ...items,
+      ]);
+      setNewLevel(null);
+    }
+  }, [items, newLevel, onChangeItems]);
+
+  return (
+    <>
+      <div className={styles.newLevel}>
+        <InlineFieldRow>
+          <InlineField label="New Level" grow={true}>
+            <Select
+              options={availableFieldOptions}
+              value={newLevel?.value || null}
+              onChange={(event) => {
+                setNewLevel({
+                  value: event.value || '',
+                  source: event.source,
+                  name: event.fieldName,
+                });
+              }}
+            />
+          </InlineField>
+          <Button disabled={!newLevel} onClick={onAddNewLevel}>
+            Add
+          </Button>
+        </InlineFieldRow>
+      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {items.map((item, index) => (
+                <Draggable key={item.name} draggableId={item.name} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
+                      className={styles.item}
+                    >
+                      <div className={styles.header}>
+                        <div className={styles.column}>
+                          {item.name && (
+                            <div className={styles.titleWrapper}>
+                              <div className={cx(styles.title)}>{item.name}</div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className={styles.column}>
+                          <IconButton
+                            name="trash-alt"
+                            onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
+                          />
+                          <Icon
+                            title="Drag and drop to reorder"
+                            name="draggabledots"
+                            size="lg"
+                            className={styles.dragIcon}
+                            {...provided.dragHandleProps}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
+  );
+};

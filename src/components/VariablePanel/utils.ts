@@ -1,10 +1,6 @@
-import { PanelData, DataFrame } from '@grafana/data';
-import { TableItem } from '../../types';
-
-interface FieldConfig {
-  name: string;
-  source?: string;
-}
+import { PanelData, DataFrame, Field } from '@grafana/data';
+import { locationService } from '@grafana/runtime';
+import { TableItem, GroupLevel, RuntimeVariable } from '../../types';
 
 /**
  * Convert Data Frame to objects array
@@ -50,34 +46,34 @@ const groupBy = (items: object[] | undefined, fieldKey: string): Map<string, obj
 const getGroupArray = (
   items: object[],
   fieldKeys: string[],
-  getItem: (item: object, key: string) => TableItem
+  getItem: (item: object, key: string, children?: TableItem[]) => TableItem
 ): TableItem[] => {
   const currentKey = fieldKeys[0];
   if (fieldKeys.length === 1) {
     return items.map((item) => getItem(item, currentKey));
   }
-  return Array.from(
-    groupBy(items, currentKey),
-    ([key, groupItems]): TableItem => ({
-      ...getItem({ [currentKey]: key }, currentKey),
-      children: getGroupArray(groupItems, fieldKeys.slice(1), getItem),
-    })
-  );
+  return Array.from(groupBy(items, currentKey), ([key, groupItems]): TableItem => {
+    const children = getGroupArray(groupItems, fieldKeys.slice(1), getItem);
+    return {
+      ...getItem({ [currentKey]: key }, currentKey, children),
+      children,
+    };
+  });
 };
 
 /**
  * Get Table Rows
  * @param data
- * @param fields
+ * @param groupLevels
  * @param getItem
  */
 export const getRows = (
   data: PanelData,
-  fields: FieldConfig[],
-  getItem?: (item: object, key: string) => TableItem
+  groupLevels: GroupLevel[],
+  getItem?: (item: object, key: string, children?: TableItem[]) => TableItem
 ): TableItem[] | null => {
-  const lastField = fields[fields.length - 1];
-  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastField.source);
+  const lastGroupLevel = groupLevels[groupLevels.length - 1];
+  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastGroupLevel.source);
 
   if (!dataFrame) {
     return null;
@@ -101,7 +97,123 @@ export const getRows = (
 
   return getGroupArray(
     objects,
-    fields.map(({ name }) => name),
+    groupLevels.map(({ name }) => name),
     getItem || defaultGetItem
   );
+};
+
+/**
+ * Get Item With Status
+ * @param item
+ * @param namesArray
+ * @param statusField
+ * @param children
+ * @param isSelectedAll
+ */
+export const getItemWithStatus = (
+  item: { value: string; selected: boolean },
+  {
+    namesArray,
+    statusField,
+    children,
+    isSelectedAll,
+  }: { namesArray?: unknown[]; statusField?: Field; children?: TableItem[]; isSelectedAll: boolean }
+): TableItem => {
+  let statusColor;
+  let showStatus = false;
+
+  /**
+   * Status
+   */
+  const index = namesArray?.findIndex((name) => name === item.value);
+  if (index !== undefined && index >= 0) {
+    showStatus = true;
+    const lastValue = statusField?.values.get(index);
+    const displayValue = statusField?.display?.(lastValue);
+    statusColor = displayValue?.color;
+  }
+
+  const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+  return {
+    value: item.value,
+    selected: isSelectedAll || item.selected || isAllChildrenSelected,
+    showStatus,
+    statusColor,
+  };
+};
+
+/**
+ * Get All Children Items for Row
+ * @param row
+ */
+export const getAllChildrenItems = (row: TableItem): TableItem[] => {
+  return (
+    row.children?.reduce((acc: TableItem[], subRow) => {
+      return acc.concat(subRow.children ? getAllChildrenItems(subRow) : subRow);
+    }, []) || []
+  );
+};
+
+/**
+ * Select Variable Values
+ * @param values
+ * @param runtimeVariable
+ */
+export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
+  if (!runtimeVariable) {
+    return;
+  }
+
+  const { name, multi } = runtimeVariable;
+
+  /**
+   * Multi update
+   */
+  if (multi) {
+    if (values.some((value) => value.toLowerCase() === 'all')) {
+      locationService.partial({ [`var-${name}`]: 'All' }, true);
+      return;
+    }
+    /**
+     * All Selected values for variable
+     */
+    const searchParams = locationService
+      .getSearch()
+      .getAll(`var-${name}`)
+      .filter((s) => s.toLowerCase().indexOf('all') !== 0);
+
+    /**
+     * Values selected, but not defined in the URL
+     */
+    if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
+      searchParams.push(...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text));
+    }
+
+    /**
+     * Get Already Selected Values
+     */
+    const alreadySelectedValues = values.filter((value) => searchParams.includes(value));
+
+    /**
+     * Deselect values
+     */
+    if (alreadySelectedValues.length === values.length) {
+      locationService.partial(
+        { [`var-${name}`]: searchParams.filter((value) => !alreadySelectedValues.includes(value)) },
+        true
+      );
+      return;
+    }
+
+    const uniqueValues = [...new Set(values.concat(searchParams)).values()];
+
+    locationService.partial({ [`var-${name}`]: uniqueValues }, true);
+    return;
+  }
+
+  /**
+   * Single Value
+   */
+  const value = values[0];
+  locationService.partial({ [`var-${name}`]: value }, true);
 };

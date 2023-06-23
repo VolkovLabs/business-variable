@@ -269,6 +269,24 @@
       },
       "id": 6,
       "options": {
+        "groupLevels": [
+          {
+            "name": "country",
+            "source": "B"
+          },
+          {
+            "name": "state",
+            "source": "B"
+          },
+          {
+            "name": "city",
+            "source": "B"
+          },
+          {
+            "name": "name",
+            "source": "B"
+          }
+        ],
         "variable": "device"
       },
       "targets": [
@@ -430,7 +448,9 @@
           "select": [
             [
               {
-                "params": ["value"],
+                "params": [
+                  "value"
+                ],
                 "type": "column"
               }
             ]
@@ -468,7 +488,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -477,9 +497,13 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "postgres",
@@ -501,9 +525,13 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "postgres",
@@ -525,9 +553,19 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["Moscow", "Stockholm", "Tokyo", "Singapore"],
-          "value": ["Moscow", "Stockholm", "Tokyo", "Singapore"]
+          "selected": true,
+          "text": [
+            "Moscow",
+            "Singapore",
+            "Stockholm",
+            "Tokyo"
+          ],
+          "value": [
+            "Moscow",
+            "Singapore",
+            "Stockholm",
+            "Tokyo"
+          ]
         },
         "datasource": {
           "type": "postgres",
@@ -550,9 +588,19 @@
       {
         "allValue": "",
         "current": {
-          "selected": false,
-          "text": ["device9", "device11", "device14", "device12"],
-          "value": ["device9", "device11", "device14", "device12"]
+          "selected": true,
+          "text": [
+            "device9",
+            "device11",
+            "device12",
+            "device14"
+          ],
+          "value": [
+            "device9",
+            "device11",
+            "device12",
+            "device14"
+          ]
         },
         "datasource": {
           "type": "postgres",
@@ -583,6 +631,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }

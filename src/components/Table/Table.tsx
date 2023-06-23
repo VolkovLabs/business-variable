@@ -34,7 +34,7 @@ interface Props<TableData extends object> {
   /**
    * Must return a unique id for each row
    */
-  getRowId: TableOptions<TableData>['getRowId'];
+  getRowId?: TableOptions<TableData>['getRowId'];
 
   /**
    * Get Sub Rows
@@ -68,7 +68,6 @@ export const Table = <TableData extends object>({
     autoResetExpanded: false,
     enableSorting: false,
     enableMultiSort: false,
-    getRowId,
     getSubRows,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
