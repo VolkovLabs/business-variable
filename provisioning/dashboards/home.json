@@ -298,7 +298,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -406,7 +406,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -604,8 +604,8 @@
       {
         "current": {
           "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "text": ["Singapore", "Japan", "Russia", "Sweden", "USA"],
+          "value": ["Singapore", "Japan", "Russia", "Sweden", "USA"]
         },
         "datasource": {
           "type": "postgres",
@@ -628,8 +628,8 @@
       {
         "current": {
           "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "text": ["Stockholm", "Singapore", "IL", "FL", "NY"],
+          "value": ["Stockholm", "Singapore", "IL", "FL", "NY"]
         },
         "datasource": {
           "type": "postgres",
@@ -652,8 +652,8 @@
       {
         "current": {
           "selected": false,
-          "text": ["Chicago"],
-          "value": ["Chicago"]
+          "text": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"],
+          "value": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"]
         },
         "datasource": {
           "type": "postgres",
@@ -677,8 +677,8 @@
         "allValue": "",
         "current": {
           "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "text": ["device10", "device15", "device9", "device7", "device2"],
+          "value": ["device10", "device15", "device9", "device7", "device2"]
         },
         "datasource": {
           "type": "postgres",
