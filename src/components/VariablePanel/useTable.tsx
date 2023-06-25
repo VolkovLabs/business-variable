@@ -98,7 +98,7 @@ export const useTable = ({
         /**
          * Add all option if only 1 level
          */
-        if (groupFields.length === 1) {
+        if (groupFields.length === 1 && runtimeVariable?.multi && runtimeVariable?.includeAll) {
           return [
             getItemWithStatus(
               {
