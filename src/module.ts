@@ -1,6 +1,6 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { VariablePanel } from './components';
+import { VariablePanel, FieldsEditor } from './components';
 import { PanelOptions } from './types';
 
 /**
@@ -27,17 +27,26 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
+    builder.addSelect({
+      path: 'variable',
+      name: 'Select Variable to Display',
+      settings: {
+        options: variables.map((vr) => ({
+          label: vr.name,
+          value: vr.name,
+        })),
+      },
+      showIf: (config) => !config.levels?.length,
+    });
+
+    builder.addCustomEditor({
+      id: 'fieldsEditor',
+      path: 'levels',
+      name: 'Tree View levels based on Data Source',
+      editor: FieldsEditor,
+    });
+
     builder
-      .addSelect({
-        path: 'variable',
-        name: 'Select Variable to Display',
-        settings: {
-          options: variables.map((vr) => ({
-            label: vr.name,
-            value: vr.name,
-          })),
-        },
-      })
       .addFieldNamePicker({
         path: 'name',
         name: 'Field with variable values. First string field will be used if not specified.',
@@ -45,6 +54,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           filter: (f: Field) => f.type === FieldType.string,
           noFieldsMessage: 'No strings fields found',
         },
+        category: ['Status'],
       })
       .addFieldNamePicker({
         path: 'status',
@@ -53,6 +63,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           filter: (f: Field) => f.type === FieldType.number,
           noFieldsMessage: 'No number fields found',
         },
+        category: ['Status'],
       });
 
     return builder;

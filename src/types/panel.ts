@@ -1,4 +1,21 @@
 /**
+ * Group Level
+ */
+export interface GroupLevel {
+  /**
+   * Name
+   *
+   * @type {string}
+   */
+  name: string;
+
+  /**
+   * Data Frame Id
+   */
+  source: string;
+}
+
+/**
  * Options
  */
 export interface PanelOptions {
@@ -22,4 +39,9 @@ export interface PanelOptions {
    * @type {string}
    */
   status: string;
+
+  /**
+   * Tree View Levels
+   */
+  levels: GroupLevel[];
 }

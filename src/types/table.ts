@@ -1,14 +1,9 @@
+import { RuntimeVariable } from './variable';
+
 /**
  * Table Item
  */
 export interface TableItem {
-  /**
-   * Text
-   *
-   * @type {string}
-   */
-  text: string;
-
   /**
    * Selected
    *
@@ -36,4 +31,19 @@ export interface TableItem {
    * @type {string}
    */
   statusColor?: string;
+
+  /**
+   * Sub Items
+   */
+  children?: TableItem[];
+
+  /**
+   * Variable
+   */
+  variable?: RuntimeVariable;
+
+  /**
+   * All Child Values
+   */
+  childValues?: string[];
 }

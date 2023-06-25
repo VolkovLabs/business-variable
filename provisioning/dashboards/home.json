@@ -269,6 +269,24 @@
       },
       "id": 6,
       "options": {
+        "levels": [
+          {
+            "name": "country",
+            "source": "B"
+          },
+          {
+            "name": "state",
+            "source": "B"
+          },
+          {
+            "name": "city",
+            "source": "B"
+          },
+          {
+            "name": "device",
+            "source": "B"
+          }
+        ],
         "variable": "device"
       },
       "targets": [
@@ -280,7 +298,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -309,7 +327,115 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "select * from devices ;",
+          "rawSql": "select name as device, country, state, city from devices ;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescale"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 6,
+        "x": 0,
+        "y": 10
+      },
+      "id": 7,
+      "options": {
+        "levels": [
+          {
+            "name": "country",
+            "source": "B"
+          },
+          {
+            "name": "device",
+            "source": "B"
+          }
+        ],
+        "variable": "device"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select name as device, country, state, city from devices ;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -396,8 +522,8 @@
       },
       "gridPos": {
         "h": 14,
-        "w": 24,
-        "x": 0,
+        "w": 18,
+        "x": 6,
         "y": 10
       },
       "id": 2,
@@ -468,7 +594,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
@@ -478,15 +604,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "text": ["Singapore", "Japan", "Russia", "Sweden", "USA"],
+          "value": ["Singapore", "Japan", "Russia", "Sweden", "USA"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct country from devices;",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": true,
@@ -502,15 +628,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["All"],
-          "value": ["$__all"]
+          "text": ["Stockholm", "Singapore", "IL", "FL", "NY"],
+          "value": ["Stockholm", "Singapore", "IL", "FL", "NY"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct state from devices where country in ($country);",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "State",
         "multi": true,
@@ -526,15 +652,15 @@
       {
         "current": {
           "selected": false,
-          "text": ["Moscow", "Stockholm", "Tokyo", "Singapore"],
-          "value": ["Moscow", "Stockholm", "Tokyo", "Singapore"]
+          "text": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"],
+          "value": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct city from devices where country in ($country) and state in ($state);",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "City",
         "multi": true,
@@ -551,8 +677,8 @@
         "allValue": "",
         "current": {
           "selected": false,
-          "text": ["device9", "device11", "device14", "device12"],
-          "value": ["device9", "device11", "device14", "device12"]
+          "text": ["device10", "device15", "device9", "device7", "device2"],
+          "value": ["device10", "device15", "device9", "device7", "device2"]
         },
         "datasource": {
           "type": "postgres",
@@ -560,7 +686,7 @@
         },
         "definition": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
         "description": "",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "Device",
         "multi": true,
@@ -583,6 +709,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 1,
+  "version": 6,
   "weekStart": ""
 }

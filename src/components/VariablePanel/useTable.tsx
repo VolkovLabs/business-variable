@@ -1,11 +1,18 @@
 import React, { useMemo, useCallback } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
-import { locationService } from '@grafana/runtime';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
-import { useRuntimeVariable } from './useRuntimeVariable';
+import { useRuntimeVariables } from './useRuntimeVariables';
+import {
+  getRows,
+  getItemWithStatus,
+  getAllChildrenItems,
+  selectVariableValues,
+  getFilteredTree,
+  convertTreeToPlain,
+} from './utils';
 
 /**
  * Use Table
@@ -28,8 +35,8 @@ export const useTable = ({
   /**
    * Runtime Variable
    */
-  const variable = options.variable;
-  const runtimeVariable = useRuntimeVariable(variable, eventBus);
+  const variable = options.levels?.length ? options.levels[options.levels.length - 1]?.name : options.variable;
+  const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
   /**
    * Update Table Data
@@ -62,113 +69,120 @@ export const useTable = ({
       )
       .find((field) => field?.values);
 
-    return runtimeVariable.options.map((option) => {
-      let statusColor;
-      let showStatus = false;
+    const groupFields = options.levels || [];
 
+    if (groupFields.length) {
       /**
-       * Status
+       * Use Group levels
        */
-      const index = namesArray?.findIndex((value: any) => value === option.value);
-      if (index !== undefined && index >= 0) {
-        showStatus = true;
-        const lastValue = statusArray?.values.get(index);
-        const displayValue = statusArray?.display?.(lastValue);
-        statusColor = displayValue?.color;
-      }
+      const rows = getRows(data, groupFields, (item, key, children) => {
+        const value = item[key as keyof typeof item];
+        const levelVariable = getRuntimeVariable(key);
 
-      return {
-        ...option,
-        selected: isSelectedAll || !!option.selected,
-        showStatus,
-        statusColor,
-      };
-    });
-  }, [data, runtimeVariable, options]);
+        return getItemWithStatus(
+          {
+            value,
+            selected: !!runtimeVariable?.options.find((option) => option.value === value)?.selected,
+            variable: levelVariable,
+          },
+          {
+            children,
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+          }
+        );
+      });
+
+      if (rows) {
+        /**
+         * Add all option if only 1 level
+         */
+        if (groupFields.length === 1 && runtimeVariable?.multi && runtimeVariable?.includeAll) {
+          return [
+            getItemWithStatus(
+              {
+                value: 'All',
+                selected: isSelectedAll,
+                variable: getRuntimeVariable(groupFields[0].name),
+              },
+              {
+                namesArray,
+                statusField: statusArray,
+                isSelectedAll,
+              }
+            ),
+          ].concat(rows);
+        }
+
+        return rows;
+      }
+    }
+
+    /**
+     * Use Variable Options
+     */
+    return (
+      runtimeVariable?.options.map((option) => {
+        return getItemWithStatus(
+          {
+            value: option.text,
+            selected: !!option.selected,
+            variable: runtimeVariable,
+          },
+          {
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+          }
+        );
+      }) || []
+    );
+  }, [runtimeVariable, data, options.levels, options.name, options.status, getRuntimeVariable]);
 
   /**
    * Value Cell Select
    */
   const onChange = useCallback(
     (row: TableItem) => {
-      if (!runtimeVariable) {
-        return;
-      }
-
-      const name = runtimeVariable.name;
-      const value = row.text;
-
-      /**
-       * All is selected
-       */
-      if (runtimeVariable.includeAll && !value?.toLowerCase()?.indexOf('all')) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Select a single value if multi select is not enabled
-       */
-      if (!runtimeVariable.multi) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Search
-       */
-      const searchParams = locationService
-        .getSearch()
-        .getAll(`var-${name}`)
-        .filter((s) => s.toLowerCase().indexOf('all') !== 0);
-
-      /**
-       * Check if any already selected
-       */
-      const selectedValues = runtimeVariable.options.filter((opt) => opt.selected).map((opt) => opt.text);
-
-      /**
-       * Value selected, but not defined in the URL
-       */
-      if (selectedValues.length && !locationService.getSearchObject()[`var-${name}`]) {
-        searchParams.push(...selectedValues);
-        locationService.partial({ [`var-${name}`]: [...selectedValues] }, true);
-      }
-
-      /**
-       * All was selected, changing to the value
-       */
-      if (runtimeVariable.includeAll && selectedValues.find((opt) => opt.toLowerCase() === 'all')) {
-        locationService.partial({ [`var-${name}`]: value }, true);
-        return;
-      }
-
-      /**
-       * Already selected value in multi-value
-       */
-      if (searchParams.length >= 1) {
-        const isSelected = searchParams.includes(value);
-
+      const values: string[] = [];
+      if (row.children) {
         /**
-         * Select more
+         * Handle Selection for all child items
          */
-        if (!isSelected) {
-          locationService.partial({ [`var-${name}`]: [...searchParams, value] }, true);
-          return;
-        }
-
-        /**
-         * Remove from selected
-         */
-        locationService.partial(
-          {
-            [`var-${name}`]: searchParams.filter((sp) => sp !== value),
-          },
-          true
-        );
+        const allChildItems = getAllChildrenItems(row);
+        const allValues = allChildItems.map((item) => item.value);
+        values.push(...allValues);
+      } else {
+        const value = row.value;
+        values.push(value);
       }
+
+      const filteredTree = getFilteredTree(tableData, values);
+      const itemsToUpdate = convertTreeToPlain(filteredTree);
+
+      /**
+       * Update All Related Variables
+       */
+      itemsToUpdate
+        .filter((item) => item.variable !== runtimeVariable)
+        .map((item) => ({
+          variable: item.variable,
+          values: item.values.filter((value) =>
+            item.variable?.options.some((option) => option.text === value && !option.selected)
+          ),
+        }))
+        .filter((item) => item.values.length > 0)
+        .forEach(({ variable, values }) => {
+          selectVariableValues(values, variable);
+        });
+
+      /**
+       * Update Variable Values
+       */
+      selectVariableValues(values, runtimeVariable);
     },
-    [runtimeVariable]
+    [runtimeVariable, tableData]
   );
 
   /**
@@ -176,48 +190,42 @@ export const useTable = ({
    */
   const columns: Array<ColumnDef<TableItem>> = useMemo(() => {
     const prefix = `${runtimeVariable?.name || variable}`;
+
     return [
-      {
-        id: 'selected',
-        header: () => null,
-        cell: ({ row }) => {
-          return (
-            <input
-              type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
-              onChange={() => onChange(row.original)}
-              checked={row.original.selected}
-              className={styles.selectControl}
-              id={`${prefix}-${row.original.value}`}
-            />
-          );
-        },
-        enableResizing: false,
-      },
       {
         id: 'value',
         accessorKey: 'value',
         header: runtimeVariable?.label || variable,
-        cell: ({ row }) => {
+        cell: ({ row, getValue }) => {
           return (
-            <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
-              {row.original.showStatus && (
+            <div style={{ paddingLeft: `${row.depth}rem`, display: 'flex' }}>
+              <input
+                type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
+                onChange={() => onChange(row.original)}
+                checked={row.original.selected}
+                className={styles.selectControl}
+                id={`${prefix}-${row.original.value}`}
+              />
+              <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
+                {row.original.showStatus && (
+                  <span
+                    className={styles.status}
+                    style={{
+                      backgroundColor: row.original.statusColor,
+                    }}
+                  />
+                )}
                 <span
-                  className={styles.status}
                   style={{
-                    backgroundColor: row.original.statusColor,
+                    fontWeight: row.original.selected
+                      ? theme.typography.fontWeightBold
+                      : theme.typography.fontWeightRegular,
                   }}
-                />
-              )}
-              <span
-                style={{
-                  fontWeight: row.original.selected
-                    ? theme.typography.fontWeightBold
-                    : theme.typography.fontWeightRegular,
-                }}
-              >
-                {row.original.text}
-              </span>
-            </label>
+                >
+                  {getValue<TableItem['value']>()}
+                </span>
+              </label>
+            </div>
           );
         },
       },
@@ -236,15 +244,15 @@ export const useTable = ({
   ]);
 
   /**
-   * Get Row Id
+   * Get Sub Rows
    */
-  const getRowId = useCallback((row: TableItem) => {
-    return row.value;
+  const getSubRows = useCallback((row: TableItem) => {
+    return row.children;
   }, []);
 
   return {
     tableData,
     columns,
-    getRowId,
+    getSubRows,
   };
 };
