@@ -271,6 +271,10 @@
       "options": {
         "groupLevels": [
           {
+            "name": "country",
+            "source": "B"
+          },
+          {
             "name": "state",
             "source": "B"
           },
@@ -444,9 +448,7 @@
           "select": [
             [
               {
-                "params": [
-                  "value"
-                ],
+                "params": ["value"],
                 "type": "column"
               }
             ]
@@ -493,20 +495,16 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct country from devices;",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": true,
@@ -521,20 +519,16 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct state from devices where country in ($country);",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "State",
         "multi": true,
@@ -550,19 +544,15 @@
       {
         "current": {
           "selected": false,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
           "uid": "timescale"
         },
         "definition": "select distinct city from devices where country in ($country) and state in ($state);",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "City",
         "multi": true,
@@ -578,31 +568,9 @@
       {
         "allValue": "",
         "current": {
-          "selected": true,
-          "text": [
-            "device5",
-            "device6",
-            "device7",
-            "device8",
-            "device9",
-            "device10",
-            "device11",
-            "device12",
-            "device13",
-            "device14"
-          ],
-          "value": [
-            "device5",
-            "device6",
-            "device7",
-            "device8",
-            "device9",
-            "device10",
-            "device11",
-            "device12",
-            "device13",
-            "device14"
-          ]
+          "selected": false,
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
@@ -610,7 +578,7 @@
         },
         "definition": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
         "description": "",
-        "hide": 2,
+        "hide": 0,
         "includeAll": true,
         "label": "Device",
         "multi": true,

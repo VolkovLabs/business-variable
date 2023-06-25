@@ -27,6 +27,9 @@ const reorder = (list: GroupLevel[], startIndex: number, endIndex: number) => {
   return result;
 };
 
+/**
+ * Get Item Style
+ */
 const getItemStyle = (
   isDragging: boolean,
   draggableStyle: DraggingStyle | NotDraggingStyle | undefined,
@@ -56,9 +59,10 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   const styles = Styles(theme);
 
   /**
-   * Items
+   * States
    */
   const [items, setItems] = useState(options?.groupLevels || []);
+  const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
 
   /**
    * Change Items
@@ -71,6 +75,9 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     [onChange]
   );
 
+  /**
+   * Drag End
+   */
   const onDragEnd = useCallback(
     (result: DropResult) => {
       /**
@@ -85,8 +92,9 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     [items, onChangeItems]
   );
 
-  const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
-
+  /**
+   * Available Field Options
+   */
   const availableFieldOptions = useMemo(() => {
     const nameField = items[items.length - 1];
 
@@ -117,6 +125,9 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     }, []);
   }, [data, items]);
 
+  /**
+   * Add New Level
+   */
   const onAddNewLevel = useCallback(() => {
     if (newLevel) {
       onChangeItems([
@@ -132,26 +143,6 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
 
   return (
     <>
-      <div className={styles.newLevel}>
-        <InlineFieldRow>
-          <InlineField label="New Level" grow={true}>
-            <Select
-              options={availableFieldOptions}
-              value={newLevel?.value || null}
-              onChange={(event) => {
-                setNewLevel({
-                  value: event.value || '',
-                  source: event.source,
-                  name: event.fieldName,
-                });
-              }}
-            />
-          </InlineField>
-          <Button disabled={!newLevel} onClick={onAddNewLevel}>
-            Add
-          </Button>
-        </InlineFieldRow>
-      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
@@ -198,6 +189,27 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
           )}
         </Droppable>
       </DragDropContext>
+
+      <div className={styles.newLevel}>
+        <InlineFieldRow>
+          <InlineField label="New Level" grow={true}>
+            <Select
+              options={availableFieldOptions}
+              value={newLevel?.value || null}
+              onChange={(event) => {
+                setNewLevel({
+                  value: event.value || '',
+                  source: event.source,
+                  name: event.fieldName,
+                });
+              }}
+            />
+          </InlineField>
+          <Button icon="plus" title="Add Level" disabled={!newLevel} onClick={onAddNewLevel}>
+            Add
+          </Button>
+        </InlineFieldRow>
+      </div>
     </>
   );
 };

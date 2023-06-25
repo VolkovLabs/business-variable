@@ -78,6 +78,7 @@ export const useTable = ({
       const rows = getRows(data, groupFields, (item, key, children) => {
         const value = item[key as keyof typeof item];
         const levelVariable = getRuntimeVariable(key);
+
         return getItemWithStatus(
           {
             value,
@@ -94,10 +95,10 @@ export const useTable = ({
       });
 
       if (rows) {
+        /**
+         * Add all option if only 1 level
+         */
         if (groupFields.length === 1) {
-          /**
-           * Add all option if only 1 level
-           */
           return [
             getItemWithStatus(
               {
@@ -113,6 +114,7 @@ export const useTable = ({
             ),
           ].concat(rows);
         }
+
         return rows;
       }
     }
@@ -188,6 +190,7 @@ export const useTable = ({
    */
   const columns: Array<ColumnDef<TableItem>> = useMemo(() => {
     const prefix = `${runtimeVariable?.name || variable}`;
+
     return [
       {
         id: 'value',

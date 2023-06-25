@@ -18,6 +18,7 @@ const convertToObjects = (dataFrame: DataFrame) => {
     }, {});
     result.push(object);
   }
+
   return result;
 };
 
@@ -49,6 +50,7 @@ const getGroupArray = (
   getItem: (item: object, key: string, children?: TableItem[]) => TableItem
 ): TableItem[] => {
   const currentKey = fieldKeys[0];
+
   if (fieldKeys.length === 1) {
     return items.map((item) => {
       const tableItem = getItem(item, currentKey);
@@ -58,6 +60,7 @@ const getGroupArray = (
       };
     });
   }
+
   return Array.from(groupBy(items, currentKey), ([key, groupItems]): TableItem => {
     const children = getGroupArray(groupItems, fieldKeys.slice(1), getItem);
     const item = getItem({ [currentKey]: key }, currentKey, children);
@@ -145,6 +148,7 @@ export const getItemWithStatus = (
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+
   return {
     value: item.value,
     selected: isSelectedAll || item.selected || isAllChildrenSelected,
@@ -186,6 +190,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       locationService.partial({ [`var-${name}`]: 'All' }, true);
       return;
     }
+
     /**
      * All Selected values for variable
      */
@@ -251,12 +256,15 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
       variable: undefined,
       values: [],
     };
+
     levelItem.variable = row.variable;
     levelItem.values.push(row.value);
+
     const newResult = acc[depth] ? acc : acc.concat(levelItem);
     if (row.children) {
       return convertTreeToPlain(row.children, newResult, depth + 1);
     }
+
     return newResult;
   }, result);
 };
