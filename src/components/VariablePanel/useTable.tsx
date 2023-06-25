@@ -102,7 +102,7 @@ export const useTable = ({
           return [
             getItemWithStatus(
               {
-                value: 'all',
+                value: 'All',
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
               },

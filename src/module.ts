@@ -45,6 +45,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           filter: (f: Field) => f.type === FieldType.string,
           noFieldsMessage: 'No strings fields found',
         },
+        category: ['Status'],
       })
       .addFieldNamePicker({
         path: 'status',
@@ -53,6 +54,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           filter: (f: Field) => f.type === FieldType.number,
           noFieldsMessage: 'No number fields found',
         },
+        category: ['Status'],
       });
 
     builder.addCustomEditor({
