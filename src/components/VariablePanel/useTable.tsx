@@ -199,7 +199,7 @@ export const useTable = ({
         cell: ({ row, getValue }) => {
           return (
             <div style={{ paddingLeft: `${row.depth}rem`, display: 'flex' }}>
-              {(row.original.showStatus || row.original.selected) && (
+              {!row.originalSubRows && (
                 <input
                   type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
                   onChange={() => onChange(row.original)}
