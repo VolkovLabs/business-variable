@@ -41,7 +41,7 @@ export interface PanelOptions {
   status: string;
 
   /**
-   * Levels
+   * Tree View Levels
    */
-  groupLevels: GroupLevel[];
+  levels: GroupLevel[];
 }

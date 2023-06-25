@@ -27,17 +27,26 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
+    builder.addSelect({
+      path: 'variable',
+      name: 'Select Variable to Display',
+      settings: {
+        options: variables.map((vr) => ({
+          label: vr.name,
+          value: vr.name,
+        })),
+      },
+      showIf: (config) => !config.levels?.length,
+    });
+
+    builder.addCustomEditor({
+      id: 'fieldsEditor',
+      path: 'levels',
+      name: 'Tree View levels based on Data Source',
+      editor: FieldsEditor,
+    });
+
     builder
-      .addSelect({
-        path: 'variable',
-        name: 'Select Variable to Display',
-        settings: {
-          options: variables.map((vr) => ({
-            label: vr.name,
-            value: vr.name,
-          })),
-        },
-      })
       .addFieldNamePicker({
         path: 'name',
         name: 'Field with variable values. First string field will be used if not specified.',
@@ -56,13 +65,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Status'],
       });
-
-    builder.addCustomEditor({
-      id: 'levelEditor',
-      path: 'groupLevels',
-      name: 'Field Levels',
-      editor: FieldsEditor,
-    });
 
     return builder;
   });

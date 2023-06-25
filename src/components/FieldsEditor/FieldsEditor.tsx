@@ -61,7 +61,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   /**
    * States
    */
-  const [items, setItems] = useState(options?.groupLevels || []);
+  const [items, setItems] = useState(options?.levels || []);
   const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
 
   /**

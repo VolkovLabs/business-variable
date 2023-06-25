@@ -35,7 +35,7 @@ export const useTable = ({
   /**
    * Runtime Variable
    */
-  const variable = options.groupLevels ? options.groupLevels[options.groupLevels.length - 1]?.name : options.variable;
+  const variable = options.levels ? options.levels[options.levels.length - 1]?.name : options.variable;
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
   /**
@@ -69,7 +69,7 @@ export const useTable = ({
       )
       .find((field) => field?.values);
 
-    const groupFields = options.groupLevels || [];
+    const groupFields = options.levels || [];
 
     if (groupFields.length) {
       /**
@@ -138,7 +138,7 @@ export const useTable = ({
         );
       }) || []
     );
-  }, [runtimeVariable, data, options.groupLevels, options.name, options.status, getRuntimeVariable]);
+  }, [runtimeVariable, data, options.levels, options.name, options.status, getRuntimeVariable]);
 
   /**
    * Value Cell Select

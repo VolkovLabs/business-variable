@@ -269,7 +269,7 @@
       },
       "id": 6,
       "options": {
-        "groupLevels": [
+        "levels": [
           {
             "name": "country",
             "source": "B"
