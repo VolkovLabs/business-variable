@@ -199,13 +199,16 @@ export const useTable = ({
         cell: ({ row, getValue }) => {
           return (
             <div style={{ paddingLeft: `${row.depth}rem`, display: 'flex' }}>
-              <input
-                type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
-                onChange={() => onChange(row.original)}
-                checked={row.original.selected}
-                className={styles.selectControl}
-                id={`${prefix}-${row.original.value}`}
-              />
+              {(row.original.showStatus || row.original.selected) && (
+                <input
+                  type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
+                  onChange={() => onChange(row.original)}
+                  checked={row.original.selected}
+                  className={styles.selectControl}
+                  id={`${prefix}-${row.original.value}`}
+                />
+              )}
+
               <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
                 {row.original.showStatus && (
                   <span
