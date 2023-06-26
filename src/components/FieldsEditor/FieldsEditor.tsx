@@ -10,6 +10,7 @@ import {
   DraggingStyle,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
+import { TestIds } from '../../constants';
 import { GroupLevel, PanelOptions } from '../../types';
 import { Styles } from './styles';
 
@@ -156,6 +157,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                       {...provided.dragHandleProps}
                       style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
                       className={styles.item}
+                      data-testid={TestIds.fieldsEditor.level(item.name)}
                     >
                       <div className={styles.header}>
                         <div className={styles.column}>
@@ -170,6 +172,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                           <IconButton
                             name="trash-alt"
                             onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
+                            data-testid={TestIds.fieldsEditor.buttonRemove}
                           />
                           <Icon
                             title="Drag and drop to reorder"
@@ -190,12 +193,13 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         </Droppable>
       </DragDropContext>
 
-      <div className={styles.newLevel}>
+      <div className={styles.newLevel} data-testid={TestIds.fieldsEditor.newLevel}>
         <InlineFieldRow>
           <InlineField label="New Level" grow={true}>
             <Select
               options={availableFieldOptions}
               value={newLevel?.value || null}
+              aria-label={TestIds.fieldsEditor.newLevelField}
               onChange={(event) => {
                 setNewLevel({
                   value: event.value || '',
@@ -205,7 +209,13 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
               }}
             />
           </InlineField>
-          <Button icon="plus" title="Add Level" disabled={!newLevel} onClick={onAddNewLevel}>
+          <Button
+            icon="plus"
+            title="Add Level"
+            disabled={!newLevel}
+            onClick={onAddNewLevel}
+            data-testid={TestIds.fieldsEditor.buttonAddNew}
+          >
             Add
           </Button>
         </InlineFieldRow>
