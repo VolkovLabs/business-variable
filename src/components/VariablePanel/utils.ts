@@ -144,7 +144,7 @@ export const getItemWithStatus = (
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
-  const selectable = item.variable?.options?.some((option) => option.value === item.value) && !children;
+  const selectable = item.variable?.options?.some((option) => option.text === item.value) && !children;
 
   return {
     value: item.value,
@@ -157,24 +157,11 @@ export const getItemWithStatus = (
 };
 
 /**
- * Get All Children Items for Row
- * @param row
- */
-export const getAllChildrenItems = (row: TableItem): TableItem[] => {
-  return (
-    row.children?.reduce((acc: TableItem[], subRow) => {
-      return acc.concat(subRow.children ? getAllChildrenItems(subRow) : subRow);
-    }, []) || []
-  );
-};
-
-/**
  * Select Variable Values
  * @param values
  * @param runtimeVariable
- * @param isToggle
  */
-export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable, isToggle = true) => {
+export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
   if (!runtimeVariable) {
     return;
   }
@@ -213,7 +200,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
     /**
      * Deselect values
      */
-    if (isToggle && alreadySelectedValues.length === values.length) {
+    if (alreadySelectedValues.length === values.length) {
       locationService.partial(
         { [`var-${name}`]: searchParams.filter((value) => !alreadySelectedValues.includes(value)) },
         true

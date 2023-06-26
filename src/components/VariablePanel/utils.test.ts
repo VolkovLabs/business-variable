@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { getRows, getAllChildrenItems, selectVariableValues, convertTreeToPlain } from './utils';
+import { getRows, selectVariableValues, convertTreeToPlain } from './utils';
 
 /**
  * Mock @grafana/runtime
@@ -188,38 +188,6 @@ describe('Utils', () => {
               ],
             },
           ],
-        },
-      ]);
-    });
-  });
-
-  describe('getAllChildrenItems', () => {
-    it('Should return most depth children items', () => {
-      expect(
-        getAllChildrenItems({
-          value: '1',
-          selected: true,
-          showStatus: false,
-          children: [
-            {
-              value: '2',
-              selected: true,
-              showStatus: false,
-              children: [
-                {
-                  value: '3',
-                  selected: true,
-                  showStatus: false,
-                },
-              ],
-            },
-          ],
-        })
-      ).toEqual([
-        {
-          value: '3',
-          selected: true,
-          showStatus: false,
         },
       ]);
     });

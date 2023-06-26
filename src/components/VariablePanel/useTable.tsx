@@ -2,17 +2,11 @@ import React, { useMemo, useCallback } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTheme2 } from '@grafana/ui';
+import { TestIds } from '../../constants';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
 import { useRuntimeVariables } from './useRuntimeVariables';
-import {
-  getRows,
-  getItemWithStatus,
-  getAllChildrenItems,
-  selectVariableValues,
-  getFilteredTree,
-  convertTreeToPlain,
-} from './utils';
+import { getRows, getItemWithStatus, selectVariableValues, getFilteredTree, convertTreeToPlain } from './utils';
 
 /**
  * Use Table
@@ -145,18 +139,7 @@ export const useTable = ({
    */
   const onChange = useCallback(
     (row: TableItem) => {
-      const values: string[] = [];
-      if (row.children) {
-        /**
-         * Handle Selection for all child items
-         */
-        const allChildItems = getAllChildrenItems(row);
-        const allValues = allChildItems.map((item) => item.value);
-        values.push(...allValues);
-      } else {
-        const value = row.value;
-        values.push(value);
-      }
+      const values = row.childValues || [row.value];
 
       const filteredTree = getFilteredTree(tableData, values);
       const itemsToUpdate = convertTreeToPlain(filteredTree);
@@ -198,7 +181,11 @@ export const useTable = ({
         header: runtimeVariable?.label || variable,
         cell: ({ row, getValue }) => {
           return (
-            <div style={{ paddingLeft: `${row.depth}rem`, display: 'flex' }}>
+            <div
+              className={styles.rowContent}
+              style={{ paddingLeft: theme.spacing(row.depth * 1.5) }}
+              data-testid={TestIds.table.cell(getValue() as string, row.depth)}
+            >
               {row.original.selectable && (
                 <input
                   type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
@@ -206,6 +193,7 @@ export const useTable = ({
                   checked={row.original.selected}
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
+                  data-testid={TestIds.table.control}
                 />
               )}
 
@@ -238,12 +226,12 @@ export const useTable = ({
     runtimeVariable?.label,
     runtimeVariable?.multi,
     variable,
+    styles.rowContent,
     styles.selectControl,
     styles.label,
     styles.status,
+    theme,
     onChange,
-    theme.typography.fontWeightBold,
-    theme.typography.fontWeightRegular,
   ]);
 
   /**
