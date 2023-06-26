@@ -333,14 +333,22 @@ describe('Use Table Hook', () => {
   });
 
   describe('Check Render Logic', () => {
-    const Rows: React.FC<{ data: TableItem[]; columns: any[]; depth?: number }> = ({ data, columns, depth = 0 }) => (
+    const Rows: React.FC<{
+      data: TableItem[];
+      columns: any[];
+      depth?: number;
+      getSubRows: (row: TableItem) => TableItem[] | undefined;
+    }> = ({ data, columns, depth = 0, getSubRows }) => (
       <>
-        {data.map((row) => (
-          <div key={`${depth}-${row.value}`}>
-            <div>{columns[0].cell({ row: { original: row, depth }, getValue: () => row.value })}</div>
-            {row.children && <Rows data={row.children} columns={columns} depth={depth + 1} />}
-          </div>
-        ))}
+        {data.map((row) => {
+          const subRows = getSubRows(row);
+          return (
+            <div key={`${depth}-${row.value}`}>
+              <div>{columns[0].cell({ row: { original: row, depth }, getValue: () => row.value })}</div>
+              {subRows && <Rows data={subRows} columns={columns} depth={depth + 1} getSubRows={getSubRows} />}
+            </div>
+          );
+        })}
       </>
     );
 
@@ -406,7 +414,9 @@ describe('Use Table Hook', () => {
       /**
        * Render rows
        */
-      render(<Rows data={result.current.tableData} columns={result.current.columns} />);
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
 
       const device1 = screen.getByTestId(TestIds.table.cell('device1', 1));
 
@@ -478,7 +488,9 @@ describe('Use Table Hook', () => {
       /**
        * Render rows
        */
-      render(<Rows data={result.current.tableData} columns={result.current.columns} />);
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
 
       const device1 = screen.getByTestId(TestIds.table.cell('device1', 0));
 
@@ -492,6 +504,89 @@ describe('Use Table Hook', () => {
        */
       const device1Control = within(device1).getByTestId(TestIds.table.control);
       expect(device1Control).toHaveAttribute('type', 'radio');
+    });
+
+    it('Row with subRows should not be selectable', () => {
+      const variable = {
+        multi: true,
+        includeAll: true,
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: true,
+          },
+        ],
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable,
+            getVariable: jest.fn(() => variable),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          } as any,
+          eventBus: null as any,
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      /**
+       * Check if country row is not selectable
+       */
+      const usaRow = screen.getByTestId(TestIds.table.cell('USA', 0));
+      expect(usaRow).toBeInTheDocument();
+      expect(within(usaRow).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
+
+      /**
+       * Check if device row is selectable if value exists in variable options
+       */
+      const device1Row = screen.getByTestId(TestIds.table.cell('device1', 1));
+      expect(device1Row).toBeInTheDocument();
+      expect(within(device1Row).getByTestId(TestIds.table.control)).toBeInTheDocument();
+
+      /**
+       * Check if device row is not selectable if value does not exist in variable options
+       */
+      const device2Row = screen.getByTestId(TestIds.table.cell('device2', 1));
+      expect(device2Row).toBeInTheDocument();
+      expect(within(device2Row).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
     });
   });
 });
