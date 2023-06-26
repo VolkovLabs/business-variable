@@ -36,12 +36,10 @@ describe('Utils', () => {
         {
           value: 'USA',
           ...defaultItem,
-          childValues: ['USA'],
         },
         {
           value: 'Japan',
           ...defaultItem,
-          childValues: ['Japan'],
         },
       ]);
     });
@@ -74,7 +72,6 @@ describe('Utils', () => {
           children: [
             {
               value: 'FL',
-              childValues: ['FL'],
               ...defaultItem,
             },
           ],
@@ -86,7 +83,6 @@ describe('Utils', () => {
           children: [
             {
               value: 'Tokio',
-              childValues: ['Tokio'],
               ...defaultItem,
             },
           ],
@@ -142,7 +138,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device1',
-                      childValues: ['device1'],
                       ...defaultItem,
                     },
                   ],
@@ -161,7 +156,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device11',
-                      childValues: ['device11'],
                       ...defaultItem,
                     },
                   ],
@@ -187,7 +181,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device12',
-                      childValues: ['device12'],
                       ...defaultItem,
                     },
                   ],

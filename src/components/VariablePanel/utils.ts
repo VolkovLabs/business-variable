@@ -53,11 +53,7 @@ const getGroupArray = (
 
   if (fieldKeys.length === 1) {
     return items.map((item) => {
-      const tableItem = getItem(item, currentKey);
-      return {
-        ...tableItem,
-        childValues: [tableItem.value],
-      };
+      return getItem(item, currentKey);
     });
   }
 
@@ -67,7 +63,7 @@ const getGroupArray = (
     return {
       ...item,
       childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : []),
+        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.value]),
         item.childValues || []
       ),
       children,
@@ -148,13 +144,15 @@ export const getItemWithStatus = (
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+  const selectable = item.variable?.options?.some((option) => option.value === item.value) && !children;
 
   return {
     value: item.value,
-    selected: isSelectedAll || item.selected || isAllChildrenSelected,
+    selected: selectable ? isSelectedAll || item.selected || isAllChildrenSelected : false,
     showStatus,
     statusColor,
     variable: item.variable,
+    selectable,
   };
 };
 
@@ -174,6 +172,7 @@ export const getAllChildrenItems = (row: TableItem): TableItem[] => {
  * Select Variable Values
  * @param values
  * @param runtimeVariable
+ * @param isToggle
  */
 export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable, isToggle = true) => {
   if (!runtimeVariable) {
@@ -250,6 +249,12 @@ type TreePlain = {
   values: string[];
 };
 
+/**
+ * Convert Tree To Plain
+ * @param rows
+ * @param result
+ * @param depth
+ */
 export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], depth = 0): TreePlain[] => {
   return rows.reduce((acc, row) => {
     const levelItem = acc[depth] || {

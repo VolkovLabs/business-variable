@@ -12,6 +12,13 @@ export interface TableItem {
   selected: boolean;
 
   /**
+   * Selectable
+   *
+   * @type {boolean}
+   */
+  selectable?: boolean;
+
+  /**
    * Value
    *
    * @type {string}
