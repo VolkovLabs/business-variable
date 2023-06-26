@@ -394,6 +394,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '1-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -407,6 +408,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '2-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -420,6 +422,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '3-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -435,6 +438,7 @@ describe('Utils', () => {
         },
         {
           values: ['1-3', '2-3', '3-3'],
+          selectable: true,
         },
       ]);
     });

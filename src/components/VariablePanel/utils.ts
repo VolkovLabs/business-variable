@@ -231,9 +231,13 @@ export const getFilteredTree = (rows: TableItem[], values: string[]): TableItem[
   return filteredRows.filter((row) => (row.children ? getFilteredTree(row.children, values) : false));
 };
 
+/**
+ * Items to Update
+ */
 type TreePlain = {
   variable?: RuntimeVariable;
   values: string[];
+  selectable?: boolean;
 };
 
 /**
@@ -247,10 +251,12 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
     const levelItem = acc[depth] || {
       variable: undefined,
       values: [],
+      selectable: false,
     };
 
     levelItem.variable = row.variable;
     levelItem.values.push(row.value);
+    levelItem.selectable = row.selectable;
 
     const newResult = acc[depth] ? acc : acc.concat(levelItem);
     if (row.children) {
