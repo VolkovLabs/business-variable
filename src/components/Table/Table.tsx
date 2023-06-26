@@ -10,7 +10,7 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 import { useStyles2 } from '@grafana/ui';
-import { Styles } from './Table.styles';
+import { Styles } from './styles';
 
 /**
  * Props
@@ -32,11 +32,6 @@ interface Props<TableData extends object> {
   className?: string;
 
   /**
-   * Must return a unique id for each row
-   */
-  getRowId?: TableOptions<TableData>['getRowId'];
-
-  /**
    * Get Sub Rows
    */
   getSubRows?: TableOptions<TableData>['getSubRows'];
@@ -47,16 +42,9 @@ interface Props<TableData extends object> {
  * @param data
  * @param className
  * @param columns
- * @param getRowId
  * @constructor
  */
-export const Table = <TableData extends object>({
-  data,
-  className,
-  columns,
-  getRowId,
-  getSubRows,
-}: Props<TableData>) => {
+export const Table = <TableData extends object>({ data, className, columns, getSubRows }: Props<TableData>) => {
   const styles = useStyles2(Styles);
 
   /**
@@ -94,9 +82,6 @@ export const Table = <TableData extends object>({
                         [styles.sortableHeader]: header.column.getCanSort(),
                       })}
                       colSpan={header.colSpan}
-                      {...(header.column.getIsSorted() && {
-                        'aria-sort': header.column.getAutoSortDir() === 'desc' ? 'descending' : 'ascending',
-                      })}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                     </th>

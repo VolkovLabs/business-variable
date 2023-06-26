@@ -333,6 +333,14 @@ describe('Use Table Hook', () => {
   });
 
   describe('Check Render Logic', () => {
+    /**
+     * Rows Component
+     * @param data
+     * @param columns
+     * @param depth
+     * @param getSubRows
+     * @constructor
+     */
     const Rows: React.FC<{
       data: TableItem[];
       columns: any[];
