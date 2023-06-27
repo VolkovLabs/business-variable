@@ -53,11 +53,7 @@ const getGroupArray = (
 
   if (fieldKeys.length === 1) {
     return items.map((item) => {
-      const tableItem = getItem(item, currentKey);
-      return {
-        ...tableItem,
-        childValues: [tableItem.value],
-      };
+      return getItem(item, currentKey);
     });
   }
 
@@ -67,7 +63,7 @@ const getGroupArray = (
     return {
       ...item,
       childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : []),
+        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.value]),
         item.childValues || []
       ),
       children,
@@ -148,26 +144,16 @@ export const getItemWithStatus = (
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+  const selectable = item.variable?.options?.some((option) => option.text === item.value) && !children;
 
   return {
     value: item.value,
-    selected: isSelectedAll || item.selected || isAllChildrenSelected,
+    selected: selectable ? isSelectedAll || item.selected || isAllChildrenSelected : false,
     showStatus,
     statusColor,
     variable: item.variable,
+    selectable,
   };
-};
-
-/**
- * Get All Children Items for Row
- * @param row
- */
-export const getAllChildrenItems = (row: TableItem): TableItem[] => {
-  return (
-    row.children?.reduce((acc: TableItem[], subRow) => {
-      return acc.concat(subRow.children ? getAllChildrenItems(subRow) : subRow);
-    }, []) || []
-  );
 };
 
 /**
@@ -175,7 +161,7 @@ export const getAllChildrenItems = (row: TableItem): TableItem[] => {
  * @param values
  * @param runtimeVariable
  */
-export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable, isToggle = true) => {
+export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
   if (!runtimeVariable) {
     return;
   }
@@ -214,7 +200,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
     /**
      * Deselect values
      */
-    if (isToggle && alreadySelectedValues.length === values.length) {
+    if (alreadySelectedValues.length === values.length) {
       locationService.partial(
         { [`var-${name}`]: searchParams.filter((value) => !alreadySelectedValues.includes(value)) },
         true
@@ -245,20 +231,32 @@ export const getFilteredTree = (rows: TableItem[], values: string[]): TableItem[
   return filteredRows.filter((row) => (row.children ? getFilteredTree(row.children, values) : false));
 };
 
+/**
+ * Items to Update
+ */
 type TreePlain = {
   variable?: RuntimeVariable;
   values: string[];
+  selectable?: boolean;
 };
 
+/**
+ * Convert Tree To Plain
+ * @param rows
+ * @param result
+ * @param depth
+ */
 export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], depth = 0): TreePlain[] => {
   return rows.reduce((acc, row) => {
     const levelItem = acc[depth] || {
       variable: undefined,
       values: [],
+      selectable: false,
     };
 
     levelItem.variable = row.variable;
     levelItem.values.push(row.value);
+    levelItem.selectable = row.selectable;
 
     const newResult = acc[depth] ? acc : acc.concat(levelItem);
     if (row.children) {

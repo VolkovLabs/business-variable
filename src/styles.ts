@@ -10,6 +10,9 @@ export const Styles = (theme: GrafanaTheme2) => {
       position: relative;
       overflow: auto;
     `,
+    rowContent: css`
+      display: flex;
+    `,
     label: css`
       display: flex;
       align-items: center;

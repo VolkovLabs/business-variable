@@ -298,7 +298,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -406,7 +406,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where $__timeFilter(time) )\ngroup by name;",
+          "rawSql": "select name as device, last(value, time) from metrics\nwhere name in (select distinct name from devices where country in ($country) and state in ($state) and city in ($city) and $__timeFilter(time) )\ngroup by name;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -603,9 +603,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": ["Singapore", "Japan", "Russia", "Sweden", "USA"],
-          "value": ["Singapore", "Japan", "Russia", "Sweden", "USA"]
+          "selected": true,
+          "text": ["Sweden", "Singapore", "USA", "Japan", "Russia"],
+          "value": ["Sweden", "Singapore", "USA", "Japan", "Russia"]
         },
         "datasource": {
           "type": "postgres",
@@ -627,9 +627,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["Stockholm", "Singapore", "IL", "FL", "NY"],
-          "value": ["Stockholm", "Singapore", "IL", "FL", "NY"]
+          "selected": true,
+          "text": ["FL", "Singapore", "Stockholm", "IL", "NY"],
+          "value": ["FL", "Singapore", "Stockholm", "IL", "NY"]
         },
         "datasource": {
           "type": "postgres",
@@ -651,9 +651,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"],
-          "value": ["Stockholm", "Singapore", "New York", "Chicago", "Tampa"]
+          "selected": true,
+          "text": ["Chicago", "New York", "Singapore", "Stockholm", "Tampa"],
+          "value": ["Chicago", "New York", "Singapore", "Stockholm", "Tampa"]
         },
         "datasource": {
           "type": "postgres",
@@ -676,9 +676,9 @@
       {
         "allValue": "",
         "current": {
-          "selected": false,
-          "text": ["device10", "device15", "device9", "device7", "device2"],
-          "value": ["device10", "device15", "device9", "device7", "device2"]
+          "selected": true,
+          "text": ["device2", "device7", "device9", "device10", "device15"],
+          "value": ["device2", "device7", "device9", "device10", "device15"]
         },
         "datasource": {
           "type": "postgres",

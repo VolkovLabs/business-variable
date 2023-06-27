@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { getRows, getAllChildrenItems, selectVariableValues, convertTreeToPlain } from './utils';
+import { getRows, selectVariableValues, convertTreeToPlain } from './utils';
 
 /**
  * Mock @grafana/runtime
@@ -36,12 +36,10 @@ describe('Utils', () => {
         {
           value: 'USA',
           ...defaultItem,
-          childValues: ['USA'],
         },
         {
           value: 'Japan',
           ...defaultItem,
-          childValues: ['Japan'],
         },
       ]);
     });
@@ -74,7 +72,6 @@ describe('Utils', () => {
           children: [
             {
               value: 'FL',
-              childValues: ['FL'],
               ...defaultItem,
             },
           ],
@@ -86,7 +83,6 @@ describe('Utils', () => {
           children: [
             {
               value: 'Tokio',
-              childValues: ['Tokio'],
               ...defaultItem,
             },
           ],
@@ -142,7 +138,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device1',
-                      childValues: ['device1'],
                       ...defaultItem,
                     },
                   ],
@@ -161,7 +156,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device11',
-                      childValues: ['device11'],
                       ...defaultItem,
                     },
                   ],
@@ -187,7 +181,6 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device12',
-                      childValues: ['device12'],
                       ...defaultItem,
                     },
                   ],
@@ -195,38 +188,6 @@ describe('Utils', () => {
               ],
             },
           ],
-        },
-      ]);
-    });
-  });
-
-  describe('getAllChildrenItems', () => {
-    it('Should return most depth children items', () => {
-      expect(
-        getAllChildrenItems({
-          value: '1',
-          selected: true,
-          showStatus: false,
-          children: [
-            {
-              value: '2',
-              selected: true,
-              showStatus: false,
-              children: [
-                {
-                  value: '3',
-                  selected: true,
-                  showStatus: false,
-                },
-              ],
-            },
-          ],
-        })
-      ).toEqual([
-        {
-          value: '3',
-          selected: true,
-          showStatus: false,
         },
       ]);
     });
@@ -433,6 +394,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '1-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -446,6 +408,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '2-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -459,6 +422,7 @@ describe('Utils', () => {
                 children: [
                   {
                     value: '3-3',
+                    selectable: true,
                   },
                 ],
               },
@@ -474,6 +438,7 @@ describe('Utils', () => {
         },
         {
           values: ['1-3', '2-3', '3-3'],
+          selectable: true,
         },
       ]);
     });
