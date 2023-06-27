@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0 (2023-06-26)
+
+### Features / Enhancements
+
+- Add Tree View (#12, #13)
+- Update README and screenshot (#14)
+
 ## 1.1.0 (2023-06-21)
 
 ### Features / Enhancements
