@@ -14,7 +14,7 @@ The Variable panel allows updating dashboard variables in the panel.
 
 ## Requirements
 
-- **Grafana 8.5+, Grafana 9.0+** is required.
+- **Grafana 9** and **Grafana 10** are required for major version 1.
 
 ## Getting Started
 
@@ -25,6 +25,7 @@ The Variable panel is not included in the Grafana Catalog. It can be downloaded 
 - Allows updating dashboard variables.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
+- Display variables as Table and Tree View based on the query.
 
 ## Feedback
 

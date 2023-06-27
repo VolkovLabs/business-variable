@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "dependencies": {
-    "grafanaDependency": ">=8.5.0",
+    "grafanaDependency": ">=9.0.0",
     "plugins": []
   },
   "id": "volkovlabs-variable-panel",
@@ -15,7 +15,7 @@
     "links": [
       {
         "name": "Documentation",
-        "url": "https://docs.volkovlabs.io/volkovlabs-variable-panel"
+        "url": "https://volkovlabs.io/plugins/volkovlabs-variable-panel"
       },
       {
         "name": "GitHub",
