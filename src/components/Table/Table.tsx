@@ -8,6 +8,7 @@ import {
   TableOptions,
   flexRender,
   ColumnDef,
+  ExpandedState,
 } from '@tanstack/react-table';
 import { useStyles2 } from '@grafana/ui';
 import { Styles } from './styles';
@@ -39,13 +40,15 @@ interface Props<TableData extends object> {
 
 /**
  * Table Component
- * @param data
- * @param className
- * @param columns
- * @constructor
+ * @param props
  */
 export const Table = <TableData extends object>({ data, className, columns, getSubRows }: Props<TableData>) => {
   const styles = useStyles2(Styles);
+
+  /**
+   * Expanded state
+   */
+  const [expanded, setExpanded] = React.useState<ExpandedState>(true);
 
   /**
    * Instance
@@ -61,8 +64,12 @@ export const Table = <TableData extends object>({ data, className, columns, getS
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     enableExpanding: true,
+    onExpandedChange: setExpanded,
     initialState: {
       expanded: true,
+    },
+    state: {
+      expanded,
     },
   });
 

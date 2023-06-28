@@ -10,6 +10,8 @@ export const TestIds = {
   table: {
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
+    header: 'data-testid table header',
+    buttonExpand: 'data-testid table button-expand',
   },
   fieldsEditor: {
     newLevel: 'data-testid fields-editor new-level',

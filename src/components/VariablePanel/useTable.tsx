@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { ColumnDef } from '@tanstack/react-table';
-import { useTheme2 } from '@grafana/ui';
+import { useTheme2, Button } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
@@ -197,6 +197,18 @@ export const useTable = ({
                 />
               )}
 
+              {row.getCanExpand() && (
+                <Button
+                  className={styles.expandButton}
+                  onClick={row.getToggleExpandedHandler()}
+                  variant="secondary"
+                  fill="text"
+                  size="sm"
+                  icon={row.getIsExpanded() ? 'angle-down' : 'angle-right'}
+                  data-testid={TestIds.table.buttonExpand}
+                />
+              )}
+
               <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
                 {row.original.showStatus && (
                   <span
@@ -228,6 +240,7 @@ export const useTable = ({
     variable,
     styles.rowContent,
     styles.selectControl,
+    styles.expandButton,
     styles.label,
     styles.status,
     theme,
