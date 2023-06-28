@@ -1,15 +1,15 @@
-import { cx } from '@emotion/css';
 import React, { Fragment } from 'react';
-import {
-  getCoreRowModel,
-  getSortedRowModel,
-  getExpandedRowModel,
-  useReactTable,
-  TableOptions,
-  flexRender,
-  ColumnDef,
-} from '@tanstack/react-table';
+import { cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getSortedRowModel,
+  TableOptions,
+  useReactTable,
+} from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from './styles';
 

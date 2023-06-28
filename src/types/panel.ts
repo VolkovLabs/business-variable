@@ -46,7 +46,7 @@ export interface PanelOptions {
   levels: GroupLevel[];
 
   /**
-   * Show Header
+   * Display Header
    */
-  showHeader: boolean;
+  header: boolean;
 }

@@ -1,6 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { VariablePanel, FieldsEditor } from './components';
+import { FieldsEditor, VariablePanel } from './components';
+import { HeaderOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -27,9 +28,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
-    builder.addBooleanSwitch({
-      path: 'showHeader',
-      name: 'Show Table Header',
+    builder.addRadio({
+      path: 'header',
+      name: 'Header',
+      settings: {
+        options: HeaderOptions,
+      },
       defaultValue: true,
     });
 

@@ -46,7 +46,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
       )}
 
       {tableData.length > 0 && (
-        <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.showHeader} />
+        <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
       )}
     </div>
   );
