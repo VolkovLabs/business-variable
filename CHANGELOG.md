@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.3.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add Display Header option (#15)
+
 ## 1.2.0 (2023-06-26)
 
 ### Features / Enhancements

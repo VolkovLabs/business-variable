@@ -44,4 +44,9 @@ export interface PanelOptions {
    * Tree View Levels
    */
   levels: GroupLevel[];
+
+  /**
+   * Display Header
+   */
+  header: boolean;
 }

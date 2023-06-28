@@ -1,6 +1,6 @@
-import { PanelPlugin, Field, FieldType } from '@grafana/data';
-import { PanelOptions } from './types';
+import { Field, FieldType, PanelPlugin } from '@grafana/data';
 import { plugin } from './module';
+import { PanelOptions } from './types';
 
 /**
  * Test Field
@@ -28,6 +28,7 @@ describe('plugin', () => {
     addSelect: jest.fn().mockImplementation(() => builder),
     addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addCustomEditor: jest.fn().mockImplementation(() => builder),
+    addRadio: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -46,6 +47,7 @@ describe('plugin', () => {
     expect(builder.addSelect).toHaveBeenCalled();
     expect(builder.addFieldNamePicker).toHaveBeenCalled();
     expect(builder.addCustomEditor).toHaveBeenCalled();
+    expect(builder.addRadio).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {
@@ -67,6 +69,7 @@ describe('plugin', () => {
       } else {
         result.push(input.path);
       }
+
       return builder;
     };
 
@@ -74,7 +77,6 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addSelect.mockImplementation(addInputImplementation({ levels: [] }, shownOptionsPaths));
-
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['variable']));
@@ -88,6 +90,7 @@ describe('plugin', () => {
           const fields = allFields.filter(input.settings.filter);
           shownFields.push(...fields);
         }
+
         return builder;
       };
 
@@ -99,7 +102,6 @@ describe('plugin', () => {
       const shownFields: TestField[] = [];
 
       builder.addFieldNamePicker.mockImplementation(addFieldNameImplementation('name', fields, shownFields));
-
       plugin['optionsSupplier'](builder);
 
       expect(shownFields).toEqual([{ name: 'string', type: FieldType.string }]);
@@ -113,7 +115,6 @@ describe('plugin', () => {
       const shownFields: TestField[] = [];
 
       builder.addFieldNamePicker.mockImplementation(addFieldNameImplementation('status', fields, shownFields));
-
       plugin['optionsSupplier'](builder);
 
       expect(shownFields).toEqual([{ name: 'number', type: FieldType.number }]);
