@@ -13,6 +13,9 @@ export const Styles = (theme: GrafanaTheme2) => {
     rowContent: css`
       display: flex;
     `,
+    expandButton: css`
+      margin-right: ${theme.spacing(1)};
+    `,
     label: css`
       display: flex;
       align-items: center;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
-import { renderHook, render, screen, fireEvent, within } from '@testing-library/react';
+import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { TableItem } from '../../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
@@ -352,7 +352,18 @@ describe('Use Table Hook', () => {
           const subRows = getSubRows(row);
           return (
             <div key={`${depth}-${row.value}`}>
-              <div>{columns[0].cell({ row: { original: row, depth }, getValue: () => row.value })}</div>
+              <div>
+                {columns[0].cell({
+                  row: {
+                    original: row,
+                    depth,
+                    getCanExpand: () => !!row.children,
+                    getToggleExpandedHandler: () => {},
+                    getIsExpanded: () => false,
+                  },
+                  getValue: () => row.value,
+                })}
+              </div>
               {subRows && <Rows data={subRows} columns={columns} depth={depth + 1} getSubRows={getSubRows} />}
             </div>
           );
@@ -361,7 +372,7 @@ describe('Use Table Hook', () => {
     );
 
     it('Should select unselected values', () => {
-      const variable = {
+      const deviceVariable = {
         multi: true,
         includeAll: true,
         options: [
@@ -382,11 +393,21 @@ describe('Use Table Hook', () => {
           },
         ],
       };
+      const countryVariable = {
+        multi: true,
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+        ],
+      };
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
-            variable,
-            getVariable: jest.fn(() => variable),
+            variable: deviceVariable,
+            getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
           } as any)
       );
       const dataFrame = toDataFrame({
@@ -452,7 +473,7 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(device1Control);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable);
+      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
     });
 
     it('Should use radio for single value', () => {
@@ -514,7 +535,7 @@ describe('Use Table Hook', () => {
       expect(device1Control).toHaveAttribute('type', 'radio');
     });
 
-    it('Row with subRows should not be selectable', () => {
+    it('Row with subRows should not be selectable and expandable', () => {
       const variable = {
         multi: true,
         includeAll: true,
@@ -583,11 +604,17 @@ describe('Use Table Hook', () => {
       expect(within(usaRow).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
 
       /**
-       * Check if device row is selectable if value exists in variable options
+       * Check if country row is expandable
+       */
+      expect(within(usaRow).getByTestId(TestIds.table.buttonExpand)).toBeInTheDocument();
+
+      /**
+       * Check if device row is selectable and not expandable if value exists in variable options
        */
       const device1Row = screen.getByTestId(TestIds.table.cell('device1', 1));
       expect(device1Row).toBeInTheDocument();
       expect(within(device1Row).getByTestId(TestIds.table.control)).toBeInTheDocument();
+      expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
 
       /**
        * Check if device row is not selectable if value does not exist in variable options
@@ -595,6 +622,7 @@ describe('Use Table Hook', () => {
       const device2Row = screen.getByTestId(TestIds.table.cell('device2', 1));
       expect(device2Row).toBeInTheDocument();
       expect(within(device2Row).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
+      expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
     });
   });
 });

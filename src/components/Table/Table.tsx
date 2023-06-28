@@ -3,6 +3,7 @@ import { cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import {
   ColumnDef,
+  ExpandedState,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
@@ -45,10 +46,7 @@ interface Props<TableData extends object> {
 
 /**
  * Table Component
- * @param data
- * @param className
- * @param columns
- * @constructor
+ * @param props
  */
 export const Table = <TableData extends object>({
   data,
@@ -58,6 +56,11 @@ export const Table = <TableData extends object>({
   showHeader = true,
 }: Props<TableData>) => {
   const styles = useStyles2(Styles);
+
+  /**
+   * Expanded state
+   */
+  const [expanded, setExpanded] = React.useState<ExpandedState>(true);
 
   /**
    * Instance
@@ -73,8 +76,12 @@ export const Table = <TableData extends object>({
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     enableExpanding: true,
+    onExpandedChange: setExpanded,
     initialState: {
       expanded: true,
+    },
+    state: {
+      expanded,
     },
   });
 
