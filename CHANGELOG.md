@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Add Display Header option (#15)
+- Add the ability to collapse parent rows (#16)
 
 ## 1.2.0 (2023-06-26)
 

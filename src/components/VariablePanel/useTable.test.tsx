@@ -1,6 +1,6 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
-import { renderHook, render, screen, fireEvent, within } from '@testing-library/react';
+import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { TableItem } from '../../types';
 import { useRuntimeVariables } from './useRuntimeVariables';

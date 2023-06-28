@@ -1,12 +1,12 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
+import { Button, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
-import { useTheme2, Button } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { PanelOptions, TableItem } from '../../types';
 import { Styles } from '../../styles';
+import { PanelOptions, TableItem } from '../../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
-import { getRows, getItemWithStatus, selectVariableValues, getFilteredTree, convertTreeToPlain } from './utils';
+import { convertTreeToPlain, getFilteredTree, getItemWithStatus, getRows, selectVariableValues } from './utils';
 
 /**
  * Use Table
