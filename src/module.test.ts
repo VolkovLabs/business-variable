@@ -28,6 +28,7 @@ describe('plugin', () => {
     addSelect: jest.fn().mockImplementation(() => builder),
     addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addCustomEditor: jest.fn().mockImplementation(() => builder),
+    addBooleanSwitch: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {

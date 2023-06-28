@@ -10,6 +10,7 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 import { useStyles2 } from '@grafana/ui';
+import { TestIds } from '../../constants';
 import { Styles } from './styles';
 
 /**
@@ -35,6 +36,11 @@ interface Props<TableData extends object> {
    * Get Sub Rows
    */
   getSubRows?: TableOptions<TableData>['getSubRows'];
+
+  /**
+   * Show Header Cells
+   */
+  showHeader?: boolean;
 }
 
 /**
@@ -44,7 +50,13 @@ interface Props<TableData extends object> {
  * @param columns
  * @constructor
  */
-export const Table = <TableData extends object>({ data, className, columns, getSubRows }: Props<TableData>) => {
+export const Table = <TableData extends object>({
+  data,
+  className,
+  columns,
+  getSubRows,
+  showHeader = true,
+}: Props<TableData>) => {
   const styles = useStyles2(Styles);
 
   /**
@@ -69,28 +81,30 @@ export const Table = <TableData extends object>({ data, className, columns, getS
   return (
     <>
       <table className={cx(styles.table, className)}>
-        <thead>
-          {tableInstance.getHeaderGroups().map((headerGroup) => {
-            return (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <th
-                      key={header.id}
-                      className={cx(styles.header, {
-                        [styles.disableGrow]: !header.column.getCanResize(),
-                        [styles.sortableHeader]: header.column.getCanSort(),
-                      })}
-                      colSpan={header.colSpan}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </th>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </thead>
+        {showHeader && (
+          <thead data-testid={TestIds.table.header}>
+            {tableInstance.getHeaderGroups().map((headerGroup) => {
+              return (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <th
+                        key={header.id}
+                        className={cx(styles.header, {
+                          [styles.disableGrow]: !header.column.getCanResize(),
+                          [styles.sortableHeader]: header.column.getCanSort(),
+                        })}
+                        colSpan={header.colSpan}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </thead>
+        )}
 
         <tbody>
           {tableInstance.getRowModel().rows.map((row) => {

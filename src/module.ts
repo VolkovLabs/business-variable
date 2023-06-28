@@ -27,6 +27,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
+    builder.addBooleanSwitch({
+      path: 'showHeader',
+      name: 'Show Table Header',
+      defaultValue: true,
+    });
+
     builder.addSelect({
       path: 'variable',
       name: 'Select Variable to Display',
