@@ -1,6 +1,7 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { render, screen } from '@testing-library/react';
+import { TestIds } from '../../constants';
 import { Table } from './Table';
 
 /**
@@ -65,5 +66,17 @@ describe('Table', () => {
     expect(screen.getByTestId(InTestIds.cell('2', 0))).toBeInTheDocument();
     expect(screen.getByTestId(InTestIds.cell('2-1', 1))).toBeInTheDocument();
     expect(screen.getByTestId(InTestIds.cell('2-2', 1))).toBeInTheDocument();
+  });
+
+  it('Should render header', () => {
+    render(getComponent({ showHeader: true, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
+
+    expect(screen.getByTestId(TestIds.table.header)).toBeInTheDocument();
+  });
+
+  it('Should not render header', () => {
+    render(getComponent({ showHeader: false, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
+
+    expect(screen.queryByTestId(TestIds.table.header)).not.toBeInTheDocument();
   });
 });
