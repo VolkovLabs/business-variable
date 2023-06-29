@@ -6,6 +6,7 @@
 
 - Add Display Header option (#15)
 - Add the ability to collapse parent rows (#16)
+- Add a Sticky option to follow when scrolling (#17)
 
 ## 1.2.0 (2023-06-26)
 
