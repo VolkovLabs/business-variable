@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import {
@@ -10,8 +10,11 @@ import {
   getSortedRowModel,
   TableOptions,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
+import { Filter } from './Filter';
 import { Styles } from './styles';
 
 /**
@@ -58,9 +61,10 @@ export const Table = <TableData extends object>({
   const styles = useStyles2(Styles);
 
   /**
-   * Expanded state
+   * States
    */
-  const [expanded, setExpanded] = React.useState<ExpandedState>(true);
+  const [expanded, setExpanded] = useState<ExpandedState>(true);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   /**
    * Instance
@@ -75,6 +79,8 @@ export const Table = <TableData extends object>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     enableExpanding: true,
     onExpandedChange: setExpanded,
     initialState: {
@@ -82,6 +88,7 @@ export const Table = <TableData extends object>({
     },
     state: {
       expanded,
+      columnFilters,
     },
   });
 
@@ -104,6 +111,7 @@ export const Table = <TableData extends object>({
                         colSpan={header.colSpan}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanFilter() && <Filter column={header.column} table={tableInstance} />}
                       </th>
                     );
                   })}

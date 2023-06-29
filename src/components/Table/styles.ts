@@ -26,24 +26,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     header: css`
       border-bottom: 1px solid ${theme.colors.border.weak};
-      &,
-      & > button {
-        position: relative;
-        white-space: nowrap;
-        padding: ${theme.spacing(1)};
-      }
-      & > button {
-        &:after {
-          content: '\\00a0';
-        }
-        width: 100%;
-        height: 100%;
-        background: none;
-        border: none;
-        padding-right: ${theme.spacing(2.5)};
-        text-align: left;
-        font-weight: ${theme.typography.fontWeightMedium};
-      }
+      padding: ${theme.spacing(1)};
     `,
     row: css`
       border-bottom: 1px solid ${theme.colors.border.weak};
@@ -81,6 +64,13 @@ export const Styles = (theme: GrafanaTheme2) => {
       && {
         padding: 0;
       }
+    `,
+    filterButton: css`
+      margin-left: ${theme.spacing(0.5)};
+    `,
+    filterContainer: css`
+      background-color: ${theme.colors.background.primary};
+      padding: ${theme.spacing(1)};
     `,
   };
 };
