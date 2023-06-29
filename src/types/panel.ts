@@ -53,5 +53,5 @@ export interface PanelOptions {
   /**
    * Use Sticky position
    */
-  stickyPosition: boolean;
+  sticky: boolean;
 }

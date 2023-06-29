@@ -38,8 +38,9 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     });
 
     builder.addRadio({
-      path: 'stickyPosition',
+      path: 'sticky',
       name: 'Sticky Position',
+      description: 'Variables will follow when scrolling.',
       settings: {
         options: StickyPositionOptions,
       },

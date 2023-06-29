@@ -6,8 +6,8 @@ import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
-import { useTable } from './useTable';
 import { useContentPosition } from './useContentPosition';
+import { useTable } from './useTable';
 
 /**
  * Properties
@@ -29,7 +29,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   const { containerRef, style } = useContentPosition({
     width,
     height,
-    sticky: options.stickyPosition,
+    sticky: options.sticky,
   });
 
   /**
@@ -55,7 +55,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
     >
       {!tableData.length && (
         <Alert data-testid={TestIds.panel.infoMessage} severity="info" title="Variable">
-          Variable is not selected.
+          Variable is not selected or do not match returned fields.
         </Alert>
       )}
 
