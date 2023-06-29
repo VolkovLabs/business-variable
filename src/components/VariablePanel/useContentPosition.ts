@@ -1,5 +1,8 @@
-import { useRef, useState, CSSProperties, useLayoutEffect } from 'react';
+import { CSSProperties, useLayoutEffect, useRef, useState } from 'react';
 
+/**
+ * Content Position
+ */
 export const useContentPosition = ({ width, height, sticky }: { width: number; height: number; sticky: boolean }) => {
   /**
    * Element ref
@@ -19,6 +22,9 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
   useLayoutEffect(() => {
     const scrollableElement = document.querySelector('.scrollbar-view');
 
+    /**
+     * Calculate Position
+     */
     const calcPosition = () => {
       if (containerRef.current && scrollableElement) {
         if (sticky) {
@@ -45,6 +51,9 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
 
     calcPosition();
 
+    /**
+     * Listen for Scroll events
+     */
     if (scrollableElement && sticky) {
       scrollableElement.addEventListener('scroll', calcPosition);
 

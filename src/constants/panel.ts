@@ -9,7 +9,7 @@ export const HeaderOptions = [
 /**
  * Sticky Position
  */
-export const StickyPositionOptions = [
-  { value: true, label: 'Enabled', description: 'Sticky table position.' },
+export const StickyOptions = [
+  { value: true, label: 'Enabled', description: 'Follow when scrolling.' },
   { value: false, label: 'Disabled', description: 'Disable sticky position.' },
 ];
