@@ -49,4 +49,9 @@ export interface PanelOptions {
    * Display Header
    */
   header: boolean;
+
+  /**
+   * Use Sticky position
+   */
+  stickyPosition: boolean;
 }

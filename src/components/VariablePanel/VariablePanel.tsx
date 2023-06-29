@@ -7,6 +7,7 @@ import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
 import { useTable } from './useTable';
+import { useContentPosition } from './useContentPosition';
 
 /**
  * Properties
@@ -17,7 +18,19 @@ interface Props extends PanelProps<PanelOptions> {}
  * Panel
  */
 export const VariablePanel: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
+  /**
+   * Table config
+   */
   const { tableData, columns, getSubRows } = useTable({ data, options, eventBus });
+
+  /**
+   * Sticky position
+   */
+  const { containerRef, style } = useContentPosition({
+    width,
+    height,
+    sticky: options.stickyPosition,
+  });
 
   /**
    * Styles and Theme
@@ -38,6 +51,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
           height: ${height}px;
         `
       )}
+      ref={containerRef}
     >
       {!tableData.length && (
         <Alert data-testid={TestIds.panel.infoMessage} severity="info" title="Variable">
@@ -46,7 +60,9 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
       )}
 
       {tableData.length > 0 && (
-        <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
+        <div style={style} className={styles.content}>
+          <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
+        </div>
       )}
     </div>
   );

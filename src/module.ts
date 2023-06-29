@@ -1,7 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { FieldsEditor, VariablePanel } from './components';
-import { HeaderOptions } from './constants';
+import { HeaderOptions, StickyPositionOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -35,6 +35,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         options: HeaderOptions,
       },
       defaultValue: true,
+    });
+
+    builder.addRadio({
+      path: 'stickyPosition',
+      name: 'Sticky Position',
+      settings: {
+        options: StickyPositionOptions,
+      },
+      defaultValue: false,
     });
 
     builder.addSelect({
