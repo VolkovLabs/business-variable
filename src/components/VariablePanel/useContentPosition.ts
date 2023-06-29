@@ -23,11 +23,13 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
       if (containerRef.current && scrollableElement) {
         if (sticky) {
           const { y: startY, height } = containerRef.current.getBoundingClientRect();
-          const transformY = Math.abs(Math.min(startY - scrollableElement.getBoundingClientRect().top, 0));
+          const scrollableElementRect = scrollableElement.getBoundingClientRect();
+          const transformY = Math.abs(Math.min(startY - scrollableElementRect.top, 0));
+          const visibleHeight = scrollableElementRect.height - startY + scrollableElementRect.top;
 
           setStyle({
             width,
-            height: Math.max(height - transformY, 0),
+            height: Math.min(Math.max(height - transformY, 0), visibleHeight),
             transform: `translateY(${transformY}px)`,
           });
 
