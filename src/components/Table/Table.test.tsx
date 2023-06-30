@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { Table } from './Table';
 
@@ -78,5 +78,64 @@ describe('Table', () => {
     render(getComponent({ showHeader: false, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
 
     expect(screen.queryByTestId(TestIds.table.header)).not.toBeInTheDocument();
+  });
+
+  it('Should show filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [{ value: 'device1' }, { value: 'device2' }],
+      })
+    );
+
+    /**
+     * Check Filter presence
+     */
+    expect(screen.getByTestId(TestIds.table.buttonFilter)).toBeInTheDocument();
+    expect(screen.queryByTestId(TestIds.table.fieldFilterValue)).not.toBeInTheDocument();
+
+    /**
+     * Open Filter
+     */
+    fireEvent.click(screen.getByTestId(TestIds.table.buttonFilter));
+
+    /**
+     * Check Filter Content Presence
+     */
+    expect(screen.getByTestId(TestIds.table.fieldFilterValue)).toBeInTheDocument();
+
+    /**
+     * Apply filter
+     */
+    await act(() =>
+      fireEvent.change(screen.getByTestId(TestIds.table.fieldFilterValue), { target: { value: 'device1' } })
+    );
+
+    expect(screen.getByTestId(InTestIds.cell('device1', 0))).toBeInTheDocument();
+    expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();
+  });
+
+  it('Should not show filter', () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [{ id: 'value', header: 'cell header', enableColumnFilter: false }],
+        data: [],
+      })
+    );
+
+    expect(screen.queryByTestId(TestIds.table.buttonFilter)).not.toBeInTheDocument();
   });
 });

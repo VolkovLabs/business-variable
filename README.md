@@ -10,7 +10,7 @@
 
 ## Introduction
 
-The Variable panel allows updating dashboard variables in the panel.
+The Variable panel allows you to update dependent and multi-variables as a Table and Tree View.
 
 ## Requirements
 
@@ -22,10 +22,11 @@ The Variable panel is not included in the Grafana Catalog. It can be downloaded 
 
 ## Highlights
 
-- Allows updating dashboard variables.
+- Allows updating dashboard variables as a Table and Tree View.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
-- Display variables as Table and Tree View based on the query.
+- Allows to filter values.
+- Supports follow when scrolling (sticky).
 
 ## Feedback
 

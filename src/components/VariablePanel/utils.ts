@@ -1,3 +1,4 @@
+import { FilterFn } from '@tanstack/react-table';
 import { PanelData, DataFrame, Field } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { TableItem, GroupLevel, RuntimeVariable } from '../../types';
@@ -265,4 +266,24 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
 
     return newResult;
   }, result);
+};
+
+/**
+ * Value Filter
+ * @param row
+ * @param columnId
+ * @param value
+ */
+export const valueFilter: FilterFn<TableItem> = (row, columnId, value) => {
+  /**
+   * Filter parent rows
+   */
+  if (row.original.childValues) {
+    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(value.toLowerCase()));
+  }
+
+  /**
+   * Filter last level row
+   */
+  return row.original.value.toLowerCase().includes(value.toLowerCase());
 };

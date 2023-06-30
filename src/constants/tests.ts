@@ -12,6 +12,8 @@ export const TestIds = {
     control: 'data-testid table value-control',
     header: 'data-testid table header',
     buttonExpand: 'data-testid table button-expand',
+    buttonFilter: 'data-testid table button-filter',
+    fieldFilterValue: 'data-testid table field-filter-value',
   },
   fieldsEditor: {
     newLevel: 'data-testid fields-editor new-level',
