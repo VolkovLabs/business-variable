@@ -762,10 +762,14 @@ describe('Use Table Hook', () => {
         expect(rowDevice1).toBeInTheDocument();
 
         /**
-         * Device can be added to favorites
+         * Device can be removed to favorites
          */
         const favoritesControl = within(rowDevice1).getByTestId(TestIds.table.favoritesControl);
         expect(favoritesControl).toBeInTheDocument();
+
+        /**
+         * Remove device from favorites
+         */
         fireEvent.click(favoritesControl);
 
         expect(favoritesMock.remove).toHaveBeenCalledWith('device', 'device1');
@@ -813,6 +817,10 @@ describe('Use Table Hook', () => {
          */
         const favoritesControl = within(rowDevice2).getByTestId(TestIds.table.favoritesControl);
         expect(favoritesControl).toBeInTheDocument();
+
+        /**
+         * Add to Favorites
+         */
         fireEvent.click(favoritesControl);
 
         expect(favoritesMock.add).toHaveBeenCalledWith('device', 'device2');
