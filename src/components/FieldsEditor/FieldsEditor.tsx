@@ -1,52 +1,15 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { cx } from '@emotion/css';
-import { StandardEditorProps, SelectableValue } from '@grafana/data';
-import { useTheme2, Icon, IconButton, InlineFieldRow, InlineField, Select, Button } from '@grafana/ui';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-  DraggingStyle,
-  NotDraggingStyle,
-} from 'react-beautiful-dnd';
+import React, { useState, useCallback } from 'react';
+import { StandardEditorProps } from '@grafana/data';
+import { useTheme2, Input, InlineField, Button, Collapse } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { GroupLevel, PanelOptions } from '../../types';
+import { LevelsGroup, PanelOptions } from '../../types';
+import { LevelsEditor } from './components/LevelsEditor';
 import { Styles } from './styles';
-
-/**
- * Reorder
- * @param list
- * @param startIndex
- * @param endIndex
- */
-const reorder = (list: GroupLevel[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-/**
- * Get Item Style
- */
-const getItemStyle = (
-  isDragging: boolean,
-  draggableStyle: DraggingStyle | NotDraggingStyle | undefined,
-  index: number
-) => ({
-  marginLeft: index * 4,
-  /**
-   * styles we need to apply on draggables
-   */
-  ...draggableStyle,
-});
 
 /**
  * Properties
  */
-interface Props extends StandardEditorProps<GroupLevel[], any, PanelOptions> {}
+interface Props extends StandardEditorProps<LevelsGroup[], any, PanelOptions> {}
 
 /**
  * Fields Editor
@@ -62,14 +25,16 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   /**
    * States
    */
-  const [items, setItems] = useState(options?.levels || []);
-  const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
+  const [items, setItems] = useState<LevelsGroup[]>(options?.levelsGroups || []);
+  const [newGroup, setNewGroup] = useState('');
+  const [collapseState, setCollapseState] = useState<Record<string, boolean>>({});
 
   /**
-   * Change Items
+  /**
+   * Change groups
    */
   const onChangeItems = useCallback(
-    (items: GroupLevel[]) => {
+    (items: LevelsGroup[]) => {
       setItems(items);
       onChange(items);
     },
@@ -77,148 +42,64 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   );
 
   /**
-   * Drag End
+   * Add new group
    */
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      /**
-       * Dropped outside the list
-       */
-      if (!result.destination) {
-        return;
-      }
+  const onAddNewGroup = useCallback(() => {
+    setNewGroup('');
+    onChangeItems(items.concat([{ name: newGroup, items: [] }]));
+  }, [items, newGroup, onChangeItems]);
 
-      onChangeItems(reorder(items, result.source.index, result.destination.index));
+  /**
+   * Toggle collapse state for group
+   */
+  const onToggleGroup = useCallback((name: string) => {
+    setCollapseState((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
+  }, []);
+
+  /**
+   * Change Group
+   */
+  const onChangeItem = useCallback(
+    (updatedItem: LevelsGroup) => {
+      onChangeItems(items.map((item) => (item.name === updatedItem.name ? updatedItem : item)));
     },
     [items, onChangeItems]
   );
 
-  /**
-   * Available Field Options
-   */
-  const availableFieldOptions = useMemo(() => {
-    const nameField = items[items.length - 1];
-
-    if (nameField) {
-      const dataFrame = data.find((dataFrame) => dataFrame.refId === nameField?.source);
-
-      return (
-        dataFrame?.fields
-          .map(({ name }) => ({
-            label: name,
-            source: dataFrame.refId,
-            value: name,
-            fieldName: name,
-          }))
-          .filter((option) => !items.some((item) => item.name === option.value)) || []
-      );
-    }
-
-    return data.reduce((acc: SelectableValue[], dataFrame) => {
-      return acc.concat(
-        dataFrame.fields.map((field) => ({
-          value: `${dataFrame.refId}:${field.name}`,
-          fieldName: field.name,
-          label: `${dataFrame.refId}:${field.name}`,
-          source: dataFrame.refId,
-        }))
-      );
-    }, []);
-  }, [data, items]);
-
-  /**
-   * Add New Level
-   */
-  const onAddNewLevel = useCallback(() => {
-    if (newLevel) {
-      onChangeItems([
-        {
-          name: newLevel.name,
-          source: newLevel.source,
-        },
-        ...items,
-      ]);
-      setNewLevel(null);
-    }
-  }, [items, newLevel, onChangeItems]);
-
   return (
     <>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {items.map((item, index) => (
-                <Draggable key={item.name} draggableId={item.name} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
-                      className={styles.item}
-                      data-testid={TestIds.fieldsEditor.level(item.name)}
-                    >
-                      <div className={styles.header}>
-                        <div className={styles.column}>
-                          {item.name && (
-                            <div className={styles.titleWrapper}>
-                              <div className={cx(styles.title)}>{item.name}</div>
-                            </div>
-                          )}
-                        </div>
+      {items.map(({ name, items }) => (
+        <Collapse
+          key={name}
+          label={name}
+          isOpen={collapseState[name]}
+          onToggle={() => onToggleGroup(name)}
+          collapsible={true}
+        >
+          <LevelsEditor name={name} items={items} data={data} onChange={onChangeItem} />
+        </Collapse>
+      ))}
 
-                        <div className={styles.column}>
-                          <IconButton
-                            name="trash-alt"
-                            onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
-                            data-testid={TestIds.fieldsEditor.buttonRemove}
-                          />
-                          <Icon
-                            title="Drag and drop to reorder"
-                            name="draggabledots"
-                            size="lg"
-                            className={styles.dragIcon}
-                            {...provided.dragHandleProps}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-
-      <div className={styles.newLevel} data-testid={TestIds.fieldsEditor.newLevel}>
-        <InlineFieldRow>
-          <InlineField label="New Level" grow={true}>
-            <Select
-              options={availableFieldOptions}
-              value={newLevel?.value || null}
-              aria-label={TestIds.fieldsEditor.newLevelField}
-              onChange={(event) => {
-                setNewLevel({
-                  value: event.value || '',
-                  source: event.source,
-                  name: event.fieldName,
-                });
-              }}
-            />
-          </InlineField>
-          <Button
-            icon="plus"
-            title="Add Level"
-            disabled={!newLevel}
-            onClick={onAddNewLevel}
-            data-testid={TestIds.fieldsEditor.buttonAddNew}
-          >
-            Add
-          </Button>
-        </InlineFieldRow>
+      <div className={styles.newGroup} data-testid={TestIds.fieldsEditor.newLevel}>
+        <InlineField label="New" grow={true}>
+          <Input
+            placeholder="Group name"
+            value={newGroup}
+            onChange={(event) => setNewGroup(event.currentTarget.value)}
+          />
+        </InlineField>
+        <Button
+          icon="plus"
+          title="Add Group"
+          disabled={!newGroup}
+          onClick={onAddNewGroup}
+          data-testid={TestIds.fieldsEditor.buttonAddNew}
+        >
+          Add
+        </Button>
       </div>
     </>
   );

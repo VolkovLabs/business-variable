@@ -4,7 +4,7 @@ import { Button, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
-import { PanelOptions, TableItem } from '../../types';
+import { PanelOptions, TableItem, Level } from '../../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { convertTreeToPlain, getFilteredTree, getItemWithStatus, getRows, selectVariableValues } from './utils';
 
@@ -15,10 +15,12 @@ export const useTable = ({
   data,
   options,
   eventBus,
+  levels,
 }: {
   data: PanelData;
   options: PanelOptions;
   eventBus: EventBus;
+  levels?: Level[];
 }) => {
   /**
    * Styles and Theme
@@ -29,7 +31,7 @@ export const useTable = ({
   /**
    * Runtime Variable
    */
-  const variable = options.levels?.length ? options.levels[options.levels.length - 1]?.name : options.variable;
+  const variable = levels?.length ? levels[levels.length - 1]?.name : options.variable;
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
   /**
@@ -63,7 +65,7 @@ export const useTable = ({
       )
       .find((field) => field?.values);
 
-    const groupFields = options.levels || [];
+    const groupFields = levels || [];
 
     if (groupFields.length) {
       /**
@@ -132,7 +134,7 @@ export const useTable = ({
         );
       }) || []
     );
-  }, [runtimeVariable, data, options.levels, options.name, options.status, getRuntimeVariable]);
+  }, [runtimeVariable, data, levels, options.name, options.status, getRuntimeVariable]);
 
   /**
    * Value Cell Select

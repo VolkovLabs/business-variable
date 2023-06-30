@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, useTheme2 } from '@grafana/ui';
+import { Alert, useTheme2, RadioButtonGroup } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
@@ -19,9 +19,36 @@ interface Props extends PanelProps<PanelOptions> {}
  */
 export const VariablePanel: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
   /**
+   * Current Levels Group
+   */
+  const [currentGroup, setCurrentGroup] = useState(options.levelsGroups?.[0].name);
+
+  /**
+   * Group options
+   */
+  const groupOptions = useMemo(() => {
+    return (
+      options.levelsGroups?.map(({ name }) => ({
+        value: name,
+        label: name,
+      })) || []
+    );
+  }, [options.levelsGroups]);
+
+  /**
+   * Current Levels
+   */
+  const currentLevels = useMemo(() => {
+    if (options.levelsGroups?.length && currentGroup) {
+      return options.levelsGroups.find((group) => group.name === currentGroup)?.items;
+    }
+    return;
+  }, [options.levelsGroups, currentGroup]);
+
+  /**
    * Table config
    */
-  const { tableData, columns, getSubRows } = useTable({ data, options, eventBus });
+  const { tableData, columns, getSubRows } = useTable({ data, options, eventBus, levels: currentLevels });
 
   /**
    * Sticky position
@@ -61,6 +88,13 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
 
       {tableData.length > 0 && (
         <div style={style} className={styles.content}>
+          {options.levelsGroups?.length > 0 && (
+            <RadioButtonGroup
+              value={currentGroup}
+              options={groupOptions}
+              onChange={(value) => setCurrentGroup(value)}
+            />
+          )}
           <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
         </div>
       )}

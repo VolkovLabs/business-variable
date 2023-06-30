@@ -56,12 +56,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           value: vr.name,
         })),
       },
-      showIf: (config) => !config.levels?.length,
+      showIf: (config) => !config.levelsGroups?.length,
     });
 
     builder.addCustomEditor({
-      id: 'fieldsEditor',
-      path: 'levels',
+      id: 'levelsGroups',
+      path: 'levelsGroups',
       name: 'Tree View levels based on Data Source',
       editor: FieldsEditor,
     });

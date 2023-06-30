@@ -1,7 +1,7 @@
 /**
- * Group Level
+ * Level
  */
-export interface GroupLevel {
+export interface Level {
   /**
    * Name
    *
@@ -13,6 +13,26 @@ export interface GroupLevel {
    * Data Frame Id
    */
   source: string;
+}
+
+/**
+ * Levels Group
+ */
+export interface LevelsGroup {
+  /**
+   * Name
+   *
+   * @type {string}
+   */
+  name: string;
+
+  /**
+   * Items
+   *
+   * @type {Level[]}
+   */
+
+  items: Level[];
 }
 
 /**
@@ -41,9 +61,9 @@ export interface PanelOptions {
   status: string;
 
   /**
-   * Tree View Levels
+   * Tree View Level Groups
    */
-  levels: GroupLevel[];
+  levelsGroups: LevelsGroup[];
 
   /**
    * Display Header
