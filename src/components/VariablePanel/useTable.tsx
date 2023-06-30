@@ -195,7 +195,7 @@ export const useTable = ({
         filterFn: valueFilter,
         cell: ({ row, getValue }) => {
           const value = getValue() as string;
-          const canBeFavorite = row.original.canBeFavorite;
+          const canBeFavorite = options.favorites && row.original.canBeFavorite;
           const isFavorite = canBeFavorite && favorites.isAdded(row.original.variable?.name, value);
 
           return (
@@ -276,6 +276,7 @@ export const useTable = ({
     variable,
     favorites,
     options.filter,
+    options.favorites,
     styles.rowContent,
     styles.selectControl,
     styles.expandButton,
