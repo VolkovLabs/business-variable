@@ -1,13 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
-import { Button, useTheme2, Icon } from '@grafana/ui';
+import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions, TableItem } from '../../types';
-import { useRuntimeVariables } from './useRuntimeVariables';
 import { useFavorites } from './useFavorites';
-import { convertTreeToPlain, getFilteredTree, getItemWithStatus, getRows, selectVariableValues } from './utils';
+import { useRuntimeVariables } from './useRuntimeVariables';
+import {
+  convertTreeToPlain,
+  getFilteredTree,
+  getItemWithStatus,
+  getRows,
+  selectVariableValues,
+  valueFilter,
+} from './utils';
 
 /**
  * Use Table
@@ -185,6 +192,8 @@ export const useTable = ({
         id: 'value',
         accessorKey: 'value',
         header: runtimeVariable?.label || variable,
+        enableColumnFilter: options.filter,
+        filterFn: valueFilter,
         cell: ({ row, getValue }) => {
           const value = getValue() as string;
           const canBeFavorite = row.original.canBeFavorite;
@@ -266,6 +275,7 @@ export const useTable = ({
     runtimeVariable?.multi,
     variable,
     favorites,
+    options.filter,
     styles.rowContent,
     styles.selectControl,
     styles.expandButton,

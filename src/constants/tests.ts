@@ -13,6 +13,8 @@ export const TestIds = {
     favoritesControl: 'data-testid table favorites-control',
     header: 'data-testid table header',
     buttonExpand: 'data-testid table button-expand',
+    buttonFilter: 'data-testid table button-filter',
+    fieldFilterValue: 'data-testid table field-filter-value',
   },
   fieldsEditor: {
     newLevel: 'data-testid fields-editor new-level',

@@ -1,7 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { FieldsEditor, VariablePanel } from './components';
-import { HeaderOptions, StickyOptions } from './constants';
+import { FilterOptions, HeaderOptions, StickyOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -28,14 +28,27 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
-    builder.addRadio({
-      path: 'header',
-      name: 'Header',
-      settings: {
-        options: HeaderOptions,
-      },
-      defaultValue: true,
-    });
+    /**
+     * Header
+     */
+    builder
+      .addRadio({
+        path: 'header',
+        name: 'Header',
+        settings: {
+          options: HeaderOptions,
+        },
+        defaultValue: true,
+      })
+      .addRadio({
+        path: 'filter',
+        name: 'Values Filtering',
+        settings: {
+          options: FilterOptions,
+        },
+        defaultValue: false,
+        showIf: (config) => config.header,
+      });
 
     builder.addRadio({
       path: 'sticky',
@@ -47,25 +60,33 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       defaultValue: false,
     });
 
-    builder.addSelect({
-      path: 'variable',
-      name: 'Select Variable to Display',
-      settings: {
-        options: variables.map((vr) => ({
-          label: vr.name,
-          value: vr.name,
-        })),
-      },
-      showIf: (config) => !config.levels?.length,
-    });
+    /**
+     * Variables
+     */
+    builder
+      .addSelect({
+        path: 'variable',
+        name: 'Select Variable to Display',
+        settings: {
+          options: variables.map((vr) => ({
+            label: vr.name,
+            value: vr.name,
+          })),
+        },
+        category: ['Hierarchy'],
+        showIf: (config) => !config.levels?.length,
+      })
+      .addCustomEditor({
+        id: 'fieldsEditor',
+        path: 'levels',
+        name: 'Tree View levels based on Data Source',
+        editor: FieldsEditor,
+        category: ['Hierarchy'],
+      });
 
-    builder.addCustomEditor({
-      id: 'fieldsEditor',
-      path: 'levels',
-      name: 'Tree View levels based on Data Source',
-      editor: FieldsEditor,
-    });
-
+    /**
+     * Status
+     */
     builder
       .addFieldNamePicker({
         path: 'name',
