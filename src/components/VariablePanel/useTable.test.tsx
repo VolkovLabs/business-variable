@@ -775,7 +775,7 @@ describe('Use Table Hook', () => {
         expect(favoritesMock.remove).toHaveBeenCalledWith('device', 'device1');
       });
 
-      it('Show show not added to favorites control for device1', () => {
+      it('Show not added to favorites control for device1', () => {
         jest.mocked(useRuntimeVariables).mockImplementation(
           () =>
             ({
