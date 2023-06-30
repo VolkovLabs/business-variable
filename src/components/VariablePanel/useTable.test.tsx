@@ -725,7 +725,7 @@ describe('Use Table Hook', () => {
         expect(within(rowAll).queryByTestId(TestIds.table.favoritesControl)).not.toBeInTheDocument();
       });
 
-      it('Show show added to favorites control for device1', () => {
+      it('Show added to favorites control for device1', () => {
         jest.mocked(useRuntimeVariables).mockImplementation(
           () =>
             ({
@@ -741,6 +741,7 @@ describe('Use Table Hook', () => {
             data: { series: [dataFrame] } as any,
             options: {
               levels: [{ name: 'device', source: 'A' }],
+              favorites: true,
             } as any,
             eventBus: null as any,
           })
@@ -792,6 +793,7 @@ describe('Use Table Hook', () => {
             data: { series: [dataFrame] } as any,
             options: {
               levels: [{ name: 'device', source: 'A' }],
+              favorites: true,
             } as any,
             eventBus: null as any,
           })
