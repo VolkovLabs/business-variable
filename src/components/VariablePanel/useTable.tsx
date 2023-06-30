@@ -33,6 +33,9 @@ export const useTable = ({
   const variable = options.levels?.length ? options.levels[options.levels.length - 1]?.name : options.variable;
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
+  /**
+   * Favorites
+   */
   const favorites = useFavorites();
 
   /**
