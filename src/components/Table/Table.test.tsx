@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { Table } from './Table';
 

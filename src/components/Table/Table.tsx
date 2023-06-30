@@ -3,15 +3,15 @@ import { cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import {
   ColumnDef,
+  ColumnFiltersState,
   ExpandedState,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   TableOptions,
   useReactTable,
-  ColumnFiltersState,
-  getFilteredRowModel,
 } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Filter } from './Filter';

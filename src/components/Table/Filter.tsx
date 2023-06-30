@@ -1,5 +1,5 @@
-import React, { useState, useCallback, FormEvent } from 'react';
-import { Button, useStyles2, Input } from '@grafana/ui';
+import React, { FormEvent, useCallback, useState } from 'react';
+import { Button, Input, useStyles2 } from '@grafana/ui';
 import { Column } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from './styles';
@@ -8,6 +8,9 @@ import { Styles } from './styles';
  * Props
  */
 interface Props<TableData extends object> {
+  /**
+   * Column
+   */
   column: Column<TableData, unknown>;
 }
 
