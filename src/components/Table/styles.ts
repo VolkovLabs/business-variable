@@ -72,5 +72,8 @@ export const Styles = (theme: GrafanaTheme2) => {
       background-color: ${theme.colors.background.primary};
       padding: ${theme.spacing(1)};
     `,
+    filterInput: css`
+      margin-top: ${theme.spacing(0.5)};
+    `,
   };
 };

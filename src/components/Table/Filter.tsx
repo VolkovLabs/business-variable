@@ -1,18 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useCallback, FormEvent } from 'react';
 import { Button, useStyles2, Input } from '@grafana/ui';
-import { Column, Table } from '@tanstack/react-table';
+import { Column } from '@tanstack/react-table';
+import { TestIds } from '../../constants';
 import { Styles } from './styles';
 
 /**
  * Props
- * @constructor
  */
 interface Props<TableData extends object> {
   column: Column<TableData, unknown>;
-  table: Table<TableData>;
 }
 
-export const Filter = <TableData extends object>({ table, column }: Props<TableData>) => {
+/**
+ * Filter
+ * @param props
+ */
+export const Filter = <TableData extends object>({ column }: Props<TableData>) => {
   /**
    * Styles
    */
@@ -23,25 +26,45 @@ export const Filter = <TableData extends object>({ table, column }: Props<TableD
    */
   const [isOpen, setIsOpen] = useState(false);
 
-  const ref = useRef<HTMLButtonElement>(null);
+  /**
+   * Current filter value
+   */
+  const columnFilterValue = (column.getFilterValue() as string) || '';
 
-  const columnFilterValue = column.getFilterValue() as string[];
+  /**
+   * Toggle Filter Visibility
+   */
+  const onToggleVisibility = useCallback(() => {
+    setIsOpen((isOpen) => !isOpen);
+  }, []);
+
+  /**
+   * Change Filter Value
+   */
+  const onChangeFilterValue = useCallback(
+    (event: FormEvent<HTMLInputElement>) => {
+      column.setFilterValue(event.currentTarget.value);
+    },
+    [column]
+  );
 
   return (
     <>
       <Button
         icon="filter"
         fill="text"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onToggleVisibility}
         size="sm"
         className={styles.filterButton}
-        ref={ref}
+        data-testid={TestIds.table.buttonFilter}
       />
-      {isOpen && ref.current && (
+      {isOpen && (
         <Input
           placeholder="Search values"
           value={columnFilterValue}
-          onChange={(event) => column.setFilterValue(event.currentTarget.value)}
+          onChange={onChangeFilterValue}
+          className={styles.filterInput}
+          data-testid={TestIds.table.fieldFilterValue}
         />
       )}
     </>

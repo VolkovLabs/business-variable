@@ -1,7 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { FieldsEditor, VariablePanel } from './components';
-import { HeaderOptions, StickyOptions } from './constants';
+import { HeaderOptions, StickyOptions, FilterOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -35,6 +35,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         options: HeaderOptions,
       },
       defaultValue: true,
+    });
+
+    builder.addRadio({
+      path: 'filter',
+      name: 'Enable Filtering',
+      description: 'Allow to filter values.',
+      settings: {
+        options: FilterOptions,
+      },
+      defaultValue: false,
+      showIf: (config) => config.header,
     });
 
     builder.addRadio({

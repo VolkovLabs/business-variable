@@ -81,6 +81,15 @@ describe('plugin', () => {
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['variable']));
     });
+
+    it('Should show filter if header enabled', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(addInputImplementation({ header: true }, shownOptionsPaths));
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['filter']));
+    });
   });
 
   describe('Settings', () => {

@@ -111,7 +111,7 @@ export const Table = <TableData extends object>({
                         colSpan={header.colSpan}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanFilter() && <Filter column={header.column} table={tableInstance} />}
+                        {header.column.getCanFilter() && <Filter column={header.column} />}
                       </th>
                     );
                   })}

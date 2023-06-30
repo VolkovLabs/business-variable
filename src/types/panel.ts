@@ -54,4 +54,9 @@ export interface PanelOptions {
    * Use Sticky position
    */
   sticky: boolean;
+
+  /**
+   * Display Filter
+   */
+  filter: true;
 }

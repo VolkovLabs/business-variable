@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { getRows, selectVariableValues, convertTreeToPlain } from './utils';
+import { getRows, selectVariableValues, convertTreeToPlain, valueFilter } from './utils';
 
 /**
  * Mock @grafana/runtime
@@ -441,6 +441,22 @@ describe('Utils', () => {
           selectable: true,
         },
       ]);
+    });
+  });
+
+  describe('Value Filter', () => {
+    it('Should include parent row if value exists in childValues', () => {
+      const parentRow = { original: { childValues: ['device1', 'device2'] } };
+
+      expect(valueFilter(parentRow as any, {} as any, 'Device2', () => {})).toBeTruthy();
+      expect(valueFilter(parentRow as any, {} as any, 'Device3', () => {})).toBeFalsy();
+    });
+
+    it('Should include row if value matches', () => {
+      const row = { original: { value: 'device1' } };
+
+      expect(valueFilter(row as any, {} as any, 'Device1', () => {})).toBeTruthy();
+      expect(valueFilter(row as any, {} as any, 'Device2', () => {})).toBeFalsy();
     });
   });
 });

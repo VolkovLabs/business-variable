@@ -6,7 +6,14 @@ import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions, TableItem } from '../../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
-import { convertTreeToPlain, getFilteredTree, getItemWithStatus, getRows, selectVariableValues } from './utils';
+import {
+  convertTreeToPlain,
+  getFilteredTree,
+  getItemWithStatus,
+  getRows,
+  selectVariableValues,
+  valueFilter,
+} from './utils';
 
 /**
  * Use Table
@@ -179,6 +186,8 @@ export const useTable = ({
         id: 'value',
         accessorKey: 'value',
         header: runtimeVariable?.label || variable,
+        enableColumnFilter: options.filter,
+        filterFn: valueFilter,
         cell: ({ row, getValue }) => {
           return (
             <div
@@ -238,6 +247,7 @@ export const useTable = ({
     runtimeVariable?.label,
     runtimeVariable?.multi,
     variable,
+    options.filter,
     styles.rowContent,
     styles.selectControl,
     styles.expandButton,
