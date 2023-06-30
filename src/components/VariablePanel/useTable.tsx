@@ -77,7 +77,6 @@ export const useTable = ({
       .find((field) => field?.values);
 
     const groupFields = options.levels || [];
-
     if (groupFields.length) {
       /**
        * Use Group levels
@@ -198,6 +197,7 @@ export const useTable = ({
           const value = getValue() as string;
           const canBeFavorite = row.original.canBeFavorite;
           const isFavorite = canBeFavorite && favorites.isAdded(row.original.variable?.name, value);
+
           return (
             <div
               className={styles.rowContent}

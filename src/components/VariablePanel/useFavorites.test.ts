@@ -1,11 +1,17 @@
-import { act, renderHook, waitFor, RenderHookResult } from '@testing-library/react';
+import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { useFavorites } from './useFavorites';
 
+/**
+ * Local Storage
+ */
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
 };
 
+/**
+ * Favorites
+ */
 describe('Use Favorites', () => {
   Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 

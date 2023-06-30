@@ -1,5 +1,8 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+/**
+ * Favorites type
+ */
 type Favorites = Record<string, string[]>;
 
 /**
@@ -11,6 +14,9 @@ const useFavoritesModel = () => {
     return JSON.parse(json || '{}');
   }, []);
 
+  /**
+   * Update
+   */
   const update = useCallback(async (data: Favorites) => {
     window.localStorage.setItem('favorites', JSON.stringify(data));
     return data;
@@ -76,6 +82,9 @@ export const useFavorites = () => {
     [data, model]
   );
 
+  /**
+   * Check if already added
+   */
   const isAdded = useCallback(
     (name: string | undefined, value: string) => {
       if (!name || !data[name]) {
@@ -83,7 +92,6 @@ export const useFavorites = () => {
       }
 
       const items = data[name];
-
       return items.includes(value);
     },
     [data]
