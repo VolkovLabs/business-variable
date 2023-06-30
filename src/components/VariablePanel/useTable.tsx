@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
-import { Button, useTheme2 } from '@grafana/ui';
+import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions, TableItem } from '../../types';
+import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import {
   convertTreeToPlain,
@@ -40,6 +41,11 @@ export const useTable = ({
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
   /**
+   * Favorites
+   */
+  const favorites = useFavorites();
+
+  /**
    * Update Table Data
    */
   const tableData: TableItem[] = useMemo(() => {
@@ -71,7 +77,6 @@ export const useTable = ({
       .find((field) => field?.values);
 
     const groupFields = options.levels || [];
-
     if (groupFields.length) {
       /**
        * Use Group levels
@@ -189,11 +194,15 @@ export const useTable = ({
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
         cell: ({ row, getValue }) => {
+          const value = getValue() as string;
+          const canBeFavorite = options.favorites && row.original.canBeFavorite;
+          const isFavorite = canBeFavorite && favorites.isAdded(row.original.variable?.name, value);
+
           return (
             <div
               className={styles.rowContent}
               style={{ paddingLeft: theme.spacing(row.depth * 1.5) }}
-              data-testid={TestIds.table.cell(getValue() as string, row.depth)}
+              data-testid={TestIds.table.cell(value, row.depth)}
             >
               {row.original.selectable && (
                 <input
@@ -218,7 +227,7 @@ export const useTable = ({
                 />
               )}
 
-              <label htmlFor={`${prefix}-${row.original.value}`} className={styles.label}>
+              <label htmlFor={`${prefix}-${value}`} className={styles.label}>
                 {row.original.showStatus && (
                   <span
                     className={styles.status}
@@ -234,9 +243,27 @@ export const useTable = ({
                       : theme.typography.fontWeightRegular,
                   }}
                 >
-                  {getValue<TableItem['value']>()}
+                  {value}
                 </span>
               </label>
+              {canBeFavorite && (
+                <Button
+                  variant="secondary"
+                  fill="text"
+                  size="sm"
+                  className={styles.favoritesButton}
+                  onClick={() => {
+                    if (isFavorite) {
+                      favorites.remove(row.original.variable?.name, value);
+                    } else {
+                      favorites.add(row.original.variable?.name, value);
+                    }
+                  }}
+                  data-testid={TestIds.table.favoritesControl}
+                >
+                  <Icon name="star" type={isFavorite ? 'solid' : 'default'} />
+                </Button>
+              )}
             </div>
           );
         },
@@ -247,12 +274,15 @@ export const useTable = ({
     runtimeVariable?.label,
     runtimeVariable?.multi,
     variable,
+    favorites,
     options.filter,
+    options.favorites,
     styles.rowContent,
     styles.selectControl,
     styles.expandButton,
     styles.label,
     styles.status,
+    styles.favoritesButton,
     theme,
     onChange,
   ]);

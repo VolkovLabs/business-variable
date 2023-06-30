@@ -21,3 +21,11 @@ export const FilterOptions = [
   { value: true, label: 'Enabled', description: 'Display Table Filter.' },
   { value: false, label: 'Disabled', description: 'Hide Table Filter.' },
 ];
+
+/**
+ * Favorites Options
+ */
+export const FavoritesOptions = [
+  { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.' },
+  { value: false, label: 'Disabled', description: 'Hide favorites.' },
+];

@@ -1,7 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { FieldsEditor, VariablePanel } from './components';
-import { FilterOptions, HeaderOptions, StickyOptions } from './constants';
+import { FavoritesOptions, FilterOptions, HeaderOptions, StickyOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -42,9 +42,18 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'filter',
-        name: 'Values Filtering',
+        name: 'Values filtering',
         settings: {
           options: FilterOptions,
+        },
+        defaultValue: false,
+        showIf: (config) => config.header,
+      })
+      .addRadio({
+        path: 'favorites',
+        name: 'Select favorites',
+        settings: {
+          options: FavoritesOptions,
         },
         defaultValue: false,
         showIf: (config) => config.header,
@@ -52,7 +61,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
 
     builder.addRadio({
       path: 'sticky',
-      name: 'Sticky Position',
+      name: 'Sticky position',
       description: 'Variables will follow when scrolling.',
       settings: {
         options: StickyOptions,

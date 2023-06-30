@@ -3,6 +3,7 @@ import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { TableItem } from '../../types';
+import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
 import { selectVariableValues } from './utils';
@@ -14,6 +15,17 @@ jest.mock('./useRuntimeVariables', () => ({
   useRuntimeVariables: jest.fn(() => ({
     variable: null,
     getVariable: jest.fn(),
+  })),
+}));
+
+/**
+ * Mock useFavorites
+ */
+jest.mock('./useFavorites', () => ({
+  useFavorites: jest.fn(() => ({
+    remove: jest.fn(),
+    add: jest.fn(),
+    isAdded: jest.fn(),
   })),
 }));
 
@@ -623,6 +635,198 @@ describe('Use Table Hook', () => {
       expect(device2Row).toBeInTheDocument();
       expect(within(device2Row).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
       expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
+    });
+
+    describe('Favorites', () => {
+      const deviceVariable = {
+        multi: true,
+        includeAll: true,
+        name: 'device',
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      };
+
+      const favoritesMock = {
+        add: jest.fn(),
+        remove: jest.fn(),
+        isAdded: jest.fn((name, value) => value === 'device1'),
+      };
+      jest.mocked(useFavorites).mockImplementation(() => favoritesMock);
+
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      beforeEach(() => {
+        favoritesMock.add.mockClear();
+        favoritesMock.remove.mockClear();
+      });
+
+      it('Show not show favorites control for All option', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn(() => deviceVariable),
+            } as any)
+        );
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              levels: [{ name: 'device', source: 'A' }],
+            } as any,
+            eventBus: null as any,
+          })
+        );
+
+        /**
+         * Render rows
+         */
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowAll = screen.getByTestId(TestIds.table.cell('All', 0));
+
+        expect(rowAll).toBeInTheDocument();
+
+        /**
+         * All value can't be added to favorites
+         */
+        expect(within(rowAll).queryByTestId(TestIds.table.favoritesControl)).not.toBeInTheDocument();
+      });
+
+      it('Show added to favorites control for device1', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn(() => deviceVariable),
+            } as any)
+        );
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              levels: [{ name: 'device', source: 'A' }],
+              favorites: true,
+            } as any,
+            eventBus: null as any,
+          })
+        );
+
+        /**
+         * Render rows
+         */
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowDevice1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+
+        expect(rowDevice1).toBeInTheDocument();
+
+        /**
+         * Device can be removed to favorites
+         */
+        const favoritesControl = within(rowDevice1).getByTestId(TestIds.table.favoritesControl);
+        expect(favoritesControl).toBeInTheDocument();
+
+        /**
+         * Remove device from favorites
+         */
+        fireEvent.click(favoritesControl);
+
+        expect(favoritesMock.remove).toHaveBeenCalledWith('device', 'device1');
+      });
+
+      it('Show not added to favorites control for device1', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn(() => deviceVariable),
+            } as any)
+        );
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              levels: [{ name: 'device', source: 'A' }],
+              favorites: true,
+            } as any,
+            eventBus: null as any,
+          })
+        );
+
+        /**
+         * Render rows
+         */
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowDevice2 = screen.getByTestId(TestIds.table.cell('device2', 0));
+
+        expect(rowDevice2).toBeInTheDocument();
+
+        /**
+         * Device can be added to favorites
+         */
+        const favoritesControl = within(rowDevice2).getByTestId(TestIds.table.favoritesControl);
+        expect(favoritesControl).toBeInTheDocument();
+
+        /**
+         * Add to Favorites
+         */
+        fireEvent.click(favoritesControl);
+
+        expect(favoritesMock.add).toHaveBeenCalledWith('device', 'device2');
+      });
     });
   });
 });

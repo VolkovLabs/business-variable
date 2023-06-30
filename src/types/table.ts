@@ -53,4 +53,9 @@ export interface TableItem {
    * All Child Values
    */
   childValues?: string[];
+
+  /**
+   * Can be added to favorites
+   */
+  canBeFavorite?: boolean;
 }

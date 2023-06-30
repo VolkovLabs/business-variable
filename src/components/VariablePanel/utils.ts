@@ -154,6 +154,7 @@ export const getItemWithStatus = (
     statusColor,
     variable: item.variable,
     selectable,
+    canBeFavorite: selectable && item.value !== 'All',
   };
 };
 

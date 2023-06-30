@@ -56,7 +56,12 @@ export interface PanelOptions {
   sticky: boolean;
 
   /**
-   * Display Filter
+   * Values Filter
    */
-  filter: true;
+  filter: boolean;
+
+  /**
+   * Select Favorites
+   */
+  favorites: boolean;
 }
