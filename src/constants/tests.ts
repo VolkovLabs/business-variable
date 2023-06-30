@@ -10,6 +10,7 @@ export const TestIds = {
   table: {
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
+    favoritesControl: 'data-testid table favorites-control',
     header: 'data-testid table header',
     buttonExpand: 'data-testid table button-expand',
   },

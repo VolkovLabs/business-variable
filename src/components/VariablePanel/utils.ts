@@ -153,6 +153,7 @@ export const getItemWithStatus = (
     statusColor,
     variable: item.variable,
     selectable,
+    canBeFavorite: item.variable?.name === 'device' && item.value !== 'All',
   };
 };
 

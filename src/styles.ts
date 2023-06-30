@@ -35,5 +35,8 @@ export const Styles = (theme: GrafanaTheme2) => {
       border-radius: 50%;
       margin-right: ${theme.spacing(1)};
     `,
+    favoritesButton: css`
+      margin-left: auto;
+    `,
   };
 };
