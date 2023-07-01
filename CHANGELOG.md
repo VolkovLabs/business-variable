@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.3.0 (2023-06-30))
+## 1.3.0 (2023-06-30)
 
 ### Features / Enhancements
 
@@ -8,7 +8,8 @@
 - Add the ability to collapse parent rows (#16)
 - Add a Sticky option to follow when scrolling (#17)
 - Add Table Filter (#18)
-- Add favorites list for devices (#19)
+- Add selecting favorites (#19)
+- Update documentation (#20)
 
 ## 1.2.0 (2023-06-26)
 
