@@ -261,7 +261,7 @@ export const useTable = ({
                   }}
                   data-testid={TestIds.table.favoritesControl}
                 >
-                  <Icon name="star" type={isFavorite ? 'solid' : 'default'} />
+                  {isFavorite ? <Icon name="favorite" /> : <Icon name="star" />}
                 </Button>
               )}
             </div>
