@@ -1,6 +1,6 @@
 import React from 'react';
 import { locationService } from '@grafana/runtime';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { VariablePanel } from './VariablePanel';
 
@@ -42,13 +42,23 @@ describe('Panel', () => {
     return <VariablePanel width={100} height={100} eventBus={eventBus} {...restProps} options={options} />;
   };
 
+  /**
+   * Render without errors
+   * @param component
+   */
+  const renderWithoutErrors = async <T,>(component: React.ReactElement): Promise<void> => {
+    await render(component);
+
+    await new Promise((resolve) => setTimeout(resolve));
+  };
+
   it('Should find component', async () => {
-    render(getComponent({}));
+    await act(() => renderWithoutErrors(getComponent({})));
     expect(screen.getByTestId(TestIds.panel.root)).toBeInTheDocument();
   });
 
   it('Should show info message if no variables', async () => {
-    render(getComponent({}));
+    await act(() => renderWithoutErrors(getComponent({})));
     expect(screen.getByTestId(TestIds.panel.infoMessage)).toBeInTheDocument();
   });
 });
