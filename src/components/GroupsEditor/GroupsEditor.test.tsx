@@ -2,19 +2,19 @@ import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
-import { FieldsEditor } from './FieldsEditor';
+import { GroupsEditor } from './GroupsEditor';
 
 /**
  * Props
  */
-type Props = React.ComponentProps<typeof FieldsEditor>;
+type Props = React.ComponentProps<typeof GroupsEditor>;
 
-describe('FieldsEditor', () => {
+describe('GroupsEditor', () => {
   /**
    * Get Tested Component
    * @param props
    */
-  const getComponent = (props: Partial<Props>) => <FieldsEditor {...(props as any)} />;
+  const getComponent = (props: Partial<Props>) => <GroupsEditor {...(props as any)} />;
 
   const dataFrameA = toDataFrame({
     fields: [
@@ -61,8 +61,8 @@ describe('FieldsEditor', () => {
       })
     );
 
-    expect(screen.getByTestId(TestIds.fieldsEditor.item('group1'))).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.fieldsEditor.item('group2'))).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.groupsEditor.item('group1'))).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.groupsEditor.item('group2'))).toBeInTheDocument();
   });
 
   it('Should add new group', async () => {
@@ -86,13 +86,13 @@ describe('FieldsEditor', () => {
     );
 
     await act(() =>
-      fireEvent.change(screen.getByTestId(TestIds.fieldsEditor.newItemName), { target: { value: 'group2' } })
+      fireEvent.change(screen.getByTestId(TestIds.groupsEditor.newItemName), { target: { value: 'group2' } })
     );
 
-    expect(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)).not.toBeDisabled();
+    expect(screen.getByTestId(TestIds.groupsEditor.buttonAddNew)).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.groupsEditor.buttonAddNew)).not.toBeDisabled();
 
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)));
+    await act(() => fireEvent.click(screen.getByTestId(TestIds.groupsEditor.buttonAddNew)));
 
     expect(onChange).toHaveBeenCalledWith([
       { name: 'group1', items: [] },
@@ -124,7 +124,7 @@ describe('FieldsEditor', () => {
       })
     );
 
-    const item2 = screen.getByTestId(TestIds.fieldsEditor.item('group2'));
+    const item2 = screen.getByTestId(TestIds.groupsEditor.item('group2'));
 
     /**
      * Check field presence
@@ -134,7 +134,7 @@ describe('FieldsEditor', () => {
     /**
      * Remove
      */
-    await act(() => fireEvent.click(within(item2).getByTestId(TestIds.fieldsEditor.buttonRemove)));
+    await act(() => fireEvent.click(within(item2).getByTestId(TestIds.groupsEditor.buttonRemove)));
 
     expect(onChange).toHaveBeenCalledWith([{ name: 'group1', items: [] }]);
   });
@@ -163,7 +163,7 @@ describe('FieldsEditor', () => {
       })
     );
 
-    const item1 = screen.getByTestId(TestIds.fieldsEditor.item('group1'));
+    const item1 = screen.getByTestId(TestIds.groupsEditor.item('group1'));
 
     /**
      * Check field presence

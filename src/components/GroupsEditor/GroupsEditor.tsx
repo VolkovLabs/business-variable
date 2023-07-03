@@ -12,10 +12,10 @@ import { Styles } from './styles';
 interface Props extends StandardEditorProps<LevelsGroup[], any, PanelOptions> {}
 
 /**
- * Fields Editor
+ * Groups Editor
  * @constructor
  */
-export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onChange }) => {
+export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onChange }) => {
   /**
    * Styles and Theme
    */
@@ -82,7 +82,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         <Collapse
           key={name}
           label={
-            <div className={styles.groupHeader} data-testid={TestIds.fieldsEditor.item(name)}>
+            <div className={styles.groupHeader} data-testid={TestIds.groupsEditor.item(name)}>
               {name}
               <Button
                 icon="trash-alt"
@@ -101,7 +101,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                    */
                   onChangeItems(items.filter((item) => item.name !== name));
                 }}
-                data-testid={TestIds.fieldsEditor.buttonRemove}
+                data-testid={TestIds.groupsEditor.buttonRemove}
               />
             </div>
           }
@@ -113,7 +113,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         </Collapse>
       ))}
 
-      <div className={styles.newGroup} data-testid={TestIds.fieldsEditor.newItem}>
+      <div className={styles.newGroup} data-testid={TestIds.groupsEditor.newItem}>
         <InlineField
           label="New"
           grow={true}
@@ -124,7 +124,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
             placeholder="Group name"
             value={newGroup}
             onChange={(event) => setNewGroup(event.currentTarget.value)}
-            data-testid={TestIds.fieldsEditor.newItemName}
+            data-testid={TestIds.groupsEditor.newItemName}
           />
         </InlineField>
         <Button
@@ -132,7 +132,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
           title="Add Group"
           disabled={!newGroup || isNameExistsError}
           onClick={onAddNewGroup}
-          data-testid={TestIds.fieldsEditor.buttonAddNew}
+          data-testid={TestIds.groupsEditor.buttonAddNew}
         >
           Add
         </Button>

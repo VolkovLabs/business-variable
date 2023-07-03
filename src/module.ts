@@ -1,6 +1,6 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { FieldsEditor, VariablePanel } from './components';
+import { GroupsEditor, VariablePanel } from './components';
 import { FavoritesOptions, FilterOptions, HeaderOptions, StickyOptions } from './constants';
 import { PanelOptions } from './types';
 
@@ -89,7 +89,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         id: 'groups',
         path: 'groups',
         name: 'Tree View based on Data Source',
-        editor: FieldsEditor,
+        editor: GroupsEditor,
         category: ['Hierarchy'],
       });
 

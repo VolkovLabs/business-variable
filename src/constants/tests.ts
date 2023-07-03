@@ -15,7 +15,7 @@ export const TestIds = {
     fieldFilterValue: 'data-testid table field-filter-value',
     header: 'data-testid table header',
   },
-  fieldsEditor: {
+  groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',
     buttonRemove: 'data-testid fields-editor button-remove',
     item: (name: string) => `data-testid fields-editor item-${name}`,
@@ -23,11 +23,11 @@ export const TestIds = {
     newItemName: 'fields-editor new-item-name',
   },
   levelsEditor: {
-    root: 'data-testid levels-editor',
+    buttonAddNew: 'data-testid levels-editor button-add-new',
+    buttonRemove: 'data-testid levels-editor button-remove',
     item: (name: string) => `data-testid levels-editor item-${name}`,
     newItem: 'data-testid levels-editor new-item',
     newItemName: 'data-testidd levels-editor new-item-name',
-    buttonRemove: 'data-testid levels-editor button-remove',
-    buttonAddNew: 'data-testid levels-editor button-add-new',
+    root: 'data-testid levels-editor',
   },
 };
