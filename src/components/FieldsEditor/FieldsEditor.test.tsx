@@ -1,7 +1,7 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { Select } from '@grafana/ui';
-import { act, render, screen, fireEvent, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { FieldsEditor } from './FieldsEditor';
 
@@ -204,8 +204,8 @@ describe('FieldsEditor', () => {
     await act(() => fireEvent.click(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)));
 
     expect(onChange).toHaveBeenCalledWith([
-      { name: 'field2', source: 'A' },
       { name: 'field1', source: 'A' },
+      { name: 'field2', source: 'A' },
     ]);
   });
 
@@ -219,11 +219,11 @@ describe('FieldsEditor', () => {
           options: {
             levels: [
               {
-                name: 'field2',
+                name: 'field1',
                 source: 'A',
               },
               {
-                name: 'field1',
+                name: 'field2',
                 source: 'A',
               },
             ],
