@@ -74,4 +74,14 @@ export interface PanelOptions {
    * Use Sticky position
    */
   sticky: boolean;
+
+  /**
+   * Values Filter
+   */
+  filter: boolean;
+
+  /**
+   * Select Favorites
+   */
+  favorites: boolean;
 }

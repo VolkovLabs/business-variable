@@ -10,7 +10,9 @@
 
 ## Introduction
 
-The Variable panel allows updating dashboard variables in the panel.
+The Variable panel allows you to update single, dependent and multi-variables as a Table and Tree View.
+
+[![Grafana dashboard variables on steroids | Variable panel with Single, Multi, and Tree View layouts](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/tutorial.png)](https://youtu.be/mYYtMW9qiPA)
 
 ## Requirements
 
@@ -22,10 +24,18 @@ The Variable panel is not included in the Grafana Catalog. It can be downloaded 
 
 ## Highlights
 
-- Allows updating dashboard variables.
+- Allows updating dashboard variables as a Table and Tree View.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
-- Display variables as Table and Tree View based on the query.
+- Allows filtering values.
+- Supports follow when scrolling (sticky).
+
+## Documentation
+
+| Section                     | Description                                                         |
+| --------------------------- | ------------------------------------------------------------------- |
+| [Hierarchy](https://volkovlabs.io/plugins/volkovlabs-variable-panel/hierarchy/) | Explains how to display variables in a table and tree view. |
+| [Release Notes](https://volkovlabs.io/plugins/volkovlabs-variable-panel/release/)    | Stay up to date with the latest features and updates.               |
 
 ## Feedback
 
