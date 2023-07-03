@@ -1,5 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+import { TableItem } from '../../types';
 import { convertTreeToPlain, getRows, selectVariableValues, valueFilter } from './utils';
 
 /**
@@ -18,7 +19,25 @@ describe('Utils', () => {
     const defaultItem = {
       selected: false,
       showStatus: false,
+      selectable: true,
     };
+
+    /**
+     * Get Item
+     * @param item
+     * @param key
+     */
+    const getItem = (item: object, key: string): TableItem => {
+      const value = item[key as keyof typeof item];
+
+      return {
+        value,
+        selected: false,
+        showStatus: false,
+        selectable: true,
+      };
+    };
+
     it('Should work for 1 level', () => {
       const fields = [{ name: 'country', source: 'a' }];
       const frameA = toDataFrame({
@@ -30,7 +49,7 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
@@ -62,7 +81,7 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
@@ -118,7 +137,7 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
@@ -181,6 +200,100 @@ describe('Utils', () => {
                   children: [
                     {
                       value: 'device12',
+                      ...defaultItem,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('Should filter unselectable values', () => {
+      const fields = [
+        { name: 'country', source: 'a' },
+        { name: 'state', source: 'a' },
+        { name: 'city', source: 'a' },
+        { name: 'name', source: 'a' },
+      ];
+      const frameA = toDataFrame({
+        refId: 'a',
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'USA', 'Japan'],
+          },
+          {
+            name: 'state',
+            values: ['FL', 'NY', 'Tokio'],
+          },
+          {
+            name: 'city',
+            values: ['Tampa', 'New York', 'Tokio'],
+          },
+          {
+            name: 'name',
+            values: ['device1', 'device11', 'device12'],
+          },
+        ],
+      });
+
+      const getItem = (item: object, key: string): TableItem => {
+        const value = item[key as keyof typeof item];
+
+        return {
+          value,
+          selected: false,
+          showStatus: false,
+          selectable: value === 'device1' || value === 'device11',
+        };
+      };
+
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
+
+      expect(result).toEqual([
+        {
+          value: 'USA',
+          ...defaultItem,
+          selectable: false,
+          childValues: ['device1', 'device11'],
+          children: [
+            {
+              value: 'FL',
+              childValues: ['device1'],
+              ...defaultItem,
+              selectable: false,
+              children: [
+                {
+                  value: 'Tampa',
+                  childValues: ['device1'],
+                  ...defaultItem,
+                  selectable: false,
+                  children: [
+                    {
+                      value: 'device1',
+                      ...defaultItem,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              value: 'NY',
+              ...defaultItem,
+              selectable: false,
+              childValues: ['device11'],
+              children: [
+                {
+                  value: 'New York',
+                  childValues: ['device11'],
+                  ...defaultItem,
+                  selectable: false,
+                  children: [
+                    {
+                      value: 'device11',
                       ...defaultItem,
                     },
                   ],
