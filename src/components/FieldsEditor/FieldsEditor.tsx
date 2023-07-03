@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { useTheme2, Input, InlineField, Button, Collapse } from '@grafana/ui';
 import { TestIds } from '../../constants';
@@ -69,22 +69,56 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     [items, onChangeItems]
   );
 
+  /**
+   * Is Name Exists error
+   */
+  const isNameExistsError = useMemo(() => {
+    return items.some((item) => item.name === newGroup);
+  }, [items, newGroup]);
+
   return (
     <>
-      {items.map(({ name, items }) => (
+      {items.map(({ name, items: levels }) => (
         <Collapse
           key={name}
-          label={name}
+          label={
+            <div className={styles.groupHeader}>
+              {name}
+              <Button
+                icon="trash-alt"
+                variant="secondary"
+                fill="text"
+                size="sm"
+                className={styles.groupRemove}
+                onClick={(event) => {
+                  /**
+                   * Prevent collapse event
+                   */
+                  event.stopPropagation();
+
+                  /**
+                   * Remove group
+                   */
+                  onChangeItems(items.filter((item) => item.name !== name));
+                }}
+              />
+            </div>
+          }
           isOpen={collapseState[name]}
           onToggle={() => onToggleGroup(name)}
           collapsible={true}
         >
-          <LevelsEditor name={name} items={items} data={data} onChange={onChangeItem} />
+          <LevelsEditor name={name} items={levels} data={data} onChange={onChangeItem} />
         </Collapse>
       ))}
 
       <div className={styles.newGroup} data-testid={TestIds.fieldsEditor.newLevel}>
-        <InlineField label="New" grow={true}>
+        <InlineField
+          label="New"
+          grow={true}
+          invalid={isNameExistsError}
+          error="Group with the same name already exists."
+        >
           <Input
             placeholder="Group name"
             value={newGroup}
@@ -94,7 +128,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         <Button
           icon="plus"
           title="Add Group"
-          disabled={!newGroup}
+          disabled={!newGroup || isNameExistsError}
           onClick={onAddNewGroup}
           data-testid={TestIds.fieldsEditor.buttonAddNew}
         >

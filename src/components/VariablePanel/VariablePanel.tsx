@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, useTheme2, RadioButtonGroup } from '@grafana/ui';
+import { Alert, useTheme2, Tab, TabsBar } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
@@ -21,19 +21,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   /**
    * Current Levels Group
    */
-  const [currentGroup, setCurrentGroup] = useState(options.levelsGroups?.[0].name);
-
-  /**
-   * Group options
-   */
-  const groupOptions = useMemo(() => {
-    return (
-      options.levelsGroups?.map(({ name }) => ({
-        value: name,
-        label: name,
-      })) || []
-    );
-  }, [options.levelsGroups]);
+  const [currentGroup, setCurrentGroup] = useState(options.levelsGroups?.[0]?.name);
 
   /**
    * Current Levels
@@ -44,6 +32,15 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
     }
     return;
   }, [options.levelsGroups, currentGroup]);
+
+  /**
+   * Change current group if was removed
+   */
+  useEffect(() => {
+    if (!options.levelsGroups?.some((group) => group.name === currentGroup)) {
+      setCurrentGroup(options.levelsGroups?.[0]?.name);
+    }
+  }, [currentGroup, options.levelsGroups]);
 
   /**
    * Table config
@@ -88,12 +85,17 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
 
       {tableData.length > 0 && (
         <div style={style} className={styles.content}>
-          {options.levelsGroups?.length > 0 && (
-            <RadioButtonGroup
-              value={currentGroup}
-              options={groupOptions}
-              onChange={(value) => setCurrentGroup(value)}
-            />
+          {options.levelsGroups?.length && (
+            <TabsBar>
+              {options.levelsGroups?.map((group) => (
+                <Tab
+                  key={group.name}
+                  label={group.name}
+                  onChangeTab={() => setCurrentGroup(group.name)}
+                  active={currentGroup === group.name}
+                />
+              ))}
+            </TabsBar>
           )}
           <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
         </div>

@@ -69,24 +69,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       defaultValue: false,
     });
 
-    builder.addSelect({
-      path: 'variable',
-      name: 'Select Variable to Display',
-      settings: {
-        options: variables.map((vr) => ({
-          label: vr.name,
-          value: vr.name,
-        })),
-      },
-      showIf: (config) => !config.levelsGroups?.length,
-    });
-
-    builder.addCustomEditor({
-      id: 'levelsGroups',
-      path: 'levelsGroups',
-      name: 'Tree View levels based on Data Source',
-      editor: FieldsEditor,
-    });
     /**
      * Variables
      */
@@ -104,8 +86,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => !config.levelsGroups?.length,
       })
       .addCustomEditor({
-        id: 'fieldsEditor',
-        path: 'levels',
+        id: 'levelsGroups',
+        path: 'levelsGroups',
         name: 'Tree View levels based on Data Source',
         editor: FieldsEditor,
         category: ['Hierarchy'],

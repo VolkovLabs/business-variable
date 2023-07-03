@@ -9,5 +9,11 @@ export const Styles = (theme: GrafanaTheme2) => {
     newGroup: css`
       margin: ${theme.spacing(2)} 0;
     `,
+    groupHeader: css`
+      display: flex;
+    `,
+    groupRemove: css`
+      margin-left: ${theme.spacing(1)};
+    `,
   };
 };
