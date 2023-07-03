@@ -85,7 +85,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
 
       {tableData.length > 0 && (
         <div style={style} className={styles.content}>
-          {options.levelsGroups?.length && (
+          {options.levelsGroups?.length > 1 && (
             <TabsBar>
               {options.levelsGroups?.map((group) => (
                 <Tab
