@@ -629,12 +629,9 @@ describe('Use Table Hook', () => {
       expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
 
       /**
-       * Check if device row is not selectable if value does not exist in variable options
+       * Check if unselectable device2 row doesn't exist
        */
-      const device2Row = screen.getByTestId(TestIds.table.cell('device2', 1));
-      expect(device2Row).toBeInTheDocument();
-      expect(within(device2Row).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
-      expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(TestIds.table.cell('device2', 1))).not.toBeInTheDocument();
     });
 
     describe('Favorites', () => {
