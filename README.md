@@ -10,7 +10,9 @@
 
 ## Introduction
 
-The Variable panel allows you to update dependent and multi-variables as a Table and Tree View.
+The Variable panel allows you to update single, dependent and multi-variables as a Table and Tree View.
+
+[![Grafana dashboard variables on steroids | Variable panel with Single, Multi, and Tree View layouts](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/tutorial.png)](https://youtu.be/mYYtMW9qiPA)
 
 ## Requirements
 
