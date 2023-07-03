@@ -10,8 +10,8 @@ import {
 import { cx } from '@emotion/css';
 import { DataFrame, SelectableValue } from '@grafana/data';
 import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
-import { TestIds } from '../../../../constants';
-import { Level, LevelsGroup } from '../../../../types';
+import { TestIds } from '../../constants';
+import { Level, LevelsGroup } from '../../types';
 import { Styles } from './styles';
 
 /**

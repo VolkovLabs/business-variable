@@ -3,7 +3,7 @@ import { StandardEditorProps } from '@grafana/data';
 import { Button, Collapse, InlineField, Input, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
-import { LevelsEditor } from './components/LevelsEditor';
+import { LevelsEditor } from '../LevelsEditor';
 import { Styles } from './styles';
 
 /**
