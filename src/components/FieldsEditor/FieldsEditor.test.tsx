@@ -1,40 +1,8 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
-import { Select } from '@grafana/ui';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { FieldsEditor } from './FieldsEditor';
-
-/**
- * Mock @grafana/ui
- */
-jest.mock('@grafana/ui', () => ({
-  ...jest.requireActual('@grafana/ui'),
-  /**
-   * Mock Select component
-   */
-  Select: jest.fn().mockImplementation(({ options, onChange, value, ...restProps }) => (
-    <select
-      onChange={(event: any) => {
-        if (onChange) {
-          onChange(options.find((option: any) => option.value === event.target.value));
-        }
-      }}
-      /**
-       * Fix jest warnings because null value.
-       * For Select component in @grafana/ui should be used null to reset value.
-       */
-      value={value === null ? '' : value}
-      {...restProps}
-    >
-      {options.map(({ label, value }: any) => (
-        <option key={value} value={value}>
-          {label}
-        </option>
-      ))}
-    </select>
-  )),
-}));
 
 /**
  * Props
@@ -72,86 +40,20 @@ describe('FieldsEditor', () => {
     refId: 'B',
   });
 
-  it('Should render levels', () => {
+  it('Should render groups', () => {
     render(
       getComponent({
         context: {
           data: [dataFrameA],
           options: {
-            levels: [
+            levelsGroups: [
               {
-                name: 'field1',
-                source: 'A',
+                name: 'group1',
+                items: [],
               },
               {
-                name: 'field2',
-                source: 'A',
-              },
-            ],
-          } as any,
-        } as any,
-      })
-    );
-
-    expect(screen.getByTestId(TestIds.fieldsEditor.level('field1'))).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.fieldsEditor.level('field2'))).toBeInTheDocument();
-  });
-
-  it('Should allow select any fields', () => {
-    render(
-      getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [],
-          } as any,
-        } as any,
-      })
-    );
-
-    expect(Select).toHaveBeenCalledWith(
-      expect.objectContaining({
-        options: [
-          {
-            value: 'A:field1',
-            source: 'A',
-            fieldName: 'field1',
-            label: 'A:field1',
-          },
-          {
-            value: 'A:field2',
-            source: 'A',
-            fieldName: 'field2',
-            label: 'A:field2',
-          },
-          {
-            value: 'B:fieldB1',
-            source: 'B',
-            fieldName: 'fieldB1',
-            label: 'B:fieldB1',
-          },
-          {
-            value: 'B:fieldB2',
-            source: 'B',
-            fieldName: 'fieldB2',
-            label: 'B:fieldB2',
-          },
-        ],
-      }),
-      expect.anything()
-    );
-  });
-
-  it('Should allow select fields only from the current data frame', () => {
-    render(
-      getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [
-              {
-                name: 'field1',
-                source: 'A',
+                name: 'group2',
+                items: [],
               },
             ],
           } as any,
@@ -159,22 +61,11 @@ describe('FieldsEditor', () => {
       })
     );
 
-    expect(Select).toHaveBeenCalledWith(
-      expect.objectContaining({
-        options: [
-          {
-            value: 'field2',
-            source: 'A',
-            fieldName: 'field2',
-            label: 'field2',
-          },
-        ],
-      }),
-      expect.anything()
-    );
+    expect(screen.getByTestId(TestIds.fieldsEditor.item('group1'))).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.fieldsEditor.item('group2'))).toBeInTheDocument();
   });
 
-  it('Should add new level', async () => {
+  it('Should add new group', async () => {
     const onChange = jest.fn();
 
     render(
@@ -182,10 +73,10 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA, dataFrameB],
           options: {
-            levels: [
+            levelsGroups: [
               {
-                name: 'field1',
-                source: 'A',
+                name: 'group1',
+                items: [],
               },
             ],
           } as any,
@@ -195,7 +86,7 @@ describe('FieldsEditor', () => {
     );
 
     await act(() =>
-      fireEvent.change(screen.getByLabelText(TestIds.fieldsEditor.newLevelField), { target: { value: 'field2' } })
+      fireEvent.change(screen.getByTestId(TestIds.fieldsEditor.newItemName), { target: { value: 'group2' } })
     );
 
     expect(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)).toBeInTheDocument();
@@ -204,12 +95,12 @@ describe('FieldsEditor', () => {
     await act(() => fireEvent.click(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)));
 
     expect(onChange).toHaveBeenCalledWith([
-      { name: 'field1', source: 'A' },
-      { name: 'field2', source: 'A' },
+      { name: 'group1', items: [] },
+      { name: 'group2', items: [] },
     ]);
   });
 
-  it('Should remove level', async () => {
+  it('Should remove group', async () => {
     const onChange = jest.fn();
 
     render(
@@ -217,14 +108,14 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA, dataFrameB],
           options: {
-            levels: [
+            levelsGroups: [
               {
-                name: 'field1',
-                source: 'A',
+                name: 'group1',
+                items: [],
               },
               {
-                name: 'field2',
-                source: 'A',
+                name: 'group2',
+                items: [],
               },
             ],
           } as any,
@@ -233,18 +124,57 @@ describe('FieldsEditor', () => {
       })
     );
 
-    const field2 = screen.getByTestId(TestIds.fieldsEditor.level('field2'));
+    const item2 = screen.getByTestId(TestIds.fieldsEditor.item('group2'));
 
     /**
      * Check field presence
      */
-    expect(field2).toBeInTheDocument();
+    expect(item2).toBeInTheDocument();
 
     /**
      * Remove
      */
-    await act(() => fireEvent.click(within(field2).getByTestId(TestIds.fieldsEditor.buttonRemove)));
+    await act(() => fireEvent.click(within(item2).getByTestId(TestIds.fieldsEditor.buttonRemove)));
 
-    expect(onChange).toHaveBeenCalledWith([{ name: 'field1', source: 'A' }]);
+    expect(onChange).toHaveBeenCalledWith([{ name: 'group1', items: [] }]);
+  });
+
+  it('Should show group content', async () => {
+    const onChange = jest.fn();
+
+    render(
+      getComponent({
+        context: {
+          data: [dataFrameA, dataFrameB],
+          options: {
+            levelsGroups: [
+              {
+                name: 'group1',
+                items: [],
+              },
+              {
+                name: 'group2',
+                items: [],
+              },
+            ],
+          } as any,
+        } as any,
+        onChange,
+      })
+    );
+
+    const item1 = screen.getByTestId(TestIds.fieldsEditor.item('group1'));
+
+    /**
+     * Check field presence
+     */
+    expect(item1).toBeInTheDocument();
+
+    /**
+     * Open
+     */
+    await act(() => fireEvent.click(item1));
+
+    expect(screen.getByTestId(TestIds.levelsEditor.root)).toBeInTheDocument();
   });
 });

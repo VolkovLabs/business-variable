@@ -132,10 +132,9 @@ describe('Use Table Hook', () => {
     const { result } = renderHook(() =>
       useTable({
         data: { series: [dataFrame] } as any,
-        options: {
-          levels: [{ name: 'device', source: 'A' }],
-        } as any,
+        options: {} as any,
         eventBus: null as any,
+        levels: [{ name: 'device', source: 'A' }],
       })
     );
 
@@ -207,13 +206,12 @@ describe('Use Table Hook', () => {
     const { result } = renderHook(() =>
       useTable({
         data: { series: [dataFrame] } as any,
-        options: {
-          levels: [
-            { name: 'country', source: 'A' },
-            { name: 'device', source: 'A' },
-          ],
-        } as any,
         eventBus: null as any,
+        options: {} as any,
+        levels: [
+          { name: 'country', source: 'A' },
+          { name: 'device', source: 'A' },
+        ],
       })
     );
 
@@ -309,11 +307,11 @@ describe('Use Table Hook', () => {
       useTable({
         data: { series: [dataFrame, statusDataFrame] } as any,
         options: {
-          levels: [{ name: 'device', source: 'A' }],
           name: 'name',
           status: 'last',
         } as any,
         eventBus: null as any,
+        levels: [{ name: 'device', source: 'A' }],
       })
     );
 
@@ -457,13 +455,13 @@ describe('Use Table Hook', () => {
         useTable({
           data: { series: [dataFrame] } as any,
           options: {
-            levels: [
-              { name: 'country', source: 'A' },
-              { name: 'device', source: 'A' },
-            ],
             favorites: true,
           } as any,
           eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
         })
       );
 
@@ -535,10 +533,10 @@ describe('Use Table Hook', () => {
         useTable({
           data: { series: [] } as any,
           options: {
-            levels: [],
             favorites: true,
           } as any,
           eventBus: null as any,
+          levels: [],
         })
       );
 
@@ -608,13 +606,13 @@ describe('Use Table Hook', () => {
         useTable({
           data: { series: [dataFrame] } as any,
           options: {
-            levels: [
-              { name: 'country', source: 'A' },
-              { name: 'device', source: 'A' },
-            ],
             favorites: true,
           } as any,
           eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
         })
       );
 
@@ -712,10 +710,10 @@ describe('Use Table Hook', () => {
           useTable({
             data: { series: [dataFrame] } as any,
             options: {
-              levels: [{ name: 'device', source: 'A' }],
               favorites: true,
             } as any,
             eventBus: null as any,
+            levels: [{ name: 'device', source: 'A' }],
           })
         );
 
@@ -755,10 +753,10 @@ describe('Use Table Hook', () => {
           useTable({
             data: { series: [dataFrame] } as any,
             options: {
-              levels: [{ name: 'device', source: 'A' }],
               favorites: true,
             } as any,
             eventBus: null as any,
+            levels: [{ name: 'device', source: 'A' }],
           })
         );
 
@@ -807,10 +805,10 @@ describe('Use Table Hook', () => {
           useTable({
             data: { series: [dataFrame] } as any,
             options: {
-              levels: [{ name: 'device', source: 'A' }],
               favorites: true,
             } as any,
             eventBus: null as any,
+            levels: [{ name: 'device', source: 'A' }],
           })
         );
 

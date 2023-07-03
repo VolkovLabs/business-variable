@@ -82,7 +82,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         <Collapse
           key={name}
           label={
-            <div className={styles.groupHeader}>
+            <div className={styles.groupHeader} data-testid={TestIds.fieldsEditor.item(name)}>
               {name}
               <Button
                 icon="trash-alt"
@@ -101,6 +101,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                    */
                   onChangeItems(items.filter((item) => item.name !== name));
                 }}
+                data-testid={TestIds.fieldsEditor.buttonRemove}
               />
             </div>
           }
@@ -112,7 +113,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         </Collapse>
       ))}
 
-      <div className={styles.newGroup} data-testid={TestIds.fieldsEditor.newLevel}>
+      <div className={styles.newGroup} data-testid={TestIds.fieldsEditor.newItem}>
         <InlineField
           label="New"
           grow={true}
@@ -123,6 +124,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
             placeholder="Group name"
             value={newGroup}
             onChange={(event) => setNewGroup(event.currentTarget.value)}
+            data-testid={TestIds.fieldsEditor.newItemName}
           />
         </InlineField>
         <Button

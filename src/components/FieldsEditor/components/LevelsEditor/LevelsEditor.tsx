@@ -149,7 +149,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
   }, [items, newLevel, onChangeItems]);
 
   return (
-    <>
+    <div data-testid={TestIds.levelsEditor.root}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={name}>
           {(provided) => (
@@ -163,7 +163,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                       {...provided.dragHandleProps}
                       style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
                       className={styles.item}
-                      data-testid={TestIds.fieldsEditor.level(item.name)}
+                      data-testid={TestIds.levelsEditor.item(item.name)}
                     >
                       <div className={styles.header}>
                         <div className={styles.column}>
@@ -178,7 +178,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                           <IconButton
                             name="trash-alt"
                             onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
-                            data-testid={TestIds.fieldsEditor.buttonRemove}
+                            data-testid={TestIds.levelsEditor.buttonRemove}
                           />
                           <Icon
                             title="Drag and drop to reorder"
@@ -199,13 +199,13 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
         </Droppable>
       </DragDropContext>
 
-      <div className={styles.newLevel} data-testid={TestIds.fieldsEditor.newLevel}>
+      <div className={styles.newLevel} data-testid={TestIds.levelsEditor.newItem}>
         <InlineFieldRow>
           <InlineField label="New Level" grow={true}>
             <Select
               options={availableFieldOptions}
               value={newLevel?.value || null}
-              aria-label={TestIds.fieldsEditor.newLevelField}
+              aria-label={TestIds.levelsEditor.newItemName}
               onChange={(event) => {
                 setNewLevel({
                   value: event.value || '',
@@ -220,12 +220,12 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
             title="Add Level"
             disabled={!newLevel}
             onClick={onAddNewLevel}
-            data-testid={TestIds.fieldsEditor.buttonAddNew}
+            data-testid={TestIds.levelsEditor.buttonAddNew}
           >
             Add
           </Button>
         </InlineFieldRow>
       </div>
-    </>
+    </div>
   );
 };
