@@ -20,15 +20,16 @@ The Variable panel allows you to update single, dependent and multi-variables as
 
 ## Getting Started
 
-The Variable panel is not included in the Grafana Catalog. It can be downloaded directly from GitHub.
+The Variable panel is under the Grafana team review. Meanwhile, it can be downloaded directly from GitHub.
 
 ## Highlights
 
 - Allows updating dashboard variables as a Table and Tree View.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
-- Allows filtering values.
+- Allows filtering values by pattern and selected favorites.
 - Supports follow when scrolling (sticky).
+- Supports multiple Tree Views using tabs.
 
 ## Documentation
 
