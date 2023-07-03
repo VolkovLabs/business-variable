@@ -1,5 +1,5 @@
 import React, { FormEvent, useCallback, useState } from 'react';
-import { Button, Input, useStyles2 } from '@grafana/ui';
+import { Button, Input, useStyles2, Icon } from '@grafana/ui';
 import { Column } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from './styles';
@@ -32,7 +32,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
   /**
    * Current filter value
    */
-  const columnFilterValue = (column.getFilterValue() as string) || '';
+  const columnFilterValue = column.getFilterValue();
 
   /**
    * Toggle Filter Visibility
@@ -51,6 +51,28 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
     [column]
   );
 
+  /**
+   * Render filter for isFavorite column
+   */
+  if (column.columnDef.id === 'isFavorite') {
+    return (
+      <Button
+        variant="secondary"
+        fill="text"
+        size="sm"
+        onClick={() => {
+          column.setFilterValue(!columnFilterValue);
+        }}
+        data-testid={TestIds.table.favoritesControl}
+      >
+        {columnFilterValue ? <Icon name="favorite" /> : <Icon name="star" />}
+      </Button>
+    );
+  }
+
+  /**
+   * Render filter for other columns
+   */
   return (
     <>
       <Button
@@ -64,7 +86,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
       {isOpen && (
         <Input
           placeholder="Search values"
-          value={columnFilterValue}
+          value={typeof columnFilterValue === 'string' ? columnFilterValue : ''}
           onChange={onChangeFilterValue}
           className={styles.filterInput}
           data-testid={TestIds.table.fieldFilterValue}

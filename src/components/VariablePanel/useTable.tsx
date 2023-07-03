@@ -14,6 +14,7 @@ import {
   getRows,
   selectVariableValues,
   valueFilter,
+  favoriteFilter,
 } from './utils';
 
 /**
@@ -90,12 +91,14 @@ export const useTable = ({
             value,
             selected: !!runtimeVariable?.options.find((option) => option.value === value)?.selected,
             variable: levelVariable,
+            isFavorite: favorites.isAdded(key, value),
           },
           {
             children,
             namesArray,
             statusField: statusArray,
             isSelectedAll,
+            favoritesEnabled: options.favorites,
           }
         );
       });
@@ -111,11 +114,13 @@ export const useTable = ({
                 value: 'All',
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
+                isFavorite: false,
               },
               {
                 namesArray,
                 statusField: statusArray,
                 isSelectedAll,
+                favoritesEnabled: options.favorites,
               }
             ),
           ].concat(rows);
@@ -135,16 +140,27 @@ export const useTable = ({
             value: option.text,
             selected: !!option.selected,
             variable: runtimeVariable,
+            isFavorite: favorites.isAdded(runtimeVariable?.name, option.text),
           },
           {
             namesArray,
             statusField: statusArray,
             isSelectedAll,
+            favoritesEnabled: options.favorites,
           }
         );
       }) || []
     );
-  }, [runtimeVariable, data, options.levels, options.name, options.status, getRuntimeVariable]);
+  }, [
+    runtimeVariable,
+    data,
+    options.levels,
+    options.name,
+    options.status,
+    options.favorites,
+    getRuntimeVariable,
+    favorites,
+  ]);
 
   /**
    * Value Cell Select
@@ -186,7 +202,7 @@ export const useTable = ({
   const columns: Array<ColumnDef<TableItem>> = useMemo(() => {
     const prefix = `${runtimeVariable?.name || variable}`;
 
-    return [
+    const columns: Array<ColumnDef<TableItem>> = [
       {
         id: 'value',
         accessorKey: 'value',
@@ -195,8 +211,6 @@ export const useTable = ({
         filterFn: valueFilter,
         cell: ({ row, getValue }) => {
           const value = getValue() as string;
-          const canBeFavorite = options.favorites && row.original.canBeFavorite;
-          const isFavorite = canBeFavorite && favorites.isAdded(row.original.variable?.name, value);
 
           return (
             <div
@@ -246,35 +260,55 @@ export const useTable = ({
                   {value}
                 </span>
               </label>
-              {canBeFavorite && (
-                <Button
-                  variant="secondary"
-                  fill="text"
-                  size="sm"
-                  className={styles.favoritesButton}
-                  onClick={() => {
-                    if (isFavorite) {
-                      favorites.remove(row.original.variable?.name, value);
-                    } else {
-                      favorites.add(row.original.variable?.name, value);
-                    }
-                  }}
-                  data-testid={TestIds.table.favoritesControl}
-                >
-                  {isFavorite ? <Icon name="favorite" /> : <Icon name="star" />}
-                </Button>
-              )}
             </div>
           );
         },
       },
     ];
+
+    if (options.favorites) {
+      columns.push({
+        id: 'isFavorite',
+        accessorKey: 'isFavorite',
+        enableColumnFilter: true,
+        enableResizing: false,
+        header: '',
+        filterFn: favoriteFilter,
+        cell: ({ row, getValue }) => {
+          const isFavorite = getValue() as boolean;
+          const canBeFavorite = row.original.canBeFavorite;
+
+          if (canBeFavorite) {
+            return (
+              <Button
+                variant="secondary"
+                fill="text"
+                size="sm"
+                onClick={() => {
+                  if (isFavorite) {
+                    favorites.remove(row.original.variable?.name, row.original.value);
+                  } else {
+                    favorites.add(row.original.variable?.name, row.original.value);
+                  }
+                }}
+                data-testid={TestIds.table.favoritesControl}
+              >
+                {isFavorite ? <Icon name="favorite" /> : <Icon name="star" />}
+              </Button>
+            );
+          }
+
+          return null;
+        },
+      });
+    }
+
+    return columns;
   }, [
     runtimeVariable?.name,
     runtimeVariable?.label,
     runtimeVariable?.multi,
     variable,
-    favorites,
     options.filter,
     options.favorites,
     styles.rowContent,
@@ -282,9 +316,9 @@ export const useTable = ({
     styles.expandButton,
     styles.label,
     styles.status,
-    styles.favoritesButton,
     theme,
     onChange,
+    favorites,
   ]);
 
   /**

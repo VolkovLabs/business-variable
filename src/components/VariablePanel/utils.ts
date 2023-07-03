@@ -69,6 +69,10 @@ const getGroupArray = (
         (acc, child) => acc.concat(child.childValues ? child.childValues : [child.value]),
         item.childValues || []
       ),
+      childFavoritesCount: children.reduce(
+        (acc, child) => acc + (child.childFavoritesCount || child.isFavorite ? 1 : 0),
+        item.childFavoritesCount || 0
+      ),
       children,
     };
   }).filter((item) => item.childValues?.length || item.selectable);
@@ -124,13 +128,20 @@ export const getRows = (
  * @param isSelectedAll
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean; variable?: RuntimeVariable },
+  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean },
   {
     namesArray,
     statusField,
     children,
     isSelectedAll,
-  }: { namesArray?: unknown[]; statusField?: Field; children?: TableItem[]; isSelectedAll: boolean }
+    favoritesEnabled,
+  }: {
+    namesArray?: unknown[];
+    statusField?: Field;
+    children?: TableItem[];
+    isSelectedAll: boolean;
+    favoritesEnabled: boolean;
+  }
 ): TableItem => {
   let statusColor;
   let showStatus = false;
@@ -148,6 +159,7 @@ export const getItemWithStatus = (
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   const selectable = item.variable?.options?.some((option) => option.text === item.value) && !children;
+  const canBeFavorite = favoritesEnabled && selectable && item.value !== 'All';
 
   return {
     value: item.value,
@@ -156,7 +168,8 @@ export const getItemWithStatus = (
     statusColor,
     variable: item.variable,
     selectable,
-    canBeFavorite: selectable && item.value !== 'All',
+    canBeFavorite,
+    isFavorite: canBeFavorite ? item.isFavorite : undefined,
   };
 };
 
@@ -289,4 +302,28 @@ export const valueFilter: FilterFn<TableItem> = (row, columnId, value) => {
    * Filter last level row
    */
   return row.original.value.toLowerCase().includes(value.toLowerCase());
+};
+
+/**
+ * Favorite Filter
+ * @param row
+ * @param columnId
+ * @param value
+ */
+export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
+  if (!value) {
+    return true;
+  }
+
+  /**
+   * Filter parent rows
+   */
+  if (row.original.childValues) {
+    return (row.original.childFavoritesCount || 0) > 0;
+  }
+
+  /**
+   * Filter last level row
+   */
+  return !!row.original.isFavorite;
 };
