@@ -191,8 +191,8 @@ describe('LevelsEditor', () => {
     expect(onChange).toHaveBeenCalledWith({
       name: 'Group 1',
       items: [
-        { name: 'field2', source: 'A' },
         { name: 'field1', source: 'A' },
+        { name: 'field2', source: 'A' },
       ],
     });
   });
@@ -206,11 +206,11 @@ describe('LevelsEditor', () => {
         name: 'Group 1',
         items: [
           {
-            name: 'field1',
+            name: 'field2',
             source: 'A',
           },
           {
-            name: 'field2',
+            name: 'field1',
             source: 'A',
           },
         ],
