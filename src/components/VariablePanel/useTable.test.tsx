@@ -37,6 +37,13 @@ jest.mock('./utils', () => ({
   selectVariableValues: jest.fn(),
 }));
 
+/**
+ * In Test Ids
+ */
+const InTestIds = {
+  row: (value: string, depth: number) => `data-testid table row-${depth}-${value}`,
+};
+
 describe('Use Table Hook', () => {
   it('Should return variable options if no levels', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
@@ -363,7 +370,7 @@ describe('Use Table Hook', () => {
         {data.map((row) => {
           const subRows = getSubRows(row);
           return (
-            <div key={`${depth}-${row.value}`}>
+            <div key={`${depth}-${row.value}`} data-testid={InTestIds.row(row.value, depth)}>
               <div>
                 {columns[0].cell({
                   row: {
@@ -374,6 +381,13 @@ describe('Use Table Hook', () => {
                     getIsExpanded: () => false,
                   },
                   getValue: () => row.value,
+                })}
+                {columns[1].cell({
+                  row: {
+                    original: row,
+                    depth,
+                  },
+                  getValue: () => row.isFavorite,
                 })}
               </div>
               {subRows && <Rows data={subRows} columns={columns} depth={depth + 1} getSubRows={getSubRows} />}
@@ -447,6 +461,7 @@ describe('Use Table Hook', () => {
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
+            favorites: true,
           } as any,
           eventBus: null as any,
         })
@@ -521,6 +536,7 @@ describe('Use Table Hook', () => {
           data: { series: [] } as any,
           options: {
             levels: [],
+            favorites: true,
           } as any,
           eventBus: null as any,
         })
@@ -596,6 +612,7 @@ describe('Use Table Hook', () => {
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
+            favorites: true,
           } as any,
           eventBus: null as any,
         })
@@ -629,12 +646,9 @@ describe('Use Table Hook', () => {
       expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
 
       /**
-       * Check if device row is not selectable if value does not exist in variable options
+       * Check if unselectable device2 row doesn't exist
        */
-      const device2Row = screen.getByTestId(TestIds.table.cell('device2', 1));
-      expect(device2Row).toBeInTheDocument();
-      expect(within(device2Row).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
-      expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(TestIds.table.cell('device2', 1))).not.toBeInTheDocument();
     });
 
     describe('Favorites', () => {
@@ -699,6 +713,7 @@ describe('Use Table Hook', () => {
             data: { series: [dataFrame] } as any,
             options: {
               levels: [{ name: 'device', source: 'A' }],
+              favorites: true,
             } as any,
             eventBus: null as any,
           })
@@ -715,7 +730,7 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowAll = screen.getByTestId(TestIds.table.cell('All', 0));
+        const rowAll = screen.getByTestId(InTestIds.row('All', 0));
 
         expect(rowAll).toBeInTheDocument();
 
@@ -758,7 +773,7 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowDevice1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+        const rowDevice1 = screen.getByTestId(InTestIds.row('device1', 0));
 
         expect(rowDevice1).toBeInTheDocument();
 
@@ -810,7 +825,7 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowDevice2 = screen.getByTestId(TestIds.table.cell('device2', 0));
+        const rowDevice2 = screen.getByTestId(InTestIds.row('device2', 0));
 
         expect(rowDevice2).toBeInTheDocument();
 

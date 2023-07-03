@@ -1,6 +1,7 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { convertTreeToPlain, getRows, selectVariableValues, valueFilter } from './utils';
+import { TableItem } from '../../types';
+import { convertTreeToPlain, getRows, selectVariableValues, valueFilter, favoriteFilter } from './utils';
 
 /**
  * Mock @grafana/runtime
@@ -18,7 +19,25 @@ describe('Utils', () => {
     const defaultItem = {
       selected: false,
       showStatus: false,
+      selectable: true,
     };
+
+    /**
+     * Get Item
+     * @param item
+     * @param key
+     */
+    const getItem = (item: object, key: string): TableItem => {
+      const value = item[key as keyof typeof item];
+
+      return {
+        value,
+        selected: false,
+        showStatus: false,
+        selectable: true,
+      };
+    };
+
     it('Should work for 1 level', () => {
       const fields = [{ name: 'country', source: 'a' }];
       const frameA = toDataFrame({
@@ -30,7 +49,7 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
@@ -62,13 +81,14 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
           value: 'USA',
           ...defaultItem,
           childValues: ['FL'],
+          childFavoritesCount: 0,
           children: [
             {
               value: 'FL',
@@ -80,6 +100,7 @@ describe('Utils', () => {
           value: 'Japan',
           ...defaultItem,
           childValues: ['Tokio'],
+          childFavoritesCount: 0,
           children: [
             {
               value: 'Tokio',
@@ -118,23 +139,26 @@ describe('Utils', () => {
           },
         ],
       });
-      const result = getRows({ series: [frameA] } as any, fields);
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
 
       expect(result).toEqual([
         {
           value: 'USA',
           ...defaultItem,
           childValues: ['device1', 'device11'],
+          childFavoritesCount: 0,
           children: [
             {
               value: 'FL',
               childValues: ['device1'],
               ...defaultItem,
+              childFavoritesCount: 0,
               children: [
                 {
                   value: 'Tampa',
                   childValues: ['device1'],
                   ...defaultItem,
+                  childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device1',
@@ -148,11 +172,13 @@ describe('Utils', () => {
               value: 'NY',
               ...defaultItem,
               childValues: ['device11'],
+              childFavoritesCount: 0,
               children: [
                 {
                   value: 'New York',
                   childValues: ['device11'],
                   ...defaultItem,
+                  childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device11',
@@ -168,20 +194,267 @@ describe('Utils', () => {
           value: 'Japan',
           ...defaultItem,
           childValues: ['device12'],
+          childFavoritesCount: 0,
           children: [
             {
               value: 'Tokio',
               ...defaultItem,
               childValues: ['device12'],
+              childFavoritesCount: 0,
               children: [
                 {
                   value: 'Tokio',
                   ...defaultItem,
                   childValues: ['device12'],
+                  childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device12',
                       ...defaultItem,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('Should filter unselectable values', () => {
+      const fields = [
+        { name: 'country', source: 'a' },
+        { name: 'state', source: 'a' },
+        { name: 'city', source: 'a' },
+        { name: 'name', source: 'a' },
+      ];
+      const frameA = toDataFrame({
+        refId: 'a',
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'USA', 'Japan'],
+          },
+          {
+            name: 'state',
+            values: ['FL', 'NY', 'Tokio'],
+          },
+          {
+            name: 'city',
+            values: ['Tampa', 'New York', 'Tokio'],
+          },
+          {
+            name: 'name',
+            values: ['device1', 'device11', 'device12'],
+          },
+        ],
+      });
+
+      const getItem = (item: object, key: string): TableItem => {
+        const value = item[key as keyof typeof item];
+
+        return {
+          value,
+          selected: false,
+          showStatus: false,
+          selectable: value === 'device1' || value === 'device11',
+        };
+      };
+
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
+
+      expect(result).toEqual([
+        {
+          value: 'USA',
+          ...defaultItem,
+          selectable: false,
+          childValues: ['device1', 'device11'],
+          childFavoritesCount: 0,
+          children: [
+            {
+              value: 'FL',
+              childValues: ['device1'],
+              ...defaultItem,
+              selectable: false,
+              childFavoritesCount: 0,
+              children: [
+                {
+                  value: 'Tampa',
+                  childValues: ['device1'],
+                  ...defaultItem,
+                  selectable: false,
+                  childFavoritesCount: 0,
+                  children: [
+                    {
+                      value: 'device1',
+                      ...defaultItem,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              value: 'NY',
+              ...defaultItem,
+              selectable: false,
+              childValues: ['device11'],
+              childFavoritesCount: 0,
+              children: [
+                {
+                  value: 'New York',
+                  childValues: ['device11'],
+                  ...defaultItem,
+                  selectable: false,
+                  childFavoritesCount: 0,
+                  children: [
+                    {
+                      value: 'device11',
+                      ...defaultItem,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('Should add childFavoritesCount', () => {
+      const fields = [
+        { name: 'country', source: 'a' },
+        { name: 'state', source: 'a' },
+        { name: 'city', source: 'a' },
+        { name: 'name', source: 'a' },
+      ];
+      const frameA = toDataFrame({
+        refId: 'a',
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'USA', 'Japan'],
+          },
+          {
+            name: 'state',
+            values: ['FL', 'NY', 'Tokio'],
+          },
+          {
+            name: 'city',
+            values: ['Tampa', 'New York', 'Tokio'],
+          },
+          {
+            name: 'name',
+            values: ['device1', 'device11', 'device12'],
+          },
+        ],
+      });
+
+      const getItem = (item: object, key: string): TableItem => {
+        const value = item[key as keyof typeof item];
+
+        return {
+          value,
+          selected: false,
+          showStatus: false,
+          selectable: value === 'device1' || value === 'device11' || value === 'device12',
+          isFavorite: value === 'device1' || value === 'device12',
+        };
+      };
+
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
+
+      expect(result).toEqual([
+        {
+          value: 'USA',
+          ...defaultItem,
+          selectable: false,
+          isFavorite: false,
+          childValues: ['device1', 'device11'],
+          childFavoritesCount: 1,
+          children: [
+            {
+              value: 'FL',
+              childValues: ['device1'],
+              ...defaultItem,
+              selectable: false,
+              isFavorite: false,
+              childFavoritesCount: 1,
+              children: [
+                {
+                  value: 'Tampa',
+                  childValues: ['device1'],
+                  ...defaultItem,
+                  selectable: false,
+                  isFavorite: false,
+                  childFavoritesCount: 1,
+                  children: [
+                    {
+                      value: 'device1',
+                      ...defaultItem,
+                      isFavorite: true,
+                      selectable: true,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              value: 'NY',
+              ...defaultItem,
+              selectable: false,
+              isFavorite: false,
+              childValues: ['device11'],
+              childFavoritesCount: 0,
+              children: [
+                {
+                  value: 'New York',
+                  childValues: ['device11'],
+                  ...defaultItem,
+                  selectable: false,
+                  isFavorite: false,
+                  childFavoritesCount: 0,
+                  children: [
+                    {
+                      value: 'device11',
+                      ...defaultItem,
+                      isFavorite: false,
+                      selectable: true,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          value: 'Japan',
+          ...defaultItem,
+          selectable: false,
+          childValues: ['device12'],
+          isFavorite: false,
+          childFavoritesCount: 1,
+          children: [
+            {
+              value: 'Tokio',
+              childValues: ['device12'],
+              ...defaultItem,
+              selectable: false,
+              isFavorite: false,
+              childFavoritesCount: 1,
+              children: [
+                {
+                  value: 'Tokio',
+                  childValues: ['device12'],
+                  ...defaultItem,
+                  selectable: false,
+                  isFavorite: false,
+                  childFavoritesCount: 1,
+                  children: [
+                    {
+                      value: 'device12',
+                      ...defaultItem,
+                      isFavorite: true,
+                      selectable: true,
                     },
                   ],
                 },
@@ -457,6 +730,34 @@ describe('Utils', () => {
 
       expect(valueFilter(row as any, {} as any, 'Device1', () => {})).toBeTruthy();
       expect(valueFilter(row as any, {} as any, 'Device2', () => {})).toBeFalsy();
+    });
+  });
+
+  describe('Favorite Filter', () => {
+    it('Should include parent row if child favorites exist', () => {
+      const parentRow1 = { original: { childFavoritesCount: 1, childValues: ['device1'] } };
+      const parentRow2 = { original: { childFavoritesCount: 0, childValues: ['device2'] } };
+
+      expect(favoriteFilter(parentRow1 as any, {} as any, true, () => {})).toBeTruthy();
+      expect(favoriteFilter(parentRow2 as any, {} as any, true, () => {})).toBeFalsy();
+    });
+
+    it('Should include row if favorite', () => {
+      const row1 = { original: { value: 'device1', isFavorite: true } };
+      const row2 = { original: { value: 'device1', isFavorite: false } };
+
+      expect(favoriteFilter(row1 as any, {} as any, true, () => {})).toBeTruthy();
+      expect(favoriteFilter(row2 as any, {} as any, true, () => {})).toBeFalsy();
+    });
+
+    it('Should include all rows if filter disabled', () => {
+      const row1 = { original: { value: 'device1', isFavorite: true } };
+      const row2 = { original: { value: 'device1', isFavorite: false } };
+      const parentRow = { original: { childFavoritesCount: 0, childValues: ['device2'] } };
+
+      expect(favoriteFilter(row1 as any, {} as any, false, () => {})).toBeTruthy();
+      expect(favoriteFilter(row2 as any, {} as any, false, () => {})).toBeTruthy();
+      expect(favoriteFilter(parentRow as any, {} as any, false, () => {})).toBeTruthy();
     });
   });
 });
