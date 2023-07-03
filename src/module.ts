@@ -83,12 +83,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           })),
         },
         category: ['Hierarchy'],
-        showIf: (config) => !config.levelsGroups?.length,
+        showIf: (config) => !config.groups?.length,
       })
       .addCustomEditor({
-        id: 'levelsGroups',
-        path: 'levelsGroups',
-        name: 'Tree View levels based on Data Source',
+        id: 'groups',
+        path: 'groups',
+        name: 'Tree View based on Data Source',
         editor: FieldsEditor,
         category: ['Hierarchy'],
       });

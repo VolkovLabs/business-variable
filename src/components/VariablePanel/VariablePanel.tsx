@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, useTheme2, Tab, TabsBar } from '@grafana/ui';
+import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
@@ -21,26 +21,26 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   /**
    * Current Levels Group
    */
-  const [currentGroup, setCurrentGroup] = useState(options.levelsGroups?.[0]?.name);
+  const [currentGroup, setCurrentGroup] = useState(options.groups?.[0]?.name);
 
   /**
    * Current Levels
    */
   const currentLevels = useMemo(() => {
-    if (options.levelsGroups?.length && currentGroup) {
-      return options.levelsGroups.find((group) => group.name === currentGroup)?.items;
+    if (options.groups?.length && currentGroup) {
+      return options.groups.find((group) => group.name === currentGroup)?.items;
     }
     return;
-  }, [options.levelsGroups, currentGroup]);
+  }, [options.groups, currentGroup]);
 
   /**
    * Change current group if was removed
    */
   useEffect(() => {
-    if (!options.levelsGroups?.some((group) => group.name === currentGroup)) {
-      setCurrentGroup(options.levelsGroups?.[0]?.name);
+    if (!options.groups?.some((group) => group.name === currentGroup)) {
+      setCurrentGroup(options.groups?.[0]?.name);
     }
-  }, [currentGroup, options.levelsGroups]);
+  }, [currentGroup, options.groups]);
 
   /**
    * Table config
@@ -85,9 +85,9 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
 
       {tableData.length > 0 && (
         <div style={style} className={styles.content}>
-          {options.levelsGroups?.length > 1 && (
+          {options.groups?.length > 1 && (
             <TabsBar>
-              {options.levelsGroups?.map((group) => (
+              {options.groups?.map((group) => (
                 <Tab
                   key={group.name}
                   label={group.name}

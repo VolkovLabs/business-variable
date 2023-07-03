@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { useTheme2, Input, InlineField, Button, Collapse } from '@grafana/ui';
+import { Button, Collapse, InlineField, Input, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { LevelsEditor } from './components/LevelsEditor';
@@ -25,7 +25,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   /**
    * States
    */
-  const [items, setItems] = useState<LevelsGroup[]>(options?.levelsGroups || []);
+  const [items, setItems] = useState<LevelsGroup[]>(options?.groups || []);
   const [newGroup, setNewGroup] = useState('');
   const [collapseState, setCollapseState] = useState<Record<string, boolean>>({});
 

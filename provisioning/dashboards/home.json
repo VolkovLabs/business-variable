@@ -283,7 +283,7 @@
       "options": {
         "favorites": false,
         "filter": false,
-        "header": true,
+        "header": false,
         "levels": [
           {
             "name": "country",
@@ -300,6 +300,29 @@
           {
             "name": "device",
             "source": "B"
+          }
+        ],
+        "groups": [
+          {
+            "items": [
+              {
+                "name": "country",
+                "source": "B"
+              },
+              {
+                "name": "state",
+                "source": "B"
+              },
+              {
+                "name": "city",
+                "source": "B"
+              },
+              {
+                "name": "device",
+                "source": "B"
+              }
+            ],
+            "name": "Location"
           }
         ],
         "sticky": false,
@@ -414,7 +437,7 @@
             "source": "B"
           }
         ],
-        "levelsGroups": [
+        "groups": [
           {
             "items": [
               {
@@ -858,8 +881,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",

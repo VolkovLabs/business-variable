@@ -46,7 +46,7 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA],
           options: {
-            levelsGroups: [
+            groups: [
               {
                 name: 'group1',
                 items: [],
@@ -73,7 +73,7 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA, dataFrameB],
           options: {
-            levelsGroups: [
+            groups: [
               {
                 name: 'group1',
                 items: [],
@@ -108,7 +108,7 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA, dataFrameB],
           options: {
-            levelsGroups: [
+            groups: [
               {
                 name: 'group1',
                 items: [],
@@ -147,7 +147,7 @@ describe('FieldsEditor', () => {
         context: {
           data: [dataFrameA, dataFrameB],
           options: {
-            levelsGroups: [
+            groups: [
               {
                 name: 'group1',
                 items: [],

@@ -63,7 +63,7 @@ export interface PanelOptions {
   /**
    * Tree View Level Groups
    */
-  levelsGroups: LevelsGroup[];
+  groups: LevelsGroup[];
 
   /**
    * Display Header
