@@ -61,7 +61,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
 
     builder.addRadio({
       path: 'sticky',
-      name: 'Sticky Position',
+      name: 'Sticky position',
       description: 'Variables will follow when scrolling.',
       settings: {
         options: StickyOptions,
@@ -88,7 +88,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addCustomEditor({
         id: 'groups',
         path: 'groups',
-        name: 'Tree View based on Data Source',
+        name: 'Tree View based on data source query',
         editor: GroupsEditor,
         category: ['Hierarchy'],
       });
