@@ -58,4 +58,14 @@ export interface TableItem {
    * Can be added to favorites
    */
   canBeFavorite?: boolean;
+
+  /**
+   * Is Favorite
+   */
+  isFavorite?: boolean;
+
+  /**
+   * Child Favorites Count
+   */
+  childFavoritesCount?: number;
 }
