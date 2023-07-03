@@ -20,7 +20,11 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
   });
 
   useLayoutEffect(() => {
-    const scrollableElement = document.querySelector('.scrollbar-view');
+    /**
+     * Several scrollbar view elements exist
+     * We have to specify particular element
+     */
+    const scrollableElement = document.querySelector('.main-view .scrollbar-view');
 
     /**
      * Calculate Position
