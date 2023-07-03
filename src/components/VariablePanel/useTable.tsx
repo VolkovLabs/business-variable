@@ -4,17 +4,17 @@ import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
-import { PanelOptions, TableItem, Level } from '../../types';
+import { Level, PanelOptions, TableItem } from '../../types';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import {
   convertTreeToPlain,
+  favoriteFilter,
   getFilteredTree,
   getItemWithStatus,
   getRows,
   selectVariableValues,
   valueFilter,
-  favoriteFilter,
 } from './utils';
 
 /**
@@ -154,16 +154,7 @@ export const useTable = ({
         );
       }) || []
     );
-  }, [
-    runtimeVariable,
-    data,
-    levels,
-    options.name,
-    options.status,
-    options.favorites,
-    getRuntimeVariable,
-    favorites,
-  ]);
+  }, [runtimeVariable, data, levels, options.name, options.status, options.favorites, getRuntimeVariable, favorites]);
 
   /**
    * Value Cell Select
