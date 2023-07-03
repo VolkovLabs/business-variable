@@ -1,6 +1,6 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
-import { FieldsEditor, VariablePanel } from './components';
+import { GroupsEditor, VariablePanel } from './components';
 import { FavoritesOptions, FilterOptions, HeaderOptions, StickyOptions } from './constants';
 import { PanelOptions } from './types';
 
@@ -83,19 +83,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           })),
         },
         category: ['Hierarchy'],
-        showIf: (config) => !config.levels?.length,
+        showIf: (config) => !config.groups?.length,
       })
       .addCustomEditor({
-        id: 'fieldsEditor',
-        path: 'levels',
-        name: 'Tree View levels based on Data Source',
-        editor: FieldsEditor,
+        id: 'groups',
+        path: 'groups',
+        name: 'Tree View based on data source query',
+        editor: GroupsEditor,
         category: ['Hierarchy'],
       });
 
-    /**
-     * Status
-     */
     builder
       .addFieldNamePicker({
         path: 'name',

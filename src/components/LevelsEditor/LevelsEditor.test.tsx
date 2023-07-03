@@ -3,7 +3,7 @@ import { toDataFrame } from '@grafana/data';
 import { Select } from '@grafana/ui';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
-import { FieldsEditor } from './FieldsEditor';
+import { LevelsEditor } from './LevelsEditor';
 
 /**
  * Mock @grafana/ui
@@ -39,14 +39,14 @@ jest.mock('@grafana/ui', () => ({
 /**
  * Props
  */
-type Props = React.ComponentProps<typeof FieldsEditor>;
+type Props = React.ComponentProps<typeof LevelsEditor>;
 
-describe('FieldsEditor', () => {
+describe('LevelsEditor', () => {
   /**
    * Get Tested Component
    * @param props
    */
-  const getComponent = (props: Partial<Props>) => <FieldsEditor {...(props as any)} />;
+  const getComponent = (props: Partial<Props>) => <LevelsEditor name="Default" {...(props as any)} />;
 
   const dataFrameA = toDataFrame({
     fields: [
@@ -75,37 +75,29 @@ describe('FieldsEditor', () => {
   it('Should render levels', () => {
     render(
       getComponent({
-        context: {
-          data: [dataFrameA],
-          options: {
-            levels: [
-              {
-                name: 'field1',
-                source: 'A',
-              },
-              {
-                name: 'field2',
-                source: 'A',
-              },
-            ],
-          } as any,
-        } as any,
+        data: [dataFrameA],
+        items: [
+          {
+            name: 'field1',
+            source: 'A',
+          },
+          {
+            name: 'field2',
+            source: 'A',
+          },
+        ],
       })
     );
 
-    expect(screen.getByTestId(TestIds.fieldsEditor.level('field1'))).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.fieldsEditor.level('field2'))).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.levelsEditor.item('field1'))).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.levelsEditor.item('field2'))).toBeInTheDocument();
   });
 
   it('Should allow select any fields', () => {
     render(
       getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [],
-          } as any,
-        } as any,
+        data: [dataFrameA, dataFrameB],
+        items: [],
       })
     );
 
@@ -145,17 +137,13 @@ describe('FieldsEditor', () => {
   it('Should allow select fields only from the current data frame', () => {
     render(
       getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [
-              {
-                name: 'field1',
-                source: 'A',
-              },
-            ],
-          } as any,
-        } as any,
+        data: [dataFrameA, dataFrameB],
+        items: [
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
       })
     );
 
@@ -179,34 +167,34 @@ describe('FieldsEditor', () => {
 
     render(
       getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [
-              {
-                name: 'field1',
-                source: 'A',
-              },
-            ],
-          } as any,
-        } as any,
+        data: [dataFrameA, dataFrameB],
+        name: 'Group 1',
+        items: [
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
         onChange,
       })
     );
 
     await act(() =>
-      fireEvent.change(screen.getByLabelText(TestIds.fieldsEditor.newLevelField), { target: { value: 'field2' } })
+      fireEvent.change(screen.getByLabelText(TestIds.levelsEditor.newItemName), { target: { value: 'field2' } })
     );
 
-    expect(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)).not.toBeDisabled();
+    expect(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)).not.toBeDisabled();
 
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.fieldsEditor.buttonAddNew)));
+    await act(() => fireEvent.click(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)));
 
-    expect(onChange).toHaveBeenCalledWith([
-      { name: 'field1', source: 'A' },
-      { name: 'field2', source: 'A' },
-    ]);
+    expect(onChange).toHaveBeenCalledWith({
+      name: 'Group 1',
+      items: [
+        { name: 'field1', source: 'A' },
+        { name: 'field2', source: 'A' },
+      ],
+    });
   });
 
   it('Should remove level', async () => {
@@ -214,26 +202,23 @@ describe('FieldsEditor', () => {
 
     render(
       getComponent({
-        context: {
-          data: [dataFrameA, dataFrameB],
-          options: {
-            levels: [
-              {
-                name: 'field1',
-                source: 'A',
-              },
-              {
-                name: 'field2',
-                source: 'A',
-              },
-            ],
-          } as any,
-        } as any,
+        data: [dataFrameA, dataFrameB],
+        name: 'Group 1',
+        items: [
+          {
+            name: 'field2',
+            source: 'A',
+          },
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
         onChange,
       })
     );
 
-    const field2 = screen.getByTestId(TestIds.fieldsEditor.level('field2'));
+    const field2 = screen.getByTestId(TestIds.levelsEditor.item('field2'));
 
     /**
      * Check field presence
@@ -243,8 +228,8 @@ describe('FieldsEditor', () => {
     /**
      * Remove
      */
-    await act(() => fireEvent.click(within(field2).getByTestId(TestIds.fieldsEditor.buttonRemove)));
+    await act(() => fireEvent.click(within(field2).getByTestId(TestIds.levelsEditor.buttonRemove)));
 
-    expect(onChange).toHaveBeenCalledWith([{ name: 'field1', source: 'A' }]);
+    expect(onChange).toHaveBeenCalledWith({ name: 'Group 1', items: [{ name: 'field1', source: 'A' }] });
   });
 });

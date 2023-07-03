@@ -1,5 +1,5 @@
-import { GrafanaTheme2 } from '@grafana/data';
 import { css } from '@emotion/css';
+import { GrafanaTheme2 } from '@grafana/data';
 
 /**
  * Styles
@@ -56,9 +56,6 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     item: css`
       margin-bottom: ${theme.spacing(1)};
-    `,
-    newLevel: css`
-      margin: ${theme.spacing(2)} 0;
     `,
   };
 };

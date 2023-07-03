@@ -76,7 +76,7 @@ describe('plugin', () => {
     it('Should show variable name if no levels', () => {
       const shownOptionsPaths: string[] = [];
 
-      builder.addSelect.mockImplementation(addInputImplementation({ levels: [] }, shownOptionsPaths));
+      builder.addSelect.mockImplementation(addInputImplementation({ groups: [] }, shownOptionsPaths));
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['variable']));

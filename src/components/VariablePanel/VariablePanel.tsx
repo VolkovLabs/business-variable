@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, useTheme2 } from '@grafana/ui';
+import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
@@ -19,9 +19,33 @@ interface Props extends PanelProps<PanelOptions> {}
  */
 export const VariablePanel: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
   /**
+   * Current Levels Group
+   */
+  const [currentGroup, setCurrentGroup] = useState(options.groups?.[0]?.name);
+
+  /**
+   * Current Levels
+   */
+  const currentLevels = useMemo(() => {
+    if (options.groups?.length && currentGroup) {
+      return options.groups.find((group) => group.name === currentGroup)?.items;
+    }
+    return;
+  }, [options.groups, currentGroup]);
+
+  /**
+   * Change current group if was removed
+   */
+  useEffect(() => {
+    if (!options.groups?.some((group) => group.name === currentGroup)) {
+      setCurrentGroup(options.groups?.[0]?.name);
+    }
+  }, [currentGroup, options.groups]);
+
+  /**
    * Table config
    */
-  const { tableData, columns, getSubRows } = useTable({ data, options, eventBus });
+  const { tableData, columns, getSubRows } = useTable({ data, options, eventBus, levels: currentLevels });
 
   /**
    * Sticky position
@@ -61,6 +85,18 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
 
       {tableData.length > 0 && (
         <div style={style} className={styles.content}>
+          {options.groups?.length > 1 && (
+            <TabsBar>
+              {options.groups?.map((group) => (
+                <Tab
+                  key={group.name}
+                  label={group.name}
+                  onChangeTab={() => setCurrentGroup(group.name)}
+                  active={currentGroup === group.name}
+                />
+              ))}
+            </TabsBar>
+          )}
           <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
         </div>
       )}

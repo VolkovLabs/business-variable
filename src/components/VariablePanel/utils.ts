@@ -1,7 +1,7 @@
 import { FilterFn } from '@tanstack/react-table';
 import { PanelData, DataFrame, Field } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { TableItem, GroupLevel, RuntimeVariable } from '../../types';
+import { TableItem, Level, RuntimeVariable } from '../../types';
 
 /**
  * Convert Data Frame to objects array
@@ -81,16 +81,16 @@ const getGroupArray = (
 /**
  * Get Table Rows
  * @param data
- * @param groupLevels
+ * @param levels
  * @param getItem
  */
 export const getRows = (
   data: PanelData,
-  groupLevels: GroupLevel[],
+  levels: Level[],
   getItem?: (item: object, key: string, children?: TableItem[]) => TableItem
 ): TableItem[] | null => {
-  const lastGroupLevel = groupLevels[groupLevels.length - 1];
-  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastGroupLevel.source);
+  const lastLevel = levels[levels.length - 1];
+  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastLevel.source);
 
   if (!dataFrame) {
     return null;
@@ -114,7 +114,7 @@ export const getRows = (
 
   return getGroupArray(
     objects,
-    groupLevels.map(({ name }) => name),
+    levels.map(({ name }) => name),
     getItem || defaultGetItem
   );
 };
@@ -126,6 +126,7 @@ export const getRows = (
  * @param statusField
  * @param children
  * @param isSelectedAll
+ * @param favoritesEnabled
  */
 export const getItemWithStatus = (
   item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean },

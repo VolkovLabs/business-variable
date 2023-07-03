@@ -15,11 +15,19 @@ export const TestIds = {
     fieldFilterValue: 'data-testid table field-filter-value',
     header: 'data-testid table header',
   },
-  fieldsEditor: {
+  groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',
     buttonRemove: 'data-testid fields-editor button-remove',
-    level: (name: string) => `data-testid fields-editor level-${name}`,
-    newLevel: 'data-testid fields-editor new-level',
-    newLevelField: 'fields-editor new-level-field',
+    item: (name: string) => `data-testid fields-editor item-${name}`,
+    newItem: 'data-testid fields-editor new-level',
+    newItemName: 'fields-editor new-item-name',
+  },
+  levelsEditor: {
+    buttonAddNew: 'data-testid levels-editor button-add-new',
+    buttonRemove: 'data-testid levels-editor button-remove',
+    item: (name: string) => `data-testid levels-editor item-${name}`,
+    newItem: 'data-testid levels-editor new-item',
+    newItemName: 'data-testidd levels-editor new-item-name',
+    root: 'data-testid levels-editor',
   },
 };

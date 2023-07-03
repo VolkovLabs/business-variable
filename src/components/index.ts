@@ -1,2 +1,2 @@
+export * from './GroupsEditor';
 export * from './VariablePanel';
-export * from './FieldsEditor';

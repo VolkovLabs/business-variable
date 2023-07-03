@@ -62,6 +62,8 @@
       },
       "id": 3,
       "options": {
+        "favorites": false,
+        "filter": false,
         "header": true,
         "sticky": false,
         "variable": "country"
@@ -133,6 +135,8 @@
       },
       "id": 4,
       "options": {
+        "favorites": false,
+        "filter": false,
         "header": true,
         "sticky": false,
         "variable": "state"
@@ -204,6 +208,8 @@
       },
       "id": 5,
       "options": {
+        "favorites": false,
+        "filter": false,
         "header": true,
         "sticky": false,
         "variable": "city"
@@ -275,7 +281,9 @@
       },
       "id": 6,
       "options": {
-        "header": true,
+        "favorites": false,
+        "filter": false,
+        "header": false,
         "levels": [
           {
             "name": "country",
@@ -292,6 +300,29 @@
           {
             "name": "device",
             "source": "B"
+          }
+        ],
+        "groups": [
+          {
+            "items": [
+              {
+                "name": "country",
+                "source": "B"
+              },
+              {
+                "name": "state",
+                "source": "B"
+              },
+              {
+                "name": "city",
+                "source": "B"
+              },
+              {
+                "name": "device",
+                "source": "B"
+              }
+            ],
+            "name": "Location"
           }
         ],
         "sticky": false,
@@ -393,7 +424,9 @@
       },
       "id": 7,
       "options": {
-        "header": false,
+        "favorites": true,
+        "filter": true,
+        "header": true,
         "levels": [
           {
             "name": "country",
@@ -402,6 +435,42 @@
           {
             "name": "device",
             "source": "B"
+          }
+        ],
+        "groups": [
+          {
+            "items": [
+              {
+                "name": "country",
+                "source": "B"
+              },
+              {
+                "name": "state",
+                "source": "B"
+              },
+              {
+                "name": "city",
+                "source": "B"
+              },
+              {
+                "name": "device",
+                "source": "B"
+              }
+            ],
+            "name": "Location"
+          },
+          {
+            "items": [
+              {
+                "name": "country",
+                "source": "C"
+              },
+              {
+                "name": "device",
+                "source": "C"
+              }
+            ],
+            "name": "Country"
           }
         ],
         "sticky": true,
@@ -447,6 +516,35 @@
           "rawQuery": true,
           "rawSql": "select name as device, country, state, city from devices ;",
           "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select name as device, country from devices ;",
+          "refId": "C",
           "sql": {
             "columns": [
               {
@@ -783,8 +881,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",
@@ -989,6 +1086,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 6,
+  "version": 2,
   "weekStart": ""
 }

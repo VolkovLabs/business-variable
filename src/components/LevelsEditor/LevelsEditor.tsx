@@ -8,10 +8,10 @@ import {
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
 import { cx } from '@emotion/css';
-import { SelectableValue, StandardEditorProps } from '@grafana/data';
+import { DataFrame, SelectableValue } from '@grafana/data';
 import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { GroupLevel, PanelOptions } from '../../types';
+import { Level, LevelsGroup } from '../../types';
 import { Styles } from './styles';
 
 /**
@@ -20,7 +20,7 @@ import { Styles } from './styles';
  * @param startIndex
  * @param endIndex
  */
-const reorder = (list: GroupLevel[], startIndex: number, endIndex: number) => {
+const reorder = (list: Level[], startIndex: number, endIndex: number) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -46,13 +46,16 @@ const getItemStyle = (
 /**
  * Properties
  */
-interface Props extends StandardEditorProps<GroupLevel[], any, PanelOptions> {}
+interface Props extends LevelsGroup {
+  onChange: (item: LevelsGroup) => void;
+  data: DataFrame[];
+}
 
 /**
- * Fields Editor
+ * Levels Editor
  * @constructor
  */
-export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onChange }) => {
+export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChange, data }) => {
   /**
    * Styles and Theme
    */
@@ -62,18 +65,21 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   /**
    * States
    */
-  const [items, setItems] = useState(options?.levels || []);
-  const [newLevel, setNewLevel] = useState<(GroupLevel & { value: string }) | null>(null);
+  const [items, setItems] = useState(groupLevels || []);
+  const [newLevel, setNewLevel] = useState<(Level & { value: string }) | null>(null);
 
   /**
    * Change Items
    */
   const onChangeItems = useCallback(
-    (items: GroupLevel[]) => {
+    (items: Level[]) => {
       setItems(items);
-      onChange(items);
+      onChange({
+        name,
+        items,
+      });
     },
-    [onChange]
+    [name, onChange]
   );
 
   /**
@@ -130,25 +136,23 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
    * Add New Level
    */
   const onAddNewLevel = useCallback(() => {
-    if (!newLevel) {
-      return;
+    if (newLevel) {
+      onChangeItems([
+        ...items,
+        {
+          name: newLevel.name,
+          source: newLevel.source,
+        },
+      ]);
+      setNewLevel(null);
     }
-
-    onChangeItems([
-      ...items,
-      {
-        name: newLevel.name,
-        source: newLevel.source,
-      },
-    ]);
-    setNewLevel(null);
   }, [items, newLevel, onChangeItems]);
 
   return (
-    <>
+    <div data-testid={TestIds.levelsEditor.root}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
+        <Droppable droppableId={name}>
+          {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items.map((item, index) => (
                 <Draggable key={item.name} draggableId={item.name} index={index}>
@@ -159,7 +163,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                       {...provided.dragHandleProps}
                       style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
                       className={styles.item}
-                      data-testid={TestIds.fieldsEditor.level(item.name)}
+                      data-testid={TestIds.levelsEditor.item(item.name)}
                     >
                       <div className={styles.header}>
                         <div className={styles.column}>
@@ -174,7 +178,7 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                           <IconButton
                             name="trash-alt"
                             onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
-                            data-testid={TestIds.fieldsEditor.buttonRemove}
+                            data-testid={TestIds.levelsEditor.buttonRemove}
                           />
                           <Icon
                             title="Drag and drop to reorder"
@@ -195,33 +199,31 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         </Droppable>
       </DragDropContext>
 
-      <div className={styles.newLevel} data-testid={TestIds.fieldsEditor.newLevel}>
-        <InlineFieldRow>
-          <InlineField label="New Level" grow={true}>
-            <Select
-              options={availableFieldOptions}
-              value={newLevel?.value || null}
-              aria-label={TestIds.fieldsEditor.newLevelField}
-              onChange={(event) => {
-                setNewLevel({
-                  value: event.value || '',
-                  source: event.source,
-                  name: event.fieldName,
-                });
-              }}
-            />
-          </InlineField>
-          <Button
-            icon="plus"
-            title="Add Level"
-            disabled={!newLevel}
-            onClick={onAddNewLevel}
-            data-testid={TestIds.fieldsEditor.buttonAddNew}
-          >
-            Add
-          </Button>
-        </InlineFieldRow>
-      </div>
-    </>
+      <InlineFieldRow data-testid={TestIds.levelsEditor.newItem}>
+        <InlineField label="New Level" grow={true}>
+          <Select
+            options={availableFieldOptions}
+            value={newLevel?.value || null}
+            aria-label={TestIds.levelsEditor.newItemName}
+            onChange={(event) => {
+              setNewLevel({
+                value: event.value || '',
+                source: event.source,
+                name: event.fieldName,
+              });
+            }}
+          />
+        </InlineField>
+        <Button
+          icon="plus"
+          title="Add Level"
+          disabled={!newLevel}
+          onClick={onAddNewLevel}
+          data-testid={TestIds.levelsEditor.buttonAddNew}
+        >
+          Add
+        </Button>
+      </InlineFieldRow>
+    </div>
   );
 };
