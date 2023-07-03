@@ -1,15 +1,15 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { cx } from '@emotion/css';
-import { DataFrame, SelectableValue } from '@grafana/data';
-import { useTheme2, Icon, IconButton, InlineFieldRow, InlineField, Select, Button } from '@grafana/ui';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   DragDropContext,
-  Droppable,
   Draggable,
-  DropResult,
   DraggingStyle,
+  Droppable,
+  DropResult,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
+import { cx } from '@emotion/css';
+import { DataFrame, SelectableValue } from '@grafana/data';
+import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../../../constants';
 import { Level, LevelsGroup } from '../../../../types';
 import { Styles } from './styles';
@@ -138,11 +138,11 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
   const onAddNewLevel = useCallback(() => {
     if (newLevel) {
       onChangeItems([
+        ...items,
         {
           name: newLevel.name,
           source: newLevel.source,
         },
-        ...items,
       ]);
       setNewLevel(null);
     }

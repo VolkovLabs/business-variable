@@ -8,6 +8,8 @@
 - Update adding new Level to last (#22)
 - Hide unselectable items (#24)
 - Use the main view scroll element to support Grafana 9 (#26)
+- Add a Favorite icon to filter selected favorites (#25)
+- Add Tree View groups (#20)
 
 ## 1.3.0 (2023-06-30)
 
