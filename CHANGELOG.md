@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Add Tutorial (#21)
+- Update adding new Level to last (#22)
 
 ## 1.3.0 (2023-06-30)
 

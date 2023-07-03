@@ -1,15 +1,15 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { cx } from '@emotion/css';
-import { StandardEditorProps, SelectableValue } from '@grafana/data';
-import { useTheme2, Icon, IconButton, InlineFieldRow, InlineField, Select, Button } from '@grafana/ui';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   DragDropContext,
-  Droppable,
   Draggable,
-  DropResult,
   DraggingStyle,
+  Droppable,
+  DropResult,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
+import { cx } from '@emotion/css';
+import { SelectableValue, StandardEditorProps } from '@grafana/data';
+import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { GroupLevel, PanelOptions } from '../../types';
 import { Styles } from './styles';
@@ -130,16 +130,18 @@ export const FieldsEditor: React.FC<Props> = ({ context: { options, data }, onCh
    * Add New Level
    */
   const onAddNewLevel = useCallback(() => {
-    if (newLevel) {
-      onChangeItems([
-        {
-          name: newLevel.name,
-          source: newLevel.source,
-        },
-        ...items,
-      ]);
-      setNewLevel(null);
+    if (!newLevel) {
+      return;
     }
+
+    onChangeItems([
+      ...items,
+      {
+        name: newLevel.name,
+        source: newLevel.source,
+      },
+    ]);
+    setNewLevel(null);
   }, [items, newLevel, onChangeItems]);
 
   return (
