@@ -1,7 +1,7 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { TableItem } from '../../types';
-import { convertTreeToPlain, getRows, selectVariableValues, valueFilter, favoriteFilter } from './utils';
+import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, valueFilter } from './utils';
 
 /**
  * Mock @grafana/runtime
