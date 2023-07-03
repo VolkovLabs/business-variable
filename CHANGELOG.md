@@ -6,6 +6,8 @@
 
 - Add Tutorial (#21)
 - Update adding new Level to last (#22)
+- Hide unselectable items (#24)
+- Use the main view scroll element to support Grafana 9 (#26)
 
 ## 1.3.0 (2023-06-30)
 
