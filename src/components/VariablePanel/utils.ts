@@ -53,9 +53,11 @@ const getGroupArray = (
   const currentKey = fieldKeys[0];
 
   if (fieldKeys.length === 1) {
-    return items.map((item) => {
-      return getItem(item, currentKey);
-    });
+    return items
+      .map((item) => {
+        return getItem(item, currentKey);
+      })
+      .filter((item) => item.selectable);
   }
 
   return Array.from(groupBy(items, currentKey), ([key, groupItems]): TableItem => {
@@ -69,7 +71,7 @@ const getGroupArray = (
       ),
       children,
     };
-  });
+  }).filter((item) => item.childValues?.length || item.selectable);
 };
 
 /**
