@@ -199,33 +199,31 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
         </Droppable>
       </DragDropContext>
 
-      <div className={styles.newLevel} data-testid={TestIds.levelsEditor.newItem}>
-        <InlineFieldRow>
-          <InlineField label="New Level" grow={true}>
-            <Select
-              options={availableFieldOptions}
-              value={newLevel?.value || null}
-              aria-label={TestIds.levelsEditor.newItemName}
-              onChange={(event) => {
-                setNewLevel({
-                  value: event.value || '',
-                  source: event.source,
-                  name: event.fieldName,
-                });
-              }}
-            />
-          </InlineField>
-          <Button
-            icon="plus"
-            title="Add Level"
-            disabled={!newLevel}
-            onClick={onAddNewLevel}
-            data-testid={TestIds.levelsEditor.buttonAddNew}
-          >
-            Add
-          </Button>
-        </InlineFieldRow>
-      </div>
+      <InlineFieldRow data-testid={TestIds.levelsEditor.newItem}>
+        <InlineField label="New Level" grow={true}>
+          <Select
+            options={availableFieldOptions}
+            value={newLevel?.value || null}
+            aria-label={TestIds.levelsEditor.newItemName}
+            onChange={(event) => {
+              setNewLevel({
+                value: event.value || '',
+                source: event.source,
+                name: event.fieldName,
+              });
+            }}
+          />
+        </InlineField>
+        <Button
+          icon="plus"
+          title="Add Level"
+          disabled={!newLevel}
+          onClick={onAddNewLevel}
+          data-testid={TestIds.levelsEditor.buttonAddNew}
+        >
+          Add
+        </Button>
+      </InlineFieldRow>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { Button, Collapse, InlineField, Input, useTheme2 } from '@grafana/ui';
+import { Button, Collapse, InlineField, InlineFieldRow, Input, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { LevelsEditor } from '../LevelsEditor';
@@ -42,14 +42,6 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   );
 
   /**
-   * Add new group
-   */
-  const onAddNewGroup = useCallback(() => {
-    setNewGroup('');
-    onChangeItems(items.concat([{ name: newGroup, items: [] }]));
-  }, [items, newGroup, onChangeItems]);
-
-  /**
    * Toggle collapse state for group
    */
   const onToggleGroup = useCallback((name: string) => {
@@ -58,6 +50,15 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
       [name]: !prev[name],
     }));
   }, []);
+
+  /**
+   * Add new group
+   */
+  const onAddNewGroup = useCallback(() => {
+    setNewGroup('');
+    onChangeItems(items.concat([{ name: newGroup, items: [] }]));
+    onToggleGroup(newGroup);
+  }, [items, newGroup, onChangeItems, onToggleGroup]);
 
   /**
    * Change Group
@@ -113,15 +114,15 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         </Collapse>
       ))}
 
-      <div className={styles.newGroup} data-testid={TestIds.groupsEditor.newItem}>
+      <InlineFieldRow className={styles.newGroup} data-testid={TestIds.groupsEditor.newItem}>
         <InlineField
-          label="New"
+          label="New Group"
           grow={true}
           invalid={isNameExistsError}
           error="Group with the same name already exists."
         >
           <Input
-            placeholder="Group name"
+            placeholder="Unique name"
             value={newGroup}
             onChange={(event) => setNewGroup(event.currentTarget.value)}
             data-testid={TestIds.groupsEditor.newItemName}
@@ -136,7 +137,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         >
           Add
         </Button>
-      </div>
+      </InlineFieldRow>
     </>
   );
 };
