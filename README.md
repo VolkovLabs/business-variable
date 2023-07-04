@@ -10,9 +10,11 @@
 
 ## Introduction
 
-The Variable panel allows you to update single, dependent and multi-variables as a Table and Tree View.
+The Variable panel builds on top of the regular dashboard variables. It allows you to have dashboard filters in a separate panel which you can place anywhere on the dashboard.
 
-[![Grafana dashboard variables on steroids | Variable panel with Single, Multi, and Tree View layouts](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/tutorial.png)](https://youtu.be/mYYtMW9qiPA)
+The variable panel offers you single- and multi-variable layouts along with an advanced Tree View layout.
+
+[![Demonstrates the Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/tutorial.png)](https://youtu.be/mYYtMW9qiPA)
 
 ## Requirements
 
@@ -24,7 +26,7 @@ The Variable panel is under the Grafana team review. Meanwhile, it can be downlo
 
 ## Highlights
 
-- Allows updating dashboard variables as a Table and Tree View.
+- Allows working with dashboard variables in Table and Tree View layouts.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
 - Allows filtering values by pattern and selected favorites.
@@ -35,7 +37,7 @@ The Variable panel is under the Grafana team review. Meanwhile, it can be downlo
 
 | Section                     | Description                                                         |
 | --------------------------- | ------------------------------------------------------------------- |
-| [Hierarchy](https://volkovlabs.io/plugins/volkovlabs-variable-panel/hierarchy/) | Explains how to display variables in a table and tree view. |
+| [Layout](https://volkovlabs.io/plugins/volkovlabs-variable-panel/layout/) | Explains how to display variables in a table and tree view. |
 | [Release Notes](https://volkovlabs.io/plugins/volkovlabs-variable-panel/release/)    | Stay up to date with the latest features and updates.               |
 
 ## Feedback
