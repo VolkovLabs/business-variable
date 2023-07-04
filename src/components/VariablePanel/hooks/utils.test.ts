@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { TableItem } from '../../types';
+import { TableItem } from '../../../types';
 import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, valueFilter } from './utils';
 
 /**
@@ -461,6 +461,51 @@ describe('Utils', () => {
               ],
             },
           ],
+        },
+      ]);
+    });
+
+    it('Should skip if no dataFrame found', () => {
+      const fields = [{ name: 'country', source: 'b' }];
+      const frameA = toDataFrame({
+        refId: 'a',
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+        ],
+      });
+      const result = getRows({ series: [frameA] } as any, fields);
+
+      expect(result).toEqual(null);
+    });
+
+    it('Should use default getItem', () => {
+      const fields = [{ name: 'country', source: 'a' }];
+      const frameA = toDataFrame({
+        refId: 'a',
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+        ],
+      });
+      const result = getRows({ series: [frameA] } as any, fields);
+
+      expect(result).toEqual([
+        {
+          value: 'USA',
+          selected: false,
+          showStatus: false,
+          selectable: true,
+        },
+        {
+          value: 'Japan',
+          selected: false,
+          showStatus: false,
+          selectable: true,
         },
       ]);
     });

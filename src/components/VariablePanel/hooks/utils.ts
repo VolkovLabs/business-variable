@@ -110,6 +110,7 @@ export const getRows = (
     value: item[key as keyof typeof item],
     selected: false,
     showStatus: false,
+    selectable: true,
   });
 
   return getGroupArray(
