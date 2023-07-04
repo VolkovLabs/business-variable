@@ -65,7 +65,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
   /**
    * States
    */
-  const [items, setItems] = useState(groupLevels || []);
+  const [items, setItems] = useState(groupLevels);
   const [newLevel, setNewLevel] = useState<(Level & { value: string }) | null>(null);
 
   /**
@@ -207,7 +207,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
             aria-label={TestIds.levelsEditor.newItemName}
             onChange={(event) => {
               setNewLevel({
-                value: event.value || '',
+                value: event.value,
                 source: event.source,
                 name: event.fieldName,
               });
