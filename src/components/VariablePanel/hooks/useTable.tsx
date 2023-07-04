@@ -136,24 +136,22 @@ export const useTable = ({
     /**
      * Use Variable Options
      */
-    return (
-      runtimeVariable?.options.map((option) => {
-        return getItemWithStatus(
-          {
-            value: option.text,
-            selected: !!option.selected,
-            variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable?.name, option.text),
-          },
-          {
-            namesArray,
-            statusField: statusArray,
-            isSelectedAll,
-            favoritesEnabled: options.favorites,
-          }
-        );
-      }) || []
-    );
+    return runtimeVariable.options.map((option) => {
+      return getItemWithStatus(
+        {
+          value: option.text,
+          selected: !!option.selected,
+          variable: runtimeVariable,
+          isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
+        },
+        {
+          namesArray,
+          statusField: statusArray,
+          isSelectedAll,
+          favoritesEnabled: options.favorites,
+        }
+      );
+    });
   }, [runtimeVariable, data, levels, options.name, options.status, options.favorites, getRuntimeVariable, favorites]);
 
   /**
