@@ -92,6 +92,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
                   label={group.name}
                   onChangeTab={() => setCurrentGroup(group.name)}
                   active={currentGroup === group.name}
+                  data-testid={TestIds.panel.tab(group.name)}
                 />
               ))}
             </TabsBar>

@@ -5,6 +5,7 @@ export const TestIds = {
   panel: {
     infoMessage: 'data-testid panel info',
     root: 'data-testid panel',
+    tab: (name: string) => `data-testid panel tab-${name}`,
   },
   table: {
     buttonExpand: 'data-testid table button-expand',
