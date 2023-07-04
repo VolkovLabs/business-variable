@@ -649,6 +649,97 @@ describe('Use Table Hook', () => {
       expect(screen.queryByTestId(TestIds.table.cell('device2', 1))).not.toBeInTheDocument();
     });
 
+    it('Should show variable names', () => {
+      const deviceVariable = {
+        multi: true,
+        includeAll: true,
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      };
+      const countryVariable = {
+        multi: true,
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+        ],
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            showName: true,
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TestIds.table.cell('device1', 1));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+
+      /**
+       * Check if name is shown
+       */
+      expect(within(device1).getByText('device: device1')).toBeInTheDocument();
+    });
+
     describe('Favorites', () => {
       const deviceVariable = {
         multi: true,
