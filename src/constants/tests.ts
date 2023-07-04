@@ -13,6 +13,7 @@ export const TestIds = {
     control: 'data-testid table value-control',
     favoritesControl: 'data-testid table favorites-control',
     fieldFilterValue: 'data-testid table field-filter-value',
+    favoritesFilter: 'data-testid table favorites-filter',
     header: 'data-testid table header',
   },
   groupsEditor: {
