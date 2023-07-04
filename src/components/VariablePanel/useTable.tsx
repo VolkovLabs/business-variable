@@ -145,7 +145,7 @@ export const useTable = ({
             value: option.text,
             selected: !!option.selected,
             variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable?.name, option.text),
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
             name: runtimeVariable.name,
           },
           {
