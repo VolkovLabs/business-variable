@@ -3,10 +3,10 @@ import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { TestIds } from '../constants';
 import { TableItem } from '../types';
+import { getItemWithStatus, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
-import { getItemWithStatus, selectVariableValues } from './utils';
 
 /**
  * Mock useRuntimeVariables
@@ -32,10 +32,10 @@ jest.mock('./useFavorites', () => ({
 /**
  * Mock utils
  */
-jest.mock('./utils', () => ({
-  ...jest.requireActual('./utils'),
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
   selectVariableValues: jest.fn(),
-  getItemWithStatus: jest.fn((...args: [any, any]) => jest.requireActual('./utils').getItemWithStatus(...args)),
+  getItemWithStatus: jest.fn((...args: [any, any]) => jest.requireActual('../utils').getItemWithStatus(...args)),
 }));
 
 /**
@@ -569,7 +569,7 @@ describe('Use Table Hook', () => {
               showStatus: false,
               selectable: true,
             }
-          : jest.requireActual('./utils').getItemWithStatus(item, options)
+          : jest.requireActual('../utils').getItemWithStatus(item, options)
       );
 
       /**

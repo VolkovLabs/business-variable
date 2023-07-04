@@ -5,8 +5,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { TestIds } from '../constants';
 import { Styles } from '../styles';
 import { Level, PanelOptions, TableItem } from '../types';
-import { useFavorites } from './useFavorites';
-import { useRuntimeVariables } from './useRuntimeVariables';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -15,7 +13,9 @@ import {
   getRows,
   selectVariableValues,
   valueFilter,
-} from './utils';
+} from '../utils';
+import { useFavorites } from './useFavorites';
+import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
  * Use Table
