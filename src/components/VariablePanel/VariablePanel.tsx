@@ -3,10 +3,10 @@ import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
 import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
+import { useContentPosition, useTable } from '../../hooks';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
-import { useContentPosition, useTable } from './hooks';
 
 /**
  * Properties

@@ -1,14 +1,14 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
-import { useTable } from './hooks';
+import { useTable } from '../../hooks';
 import { VariablePanel } from './VariablePanel';
 
 /**
  * Mock hooks
  */
-jest.mock('./hooks', () => ({
-  ...jest.requireActual('./hooks'),
+jest.mock('../../hooks', () => ({
+  ...jest.requireActual('../../hooks'),
   useTable: jest.fn(() => ({
     tableData: [],
     columns: [],

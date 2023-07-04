@@ -1,6 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { TableItem } from '../../../types';
+import { TableItem } from '../types';
 import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, valueFilter } from './utils';
 
 /**

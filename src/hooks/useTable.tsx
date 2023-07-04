@@ -2,9 +2,9 @@ import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
-import { TestIds } from '../../../constants';
-import { Styles } from '../../../styles';
-import { Level, PanelOptions, TableItem } from '../../../types';
+import { TestIds } from '../constants';
+import { Styles } from '../styles';
+import { Level, PanelOptions, TableItem } from '../types';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import {
