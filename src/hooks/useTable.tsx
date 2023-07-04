@@ -2,11 +2,9 @@ import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
-import { TestIds } from '../../constants';
-import { Styles } from '../../styles';
-import { Level, PanelOptions, TableItem } from '../../types';
-import { useFavorites } from './useFavorites';
-import { useRuntimeVariables } from './useRuntimeVariables';
+import { TestIds } from '../constants';
+import { Styles } from '../styles';
+import { Level, PanelOptions, TableItem } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -15,7 +13,9 @@ import {
   getRows,
   selectVariableValues,
   valueFilter,
-} from './utils';
+} from '../utils';
+import { useFavorites } from './useFavorites';
+import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
  * Use Table
@@ -138,25 +138,22 @@ export const useTable = ({
     /**
      * Use Variable Options
      */
-    return (
-      runtimeVariable?.options.map((option) => {
-        return getItemWithStatus(
-          {
-            value: option.text,
-            selected: !!option.selected,
-            variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
-            name: runtimeVariable.name,
-          },
-          {
-            namesArray,
-            statusField: statusArray,
-            isSelectedAll,
-            favoritesEnabled: options.favorites,
-          }
-        );
-      }) || []
-    );
+    return runtimeVariable.options.map((option) => {
+      return getItemWithStatus(
+        {
+          value: option.text,
+          selected: !!option.selected,
+          variable: runtimeVariable,
+          isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
+        },
+        {
+          namesArray,
+          statusField: statusArray,
+          isSelectedAll,
+          favoritesEnabled: options.favorites,
+        }
+      );
+    });
   }, [runtimeVariable, data, levels, options.name, options.status, options.favorites, getRuntimeVariable, favorites]);
 
   /**

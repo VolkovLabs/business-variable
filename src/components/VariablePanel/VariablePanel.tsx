@@ -3,11 +3,10 @@ import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
 import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
+import { useContentPosition, useTable } from '../../hooks';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
-import { useContentPosition } from './useContentPosition';
-import { useTable } from './useTable';
 
 /**
  * Properties
@@ -93,6 +92,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
                   label={group.name}
                   onChangeTab={() => setCurrentGroup(group.name)}
                   active={currentGroup === group.name}
+                  data-testid={TestIds.panel.tab(group.name)}
                 />
               ))}
             </TabsBar>

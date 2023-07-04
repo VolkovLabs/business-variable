@@ -63,7 +63,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
         onClick={() => {
           column.setFilterValue(!columnFilterValue);
         }}
-        data-testid={TestIds.table.favoritesControl}
+        data-testid={TestIds.table.favoritesFilter}
       >
         {columnFilterValue ? <Icon name="favorite" /> : <Icon name="star" />}
       </Button>

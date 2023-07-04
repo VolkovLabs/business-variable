@@ -5,6 +5,7 @@ export const TestIds = {
   panel: {
     infoMessage: 'data-testid panel info',
     root: 'data-testid panel',
+    tab: (name: string) => `data-testid panel tab-${name}`,
   },
   table: {
     buttonExpand: 'data-testid table button-expand',
@@ -13,6 +14,7 @@ export const TestIds = {
     control: 'data-testid table value-control',
     favoritesControl: 'data-testid table favorites-control',
     fieldFilterValue: 'data-testid table field-filter-value',
+    favoritesFilter: 'data-testid table favorites-filter',
     header: 'data-testid table header',
   },
   groupsEditor: {

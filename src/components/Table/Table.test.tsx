@@ -9,6 +9,7 @@ import { Table } from './Table';
  */
 const InTestIds = {
   cell: (value: string, depth: number) => `cell-${depth}-${value},`,
+  favoriteCell: (value: string, depth: number) => `cell-favorite-${depth}-${value}`,
 };
 
 describe('Table', () => {
@@ -80,7 +81,7 @@ describe('Table', () => {
     expect(screen.queryByTestId(TestIds.table.header)).not.toBeInTheDocument();
   });
 
-  it('Should show filter', async () => {
+  it('Should show value filter', async () => {
     render(
       getComponent({
         showHeader: true,
@@ -122,6 +123,53 @@ describe('Table', () => {
     await act(() =>
       fireEvent.change(screen.getByTestId(TestIds.table.fieldFilterValue), { target: { value: 'device1' } })
     );
+
+    expect(screen.getByTestId(InTestIds.cell('device1', 0))).toBeInTheDocument();
+    expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();
+  });
+
+  it('Should show favorites filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+          {
+            id: 'isFavorite',
+            header: '',
+            accessorKey: 'isFavorite',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as boolean;
+              return <span data-testid={InTestIds.favoriteCell(row.original.value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [
+          { value: 'device1', isFavorite: true },
+          { value: 'device2', isFavorite: false },
+        ],
+      })
+    );
+
+    /**
+     * Check Filter presence
+     */
+    expect(screen.getByTestId(TestIds.table.favoritesFilter)).toBeInTheDocument();
+
+    /**
+     * Apply Favorite filter
+     */
+    await act(() => fireEvent.click(screen.getByTestId(TestIds.table.favoritesFilter)));
 
     expect(screen.getByTestId(InTestIds.cell('device1', 0))).toBeInTheDocument();
     expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();

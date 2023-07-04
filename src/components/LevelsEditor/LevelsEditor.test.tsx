@@ -1,4 +1,5 @@
 import React from 'react';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { toDataFrame } from '@grafana/data';
 import { Select } from '@grafana/ui';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
@@ -34,6 +35,23 @@ jest.mock('@grafana/ui', () => ({
       ))}
     </select>
   )),
+}));
+
+/**
+ * Mock react-beautiful-dnd
+ */
+jest.mock('react-beautiful-dnd', () => ({
+  ...jest.requireActual('react-beautiful-dnd'),
+  DragDropContext: jest.fn(({ children }) => children),
+  Droppable: jest.fn(({ children }) => children({})),
+  Draggable: jest.fn(({ children }) =>
+    children(
+      {
+        draggableProps: {},
+      },
+      {}
+    )
+  ),
 }));
 
 /**
@@ -231,5 +249,118 @@ describe('LevelsEditor', () => {
     await act(() => fireEvent.click(within(field2).getByTestId(TestIds.levelsEditor.buttonRemove)));
 
     expect(onChange).toHaveBeenCalledWith({ name: 'Group 1', items: [{ name: 'field1', source: 'A' }] });
+  });
+
+  it('Should render without errors if dataFrame was removed', () => {
+    render(
+      getComponent({
+        data: [dataFrameB],
+        name: 'Group 1',
+        items: [
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
+      })
+    );
+
+    expect(screen.getByTestId(TestIds.levelsEditor.root)).toBeInTheDocument();
+  });
+
+  it('Should reorder items', async () => {
+    let onDragEndHandler: (result: DropResult) => void = () => {};
+    jest.mocked(DragDropContext).mockImplementation(({ children, onDragEnd }: any) => {
+      onDragEndHandler = onDragEnd;
+      return children;
+    });
+    const onChange = jest.fn();
+
+    render(
+      getComponent({
+        data: [dataFrameA, dataFrameB],
+        name: 'Group 1',
+        items: [
+          {
+            name: 'field2',
+            source: 'A',
+          },
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
+        onChange,
+      })
+    );
+
+    /**
+     * Simulate drop field 1 to index 0
+     */
+    await act(() =>
+      onDragEndHandler({
+        destination: {
+          index: 0,
+        },
+        source: {
+          index: 1,
+        },
+      } as any)
+    );
+
+    expect(onChange).toHaveBeenCalledWith({
+      name: 'Group 1',
+      items: [
+        {
+          name: 'field1',
+          source: 'A',
+        },
+        {
+          name: 'field2',
+          source: 'A',
+        },
+      ],
+    });
+  });
+
+  it('Should not reorder items if drop outside the list', async () => {
+    let onDragEndHandler: (result: DropResult) => void = () => {};
+    jest.mocked(DragDropContext).mockImplementation(({ children, onDragEnd }: any) => {
+      onDragEndHandler = onDragEnd;
+      return children;
+    });
+    const onChange = jest.fn();
+
+    render(
+      getComponent({
+        data: [dataFrameA, dataFrameB],
+        name: 'Group 1',
+        items: [
+          {
+            name: 'field2',
+            source: 'A',
+          },
+          {
+            name: 'field1',
+            source: 'A',
+          },
+        ],
+        onChange,
+      })
+    );
+
+    /**
+     * Simulate drop field 1 to outside the list
+     */
+    await act(() =>
+      onDragEndHandler({
+        destination: null,
+        source: {
+          index: 1,
+        },
+      } as any)
+    );
+
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

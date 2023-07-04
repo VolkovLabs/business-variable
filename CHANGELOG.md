@@ -11,6 +11,7 @@
 - Add a Favorite icon to filter selected favorites (#25)
 - Add Tree View groups (#20)
 - Add an option to display the variable name in front of the value (#30)
+- Increase tests coverage (#31)
 
 ## 1.3.0 (2023-06-30)
 

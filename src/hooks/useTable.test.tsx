@@ -1,12 +1,12 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { TestIds } from '../../constants';
-import { TableItem } from '../../types';
+import { TestIds } from '../constants';
+import { TableItem } from '../types';
+import { getItemWithStatus, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
-import { selectVariableValues } from './utils';
 
 /**
  * Mock useRuntimeVariables
@@ -32,9 +32,10 @@ jest.mock('./useFavorites', () => ({
 /**
  * Mock utils
  */
-jest.mock('./utils', () => ({
-  ...jest.requireActual('./utils'),
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
   selectVariableValues: jest.fn(),
+  getItemWithStatus: jest.fn((...args: [any, any]) => jest.requireActual('../utils').getItemWithStatus(...args)),
 }));
 
 /**
@@ -336,6 +337,7 @@ describe('Use Table Hook', () => {
       () =>
         ({
           variable: null,
+          getVariable: jest.fn(),
         } as any)
     );
 
@@ -365,7 +367,7 @@ describe('Use Table Hook', () => {
       getSubRows: (row: TableItem) => TableItem[] | undefined;
     }> = ({ data, columns, depth = 0, getSubRows }) => (
       <>
-        {data.map((row) => {
+        {data.map((row, index) => {
           const subRows = getSubRows(row);
           return (
             <div key={`${depth}-${row.value}`} data-testid={InTestIds.row(row.value, depth)}>
@@ -376,7 +378,7 @@ describe('Use Table Hook', () => {
                     depth,
                     getCanExpand: () => !!row.children,
                     getToggleExpandedHandler: () => {},
-                    getIsExpanded: () => false,
+                    getIsExpanded: () => index % 2 === 0,
                   },
                   getValue: () => row.value,
                 })}
@@ -499,6 +501,121 @@ describe('Use Table Hook', () => {
       fireEvent.click(device1Control);
 
       expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
+    });
+
+    it('Should select unselected parent values', () => {
+      const deviceVariable = {
+        multi: true,
+        includeAll: true,
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: false,
+          },
+        ],
+      };
+      const countryVariable = {
+        multi: true,
+        name: 'country',
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+          {
+            text: 'Japan',
+            value: 'Japan',
+            selected: false,
+          },
+        ],
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      jest.mocked(getItemWithStatus).mockImplementation((item, options) =>
+        item.variable?.name === 'country'
+          ? {
+              ...item,
+              showStatus: false,
+              selectable: true,
+            }
+          : jest.requireActual('../utils').getItemWithStatus(item, options)
+      );
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const country = screen.getByTestId(TestIds.table.cell('Japan', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(country).toBeInTheDocument();
+
+      /**
+       * Check if Japan is not selected
+       */
+      const countryControl = within(country).getByTestId(TestIds.table.control);
+      expect(countryControl).not.toBeChecked();
+
+      /**
+       * Select country
+       */
+      fireEvent.click(countryControl);
+
+      expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable);
+      expect(selectVariableValues).toHaveBeenCalledWith(['device2'], deviceVariable);
     });
 
     it('Should use radio for single value', () => {
