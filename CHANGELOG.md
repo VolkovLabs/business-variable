@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.3.0 (2023-06-30)
+## 1.4.0 (IN PROGRESS)
 
 ### Features / Enhancements
 
@@ -10,6 +10,7 @@
 - Use the main view scroll element to support Grafana 9 (#26)
 - Add a Favorite icon to filter selected favorites (#25)
 - Add Tree View groups (#20)
+- Add an option to display the variable name in front of the value (#30)
 
 ## 1.3.0 (2023-06-30)
 
