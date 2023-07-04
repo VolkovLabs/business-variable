@@ -17,6 +17,7 @@ const convertToObjects = (dataFrame: DataFrame) => {
         [field.name]: field.values.get(index),
       };
     }, {});
+
     result.push(object);
   }
 
