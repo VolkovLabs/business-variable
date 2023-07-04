@@ -6,8 +6,7 @@ import { TestIds } from '../../constants';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
-import { useContentPosition } from './useContentPosition';
-import { useTable } from './useTable';
+import { useContentPosition, useTable } from './hooks';
 
 /**
  * Properties

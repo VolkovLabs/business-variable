@@ -1,8 +1,8 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { TestIds } from '../../constants';
-import { TableItem } from '../../types';
+import { TestIds } from '../../../constants';
+import { TableItem } from '../../../types';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
