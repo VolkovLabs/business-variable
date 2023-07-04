@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
 import { useTable } from './hooks';
 import { VariablePanel } from './VariablePanel';

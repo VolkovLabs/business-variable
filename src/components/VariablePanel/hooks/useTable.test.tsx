@@ -6,7 +6,7 @@ import { TableItem } from '../../../types';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
-import { selectVariableValues, getItemWithStatus } from './utils';
+import { getItemWithStatus, selectVariableValues } from './utils';
 
 /**
  * Mock useRuntimeVariables
