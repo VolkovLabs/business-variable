@@ -2,12 +2,42 @@ import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from '../../constants';
+import { LevelsEditor } from '../LevelsEditor';
 import { GroupsEditor } from './GroupsEditor';
 
 /**
  * Props
  */
 type Props = React.ComponentProps<typeof GroupsEditor>;
+
+/**
+ * Mock @grafana/ui
+ */
+jest.mock('@grafana/ui', () => ({
+  ...jest.requireActual('@grafana/ui'),
+  Collapse: jest.fn(({ children, isOpen, label, onToggle }) => {
+    return (
+      <>
+        <div onClick={onToggle}>{label}</div>
+        {isOpen ? children : null}
+      </>
+    );
+  }),
+}));
+
+/**
+ * Mock LevelsEditor
+ */
+jest.mock('../LevelsEditor', () => ({
+  LevelsEditor: jest.fn(() => <div data-testid={TestIds.levelsEditor.root} />),
+}));
+
+/**
+ * In Test Ids
+ */
+const InTestIds = {
+  buttonLevelsUpdate: 'button-levels-update',
+};
 
 describe('GroupsEditor', () => {
   /**
@@ -63,6 +93,19 @@ describe('GroupsEditor', () => {
 
     expect(screen.getByTestId(TestIds.groupsEditor.item('group1'))).toBeInTheDocument();
     expect(screen.getByTestId(TestIds.groupsEditor.item('group2'))).toBeInTheDocument();
+  });
+
+  it('Should render if groups unspecified', () => {
+    render(
+      getComponent({
+        context: {
+          data: [dataFrameA],
+          options: {} as any,
+        } as any,
+      })
+    );
+
+    expect(screen.getByTestId(TestIds.groupsEditor.newItem)).toBeInTheDocument();
   });
 
   it('Should add new group', async () => {
@@ -176,5 +219,80 @@ describe('GroupsEditor', () => {
     await act(() => fireEvent.click(item1));
 
     expect(screen.getByTestId(TestIds.levelsEditor.root)).toBeInTheDocument();
+  });
+
+  it('Should update item', () => {
+    const onChange = jest.fn();
+
+    jest.mocked(LevelsEditor).mockImplementation(({ name, onChange }) => (
+      <div data-testid={TestIds.levelsEditor.root}>
+        <button
+          data-testid={InTestIds.buttonLevelsUpdate}
+          onClick={() =>
+            onChange({
+              name,
+              items: [],
+            })
+          }
+        />
+      </div>
+    ));
+
+    render(
+      getComponent({
+        context: {
+          data: [dataFrameA, dataFrameB],
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'field 2',
+                  },
+                  {
+                    name: 'field1',
+                  },
+                ],
+              },
+              {
+                name: 'group2',
+                items: [
+                  {
+                    name: 'field1',
+                  },
+                ],
+              },
+            ],
+          } as any,
+        } as any,
+        onChange,
+      })
+    );
+
+    /**
+     * Open group1
+     */
+    fireEvent.click(screen.getByTestId(TestIds.groupsEditor.item('group1')));
+
+    /**
+     * Simulate group change
+     */
+    fireEvent.click(screen.getByTestId(InTestIds.buttonLevelsUpdate));
+
+    expect(onChange).toHaveBeenCalledWith([
+      {
+        name: 'group1',
+        items: [],
+      },
+      {
+        name: 'group2',
+        items: [
+          {
+            name: 'field1',
+          },
+        ],
+      },
+    ]);
   });
 });
