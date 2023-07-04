@@ -1,7 +1,7 @@
-import { FilterFn } from '@tanstack/react-table';
-import { PanelData, DataFrame, Field } from '@grafana/data';
+import { DataFrame, Field, PanelData } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { TableItem, Level, RuntimeVariable } from '../../types';
+import { FilterFn } from '@tanstack/react-table';
+import { Level, RuntimeVariable, TableItem } from '../../types';
 
 /**
  * Convert Data Frame to objects array
@@ -17,6 +17,7 @@ const convertToObjects = (dataFrame: DataFrame) => {
         [field.name]: field.values.get(index),
       };
     }, {});
+
     result.push(object);
   }
 
@@ -129,7 +130,7 @@ export const getRows = (
  * @param favoritesEnabled
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean },
+  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean; name?: string },
   {
     namesArray,
     statusField,
@@ -171,6 +172,7 @@ export const getItemWithStatus = (
     selectable,
     canBeFavorite,
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
+    name: item.name,
   };
 };
 

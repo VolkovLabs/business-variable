@@ -1,7 +1,7 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
-import { FavoritesOptions, FilterOptions, HeaderOptions, StickyOptions } from './constants';
+import { FavoritesOptions, FilterOptions, HeaderOptions, ShowNameOptions, StickyOptions } from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -75,7 +75,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     builder
       .addSelect({
         path: 'variable',
-        name: 'Select Variable to Display',
+        name: 'Select variable to display',
         settings: {
           options: variables.map((vr) => ({
             label: vr.name,
@@ -84,6 +84,14 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Hierarchy'],
         showIf: (config) => !config.groups?.length,
+      })
+      .addRadio({
+        path: 'showName',
+        name: 'Display variable names',
+        settings: {
+          options: ShowNameOptions,
+        },
+        defaultValue: false,
       })
       .addCustomEditor({
         id: 'groups',

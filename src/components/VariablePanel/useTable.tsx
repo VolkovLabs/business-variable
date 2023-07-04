@@ -95,6 +95,7 @@ export const useTable = ({
             selected: !!runtimeVariable?.options.find((option) => option.value === value)?.selected,
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
+            name: key,
           },
           {
             children,
@@ -118,6 +119,7 @@ export const useTable = ({
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,
+                name: groupFields[0].name,
               },
               {
                 namesArray,
@@ -143,7 +145,8 @@ export const useTable = ({
             value: option.text,
             selected: !!option.selected,
             variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable?.name, option.text),
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
+            name: runtimeVariable.name,
           },
           {
             namesArray,
@@ -251,6 +254,7 @@ export const useTable = ({
                       : theme.typography.fontWeightRegular,
                   }}
                 >
+                  {options.showName ? `${row.original.name}: ` : ''}
                   {value}
                 </span>
               </label>
@@ -305,6 +309,7 @@ export const useTable = ({
     variable,
     options.filter,
     options.favorites,
+    options.showName,
     styles.rowContent,
     styles.selectControl,
     styles.expandButton,

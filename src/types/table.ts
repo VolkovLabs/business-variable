@@ -68,4 +68,9 @@ export interface TableItem {
    * Child Favorites Count
    */
   childFavoritesCount?: number;
+
+  /**
+   * Name
+   */
+  name?: string;
 }

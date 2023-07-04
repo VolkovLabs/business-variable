@@ -84,4 +84,9 @@ export interface PanelOptions {
    * Select Favorites
    */
   favorites: boolean;
+
+  /**
+   * Show Variable Names
+   */
+  showName: boolean;
 }
