@@ -129,7 +129,7 @@ export const getRows = (
  * @param favoritesEnabled
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean },
+  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean; name?: string },
   {
     namesArray,
     statusField,
@@ -171,6 +171,7 @@ export const getItemWithStatus = (
     selectable,
     canBeFavorite,
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
+    name: item.name,
   };
 };
 

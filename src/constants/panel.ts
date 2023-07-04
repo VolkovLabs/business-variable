@@ -29,3 +29,11 @@ export const FavoritesOptions = [
   { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.' },
   { value: false, label: 'Disabled', description: 'Hide favorites.' },
 ];
+
+/**
+ * Show Name Options
+ */
+export const ShowNameOptions = [
+  { value: true, label: 'Enabled', description: 'Show variable names.' },
+  { value: false, label: 'Disabled', description: 'Hide variable names.' },
+];
