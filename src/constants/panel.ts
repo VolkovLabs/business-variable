@@ -34,6 +34,6 @@ export const FavoritesOptions = [
  * Show Name Options
  */
 export const ShowNameOptions = [
-  { value: true, label: 'Enabled', description: 'Show variable names.' },
+  { value: true, label: 'Enabled', description: 'Display variable names.' },
   { value: false, label: 'Disabled', description: 'Hide variable names.' },
 ];

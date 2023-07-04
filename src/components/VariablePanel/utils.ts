@@ -1,7 +1,7 @@
-import { FilterFn } from '@tanstack/react-table';
-import { PanelData, DataFrame, Field } from '@grafana/data';
+import { DataFrame, Field, PanelData } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { TableItem, Level, RuntimeVariable } from '../../types';
+import { FilterFn } from '@tanstack/react-table';
+import { Level, RuntimeVariable, TableItem } from '../../types';
 
 /**
  * Convert Data Frame to objects array
