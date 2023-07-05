@@ -42,6 +42,6 @@ export const ShowNameOptions = [
  * Auto Scroll Options
  */
 export const AutoScrollOptions = [
-  { value: true, label: 'Enabled', description: 'Auto scroll to first selected value.' },
+  { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
   { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
 ];

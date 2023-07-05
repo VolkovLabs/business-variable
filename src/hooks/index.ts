@@ -1,3 +1,3 @@
 export * from './useContentPosition';
-export * from './useTable';
 export * from './useScrollToSelected';
+export * from './useTable';

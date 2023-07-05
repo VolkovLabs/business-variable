@@ -78,8 +78,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
 
     builder.addRadio({
       path: 'autoScroll',
-      name: 'Auto Scroll',
-      description: 'Auto scroll to first selected value.',
+      name: 'Auto Scroll to the selected value',
       settings: {
         options: AutoScrollOptions,
       },

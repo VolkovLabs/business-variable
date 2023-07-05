@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { TableItem } from '../types';
 
+/**
+ * Scroll to Selected
+ */
 export const useScrollToSelected = (tableData: TableItem[], autoScroll: boolean) => {
   const scrollElementRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);

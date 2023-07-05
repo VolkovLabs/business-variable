@@ -18,7 +18,7 @@ import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
- * Use Table
+ * Table
  */
 export const useTable = ({
   data,
