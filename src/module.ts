@@ -1,7 +1,14 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
-import { FavoritesOptions, FilterOptions, HeaderOptions, ShowNameOptions, StickyOptions } from './constants';
+import {
+  AutoScrollOptions,
+  FavoritesOptions,
+  FilterOptions,
+  HeaderOptions,
+  ShowNameOptions,
+  StickyOptions,
+} from './constants';
 import { PanelOptions } from './types';
 
 /**
@@ -65,6 +72,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       description: 'Variables will follow when scrolling.',
       settings: {
         options: StickyOptions,
+      },
+      defaultValue: false,
+    });
+
+    builder.addRadio({
+      path: 'autoScroll',
+      name: 'Auto Scroll',
+      description: 'Auto scroll to first selected value.',
+      settings: {
+        options: AutoScrollOptions,
       },
       defaultValue: false,
     });

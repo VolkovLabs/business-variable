@@ -89,4 +89,9 @@ export interface PanelOptions {
    * Show Variable Names
    */
   showName: boolean;
+
+  /**
+   * Auto Scroll
+   */
+  autoScroll: boolean;
 }
