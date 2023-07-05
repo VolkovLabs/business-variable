@@ -4,7 +4,7 @@ import { getTemplateSrv, RefreshEvent } from '@grafana/runtime';
 import { RuntimeVariable } from '../types';
 
 /**
- * Use Runtime Variables
+ * Runtime Variables
  * @param eventBus
  * @param variableName
  */

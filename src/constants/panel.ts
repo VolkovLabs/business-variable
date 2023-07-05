@@ -37,3 +37,11 @@ export const ShowNameOptions = [
   { value: true, label: 'Enabled', description: 'Display variable names.' },
   { value: false, label: 'Disabled', description: 'Hide variable names.' },
 ];
+
+/**
+ * Auto Scroll Options
+ */
+export const AutoScrollOptions = [
+  { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
+  { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
+];

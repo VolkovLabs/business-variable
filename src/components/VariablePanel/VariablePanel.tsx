@@ -3,7 +3,7 @@ import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
 import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { useContentPosition, useTable } from '../../hooks';
+import { useContentPosition, useScrollToSelected, useTable } from '../../hooks';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
@@ -56,6 +56,11 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   });
 
   /**
+   * Scroll To Selected Element
+   */
+  const scrollElementRef = useScrollToSelected(tableData, options.autoScroll);
+
+  /**
    * Styles and Theme
    */
   const theme = useTheme2();
@@ -83,7 +88,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
       )}
 
       {tableData.length > 0 && (
-        <div style={style} className={styles.content}>
+        <div style={style} className={styles.content} ref={scrollElementRef}>
           {options.groups?.length > 1 && (
             <TabsBar>
               {options.groups?.map((group) => (
