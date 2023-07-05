@@ -35,6 +35,25 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     const variables = getTemplateSrv().getVariables();
 
+    builder
+      .addRadio({
+        path: 'sticky',
+        name: 'Sticky position',
+        description: 'Variables will follow when scrolling.',
+        settings: {
+          options: StickyOptions,
+        },
+        defaultValue: false,
+      })
+      .addRadio({
+        path: 'autoScroll',
+        name: 'Auto Scroll to the selected value',
+        settings: {
+          options: AutoScrollOptions,
+        },
+        defaultValue: false,
+      });
+
     /**
      * Header
      */
@@ -45,6 +64,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: HeaderOptions,
         },
+        category: ['Header'],
         defaultValue: true,
       })
       .addRadio({
@@ -54,6 +74,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: FilterOptions,
         },
         defaultValue: false,
+        category: ['Header'],
         showIf: (config) => config.header,
       })
       .addRadio({
@@ -63,27 +84,9 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: FavoritesOptions,
         },
         defaultValue: false,
+        category: ['Header'],
         showIf: (config) => config.header,
       });
-
-    builder.addRadio({
-      path: 'sticky',
-      name: 'Sticky position',
-      description: 'Variables will follow when scrolling.',
-      settings: {
-        options: StickyOptions,
-      },
-      defaultValue: false,
-    });
-
-    builder.addRadio({
-      path: 'autoScroll',
-      name: 'Auto Scroll to the selected value',
-      settings: {
-        options: AutoScrollOptions,
-      },
-      defaultValue: false,
-    });
 
     /**
      * Variables
@@ -98,8 +101,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
             value: vr.name,
           })),
         },
-        category: ['Hierarchy'],
+        category: ['Layout'],
         showIf: (config) => !config.groups?.length,
+      })
+      .addCustomEditor({
+        id: 'groups',
+        path: 'groups',
+        name: 'Tree View based on data source query',
+        editor: GroupsEditor,
+        category: ['Layout'],
       })
       .addRadio({
         path: 'showName',
@@ -108,13 +118,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: ShowNameOptions,
         },
         defaultValue: false,
-      })
-      .addCustomEditor({
-        id: 'groups',
-        path: 'groups',
-        name: 'Tree View based on data source query',
-        editor: GroupsEditor,
-        category: ['Hierarchy'],
+        category: ['Layout'],
+        showIf: (config) => !!config.groups?.length,
       });
 
     builder

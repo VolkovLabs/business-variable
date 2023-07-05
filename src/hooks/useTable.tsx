@@ -251,7 +251,7 @@ export const useTable = ({
                       : theme.typography.fontWeightRegular,
                   }}
                 >
-                  {options.showName ? `${row.original.name}: ` : ''}
+                  {options.showName && row.original.name ? `${row.original.name}: ` : ''}
                   {value}
                 </span>
               </label>
