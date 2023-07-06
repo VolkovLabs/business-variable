@@ -63,7 +63,7 @@
     "levitate": "npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data,@grafana/runtime,@grafana/ui",
     "lint": "eslint --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "eslint --fix --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
-    "sign": "npx --yes @grafana/sign-plugin@latest --rootUrls http://localhost:3000/",
+    "sign": "npx --yes @grafana/sign-plugin@latest",
     "start": "docker-compose pull && docker-compose up",
     "stop": "docker-compose down",
     "test": "jest --watch --onlyChanged",
