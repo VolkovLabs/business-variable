@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.4.0 (IN PROGRESS)
+## 1.4.0 (2023-07-06)
 
 ### Features / Enhancements
 
@@ -9,10 +9,11 @@
 - Hide unselectable items (#24)
 - Use the main view scroll element to support Grafana 9 (#26)
 - Add a Favorite icon to filter selected favorites (#25)
-- Add Tree View groups (#20)
+- Add Tree View groups. Requires to update Tree View configuration. (#20)
 - Add an option to display the variable name in front of the value (#30)
 - Increase tests coverage (#31)
 - Add auto scroll to the selected value (#32)
+- Community signed release (#37)
 
 ## 1.3.0 (2023-06-30)
 

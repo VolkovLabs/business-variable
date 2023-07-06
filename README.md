@@ -22,7 +22,13 @@ The variable panel offers you single- and multi-variable layouts along with an a
 
 ## Getting Started
 
-The Variable panel is under the Grafana team review. Meanwhile, it can be downloaded directly from GitHub.
+The Variable panel can be installed from the [Grafana Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or utilizing the Grafana command line tool.
+
+For the latter, use the following command.
+
+```bash
+grafana-cli plugins install volkovlabs-variable-panel
+```
 
 ## Highlights
 
