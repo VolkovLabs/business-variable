@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TableItem } from '../types';
 import { useScrollToSelected } from './useScrollToSelected';
@@ -14,10 +14,18 @@ const InTestIds = {
 describe('Use Scroll To Selected', () => {
   it('Should scroll to first selected row', () => {
     const Component = ({ tableData, autoScroll }: { tableData: TableItem[]; autoScroll: boolean }) => {
-      const ref = useScrollToSelected(tableData, autoScroll);
+      const containerRef = useRef<HTMLDivElement>(null);
+      const firstSelectedRowRef = useRef<HTMLTableRowElement>(null);
+      const scrollTo = useScrollToSelected({ autoScroll, containerRef });
+
+      useEffect(() => {
+        if (containerRef.current && firstSelectedRowRef.current && autoScroll) {
+          scrollTo(firstSelectedRowRef.current, 0);
+        }
+      }, [autoScroll, scrollTo, tableData]);
 
       return (
-        <div ref={ref} style={{ overflow: 'scroll', height: 200 }} data-testid={InTestIds.container}>
+        <div ref={containerRef} style={{ overflow: 'scroll', height: 200 }} data-testid={InTestIds.container}>
           <table>
             <tbody>
               <tr>
@@ -25,7 +33,7 @@ describe('Use Scroll To Selected', () => {
                   <input type="checkbox" />
                 </td>
               </tr>
-              <tr data-testid={InTestIds.selectedRow}>
+              <tr data-testid={InTestIds.selectedRow} ref={firstSelectedRowRef}>
                 <td>
                   <input type="checkbox" defaultChecked={true} />
                 </td>

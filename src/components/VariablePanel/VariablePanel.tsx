@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
 import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { useContentPosition, useScrollToSelected, useTable } from '../../hooks';
+import { useContentPosition, useContentSizes, useScrollToSelected, useTable } from '../../hooks';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
@@ -56,9 +56,35 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   });
 
   /**
+   * Content Sizes
+   */
+  const {
+    containerRef: scrollableContainerRef,
+    tableRef,
+    headerRef,
+    tableTopOffset,
+    tableHeaderRef,
+    tableContentTopOffset,
+  } = useContentSizes({ width, height, options, tableData });
+
+  /**
+   * First selected row ref
+   */
+  const firstSelectedRowRef = useRef(null);
+
+  /**
    * Scroll To Selected Element
    */
-  const scrollElementRef = useScrollToSelected(tableData, options.autoScroll);
+  const scrollTo = useScrollToSelected({ autoScroll: options.autoScroll, containerRef: scrollableContainerRef });
+
+  /**
+   * Auto scroll on updates
+   */
+  useEffect(() => {
+    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll && tableData) {
+      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
+    }
+  }, [scrollTo, containerRef, currentGroup, firstSelectedRowRef, options.autoScroll, tableData, tableContentTopOffset]);
 
   /**
    * Styles and Theme
@@ -88,21 +114,32 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
       )}
 
       {tableData.length > 0 && (
-        <div style={style} className={styles.content} ref={scrollElementRef}>
+        <div style={style} className={styles.content} ref={scrollableContainerRef}>
           {options.groups?.length > 1 && (
-            <TabsBar>
-              {options.groups?.map((group) => (
-                <Tab
-                  key={group.name}
-                  label={group.name}
-                  onChangeTab={() => setCurrentGroup(group.name)}
-                  active={currentGroup === group.name}
-                  data-testid={TestIds.panel.tab(group.name)}
-                />
-              ))}
-            </TabsBar>
+            <div ref={headerRef} className={styles.header}>
+              <TabsBar>
+                {options.groups?.map((group) => (
+                  <Tab
+                    key={group.name}
+                    label={group.name}
+                    onChangeTab={() => setCurrentGroup(group.name)}
+                    active={currentGroup === group.name}
+                    data-testid={TestIds.panel.tab(group.name)}
+                  />
+                ))}
+              </TabsBar>
+            </div>
           )}
-          <Table columns={columns} data={tableData} getSubRows={getSubRows} showHeader={options.header} />
+          <Table
+            columns={columns}
+            data={tableData}
+            getSubRows={getSubRows}
+            showHeader={options.header}
+            firstSelectedRowRef={firstSelectedRowRef}
+            tableRef={tableRef}
+            tableHeaderRef={tableHeaderRef}
+            topOffset={tableTopOffset}
+          />
         </div>
       )}
     </div>

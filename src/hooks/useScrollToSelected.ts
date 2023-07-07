@@ -1,39 +1,34 @@
-import { useEffect, useRef, useState } from 'react';
-import { TableItem } from '../types';
+import { RefObject, useCallback } from 'react';
 
 /**
  * Scroll to Selected
  */
-export const useScrollToSelected = (tableData: TableItem[], autoScroll: boolean) => {
-  const scrollElementRef = useRef<HTMLDivElement>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-
+export const useScrollToSelected = ({
+  autoScroll,
+  containerRef,
+}: {
+  autoScroll: boolean;
+  containerRef: RefObject<HTMLDivElement>;
+}) => {
   /**
    * Wait until table data is ready
    */
-  useEffect(() => {
-    if (scrollElementRef.current && !isScrolled && autoScroll) {
-      /**
-       * Find first checked input
-       */
-      const firstCheckedElement = scrollElementRef.current.querySelector('input:checked');
-
-      /**
-       * Find first checked row
-       */
-      const firstCheckedRow = firstCheckedElement?.closest('tr');
-      if (firstCheckedRow) {
-        const { top: parentTop } = scrollElementRef.current.getBoundingClientRect();
-        const { top } = firstCheckedRow.getBoundingClientRect();
+  return useCallback(
+    (toElement: HTMLElement, stickyContentHeight = 0) => {
+      if (containerRef.current && autoScroll) {
+        const { top: parentTop } = containerRef.current.getBoundingClientRect();
+        const { top } = toElement.getBoundingClientRect();
 
         /**
          * Scroll to first checked row
          */
-        scrollElementRef.current.scrollTo({ top: top - parentTop });
-        setIsScrolled(true);
+        const scrollTop = top + containerRef.current.scrollTop - parentTop;
+        const scrollTopWithWithOffset = scrollTop - stickyContentHeight;
+        containerRef.current.scrollTo({
+          top: scrollTopWithWithOffset > 0 ? scrollTopWithWithOffset : scrollTop + stickyContentHeight,
+        });
       }
-    }
-  }, [autoScroll, isScrolled, tableData]);
-
-  return scrollElementRef;
+    },
+    [autoScroll, containerRef]
+  );
 };
