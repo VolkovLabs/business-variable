@@ -46,6 +46,10 @@ const InTestIds = {
 };
 
 describe('Use Table Hook', () => {
+  beforeEach(() => {
+    jest.mocked(selectVariableValues).mockClear();
+  });
+
   it('Should return variable options if no levels', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
@@ -501,6 +505,15 @@ describe('Use Table Hook', () => {
       fireEvent.click(device1Control);
 
       expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
+
+      jest.mocked(selectVariableValues).mockClear();
+
+      /**
+       * Should select values by clicking on label
+       */
+      fireEvent.click(within(device1).getByTestId(TestIds.table.label));
+
+      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
     });
 
     it('Should select unselected parent values', () => {
@@ -746,6 +759,13 @@ describe('Use Table Hook', () => {
       const usaRow = screen.getByTestId(TestIds.table.cell('USA', 0));
       expect(usaRow).toBeInTheDocument();
       expect(within(usaRow).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
+
+      /**
+       * Check if label clicking doesn't update values
+       */
+      fireEvent.click(within(usaRow).getByTestId(TestIds.table.label));
+
+      expect(selectVariableValues).not.toHaveBeenCalled();
 
       /**
        * Check if country row is expandable

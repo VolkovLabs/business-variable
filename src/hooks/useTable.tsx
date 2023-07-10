@@ -235,7 +235,19 @@ export const useTable = ({
                 />
               )}
 
-              <label htmlFor={`${prefix}-${value}`} className={styles.label}>
+              <label
+                onClick={() => {
+                  /**
+                   * Html For causes loosing panel focus
+                   * So we have to call onChange manually
+                   */
+                  if (row.original.selectable) {
+                    onChange(row.original);
+                  }
+                }}
+                data-testid={TestIds.table.label}
+                className={styles.label}
+              >
                 {row.original.showStatus && (
                   <span
                     className={styles.status}

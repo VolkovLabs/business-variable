@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, Tab, TabsBar, useTheme2 } from '@grafana/ui';
+import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { useContentPosition, useContentSizes, useScrollToSelected, useTable } from '../../hooks';
+import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
 import { Styles } from '../../styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
@@ -73,18 +73,32 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
   const firstSelectedRowRef = useRef(null);
 
   /**
-   * Scroll To Selected Element
+   * Scroll To Element
    */
-  const scrollTo = useScrollToSelected({ autoScroll: options.autoScroll, containerRef: scrollableContainerRef });
+  const scrollTo = useScrollTo({ containerRef: scrollableContainerRef });
 
   /**
-   * Auto scroll on updates
+   * Is Panel Focused
+   */
+  const isFocused = useRef<boolean>(false);
+
+  /**
+   * Auto scroll on group updates
    */
   useEffect(() => {
-    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll && tableData) {
+    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll) {
       scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
     }
-  }, [scrollTo, containerRef, currentGroup, firstSelectedRowRef, options.autoScroll, tableData, tableContentTopOffset]);
+  }, [scrollTo, containerRef, currentGroup, firstSelectedRowRef, options.autoScroll, tableContentTopOffset]);
+
+  /**
+   * Auto scroll on external table data updates
+   */
+  useEffect(() => {
+    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll && tableData && !isFocused.current) {
+      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
+    }
+  }, [scrollTo, containerRef, firstSelectedRowRef, options.autoScroll, tableData, tableContentTopOffset]);
 
   /**
    * Styles and Theme
@@ -96,52 +110,69 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
    * Return
    */
   return (
-    <div
-      data-testid={TestIds.panel.root}
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-      ref={containerRef}
+    <ClickOutsideWrapper
+      onClick={() => {
+        if (isFocused.current) {
+          isFocused.current = false;
+        }
+      }}
+      useCapture={true}
     >
-      {!tableData.length && (
-        <Alert data-testid={TestIds.panel.infoMessage} severity="info" title="Variable">
-          Variable is not selected or do not match returned fields.
-        </Alert>
-      )}
+      <div
+        data-testid={TestIds.panel.root}
+        className={cx(
+          styles.wrapper,
+          css`
+            width: ${width}px;
+            height: ${height}px;
+          `
+        )}
+        ref={containerRef}
+        onMouseDown={() => {
+          isFocused.current = true;
+        }}
+      >
+        {!tableData.length && (
+          <Alert data-testid={TestIds.panel.infoMessage} severity="info" title="Variable">
+            Variable is not selected or do not match returned fields.
+          </Alert>
+        )}
 
-      {tableData.length > 0 && (
-        <div style={style} className={styles.content} ref={scrollableContainerRef}>
-          {options.groups?.length > 1 && (
-            <div ref={headerRef} className={styles.header}>
-              <TabsBar>
-                {options.groups?.map((group) => (
-                  <Tab
-                    key={group.name}
-                    label={group.name}
-                    onChangeTab={() => setCurrentGroup(group.name)}
-                    active={currentGroup === group.name}
-                    data-testid={TestIds.panel.tab(group.name)}
-                  />
-                ))}
-              </TabsBar>
-            </div>
-          )}
-          <Table
-            columns={columns}
-            data={tableData}
-            getSubRows={getSubRows}
-            showHeader={options.header}
-            firstSelectedRowRef={firstSelectedRowRef}
-            tableRef={tableRef}
-            tableHeaderRef={tableHeaderRef}
-            topOffset={tableTopOffset}
-          />
-        </div>
-      )}
-    </div>
+        {tableData.length > 0 && (
+          <div
+            style={style}
+            className={styles.content}
+            ref={scrollableContainerRef}
+            data-testid={TestIds.panel.content}
+          >
+            {options.groups?.length > 1 && (
+              <div ref={headerRef} className={styles.header}>
+                <TabsBar>
+                  {options.groups?.map((group) => (
+                    <Tab
+                      key={group.name}
+                      label={group.name}
+                      onChangeTab={() => setCurrentGroup(group.name)}
+                      active={currentGroup === group.name}
+                      data-testid={TestIds.panel.tab(group.name)}
+                    />
+                  ))}
+                </TabsBar>
+              </div>
+            )}
+            <Table
+              columns={columns}
+              data={tableData}
+              getSubRows={getSubRows}
+              showHeader={options.header}
+              firstSelectedRowRef={firstSelectedRowRef}
+              tableRef={tableRef}
+              tableHeaderRef={tableHeaderRef}
+              topOffset={tableTopOffset}
+            />
+          </div>
+        )}
+      </div>
+    </ClickOutsideWrapper>
   );
 };
