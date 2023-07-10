@@ -678,6 +678,74 @@ describe('Use Table Hook', () => {
       expect(device1Control).toHaveAttribute('type', 'radio');
     });
 
+    it('Should select value if single all value is selected', () => {
+      const variable = {
+        multi: false,
+        includeAll: true,
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: true,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: true,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable,
+            getVariable: jest.fn(() => variable),
+          } as any)
+      );
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [] } as any,
+          options: {
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+
+      /**
+       * Select device 1
+       */
+      const device1Control = within(device1).getByTestId(TestIds.table.control);
+
+      fireEvent.click(device1Control);
+
+      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable);
+    });
+
     it('Row with subRows should not be selectable and expandable', () => {
       const variable = {
         multi: true,
