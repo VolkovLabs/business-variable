@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Update single select variable with All enabled (#41)
+
 ## 1.4.0 (2023-07-06)
 
 ### Features / Enhancements

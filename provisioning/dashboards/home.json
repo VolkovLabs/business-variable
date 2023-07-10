@@ -62,9 +62,11 @@
       },
       "id": 3,
       "options": {
-        "favorites": false,
-        "filter": false,
+        "autoScroll": false,
+        "favorites": true,
+        "filter": true,
         "header": true,
+        "showName": false,
         "sticky": false,
         "variable": "country"
       },
@@ -135,9 +137,11 @@
       },
       "id": 4,
       "options": {
+        "autoScroll": false,
         "favorites": false,
         "filter": false,
         "header": true,
+        "showName": false,
         "sticky": false,
         "variable": "state"
       },
@@ -208,9 +212,11 @@
       },
       "id": 5,
       "options": {
+        "autoScroll": false,
         "favorites": false,
         "filter": false,
         "header": true,
+        "showName": false,
         "sticky": false,
         "variable": "city"
       },
@@ -281,27 +287,9 @@
       },
       "id": 6,
       "options": {
+        "autoScroll": false,
         "favorites": false,
         "filter": false,
-        "header": false,
-        "levels": [
-          {
-            "name": "country",
-            "source": "B"
-          },
-          {
-            "name": "state",
-            "source": "B"
-          },
-          {
-            "name": "city",
-            "source": "B"
-          },
-          {
-            "name": "device",
-            "source": "B"
-          }
-        ],
         "groups": [
           {
             "items": [
@@ -325,6 +313,8 @@
             "name": "Location"
           }
         ],
+        "header": false,
+        "showName": false,
         "sticky": false,
         "variable": "device"
       },
@@ -424,19 +414,9 @@
       },
       "id": 7,
       "options": {
+        "autoScroll": false,
         "favorites": true,
         "filter": true,
-        "header": true,
-        "levels": [
-          {
-            "name": "country",
-            "source": "B"
-          },
-          {
-            "name": "device",
-            "source": "B"
-          }
-        ],
         "groups": [
           {
             "items": [
@@ -473,6 +453,8 @@
             "name": "Country"
           }
         ],
+        "header": true,
+        "showName": false,
         "sticky": true,
         "variable": "device"
       },
@@ -881,7 +863,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text"
+                "color": "text",
+                "value": null
               },
               {
                 "color": "#9d70f9",
@@ -980,9 +963,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": ["Sweden", "Singapore", "USA", "Japan", "Russia"],
-          "value": ["Sweden", "Singapore", "USA", "Japan", "Russia"]
+          "selected": false,
+          "text": "Sweden",
+          "value": "Sweden"
         },
         "datasource": {
           "type": "postgres",
@@ -992,7 +975,7 @@
         "hide": 0,
         "includeAll": true,
         "label": "Country",
-        "multi": true,
+        "multi": false,
         "name": "country",
         "options": [],
         "query": "select distinct country from devices;",
@@ -1005,8 +988,8 @@
       {
         "current": {
           "selected": true,
-          "text": ["FL", "Singapore", "Stockholm", "IL", "NY"],
-          "value": ["FL", "Singapore", "Stockholm", "IL", "NY"]
+          "text": ["Stockholm"],
+          "value": ["Stockholm"]
         },
         "datasource": {
           "type": "postgres",
@@ -1029,8 +1012,8 @@
       {
         "current": {
           "selected": true,
-          "text": ["Chicago", "New York", "Singapore", "Stockholm", "Tampa"],
-          "value": ["Chicago", "New York", "Singapore", "Stockholm", "Tampa"]
+          "text": ["Stockholm"],
+          "value": ["Stockholm"]
         },
         "datasource": {
           "type": "postgres",
@@ -1054,8 +1037,8 @@
         "allValue": "",
         "current": {
           "selected": true,
-          "text": ["device2", "device7", "device9", "device10", "device15"],
-          "value": ["device2", "device7", "device9", "device10", "device15"]
+          "text": ["device9", "device10"],
+          "value": ["device9", "device10"]
         },
         "datasource": {
           "type": "postgres",
@@ -1086,6 +1069,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
