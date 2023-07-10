@@ -25,7 +25,11 @@ export const Styles = (theme: GrafanaTheme2) => {
       width: 0;
     `,
     header: css`
-      border-bottom: 1px solid ${theme.colors.border.weak};
+      position: sticky;
+      background-color: ${theme.colors.background.primary};
+      box-shadow: 0 1px ${theme.colors.border.weak};
+    `,
+    headerCell: css`
       padding: ${theme.spacing(1)};
     `,
     row: css`

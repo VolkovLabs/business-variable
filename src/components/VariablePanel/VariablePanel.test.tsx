@@ -17,6 +17,18 @@ jest.mock('../../hooks', () => ({
 }));
 
 /**
+ * Properties
+ */
+type Props = React.ComponentProps<typeof VariablePanel>;
+
+/**
+ * In Test Ids
+ */
+const InTestIds = {
+  outsideElement: 'outside-element',
+};
+
+/**
  * Panel
  */
 describe('Panel', () => {
@@ -31,8 +43,8 @@ describe('Panel', () => {
   /**
    * Get Tested Component
    */
-  const getComponent = ({ options = { name: 'data' }, ...restProps }: any) => {
-    return <VariablePanel width={100} height={100} eventBus={eventBus} {...restProps} options={options} />;
+  const getComponent = ({ options = {} as any, ...restProps }: Partial<Props>) => {
+    return <VariablePanel width={100} height={100} eventBus={eventBus} options={options} {...(restProps as any)} />;
   };
 
   it('Should find component', async () => {
@@ -63,7 +75,7 @@ describe('Panel', () => {
               items: [],
             },
           ],
-        },
+        } as any,
       })
     );
 
@@ -96,7 +108,7 @@ describe('Panel', () => {
               items: [],
             },
           ],
-        },
+        } as any,
       })
     );
 
@@ -123,7 +135,7 @@ describe('Panel', () => {
               ],
             },
           ],
-        },
+        } as any,
       })
     );
 
@@ -166,7 +178,7 @@ describe('Panel', () => {
               ],
             },
           ],
-        },
+        } as any,
       })
     );
 
@@ -184,5 +196,167 @@ describe('Panel', () => {
         ],
       })
     );
+  });
+
+  describe('Auto Scroll', () => {
+    const scrollTo = jest.fn();
+
+    const OutsideWrapper = ({ children }: any) => (
+      <div>
+        <div data-testid={InTestIds.outsideElement} />
+        {children}
+      </div>
+    );
+
+    beforeAll(() => {
+      Object.defineProperty(Element.prototype, 'scrollTo', { value: scrollTo });
+
+      const getBoundingClientRect = function (this: HTMLElement) {
+        return {
+          top: this.tagName === 'TR' ? 40 : 0,
+        };
+      };
+      Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
+        value: getBoundingClientRect,
+      });
+
+      jest.mocked(useTable).mockImplementation(() => ({
+        tableData: [
+          { value: 'device1', selected: false, showStatus: false },
+          { value: 'device2', selected: true, showStatus: false },
+        ],
+        columns: [{ id: 'value', accessorKey: 'value' }],
+        getSubRows: () => undefined,
+      }));
+    });
+
+    beforeEach(() => {
+      scrollTo.mockClear();
+    });
+
+    it('Should scroll to selected element on initial load', () => {
+      render(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'Group 1',
+                items: [
+                  {
+                    name: 'value',
+                  },
+                ],
+              },
+            ] as any,
+            autoScroll: true,
+          } as any,
+        })
+      );
+
+      expect(scrollTo).toHaveBeenCalledWith({ top: 40 });
+    });
+
+    it('Should scroll to selected element if panel is not focused', () => {
+      const { rerender } = render(
+        <OutsideWrapper>
+          {getComponent({
+            options: {
+              groups: [
+                {
+                  name: 'Group 1',
+                  items: [
+                    {
+                      name: 'value',
+                    },
+                  ],
+                },
+              ] as any,
+              autoScroll: true,
+            } as any,
+          })}
+        </OutsideWrapper>
+      );
+
+      /**
+       * Make panel is not focused
+       */
+      fireEvent.mouseDown(screen.getByTestId(TestIds.panel.root));
+      fireEvent.click(screen.getByTestId(InTestIds.outsideElement));
+
+      scrollTo.mockClear();
+
+      rerender(
+        <OutsideWrapper>
+          {getComponent({
+            options: {
+              groups: [
+                {
+                  name: 'Group 1',
+                  items: [
+                    {
+                      name: 'value',
+                    },
+                  ],
+                },
+              ] as any,
+              autoScroll: true,
+            } as any,
+          })}
+        </OutsideWrapper>
+      );
+
+      expect(scrollTo).toHaveBeenCalled();
+    });
+
+    it('Should not scroll to selected element if panel is focused', () => {
+      const { rerender } = render(
+        <OutsideWrapper>
+          {getComponent({
+            options: {
+              groups: [
+                {
+                  name: 'Group 1',
+                  items: [
+                    {
+                      name: 'value',
+                    },
+                  ],
+                },
+              ] as any,
+              autoScroll: true,
+            } as any,
+          })}
+        </OutsideWrapper>
+      );
+
+      scrollTo.mockClear();
+
+      /**
+       * Make panel is focused
+       */
+      fireEvent.mouseDown(screen.getByTestId(TestIds.panel.root));
+
+      rerender(
+        <OutsideWrapper>
+          {getComponent({
+            options: {
+              groups: [
+                {
+                  name: 'Group 1',
+                  items: [
+                    {
+                      name: 'value',
+                    },
+                  ],
+                },
+              ] as any,
+              autoScroll: true,
+            } as any,
+          })}
+        </OutsideWrapper>
+      );
+
+      expect(scrollTo).not.toHaveBeenCalled();
+    });
   });
 });

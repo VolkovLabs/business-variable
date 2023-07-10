@@ -13,6 +13,11 @@ export const Styles = (theme: GrafanaTheme2) => {
       position: absolute;
       overflow: auto;
     `,
+    header: css`
+      position: sticky;
+      top: 0;
+      background-color: ${theme.colors.background.primary};
+    `,
     rowContent: css`
       display: flex;
     `,

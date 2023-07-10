@@ -46,6 +46,10 @@ const InTestIds = {
 };
 
 describe('Use Table Hook', () => {
+  beforeEach(() => {
+    jest.mocked(selectVariableValues).mockClear();
+  });
+
   it('Should return variable options if no levels', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
@@ -501,6 +505,15 @@ describe('Use Table Hook', () => {
       fireEvent.click(device1Control);
 
       expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
+
+      jest.mocked(selectVariableValues).mockClear();
+
+      /**
+       * Should select values by clicking on label
+       */
+      fireEvent.click(within(device1).getByTestId(TestIds.table.label));
+
+      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
     });
 
     it('Should select unselected parent values', () => {
@@ -678,6 +691,74 @@ describe('Use Table Hook', () => {
       expect(device1Control).toHaveAttribute('type', 'radio');
     });
 
+    it('Should select value if single all value is selected', () => {
+      const variable = {
+        multi: false,
+        includeAll: true,
+        options: [
+          {
+            text: 'All',
+            value: '__all',
+            selected: true,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: true,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable,
+            getVariable: jest.fn(() => variable),
+          } as any)
+      );
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [] } as any,
+          options: {
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+
+      /**
+       * Select device 1
+       */
+      const device1Control = within(device1).getByTestId(TestIds.table.control);
+
+      fireEvent.click(device1Control);
+
+      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable);
+    });
+
     it('Row with subRows should not be selectable and expandable', () => {
       const variable = {
         multi: true,
@@ -746,6 +827,13 @@ describe('Use Table Hook', () => {
       const usaRow = screen.getByTestId(TestIds.table.cell('USA', 0));
       expect(usaRow).toBeInTheDocument();
       expect(within(usaRow).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
+
+      /**
+       * Check if label clicking doesn't update values
+       */
+      fireEvent.click(within(usaRow).getByTestId(TestIds.table.label));
+
+      expect(selectVariableValues).not.toHaveBeenCalled();
 
       /**
        * Check if country row is expandable

@@ -1,3 +1,4 @@
 export * from './useContentPosition';
-export * from './useScrollToSelected';
+export * from './useScrollTo';
 export * from './useTable';
+export * from './useContentSizes';

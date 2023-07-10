@@ -160,8 +160,8 @@ export const useTable = ({
    * Value Cell Select
    */
   const onChange = useCallback(
-    (row: TableItem) => {
-      const values = row.childValues || [row.value];
+    (item: TableItem) => {
+      const values = item.childValues || [item.value];
 
       const filteredTree = getFilteredTree(tableData, values);
       const itemsToUpdate = convertTreeToPlain(filteredTree);
@@ -191,6 +191,18 @@ export const useTable = ({
   );
 
   /**
+   * Value Cell Click for Single variables with All selected
+   */
+  const onClick = useCallback(
+    (item: TableItem) => {
+      if (item.selected && !item.variable?.multi) {
+        onChange(item);
+      }
+    },
+    [onChange]
+  );
+
+  /**
    * Columns
    */
   const columns: Array<ColumnDef<TableItem>> = useMemo(() => {
@@ -216,6 +228,7 @@ export const useTable = ({
                 <input
                   type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
                   onChange={() => onChange(row.original)}
+                  onClick={() => onClick(row.original)}
                   checked={row.original.selected}
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
@@ -235,7 +248,19 @@ export const useTable = ({
                 />
               )}
 
-              <label htmlFor={`${prefix}-${value}`} className={styles.label}>
+              <label
+                onClick={() => {
+                  /**
+                   * Html For causes loosing panel focus
+                   * So we have to call onChange manually
+                   */
+                  if (row.original.selectable) {
+                    onChange(row.original);
+                  }
+                }}
+                data-testid={TestIds.table.label}
+                className={styles.label}
+              >
                 {row.original.showStatus && (
                   <span
                     className={styles.status}
@@ -314,6 +339,7 @@ export const useTable = ({
     styles.status,
     theme,
     onChange,
+    onClick,
     favorites,
   ]);
 
