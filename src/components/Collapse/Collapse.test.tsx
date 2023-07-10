@@ -1,6 +1,5 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { getJestSelectors } from '../../utils';
 import { Collapse } from './Collapse';
 
 type Props = React.ComponentProps<typeof Collapse>;
@@ -17,11 +16,8 @@ const InTestIds = {
 /**
  * Get Selectors
  */
-const getSelectors = getJestSelectors(InTestIds);
 
 describe('Collapse', () => {
-  const selectors = getSelectors(screen);
-
   /**
    * Get Tested Component
    */
@@ -32,11 +28,11 @@ describe('Collapse', () => {
   it('Should expand content', () => {
     const { rerender } = render(getComponent({ isOpen: false }));
 
-    expect(selectors.content(true)).not.toBeInTheDocument();
+    expect(screen.queryByTestId(InTestIds.content)).not.toBeInTheDocument();
 
     rerender(getComponent({ isOpen: true }));
 
-    expect(selectors.content()).toBeInTheDocument();
+    expect(screen.getByTestId(InTestIds.content)).toBeInTheDocument();
   });
 
   it('Actions should not affect collapse state', () => {
@@ -44,7 +40,7 @@ describe('Collapse', () => {
 
     render(getComponent({ onToggle, actions: <button data-testid={InTestIds.buttonRemove}>remove</button> }));
 
-    fireEvent.click(selectors.buttonRemove());
+    fireEvent.click(screen.getByTestId(InTestIds.buttonRemove));
 
     expect(onToggle).not.toHaveBeenCalled();
   });
