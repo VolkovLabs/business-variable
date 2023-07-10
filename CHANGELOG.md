@@ -5,6 +5,8 @@
 ### Features / Enhancements
 
 - Update single select variable with All enabled (#41)
+- Add sticky header and auto scroll on group selection (#38)
+- Add drag and drop for Groups (#42)
 
 ## 1.4.0 (2023-07-06)
 

@@ -13,10 +13,6 @@ const InTestIds = {
   buttonRemove: 'data-testid button-remove',
 };
 
-/**
- * Get Selectors
- */
-
 describe('Collapse', () => {
   /**
    * Get Tested Component
