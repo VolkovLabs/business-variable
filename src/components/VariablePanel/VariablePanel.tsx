@@ -65,7 +65,7 @@ export const VariablePanel: React.FC<Props> = ({ data, options, width, height, e
     tableTopOffset,
     tableHeaderRef,
     tableContentTopOffset,
-  } = useContentSizes({ width, height, options, tableData });
+  } = useContentSizes({ height, options, tableData });
 
   /**
    * First selected row ref

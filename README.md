@@ -44,6 +44,7 @@ grafana-cli plugins install volkovlabs-variable-panel
 | Section                     | Description                                                         |
 | --------------------------- | ------------------------------------------------------------------- |
 | [Layout](https://volkovlabs.io/plugins/volkovlabs-variable-panel/layout/) | Explains how to display variables in a table and tree view. |
+| [Features](https://volkovlabs.io/plugins/volkovlabs-variable-panel/features/) | Demonstrates panel features. |
 | [Release Notes](https://volkovlabs.io/plugins/volkovlabs-variable-panel/release/)    | Stay up to date with the latest features and updates.               |
 
 ## Feedback

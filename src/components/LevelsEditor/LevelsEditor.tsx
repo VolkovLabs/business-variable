@@ -12,21 +12,8 @@ import { DataFrame, SelectableValue } from '@grafana/data';
 import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { Level, LevelsGroup } from '../../types';
+import { reorder } from '../../utils';
 import { Styles } from './styles';
-
-/**
- * Reorder
- * @param list
- * @param startIndex
- * @param endIndex
- */
-const reorder = (list: Level[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
 
 /**
  * Get Item Style
@@ -47,7 +34,15 @@ const getItemStyle = (
  * Properties
  */
 interface Props extends LevelsGroup {
+  /**
+   * On Change
+   * @param item
+   */
   onChange: (item: LevelsGroup) => void;
+
+  /**
+   * Data
+   */
   data: DataFrame[];
 }
 

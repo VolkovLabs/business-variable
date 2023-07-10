@@ -9,11 +9,23 @@ export const Styles = (theme: GrafanaTheme2) => {
     newGroup: css`
       margin: ${theme.spacing(2)} 0;
     `,
-    groupHeader: css`
-      display: flex;
+    group: css`
+      margin-bottom: ${theme.spacing(1)};
     `,
-    groupRemove: css`
-      margin-left: ${theme.spacing(1)};
+    groupHeader: css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `,
+    dragIcon: css`
+      cursor: grab;
+      color: ${theme.colors.text.disabled};
+      margin: ${theme.spacing(0, 0.5)};
+      &:hover {
+        color: ${theme.colors.text};
+      }
+    `,
+    removeButton: css`
+      color: ${theme.colors.text.secondary};
     `,
   };
 };

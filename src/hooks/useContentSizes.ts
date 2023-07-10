@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { PanelOptions, TableItem } from '../types';
 
+/**
+ * Content Sizes
+ */
 export const useContentSizes = ({
   tableData,
-  width,
   height,
   options,
 }: {
   tableData: TableItem[];
-  width: number;
   height: number;
   options: PanelOptions;
 }) => {
