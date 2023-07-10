@@ -34,7 +34,15 @@ const getItemStyle = (
  * Properties
  */
 interface Props extends LevelsGroup {
+  /**
+   * On Change
+   * @param item
+   */
   onChange: (item: LevelsGroup) => void;
+
+  /**
+   * Data
+   */
   data: DataFrame[];
 }
 
