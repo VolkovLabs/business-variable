@@ -42,6 +42,7 @@ jest.mock('../utils', () => ({
  * In Test Ids
  */
 const InTestIds = {
+  headerRow: (id: string) => `data-testid table header-row-${id}`,
   row: (value: string, depth: number) => `data-testid table row-${depth}-${value}`,
 };
 
@@ -356,6 +357,22 @@ describe('Use Table Hook', () => {
   });
 
   describe('Check Render Logic', () => {
+    /**
+     * Table Header
+     * @param columns
+     * @param table
+     * @constructor
+     */
+    const TableHeader = ({ columns, table }: { columns: any[]; table: any }) => (
+      <>
+        {columns.map((column) => (
+          <div key={column.id} data-testid={InTestIds.headerRow(column.id)}>
+            {typeof column.header === 'function' ? column.header({ table }) : column.header}
+          </div>
+        ))}
+      </>
+    );
+
     /**
      * Rows Component
      * @param data
@@ -1135,6 +1152,134 @@ describe('Use Table Hook', () => {
         fireEvent.click(favoritesControl);
 
         expect(favoritesMock.add).toHaveBeenCalledWith('device', 'device2');
+      });
+    });
+
+    describe('Header', () => {
+      it('Should render expand all button', () => {
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
+        expect(valueHeader).toBeInTheDocument();
+
+        const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
+        expect(buttonExpandAll).toBeInTheDocument();
+        expect(within(buttonExpandAll).getByTestId('angle-double-down')).toBeInTheDocument();
+
+        fireEvent.click(buttonExpandAll);
+
+        expect(toggleAllRows).toHaveBeenCalled();
+      });
+
+      it('Should show current expand state', () => {
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => false,
+            }}
+          />
+        );
+
+        const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
+        expect(valueHeader).toBeInTheDocument();
+
+        const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
+        expect(buttonExpandAll).toBeInTheDocument();
+        expect(within(buttonExpandAll).getByTestId('angle-double-right')).toBeInTheDocument();
+      });
+
+      it('Should not render expand all button', () => {
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => false,
+              getToggleAllRowsExpandedHandler: () => undefined,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
+        expect(valueHeader).toBeInTheDocument();
+
+        expect(within(valueHeader).queryByTestId(TestIds.table.buttonExpandAll)).not.toBeInTheDocument();
       });
     });
   });

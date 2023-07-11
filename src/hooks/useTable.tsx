@@ -212,7 +212,22 @@ export const useTable = ({
       {
         id: 'value',
         accessorKey: 'value',
-        header: runtimeVariable?.label || variable,
+        header: ({ table }) => (
+          <>
+            {table.getCanSomeRowsExpand() && (
+              <Button
+                className={styles.expandButton}
+                onClick={table.getToggleAllRowsExpandedHandler()}
+                variant="secondary"
+                fill="text"
+                size="sm"
+                icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
+                data-testid={TestIds.table.buttonExpandAll}
+              />
+            )}
+            {runtimeVariable?.label || variable}
+          </>
+        ),
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
         cell: ({ row, getValue }) => {
