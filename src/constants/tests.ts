@@ -9,6 +9,7 @@ export const TestIds = {
     content: 'data-testid panel content',
   },
   table: {
+    buttonExpandAll: 'data-testid table button-expand-all',
     buttonExpand: 'data-testid table button-expand',
     buttonFilter: 'data-testid table button-filter',
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
