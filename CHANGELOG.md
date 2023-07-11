@@ -1,12 +1,13 @@
 # Change Log
 
-## 1.5.0 (IN PROGRESS)
+## 1.5.0 (2023-07-11)
 
 ### Features / Enhancements
 
 - Update single select variable with All enabled (#41)
-- Add sticky header and auto scroll on group selection (#38)
+- Add sticky header and auto scroll on multi-group selection (#38)
 - Add drag and drop for Groups (#42)
+- Add expand and collapse all in the header (#46)
 
 ## 1.4.0 (2023-07-06)
 

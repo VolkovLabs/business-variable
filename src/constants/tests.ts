@@ -3,22 +3,22 @@
  */
 export const TestIds = {
   panel: {
+    content: 'data-testid panel content',
     infoMessage: 'data-testid panel info',
     root: 'data-testid panel',
     tab: (name: string) => `data-testid panel tab-${name}`,
-    content: 'data-testid panel content',
   },
   table: {
-    buttonExpandAll: 'data-testid table button-expand-all',
     buttonExpand: 'data-testid table button-expand',
+    buttonExpandAll: 'data-testid table button-expand-all',
     buttonFilter: 'data-testid table button-filter',
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
-    label: 'data-testid table label',
     favoritesControl: 'data-testid table favorites-control',
-    fieldFilterValue: 'data-testid table field-filter-value',
     favoritesFilter: 'data-testid table favorites-filter',
+    fieldFilterValue: 'data-testid table field-filter-value',
     header: 'data-testid table header',
+    label: 'data-testid table label',
   },
   groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',

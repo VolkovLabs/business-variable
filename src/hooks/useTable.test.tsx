@@ -1195,7 +1195,7 @@ describe('Use Table Hook', () => {
 
         const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
         expect(buttonExpandAll).toBeInTheDocument();
-        expect(within(buttonExpandAll).getByTestId('angle-down')).toBeInTheDocument();
+        expect(within(buttonExpandAll).getByTestId('angle-double-down')).toBeInTheDocument();
 
         fireEvent.click(buttonExpandAll);
 
@@ -1241,7 +1241,7 @@ describe('Use Table Hook', () => {
 
         const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
         expect(buttonExpandAll).toBeInTheDocument();
-        expect(within(buttonExpandAll).getByTestId('angle-right')).toBeInTheDocument();
+        expect(within(buttonExpandAll).getByTestId('angle-double-right')).toBeInTheDocument();
       });
 
       it('Should not render expand all button', () => {

@@ -221,7 +221,7 @@ export const useTable = ({
                 variant="secondary"
                 fill="text"
                 size="sm"
-                icon={table.getIsAllRowsExpanded() ? 'angle-down' : 'angle-right'}
+                icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
                 data-testid={TestIds.table.buttonExpandAll}
               />
             )}
