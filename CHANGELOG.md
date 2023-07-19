@@ -4,7 +4,7 @@
 
 ### Features / Enhancements
 
-- Update ESLint configuration
+- Update ESLint configuration (#47)
 
 ## 1.5.0 (2023-07-11)
 
