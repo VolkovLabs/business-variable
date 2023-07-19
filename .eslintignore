@@ -8,3 +8,6 @@ coverage/
 cypress/
 dist/
 websocket/
+
+# Not included in app code
+timescale/
