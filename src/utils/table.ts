@@ -14,7 +14,7 @@ const convertToObjects = (dataFrame: DataFrame) => {
     const object = dataFrame.fields.reduce((acc, field) => {
       return {
         ...acc,
-        [field.name]: field.values[index],
+        [field.name]: field.values.get(index),
       };
     }, {});
 
@@ -155,7 +155,7 @@ export const getItemWithStatus = (
   const index = namesArray?.findIndex((name) => name === item.value);
   if (index !== undefined && index >= 0) {
     showStatus = true;
-    const lastValue = statusField?.values[index];
+    const lastValue = statusField?.values.get(index);
     const displayValue = statusField?.display?.(lastValue);
     statusColor = displayValue?.color;
   }
