@@ -66,7 +66,7 @@ export const useTable = ({
         series.fields.find((field) => field.type === FieldType.string && (!options.name || field.name === options.name))
       )
       .find((field) => field?.values)
-      ?.values?.toArray();
+      ?.values;
 
     /**
      * Status values from data source
