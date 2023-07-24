@@ -80,7 +80,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
         fill="text"
         onClick={onToggleVisibility}
         size="sm"
-        className={styles.filterButton}
+        className={styles.headerButton}
         data-testid={TestIds.table.buttonFilter}
       />
       {isOpen && (

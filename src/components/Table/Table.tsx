@@ -1,6 +1,6 @@
 import React, { Fragment, RefObject, useState } from 'react';
 import { cx } from '@emotion/css';
-import { useStyles2 } from '@grafana/ui';
+import { Button, useStyles2 } from '@grafana/ui';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -97,7 +97,7 @@ export const Table = <TableData extends object>({
     columns,
     data,
     autoResetExpanded: false,
-    enableSorting: false,
+    enableSorting: true,
     enableMultiSort: false,
     getSubRows,
     getCoreRowModel: getCoreRowModel(),
@@ -141,6 +141,23 @@ export const Table = <TableData extends object>({
                       colSpan={header.colSpan}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.getCanSort() && (
+                        <Button
+                          icon={
+                            !header.column.getIsSorted()
+                              ? 'arrow-right'
+                              : header.column.getIsSorted() === 'asc'
+                              ? 'arrow-up'
+                              : 'arrow-down'
+                          }
+                          fill="text"
+                          onClick={header.column.getToggleSortingHandler()}
+                          size="sm"
+                          className={styles.headerButton}
+                          variant={header.column.getIsSorted() ? 'primary' : 'secondary'}
+                          data-testid={TestIds.table.buttonSort}
+                        />
+                      )}
                       {header.column.getCanFilter() && <Filter column={header.column} />}
                     </th>
                   );

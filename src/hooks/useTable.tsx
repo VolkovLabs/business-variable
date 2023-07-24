@@ -12,6 +12,7 @@ import {
   getItemWithStatus,
   getRows,
   selectVariableValues,
+  statusSort,
   valueFilter,
 } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -230,6 +231,8 @@ export const useTable = ({
         ),
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
+        enableSorting: levels ? levels.length <= 1 : true,
+        sortingFn: statusSort,
         cell: ({ row, getValue }) => {
           const value = getValue() as string;
 
@@ -307,6 +310,7 @@ export const useTable = ({
         accessorKey: 'isFavorite',
         enableColumnFilter: true,
         enableResizing: false,
+        enableSorting: false,
         header: '',
         filterFn: favoriteFilter,
         cell: ({ row, getValue }) => {
@@ -347,9 +351,10 @@ export const useTable = ({
     options.filter,
     options.favorites,
     options.showName,
+    levels,
+    styles.expandButton,
     styles.rowContent,
     styles.selectControl,
-    styles.expandButton,
     styles.label,
     styles.status,
     theme,
