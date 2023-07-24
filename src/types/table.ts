@@ -40,6 +40,13 @@ export interface TableItem {
   statusColor?: string;
 
   /**
+   * Status
+   *
+   * @type {number}
+   */
+  status?: number;
+
+  /**
    * Sub Items
    */
   children?: TableItem[];

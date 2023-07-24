@@ -94,4 +94,9 @@ export interface PanelOptions {
    * Auto Scroll
    */
   autoScroll: boolean;
+
+  /**
+   * Status Sort
+   */
+  statusSort: boolean;
 }

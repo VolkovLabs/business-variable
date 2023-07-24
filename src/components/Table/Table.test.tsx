@@ -128,6 +128,60 @@ describe('Table', () => {
     expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();
   });
 
+  it('Should show value sorting', async () => {
+    const { container } = render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableSorting: true,
+            sortingFn: (rowA: any, rowB: any) => (rowA.original.status > rowB.original.status ? 1 : -1),
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [
+          { value: 'device1', status: 60 },
+          { value: 'device2', status: 50 },
+        ],
+      })
+    );
+
+    /**
+     * Check Sort presence
+     */
+    expect(screen.getByTestId(TestIds.table.buttonSort)).toBeInTheDocument();
+
+    /**
+     * Apply asc sorting
+     */
+    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+
+    /**
+     * Check Asc Sort order
+     */
+    const ascRows = container.querySelectorAll('tbody tr');
+    expect(ascRows[0]).toHaveTextContent('device2');
+    expect(ascRows[1]).toHaveTextContent('device1');
+
+    /**
+     * Apply desc sorting
+     */
+    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+
+    /**
+     * Check Desc Sort order
+     */
+    const descRows = container.querySelectorAll('tbody tr');
+    expect(descRows[0]).toHaveTextContent('device1');
+    expect(descRows[1]).toHaveTextContent('device2');
+  });
+
   it('Should show favorites filter', async () => {
     render(
       getComponent({

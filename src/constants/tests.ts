@@ -12,6 +12,7 @@ export const TestIds = {
     buttonExpand: 'data-testid table button-expand',
     buttonExpandAll: 'data-testid table button-expand-all',
     buttonFilter: 'data-testid table button-filter',
+    buttonSort: 'data-testidd table button-sort',
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
     favoritesControl: 'data-testid table favorites-control',

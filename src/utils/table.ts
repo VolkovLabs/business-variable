@@ -1,6 +1,6 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { FilterFn } from '@tanstack/react-table';
+import { FilterFn, SortingFn } from '@tanstack/react-table';
 import { Level, RuntimeVariable, TableItem } from '../types';
 
 /**
@@ -153,11 +153,13 @@ export const getItemWithStatus = (
    * Status
    */
   const index = namesArray?.findIndex((name) => name === item.value);
+  let status;
   if (index !== undefined && index >= 0) {
     showStatus = true;
     const lastValue = statusField?.values.get(index);
     const displayValue = statusField?.display?.(lastValue);
     statusColor = displayValue?.color;
+    status = lastValue;
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
@@ -174,6 +176,7 @@ export const getItemWithStatus = (
     canBeFavorite,
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
     name: item.name,
+    status,
   };
 };
 
@@ -306,6 +309,22 @@ export const valueFilter: FilterFn<TableItem> = (row, columnId, value) => {
    * Filter last level row
    */
   return row.original.value.toLowerCase().includes(value.toLowerCase());
+};
+
+/**
+ * Status Sort
+ * @param rowA
+ * @param rowB
+ */
+export const statusSort: SortingFn<TableItem> = (rowA, rowB): number => {
+  const statusA = rowA.original.status !== undefined ? rowA.original.status : 0;
+  const statusB = rowB.original.status !== undefined ? rowB.original.status : 0;
+
+  if (statusA === statusB) {
+    return 0;
+  }
+
+  return statusA > statusB ? 1 : -1;
 };
 
 /**

@@ -1,7 +1,7 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { TableItem } from '../types';
-import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, valueFilter } from './table';
+import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, statusSort, valueFilter } from './table';
 
 /**
  * Mock @grafana/runtime
@@ -803,6 +803,36 @@ describe('Utils', () => {
       expect(favoriteFilter(row1 as any, {} as any, false, () => {})).toBeTruthy();
       expect(favoriteFilter(row2 as any, {} as any, false, () => {})).toBeTruthy();
       expect(favoriteFilter(parentRow as any, {} as any, false, () => {})).toBeTruthy();
+    });
+  });
+
+  describe('Status Sort', () => {
+    it('Should sort A lower B', () => {
+      const rowA = { original: { status: 50 } };
+      const rowB = { original: { status: 60 } };
+
+      expect(statusSort(rowA as any, rowB as any, 'value')).toEqual(-1);
+    });
+
+    it('Should sort A higher B', () => {
+      const rowA = { original: { status: 60 } };
+      const rowB = { original: { status: 50 } };
+
+      expect(statusSort(rowA as any, rowB as any, 'value')).toEqual(1);
+    });
+
+    it('Should keep A position', () => {
+      const rowA = { original: { status: 50 } };
+      const rowB = { original: { status: 50 } };
+
+      expect(statusSort(rowA as any, rowB as any, 'value')).toEqual(0);
+    });
+
+    it('Should keep A position if no status', () => {
+      const rowA = { original: {} };
+      const rowB = { original: {} };
+
+      expect(statusSort(rowA as any, rowB as any, 'value')).toEqual(0);
     });
   });
 });

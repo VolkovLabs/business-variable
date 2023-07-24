@@ -66,10 +66,9 @@ export const Styles = (theme: GrafanaTheme2) => {
     sortableHeader: css`
       /* increases selector's specificity so that it always takes precedence over default styles  */
       && {
-        padding: 0;
       }
     `,
-    filterButton: css`
+    headerButton: css`
       margin-left: ${theme.spacing(0.5)};
     `,
     filterContainer: css`

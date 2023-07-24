@@ -39,6 +39,7 @@ export const Styles = (theme: GrafanaTheme2) => {
       height: 12px;
       border-radius: 50%;
       margin-right: ${theme.spacing(1)};
+      flex: none;
     `,
   };
 };
