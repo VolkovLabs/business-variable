@@ -160,7 +160,7 @@ describe('Table', () => {
     /**
      * Apply asc sorting
      */
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
 
     /**
      * Check Asc Sort order
@@ -172,7 +172,7 @@ describe('Table', () => {
     /**
      * Apply desc sorting
      */
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
 
     /**
      * Check Desc Sort order
