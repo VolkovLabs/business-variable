@@ -1,3 +1,8 @@
+export enum DisplayMode {
+  MINIMIZE = 'minimize',
+  TABLE = 'table',
+}
+
 /**
  * Level
  */
@@ -94,4 +99,9 @@ export interface PanelOptions {
    * Auto Scroll
    */
   autoScroll: boolean;
+
+  /**
+   * Display Mode
+   */
+  displayMode: DisplayMode;
 }

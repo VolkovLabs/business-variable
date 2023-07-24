@@ -1,3 +1,13 @@
+import { DisplayMode } from '../types';
+
+/**
+ * Display Mode Options
+ */
+export const DisplayModeOptions = [
+  { value: DisplayMode.TABLE, label: 'Table', description: 'Use table view.' },
+  { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Use minimize view.' },
+];
+
 /**
  * Header Options
  */

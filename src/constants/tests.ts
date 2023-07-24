@@ -2,7 +2,7 @@
  * Test Identifiers
  */
 export const TestIds = {
-  panel: {
+  tableView: {
     content: 'data-testid panel content',
     infoMessage: 'data-testid panel info',
     root: 'data-testid panel',

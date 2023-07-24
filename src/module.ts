@@ -3,13 +3,14 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
 import {
   AutoScrollOptions,
+  DisplayModeOptions,
   FavoritesOptions,
   FilterOptions,
   HeaderOptions,
   ShowNameOptions,
   StickyOptions,
 } from './constants';
-import { PanelOptions } from './types';
+import { DisplayMode, PanelOptions } from './types';
 
 /**
  * Panel Plugin
@@ -34,6 +35,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      * Variables
      */
     const variables = getTemplateSrv().getVariables();
+
+    builder.addRadio({
+      path: 'displayMode',
+      name: 'Display mode',
+      settings: {
+        options: DisplayModeOptions,
+      },
+      defaultValue: DisplayMode.TABLE,
+    });
 
     builder
       .addRadio({
