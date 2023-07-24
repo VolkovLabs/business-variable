@@ -7,6 +7,7 @@ import {
   FilterOptions,
   HeaderOptions,
   ShowNameOptions,
+  statusSortOptions,
   StickyOptions,
 } from './constants';
 import { PanelOptions } from './types';
@@ -80,8 +81,20 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'favorites',
         name: 'Select favorites',
+        description: 'Saved in the browser storage for each user.',
         settings: {
           options: FavoritesOptions,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => config.header,
+      })
+      .addRadio({
+        path: 'statusSort',
+        name: 'Sort by status',
+        description: 'Available for a single-level layout.',
+        settings: {
+          options: statusSortOptions,
         },
         defaultValue: false,
         category: ['Header'],
