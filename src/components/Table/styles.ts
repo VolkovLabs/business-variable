@@ -66,7 +66,6 @@ export const Styles = (theme: GrafanaTheme2) => {
     sortableHeader: css`
       /* increases selector's specificity so that it always takes precedence over default styles  */
       && {
-        cursor: pointer;
       }
     `,
     headerButton: css`
