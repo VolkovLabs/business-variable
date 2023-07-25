@@ -44,35 +44,9 @@ export interface LevelsGroup {
 }
 
 /**
- * Minimize View Options
- */
-export interface MinimizeViewOptions {
-  /**
-   * Variable
-   *
-   * @type {string}
-   */
-  variable: string;
-
-  /**
-   * Padding
-   *
-   * @type {number}
-   */
-  padding: number;
-}
-
-/**
  * Table View Options
  */
 export interface TableViewOptions {
-  /**
-   * Variable
-   *
-   * @type {string}
-   */
-  variable: string;
-
   /**
    * Field name for variable values
    *
@@ -139,7 +113,16 @@ export interface PanelOptions extends TableViewOptions {
   displayMode: DisplayMode;
 
   /**
-   * Minimize View Options
+   * Variable
+   *
+   * @type {string}
    */
-  minimizeView?: MinimizeViewOptions;
+  variable: string;
+
+  /**
+   * Padding
+   *
+   * @type {number}
+   */
+  padding: number;
 }

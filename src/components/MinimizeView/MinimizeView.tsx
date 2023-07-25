@@ -4,7 +4,7 @@ import { EventBus } from '@grafana/data';
 import { Alert } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
-import { MinimizeViewOptions, VariableType } from '../../types';
+import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
 
 /**
@@ -14,7 +14,7 @@ interface Props {
   /**
    * Options
    */
-  options?: MinimizeViewOptions;
+  options?: PanelOptions;
 
   /**
    * Event Bus
