@@ -4,6 +4,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { MinimizeView } from './MinimizeView';
+import { VariableType } from '../../types';
 
 /**
  * In Test Ids
@@ -62,7 +63,7 @@ describe('Minimize View', () => {
         ({
           variable: {
             label: '123',
-            type: 'query',
+            type: VariableType.QUERY,
           },
         } as any)
     );
@@ -78,7 +79,7 @@ describe('Minimize View', () => {
         ({
           variable: {
             label: '123',
-            type: 'custom',
+            type: VariableType.CUSTOM,
           },
         } as any)
     );

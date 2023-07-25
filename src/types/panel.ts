@@ -1,3 +1,6 @@
+/**
+ * Display Mode
+ */
 export enum DisplayMode {
   MINIMIZE = 'minimize',
   TABLE = 'table',

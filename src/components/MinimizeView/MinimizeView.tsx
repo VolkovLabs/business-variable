@@ -2,7 +2,7 @@ import React from 'react';
 import { EventBus } from '@grafana/data';
 import { Alert, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { MinimizeViewOptions } from '../../types';
+import { MinimizeViewOptions, VariableType } from '../../types';
 import { useRuntimeVariables } from '../../hooks';
 import { OptionsVariable } from '../OptionsVariable';
 import { Styles } from './styles';
@@ -55,7 +55,7 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
 
   return (
     <div className={styles.root} data-testid={TestIds.minimizeView.root} style={{ maxWidth: width }}>
-      {(variable.type === 'query' || variable.type === 'custom') && (
+      {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
         <OptionsVariable variable={variable} width={width - 16} />
       )}
     </div>
