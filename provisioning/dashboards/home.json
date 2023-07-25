@@ -67,6 +67,7 @@
         "filter": true,
         "header": true,
         "showName": false,
+        "statusSort": false,
         "sticky": false,
         "variable": "country"
       },
@@ -142,6 +143,7 @@
         "filter": false,
         "header": true,
         "showName": false,
+        "statusSort": false,
         "sticky": false,
         "variable": "state"
       },
@@ -217,6 +219,7 @@
         "filter": false,
         "header": true,
         "showName": false,
+        "statusSort": false,
         "sticky": false,
         "variable": "city"
       },
@@ -315,6 +318,7 @@
         ],
         "header": false,
         "showName": false,
+        "statusSort": false,
         "sticky": false,
         "variable": "device"
       },
@@ -455,6 +459,7 @@
         ],
         "header": true,
         "showName": false,
+        "statusSort": true,
         "sticky": true,
         "variable": "device"
       },
@@ -863,8 +868,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",
@@ -964,8 +968,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Sweden",
-          "value": "Sweden"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "postgres",
@@ -988,8 +992,8 @@
       {
         "current": {
           "selected": true,
-          "text": ["Stockholm"],
-          "value": ["Stockholm"]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
@@ -1011,9 +1015,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": ["Stockholm"],
-          "value": ["Stockholm"]
+          "selected": false,
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
