@@ -35,7 +35,7 @@ describe('Options Variable', () => {
    * Get Tested Component
    */
   const getComponent = (props: Partial<Props>) => {
-    return <OptionsVariable variable={defaultVariable} width={400} {...(props as any)} />;
+    return <OptionsVariable variable={defaultVariable} width={300} {...(props as any)} />;
   };
 
   describe('Single variable', () => {
