@@ -41,9 +41,21 @@ export interface LevelsGroup {
 }
 
 /**
- * Options
+ * Minimize View Options
  */
-export interface PanelOptions {
+export interface MinimizeViewOptions {
+  /**
+   * Variable
+   *
+   * @type {string}
+   */
+  variable: string;
+}
+
+/**
+ * Table View Options
+ */
+export interface TableViewOptions {
   /**
    * Variable
    *
@@ -99,9 +111,20 @@ export interface PanelOptions {
    * Auto Scroll
    */
   autoScroll: boolean;
+}
 
+/**
+ * Options
+ * Extends for backward compatibility
+ */
+export interface PanelOptions extends TableViewOptions {
   /**
    * Display Mode
    */
   displayMode: DisplayMode;
+
+  /**
+   * Minimize View Options
+   */
+  minimizeView?: MinimizeViewOptions;
 }

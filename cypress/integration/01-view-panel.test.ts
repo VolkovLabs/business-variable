@@ -29,7 +29,7 @@ describe('Viewing an Variable panel', () => {
     /**
      * Root
      */
-    const chart = currentPanel.find(getTestIdSelector(TestIds.panel.root));
+    const chart = currentPanel.find(getTestIdSelector(TestIds.tableView.root));
     chart.should('be.visible');
 
     /**

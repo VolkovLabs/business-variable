@@ -14,7 +14,7 @@ interface Props extends PanelProps<PanelOptions> {}
  */
 export const VariablePanel: React.FC<Props> = ({ options, ...restProps }) => {
   if (options.displayMode === DisplayMode.MINIMIZE) {
-    return <MinimizeView options={options} {...restProps} />;
+    return <MinimizeView options={options.minimizeView} {...restProps} />;
   }
 
   return <TableView options={options} {...restProps} />;
