@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { InlineField, Select } from '@grafana/ui';
+import { TestIds } from '../../constants';
 import { RuntimeVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
@@ -11,8 +12,15 @@ interface Props {
   variable: RuntimeVariable;
 }
 
+/**
+ * All Value
+ */
 const AllValue = 'All';
 
+/**
+ * Options Variable
+ * @param props
+ */
 export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   /**
    * Current values
@@ -81,15 +89,20 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    * Options
    */
   const options = useMemo(() => {
-    return variable.options.map((option) => ({
-      label: option.text,
-      value: option.value === '$__all' ? AllValue : option.value,
-    }));
+    return variable.options.map((option) => {
+      const value = option.value === '$__all' ? AllValue : option.value;
+      return {
+        label: option.text,
+        value,
+        ariaLabel: TestIds.optionsVariable.option(value),
+      };
+    });
   }, [variable]);
 
   return (
     <InlineField label={variable.label}>
       <Select
+        aria-label={TestIds.optionsVariable.root}
         onChange={onChange}
         options={options}
         isMulti={variable.multi}

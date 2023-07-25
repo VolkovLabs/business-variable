@@ -36,4 +36,8 @@ export const TestIds = {
     newItemName: 'data-testidd levels-editor new-item-name',
     root: 'data-testid levels-editor',
   },
+  optionsVariable: {
+    root: 'options-variable',
+    option: (name: string) => `options-variable option-${name}`,
+  },
 };
