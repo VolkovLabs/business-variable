@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { InlineField, Select } from '@grafana/ui';
-import { AllValue, TestIds } from '../../constants';
+import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { RuntimeVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
@@ -26,7 +26,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   const values = useMemo(() => {
     return variable.options
       .filter((option) => option.selected)
-      .map((option) => (option.value === '$__all' ? AllValue : option.value));
+      .map((option) => (option.value === AllValueParameter ? AllValue : option.value));
   }, [variable]);
 
   /**
@@ -88,7 +88,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    */
   const options = useMemo(() => {
     return variable.options.map((option) => {
-      const value = option.value === '$__all' ? AllValue : option.value;
+      const value = option.value === AllValueParameter ? AllValue : option.value;
       return {
         label: option.text,
         value,

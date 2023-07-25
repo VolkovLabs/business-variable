@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import { AllValue, TestIds } from '../../constants';
+import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { selectVariableValues } from '../../utils';
 import { OptionsVariable } from './OptionsVariable';
 
@@ -104,7 +104,7 @@ describe('Options Variable', () => {
   describe('Multi variable', () => {
     const allOption = {
       text: AllValue,
-      value: '$__all',
+      value: AllValueParameter,
       selected: false,
     };
     const option1 = {
