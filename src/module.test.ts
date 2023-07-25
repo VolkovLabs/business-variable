@@ -1,6 +1,6 @@
 import { Field, FieldType, PanelPlugin } from '@grafana/data';
 import { plugin } from './module';
-import { PanelOptions } from './types';
+import { DisplayMode, PanelOptions } from './types';
 
 /**
  * Test Field
@@ -76,7 +76,9 @@ describe('plugin', () => {
     it('Should show variable name if no levels', () => {
       const shownOptionsPaths: string[] = [];
 
-      builder.addSelect.mockImplementation(addInputImplementation({ groups: [] }, shownOptionsPaths));
+      builder.addSelect.mockImplementation(
+        addInputImplementation({ groups: [], displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+      );
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['variable']));
@@ -85,7 +87,9 @@ describe('plugin', () => {
     it('Should show filter if header enabled', () => {
       const shownOptionsPaths: string[] = [];
 
-      builder.addRadio.mockImplementation(addInputImplementation({ header: true }, shownOptionsPaths));
+      builder.addRadio.mockImplementation(
+        addInputImplementation({ header: true, displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+      );
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['filter']));
