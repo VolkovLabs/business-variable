@@ -2,7 +2,7 @@
  * Test Identifiers
  */
 export const TestIds = {
-  panel: {
+  tableView: {
     content: 'data-testid panel content',
     infoMessage: 'data-testid panel info',
     root: 'data-testid panel',
@@ -35,5 +35,13 @@ export const TestIds = {
     newItem: 'data-testid levels-editor new-item',
     newItemName: 'data-testidd levels-editor new-item-name',
     root: 'data-testid levels-editor',
+  },
+  minimizeView: {
+    root: 'data-testid minimize-view',
+    noVariableMessage: 'data-testid minimize-view no-variable-message',
+  },
+  optionsVariable: {
+    root: 'options-variable',
+    option: (name: string) => `options-variable option-${name}`,
   },
 };

@@ -1,4 +1,12 @@
 /**
+ * Display Mode
+ */
+export enum DisplayMode {
+  MINIMIZE = 'minimize',
+  TABLE = 'table',
+}
+
+/**
  * Level
  */
 export interface Level {
@@ -36,16 +44,9 @@ export interface LevelsGroup {
 }
 
 /**
- * Options
+ * Table View Options
  */
-export interface PanelOptions {
-  /**
-   * Variable
-   *
-   * @type {string}
-   */
-  variable: string;
-
+export interface TableViewOptions {
   /**
    * Field name for variable values
    *
@@ -99,4 +100,29 @@ export interface PanelOptions {
    * Status Sort
    */
   statusSort: boolean;
+}
+
+/**
+ * Options
+ * Extends for backward compatibility
+ */
+export interface PanelOptions extends TableViewOptions {
+  /**
+   * Display Mode
+   */
+  displayMode: DisplayMode;
+
+  /**
+   * Variable
+   *
+   * @type {string}
+   */
+  variable: string;
+
+  /**
+   * Padding
+   *
+   * @type {number}
+   */
+  padding: number;
 }

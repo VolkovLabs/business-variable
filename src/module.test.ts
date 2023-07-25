@@ -1,6 +1,6 @@
 import { Field, FieldType, PanelPlugin } from '@grafana/data';
 import { plugin } from './module';
-import { PanelOptions } from './types';
+import { DisplayMode, PanelOptions } from './types';
 
 /**
  * Test Field
@@ -25,10 +25,11 @@ describe('plugin', () => {
    * Builder
    */
   const builder: any = {
-    addSelect: jest.fn().mockImplementation(() => builder),
-    addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addCustomEditor: jest.fn().mockImplementation(() => builder),
+    addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addRadio: jest.fn().mockImplementation(() => builder),
+    addSelect: jest.fn().mockImplementation(() => builder),
+    addSliderInput: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -44,10 +45,11 @@ describe('plugin', () => {
     /**
      * Inputs
      */
-    expect(builder.addSelect).toHaveBeenCalled();
-    expect(builder.addFieldNamePicker).toHaveBeenCalled();
     expect(builder.addCustomEditor).toHaveBeenCalled();
+    expect(builder.addFieldNamePicker).toHaveBeenCalled();
     expect(builder.addRadio).toHaveBeenCalled();
+    expect(builder.addSelect).toHaveBeenCalled();
+    expect(builder.addSliderInput).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {
@@ -76,7 +78,9 @@ describe('plugin', () => {
     it('Should show variable name if no levels', () => {
       const shownOptionsPaths: string[] = [];
 
-      builder.addSelect.mockImplementation(addInputImplementation({ groups: [] }, shownOptionsPaths));
+      builder.addSelect.mockImplementation(
+        addInputImplementation({ groups: [], displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+      );
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['variable']));
@@ -85,7 +89,9 @@ describe('plugin', () => {
     it('Should show filter if header enabled', () => {
       const shownOptionsPaths: string[] = [];
 
-      builder.addRadio.mockImplementation(addInputImplementation({ header: true }, shownOptionsPaths));
+      builder.addRadio.mockImplementation(
+        addInputImplementation({ header: true, displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+      );
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['filter']));

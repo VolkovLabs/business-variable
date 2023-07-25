@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
-import { TestIds } from '../constants';
-import { Styles } from '../styles';
+import { Styles } from '../components/TableView/styles';
+import { AllValue, TestIds } from '../constants';
 import { Level, PanelOptions, TableItem } from '../types';
 import {
   convertTreeToPlain,
@@ -116,7 +116,7 @@ export const useTable = ({
           return [
             getItemWithStatus(
               {
-                value: 'All',
+                value: AllValue,
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,

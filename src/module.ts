@@ -3,14 +3,15 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
 import {
   AutoScrollOptions,
+  DisplayModeOptions,
   FavoritesOptions,
   FilterOptions,
   HeaderOptions,
   ShowNameOptions,
-  statusSortOptions,
+  StatusSortOptions,
   StickyOptions,
 } from './constants';
-import { PanelOptions } from './types';
+import { DisplayMode, PanelOptions } from './types';
 
 /**
  * Panel Plugin
@@ -35,6 +36,42 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      * Variables
      */
     const variables = getTemplateSrv().getVariables();
+    const variableOptions = variables.map((vr) => ({
+      label: vr.name,
+      value: vr.name,
+    }));
+
+    /**
+     * Visibility
+     */
+    const showForMinimizeView = (config: PanelOptions) => config.displayMode === DisplayMode.MINIMIZE;
+    const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
+
+    /**
+     * Common Options
+     */
+    builder.addRadio({
+      path: 'displayMode',
+      name: 'Display mode',
+      settings: {
+        options: DisplayModeOptions,
+      },
+      defaultValue: DisplayMode.TABLE,
+    });
+
+    /**
+     * Minimize Mode Options
+     */
+    builder.addSliderInput({
+      path: 'padding',
+      name: 'Padding',
+      defaultValue: 10,
+      settings: {
+        min: 0,
+        max: 20,
+      },
+      showIf: showForMinimizeView,
+    });
 
     builder
       .addRadio({
@@ -45,6 +82,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: StickyOptions,
         },
         defaultValue: false,
+        showIf: showForTableView,
       })
       .addRadio({
         path: 'autoScroll',
@@ -53,6 +91,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: AutoScrollOptions,
         },
         defaultValue: false,
+        showIf: showForTableView,
       });
 
     /**
@@ -67,6 +106,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Header'],
         defaultValue: true,
+        showIf: showForTableView,
       })
       .addRadio({
         path: 'filter',
@@ -76,7 +116,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         category: ['Header'],
-        showIf: (config) => config.header,
+        showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
         path: 'favorites',
@@ -87,17 +127,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         category: ['Header'],
-        showIf: (config) => config.header,
+        showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
         path: 'statusSort',
         name: 'Sort by status',
         settings: {
-          options: statusSortOptions,
+          options: StatusSortOptions,
         },
         defaultValue: false,
         category: ['Header'],
-        showIf: (config) => config.header,
+        showIf: (config) => showForTableView(config) && config.header,
       });
 
     /**
@@ -108,13 +148,10 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'variable',
         name: 'Select variable to display',
         settings: {
-          options: variables.map((vr) => ({
-            label: vr.name,
-            value: vr.name,
-          })),
+          options: variableOptions,
         },
         category: ['Layout'],
-        showIf: (config) => !config.groups?.length,
+        showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
       })
       .addCustomEditor({
         id: 'groups',
@@ -122,6 +159,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Tree View based on data source query',
         editor: GroupsEditor,
         category: ['Layout'],
+        showIf: showForTableView,
       })
       .addRadio({
         path: 'showName',
@@ -131,7 +169,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         category: ['Layout'],
-        showIf: (config) => !!config.groups?.length,
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
     builder
@@ -143,6 +181,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           noFieldsMessage: 'No strings fields found',
         },
         category: ['Status'],
+        showIf: showForTableView,
       })
       .addFieldNamePicker({
         path: 'status',
@@ -152,6 +191,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           noFieldsMessage: 'No number fields found',
         },
         category: ['Status'],
+        showIf: showForTableView,
       });
 
     return builder;

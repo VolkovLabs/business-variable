@@ -1,6 +1,7 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
+import { AllValue } from '../constants';
 import { Level, RuntimeVariable, TableItem } from '../types';
 
 /**
@@ -164,7 +165,7 @@ export const getItemWithStatus = (
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   const selectable = item.variable?.options?.some((option) => option.text === item.value) && !children;
-  const canBeFavorite = favoritesEnabled && selectable && item.value !== 'All';
+  const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
   return {
     value: item.value,
@@ -197,7 +198,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
    */
   if (multi) {
     if (values.some((value) => value.toLowerCase() === 'all')) {
-      locationService.partial({ [`var-${name}`]: 'All' }, true);
+      locationService.partial({ [`var-${name}`]: AllValue }, true);
       return;
     }
 

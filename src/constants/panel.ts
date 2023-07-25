@@ -1,3 +1,13 @@
+import { DisplayMode } from '../types';
+
+/**
+ * Display Mode Options
+ */
+export const DisplayModeOptions = [
+  { value: DisplayMode.TABLE, label: 'Table', description: 'Full featured table view.' },
+  { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Minimized select view.' },
+];
+
 /**
  * Header Options
  */
@@ -33,7 +43,7 @@ export const FavoritesOptions = [
 /**
  * Status Sort Options
  */
-export const statusSortOptions = [
+export const StatusSortOptions = [
   { value: true, label: 'Enabled', description: 'Allows sort by status.' },
   { value: false, label: 'Disabled', description: 'Hide sorting.' },
 ];
