@@ -130,7 +130,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'statusSort',
         name: 'Sort by status',
-        description: 'Available for a single-level layout.',
         settings: {
           options: StatusSortOptions,
         },

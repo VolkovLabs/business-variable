@@ -231,7 +231,7 @@ export const useTable = ({
         ),
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
-        enableSorting: options.statusSort && (levels ? levels.length <= 1 : true),
+        enableSorting: options.statusSort,
         sortingFn: statusSort,
         cell: ({ row, getValue }) => {
           const value = getValue() as string;
@@ -352,7 +352,6 @@ export const useTable = ({
     options.favorites,
     options.showName,
     options.statusSort,
-    levels,
     styles.expandButton,
     styles.rowContent,
     styles.selectControl,

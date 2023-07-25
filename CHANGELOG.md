@@ -5,7 +5,7 @@
 ### Features / Enhancements
 
 - Update ESLint configuration (#47)
-- Add status sort button (#49)
+- Add status sort button (#49, #51)
 
 ## 1.5.0 (2023-07-11)
 

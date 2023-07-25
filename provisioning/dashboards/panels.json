@@ -32,6 +32,24 @@
         "type": "marcusolsson-static-datasource",
         "uid": "P1D2C73DC01F2359B"
       },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 17,
         "w": 7,
@@ -40,6 +58,13 @@
       },
       "id": 8,
       "options": {
+        "autoScroll": false,
+        "favorites": false,
+        "filter": false,
+        "header": true,
+        "showName": false,
+        "statusSort": false,
+        "sticky": false,
         "variables": []
       },
       "title": "Empty",
@@ -50,6 +75,24 @@
         "type": "marcusolsson-static-datasource",
         "uid": "P1D2C73DC01F2359B"
       },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 17,
         "w": 7,
@@ -58,8 +101,15 @@
       },
       "id": 7,
       "options": {
+        "autoScroll": false,
+        "favorites": true,
+        "filter": true,
+        "header": true,
         "heading": "Devices",
         "selectedVariables": ["device"],
+        "showName": false,
+        "statusSort": true,
+        "sticky": false,
         "variable": "single",
         "variables": ["single"]
       },
@@ -87,6 +137,24 @@
         "type": "marcusolsson-static-datasource",
         "uid": "P1D2C73DC01F2359B"
       },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 17,
         "w": 7,
@@ -95,8 +163,15 @@
       },
       "id": 6,
       "options": {
+        "autoScroll": false,
+        "favorites": true,
+        "filter": true,
+        "header": true,
         "heading": "Devices",
         "selectedVariables": ["device"],
+        "showName": false,
+        "statusSort": true,
+        "sticky": false,
         "variable": "device",
         "variables": ["device"]
       },
