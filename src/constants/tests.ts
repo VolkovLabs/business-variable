@@ -36,6 +36,10 @@ export const TestIds = {
     newItemName: 'data-testidd levels-editor new-item-name',
     root: 'data-testid levels-editor',
   },
+  minimizeView: {
+    root: 'data-testid minimize-view',
+    noVariableMessage: 'data-testid minimize-view no-variable-message',
+  },
   optionsVariable: {
     root: 'options-variable',
     option: (name: string) => `options-variable option-${name}`,

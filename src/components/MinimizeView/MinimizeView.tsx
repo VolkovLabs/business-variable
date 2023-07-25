@@ -1,6 +1,7 @@
 import React from 'react';
 import { EventBus } from '@grafana/data';
 import { Alert, useTheme2 } from '@grafana/ui';
+import { TestIds } from '../../constants';
 import { MinimizeViewOptions } from '../../types';
 import { useRuntimeVariables } from '../../hooks';
 import { OptionsVariable } from '../OptionsVariable';
@@ -41,14 +42,14 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
    */
   if (!variable) {
     return (
-      <Alert severity="info" title="Variable">
+      <Alert severity="info" title="Variable" data-testid={TestIds.minimizeView.noVariableMessage}>
         Variable is not selected.
       </Alert>
     );
   }
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-testid={TestIds.minimizeView.root}>
       {(variable.type === 'query' || variable.type === 'custom') && <OptionsVariable variable={variable} />}
     </div>
   );
