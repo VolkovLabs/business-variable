@@ -53,6 +53,13 @@ export interface MinimizeViewOptions {
    * @type {string}
    */
   variable: string;
+
+  /**
+   * Padding
+   *
+   * @type {number}
+   */
+  padding: number;
 }
 
 /**

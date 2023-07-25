@@ -1,11 +1,11 @@
 import React from 'react';
+import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
-import { Alert, useTheme2 } from '@grafana/ui';
+import { Alert } from '@grafana/ui';
 import { TestIds } from '../../constants';
-import { MinimizeViewOptions, VariableType } from '../../types';
 import { useRuntimeVariables } from '../../hooks';
+import { MinimizeViewOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
-import { Styles } from './styles';
 
 /**
  * Properties
@@ -30,13 +30,7 @@ interface Props {
 /**
  * Minimize View
  */
-export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName } = {}, eventBus, width }) => {
-  /**
-   * Styles and Theme
-   */
-  const theme = useTheme2();
-  const styles = Styles(theme);
-
+export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName, padding } = {}, eventBus }) => {
   /**
    * Runtime Variables
    */
@@ -54,9 +48,14 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
   }
 
   return (
-    <div className={styles.root} data-testid={TestIds.minimizeView.root} style={{ maxWidth: width }}>
+    <div
+      className={css`
+        padding: ${padding}px;
+      `}
+      data-testid={TestIds.minimizeView.root}
+    >
       {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-        <OptionsVariable variable={variable} width={width - 16} />
+        <OptionsVariable variable={variable} />
       )}
     </div>
   );

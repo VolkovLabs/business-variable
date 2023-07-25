@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
-import { MinimizeView } from './MinimizeView';
 import { VariableType } from '../../types';
+import { MinimizeView } from './MinimizeView';
 
 /**
  * In Test Ids

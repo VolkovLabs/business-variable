@@ -13,11 +13,6 @@ interface Props {
    * Variable
    */
   variable: RuntimeVariable;
-
-  /**
-   * Width
-   */
-  width: number;
 }
 
 /**
@@ -29,7 +24,7 @@ const AllValue = 'All';
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable, width }) => {
+export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   /**
    * Current values
    */
@@ -108,16 +103,14 @@ export const OptionsVariable: React.FC<Props> = ({ variable, width }) => {
   }, [variable]);
 
   return (
-    <InlineField label={variable.label} style={{ maxWidth: width }} labelWidth={12}>
-      <div style={{ maxWidth: width - 100 }}>
-        <Select
-          aria-label={TestIds.optionsVariable.root}
-          onChange={onChange}
-          options={options}
-          isMulti={variable.multi}
-          value={variable.multi ? values : values[0] || null}
-        />
-      </div>
+    <InlineField label={variable.label}>
+      <Select
+        aria-label={TestIds.optionsVariable.root}
+        onChange={onChange}
+        options={options}
+        isMulti={variable.multi}
+        value={variable.multi ? values : values[0] || null}
+      />
     </InlineField>
   );
 };

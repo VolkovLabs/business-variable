@@ -25,10 +25,11 @@ describe('plugin', () => {
    * Builder
    */
   const builder: any = {
-    addSelect: jest.fn().mockImplementation(() => builder),
-    addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addCustomEditor: jest.fn().mockImplementation(() => builder),
+    addFieldNamePicker: jest.fn().mockImplementation(() => builder),
     addRadio: jest.fn().mockImplementation(() => builder),
+    addSelect: jest.fn().mockImplementation(() => builder),
+    addSliderInput: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -44,10 +45,11 @@ describe('plugin', () => {
     /**
      * Inputs
      */
-    expect(builder.addSelect).toHaveBeenCalled();
-    expect(builder.addFieldNamePicker).toHaveBeenCalled();
     expect(builder.addCustomEditor).toHaveBeenCalled();
+    expect(builder.addFieldNamePicker).toHaveBeenCalled();
     expect(builder.addRadio).toHaveBeenCalled();
+    expect(builder.addSelect).toHaveBeenCalled();
+    expect(builder.addSliderInput).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {

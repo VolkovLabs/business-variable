@@ -62,14 +62,25 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     /**
      * Minimize Mode Options
      */
-    builder.addSelect({
-      path: 'minimizeView.variable',
-      name: 'Select variable to display',
-      settings: {
-        options: variableOptions,
-      },
-      showIf: showForMinimizeView,
-    });
+    builder
+      .addSelect({
+        path: 'minimizeView.variable',
+        name: 'Select variable to display',
+        settings: {
+          options: variableOptions,
+        },
+        showIf: showForMinimizeView,
+      })
+      .addSliderInput({
+        path: 'minimizeView.padding',
+        name: 'Padding',
+        defaultValue: 10,
+        settings: {
+          min: 0,
+          max: 20,
+        },
+        showIf: showForMinimizeView,
+      });
 
     builder
       .addRadio({
