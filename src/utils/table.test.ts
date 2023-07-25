@@ -1,5 +1,6 @@
 import { toDataFrame } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+import { AllValue } from '../constants';
 import { TableItem } from '../types';
 import { convertTreeToPlain, favoriteFilter, getRows, selectVariableValues, statusSort, valueFilter } from './table';
 
@@ -617,7 +618,7 @@ describe('Utils', () => {
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: 'All',
+            [`var-${variable.name}`]: AllValue,
           },
           true
         );
@@ -626,11 +627,11 @@ describe('Utils', () => {
          * Check case-insensitive of all value
          */
         jest.mocked(locationService.partial).mockClear();
-        selectVariableValues(['value1', 'All'], variable as any);
+        selectVariableValues(['value1', AllValue], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: 'All',
+            [`var-${variable.name}`]: AllValue,
           },
           true
         );

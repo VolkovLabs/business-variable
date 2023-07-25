@@ -1,7 +1,7 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { TestIds } from '../constants';
+import { AllValue, TestIds } from '../constants';
 import { TableItem } from '../types';
 import { getItemWithStatus, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -99,7 +99,7 @@ describe('Use Table Hook', () => {
       includeAll: true,
       options: [
         {
-          text: 'All',
+          text: AllValue,
           value: '__all',
           selected: false,
         },
@@ -146,7 +146,7 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: 'All',
+        value: AllValue,
         selected: false,
         selectable: true,
       }),
@@ -169,7 +169,7 @@ describe('Use Table Hook', () => {
       includeAll: true,
       options: [
         {
-          text: 'All',
+          text: AllValue,
           value: '__all',
           selected: false,
         },
@@ -255,7 +255,7 @@ describe('Use Table Hook', () => {
       includeAll: false,
       options: [
         {
-          text: 'All',
+          text: AllValue,
           value: '__all',
           selected: false,
         },
@@ -424,7 +424,7 @@ describe('Use Table Hook', () => {
         includeAll: true,
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: false,
           },
@@ -539,7 +539,7 @@ describe('Use Table Hook', () => {
         includeAll: true,
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: false,
           },
@@ -714,7 +714,7 @@ describe('Use Table Hook', () => {
         includeAll: true,
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: true,
           },
@@ -782,7 +782,7 @@ describe('Use Table Hook', () => {
         includeAll: true,
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: false,
           },
@@ -877,7 +877,7 @@ describe('Use Table Hook', () => {
         includeAll: true,
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: false,
           },
@@ -969,7 +969,7 @@ describe('Use Table Hook', () => {
         name: 'device',
         options: [
           {
-            text: 'All',
+            text: AllValue,
             value: '__all',
             selected: false,
           },
@@ -1041,7 +1041,7 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowAll = screen.getByTestId(InTestIds.row('All', 0));
+        const rowAll = screen.getByTestId(InTestIds.row(AllValue, 0));
 
         expect(rowAll).toBeInTheDocument();
 

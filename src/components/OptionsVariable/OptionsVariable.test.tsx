@@ -1,9 +1,9 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import { TestIds } from '../../constants';
-import { OptionsVariable } from './OptionsVariable';
+import { AllValue, TestIds } from '../../constants';
 import { selectVariableValues } from '../../utils';
+import { OptionsVariable } from './OptionsVariable';
 
 /**
  * Mock utils
@@ -103,7 +103,7 @@ describe('Options Variable', () => {
 
   describe('Multi variable', () => {
     const allOption = {
-      text: 'All',
+      text: AllValue,
       value: '$__all',
       selected: false,
     };
@@ -186,7 +186,7 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: ['All', option1.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [AllValue, option1.value] } });
 
       expect(selectVariableValues).toHaveBeenCalledWith([option1.value], expect.any(Object));
     });
@@ -208,9 +208,9 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: ['All', option2.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [AllValue, option2.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['All'], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([AllValue], expect.any(Object));
     });
 
     it('Should select all value if no selected values', () => {
@@ -232,7 +232,7 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['All'], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([AllValue], expect.any(Object));
     });
 
     it('Should deselect values', () => {

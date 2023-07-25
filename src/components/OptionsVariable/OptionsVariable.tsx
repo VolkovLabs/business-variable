@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { InlineField, Select } from '@grafana/ui';
-import { TestIds } from '../../constants';
+import { AllValue, TestIds } from '../../constants';
 import { RuntimeVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
@@ -14,11 +14,6 @@ interface Props {
    */
   variable: RuntimeVariable;
 }
-
-/**
- * All Value
- */
-const AllValue = 'All';
 
 /**
  * Options Variable
