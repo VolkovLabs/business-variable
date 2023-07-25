@@ -20,12 +20,17 @@ interface Props {
    * Event Bus
    */
   eventBus: EventBus;
+
+  /**
+   * Width
+   */
+  width: number;
 }
 
 /**
  * Minimize View
  */
-export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName } = {}, eventBus }) => {
+export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName } = {}, eventBus, width }) => {
   /**
    * Styles and Theme
    */
@@ -49,8 +54,10 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
   }
 
   return (
-    <div className={styles.root} data-testid={TestIds.minimizeView.root}>
-      {(variable.type === 'query' || variable.type === 'custom') && <OptionsVariable variable={variable} />}
+    <div className={styles.root} data-testid={TestIds.minimizeView.root} style={{ maxWidth: width }}>
+      {(variable.type === 'query' || variable.type === 'custom') && (
+        <OptionsVariable variable={variable} width={width - 16} />
+      )}
     </div>
   );
 };

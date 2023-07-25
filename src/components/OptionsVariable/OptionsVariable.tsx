@@ -9,7 +9,15 @@ import { selectVariableValues } from '../../utils';
  * Properties
  */
 interface Props {
+  /**
+   * Variable
+   */
   variable: RuntimeVariable;
+
+  /**
+   * Width
+   */
+  width: number;
 }
 
 /**
@@ -21,7 +29,7 @@ const AllValue = 'All';
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable }) => {
+export const OptionsVariable: React.FC<Props> = ({ variable, width }) => {
   /**
    * Current values
    */
@@ -100,14 +108,16 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   }, [variable]);
 
   return (
-    <InlineField label={variable.label}>
-      <Select
-        aria-label={TestIds.optionsVariable.root}
-        onChange={onChange}
-        options={options}
-        isMulti={variable.multi}
-        value={variable.multi ? values : values[0] || null}
-      />
+    <InlineField label={variable.label} style={{ maxWidth: width }} labelWidth={12}>
+      <div style={{ maxWidth: width - 100 }}>
+        <Select
+          aria-label={TestIds.optionsVariable.root}
+          onChange={onChange}
+          options={options}
+          isMulti={variable.multi}
+          value={variable.multi ? values : values[0] || null}
+        />
+      </div>
     </InlineField>
   );
 };
