@@ -43,7 +43,7 @@ export const FavoritesOptions = [
 /**
  * Status Sort Options
  */
-export const statusSortOptions = [
+export const StatusSortOptions = [
   { value: true, label: 'Enabled', description: 'Allows sort by status.' },
   { value: false, label: 'Disabled', description: 'Hide sorting.' },
 ];

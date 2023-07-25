@@ -8,7 +8,7 @@ import {
   FilterOptions,
   HeaderOptions,
   ShowNameOptions,
-  statusSortOptions,
+  StatusSortOptions,
   StickyOptions,
 } from './constants';
 import { DisplayMode, PanelOptions } from './types';
@@ -132,7 +132,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Sort by status',
         description: 'Available for a single-level layout.',
         settings: {
-          options: statusSortOptions,
+          options: StatusSortOptions,
         },
         defaultValue: false,
         category: ['Header'],
