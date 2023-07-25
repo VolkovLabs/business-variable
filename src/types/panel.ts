@@ -111,6 +111,11 @@ export interface TableViewOptions {
    * Auto Scroll
    */
   autoScroll: boolean;
+
+  /**
+   * Status Sort
+   */
+  statusSort: boolean;
 }
 
 /**

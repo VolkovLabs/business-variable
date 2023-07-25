@@ -145,10 +145,10 @@ export const Table = <TableData extends object>({
                         <Button
                           icon={
                             !header.column.getIsSorted()
-                              ? 'arrow-right'
+                              ? 'list-ul'
                               : header.column.getIsSorted() === 'asc'
-                              ? 'arrow-up'
-                              : 'arrow-down'
+                              ? 'sort-amount-up'
+                              : 'sort-amount-down'
                           }
                           fill="text"
                           onClick={header.column.getToggleSortingHandler()}
@@ -156,6 +156,7 @@ export const Table = <TableData extends object>({
                           className={styles.headerButton}
                           variant={header.column.getIsSorted() ? 'primary' : 'secondary'}
                           data-testid={TestIds.table.buttonSort}
+                          title="Sort by status"
                         />
                       )}
                       {header.column.getCanFilter() && <Filter column={header.column} />}

@@ -41,6 +41,14 @@ export const FavoritesOptions = [
 ];
 
 /**
+ * Status Sort Options
+ */
+export const statusSortOptions = [
+  { value: true, label: 'Enabled', description: 'Allows sort by status.' },
+  { value: false, label: 'Disabled', description: 'Hide sorting.' },
+];
+
+/**
  * Show Name Options
  */
 export const ShowNameOptions = [
