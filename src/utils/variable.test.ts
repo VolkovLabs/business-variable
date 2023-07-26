@@ -20,7 +20,7 @@ describe('Variable Utils', () => {
       jest.mocked(locationService.partial).mockClear();
     });
 
-    describe('Single', () => {
+    describe('Custom Single', () => {
       jest.mocked(locationService.getSearch).mockImplementation(
         () =>
           ({
@@ -53,7 +53,7 @@ describe('Variable Utils', () => {
       });
     });
 
-    describe('Multi', () => {
+    describe('Custom Multi', () => {
       jest.mocked(locationService.getSearch).mockImplementation(
         () =>
           ({
@@ -202,6 +202,33 @@ describe('Variable Utils', () => {
           true
         );
       });
+    });
+
+    describe('Text Box', () => {
+      it('Should apply only first value', () => {
+        const variable = { name: 'variable', type: VariableType.TEXTBOX };
+        selectVariableValues(['value1'], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: 'value1',
+          },
+          true
+        );
+      });
+    });
+
+    it('Should not apply value if no variable passed', () => {
+      selectVariableValues(['value1']);
+
+      expect(locationService.partial).not.toHaveBeenCalled();
+    });
+
+    it('Should not apply value for unsupported variable type', () => {
+      const variable = { name: 'variable', type: VariableType.ADHOC };
+      selectVariableValues(['value1'], variable as any);
+
+      expect(locationService.partial).not.toHaveBeenCalled();
     });
   });
 });

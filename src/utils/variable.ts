@@ -87,7 +87,10 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       return;
     }
     default: {
-      console.log('Unsupported variable type update', runtimeVariable.type);
+      /**
+       * Unsupported variable type
+       */
+      return;
     }
   }
 };
