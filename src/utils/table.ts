@@ -1,7 +1,8 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
 import { AllValue } from '../constants';
-import { Level, RuntimeVariable, TableItem, VariableType } from '../types';
+import { Level, RuntimeVariable, TableItem } from '../types';
+import { isVariableWithOptions } from './variable';
 
 /**
  * Convert Data Frame to objects array
@@ -164,7 +165,7 @@ export const getItemWithStatus = (
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   let selectable = false;
-  if (item.variable?.type === VariableType.QUERY || item.variable?.type === VariableType.CUSTOM) {
+  if (isVariableWithOptions(item.variable)) {
     selectable = item.variable?.options?.some((option) => option.text.toString() === item.value) && !children;
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
