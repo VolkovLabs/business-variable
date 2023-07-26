@@ -53,14 +53,11 @@ export const MinimizeView: React.FC<Props> = ({
   }
 
   /**
-   * Label Width
+   * Label and Select Width
    */
   const labelWidth = 10;
-
-  /**
-   * Label Width px
-   */
   const labelWidthPx = labelWidth * 8;
+  const maxWidth = width - labelWidthPx - padding * 2;
 
   return (
     <div
@@ -72,7 +69,7 @@ export const MinimizeView: React.FC<Props> = ({
       <InlineField label={variable.label || variable.name} labelWidth={labelWidth}>
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-            <div style={{ maxWidth: width - labelWidthPx - 4 }}>
+            <div style={{ maxWidth }}>
               <OptionsVariable variable={variable} />
             </div>
           )}

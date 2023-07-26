@@ -7,6 +7,7 @@
 - Update ESLint configuration (#47)
 - Add status sort button (#49, #51)
 - Add minimize mode similar to the native select (#50)
+- Add text box variable (#53)
 
 ## 1.5.0 (2023-07-11)
 
