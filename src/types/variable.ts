@@ -1,4 +1,4 @@
-import { TypedVariableModel } from '@grafana/data';
+import { TextBoxVariableModel, TypedVariableModel, VariableOption } from '@grafana/data';
 
 /**
  * Dashboard variable type
@@ -56,34 +56,11 @@ export interface RuntimeVariableOption {
 }
 
 /**
+ * TextBox Variable
+ */
+export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption> };
+
+/**
  * Runtime Variable
  */
-export type RuntimeVariable = TypedVariableModel & {
-  /**
-   * Options
-   *
-   * @type {RuntimeVariableOption[]}
-   */
-  options: RuntimeVariableOption[];
-
-  /**
-   * Id
-   *
-   * @type {string}
-   */
-  id: string;
-
-  /**
-   * Multi
-   *
-   * @type {boolean}
-   */
-  multi: boolean;
-
-  /**
-   * Include All
-   *
-   * @type {boolean}
-   */
-  includeAll: boolean;
-};
+export type RuntimeVariable = TypedVariableModel | TextBoxVariable;

@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import { SelectableValue } from '@grafana/data';
+import { CustomVariableModel, QueryVariableModel, SelectableValue } from '@grafana/data';
 import { InlineField, Select } from '@grafana/ui';
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
-import { RuntimeVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -12,7 +11,7 @@ interface Props {
   /**
    * Variable
    */
-  variable: RuntimeVariable;
+  variable: QueryVariableModel | CustomVariableModel;
 }
 
 /**
@@ -26,7 +25,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   const values = useMemo(() => {
     return variable.options
       .filter((option) => option.selected)
-      .map((option) => (option.value === AllValueParameter ? AllValue : option.value));
+      .map((option) => (option.value === AllValueParameter ? AllValue : option.value.toString()));
   }, [variable]);
 
   /**
@@ -88,9 +87,9 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    */
   const options = useMemo(() => {
     return variable.options.map((option) => {
-      const value = option.value === AllValueParameter ? AllValue : option.value;
+      const value = option.value === AllValueParameter ? AllValue : option.value.toString();
       return {
-        label: option.text,
+        label: option.text.toString(),
         value,
         ariaLabel: TestIds.optionsVariable.option(value),
       };
@@ -98,7 +97,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   }, [variable]);
 
   return (
-    <InlineField label={variable.label}>
+    <InlineField label={variable.label || variable.name}>
       <Select
         aria-label={TestIds.optionsVariable.root}
         onChange={onChange}

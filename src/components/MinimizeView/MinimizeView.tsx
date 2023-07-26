@@ -6,6 +6,7 @@ import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
+import { TextVariable } from '../TextVariable';
 
 /**
  * Properties
@@ -57,6 +58,7 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
       {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
         <OptionsVariable variable={variable} />
       )}
+      {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}
     </div>
   );
 };

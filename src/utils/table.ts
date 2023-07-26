@@ -1,8 +1,7 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
-import { locationService } from '@grafana/runtime';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
 import { AllValue } from '../constants';
-import { Level, RuntimeVariable, TableItem } from '../types';
+import { Level, RuntimeVariable, TableItem, VariableType } from '../types';
 
 /**
  * Convert Data Frame to objects array
@@ -164,7 +163,10 @@ export const getItemWithStatus = (
   }
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
-  const selectable = item.variable?.options?.some((option) => option.text === item.value) && !children;
+  let selectable = false;
+  if (item.variable?.type === VariableType.QUERY || item.variable?.type === VariableType.CUSTOM) {
+    selectable = item.variable?.options?.some((option) => option.text.toString() === item.value) && !children;
+  }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
   return {
@@ -179,71 +181,6 @@ export const getItemWithStatus = (
     name: item.name,
     status,
   };
-};
-
-/**
- * Select Variable Values
- * @param values
- * @param runtimeVariable
- */
-export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
-  if (!runtimeVariable) {
-    return;
-  }
-
-  const { name, multi } = runtimeVariable;
-
-  /**
-   * Multi update
-   */
-  if (multi) {
-    if (values.some((value) => value.toLowerCase() === 'all')) {
-      locationService.partial({ [`var-${name}`]: AllValue }, true);
-      return;
-    }
-
-    /**
-     * All Selected values for variable
-     */
-    const searchParams = locationService
-      .getSearch()
-      .getAll(`var-${name}`)
-      .filter((s) => s.toLowerCase().indexOf('all') !== 0);
-
-    /**
-     * Values selected, but not defined in the URL
-     */
-    if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
-      searchParams.push(...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text));
-    }
-
-    /**
-     * Get Already Selected Values
-     */
-    const alreadySelectedValues = values.filter((value) => searchParams.includes(value));
-
-    /**
-     * Deselect values
-     */
-    if (alreadySelectedValues.length === values.length) {
-      locationService.partial(
-        { [`var-${name}`]: searchParams.filter((value) => !alreadySelectedValues.includes(value)) },
-        true
-      );
-      return;
-    }
-
-    const uniqueValues = [...new Set(values.concat(searchParams)).values()];
-
-    locationService.partial({ [`var-${name}`]: uniqueValues }, true);
-    return;
-  }
-
-  /**
-   * Single Value
-   */
-  const value = values[0];
-  locationService.partial({ [`var-${name}`]: value }, true);
 };
 
 /**
