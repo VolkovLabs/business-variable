@@ -1,12 +1,13 @@
 # Change Log
 
-## 1.6.0 (IN PROGRESS)
+## 1.6.0 (2023-07-26)
 
 ### Features / Enhancements
 
 - Update ESLint configuration (#47)
 - Add status sort button (#49, #51)
-- Add minimize mode similar to the native select (#50)
+- Add minimize mode similar to the native select for Query and Custom (#50)
+- Add input for text box variable (#53)
 
 ## 1.5.0 (2023-07-11)
 

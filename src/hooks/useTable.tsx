@@ -4,13 +4,15 @@ import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
 import { AllValue, TestIds } from '../constants';
-import { Level, PanelOptions, TableItem } from '../types';
+import { Level, PanelOptions, TableItem, VariableType } from '../types';
+import { TextVariable } from '../components/TextVariable';
 import {
   convertTreeToPlain,
   favoriteFilter,
   getFilteredTree,
   getItemWithStatus,
   getRows,
+  isVariableWithOptions,
   selectVariableValues,
   statusSort,
   valueFilter,
@@ -57,7 +59,10 @@ export const useTable = ({
       return [];
     }
 
-    const isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
+    let isSelectedAll = false;
+    if (isVariableWithOptions(runtimeVariable)) {
+      isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
+    }
 
     /**
      * Variable values from data source
@@ -82,7 +87,7 @@ export const useTable = ({
 
     const groupFields = levels || [];
 
-    if (groupFields.length) {
+    if (groupFields.length && isVariableWithOptions(runtimeVariable)) {
       /**
        * Use Group levels
        */
@@ -93,7 +98,7 @@ export const useTable = ({
         return getItemWithStatus(
           {
             value,
-            selected: !!runtimeVariable?.options.find((option) => option.value === value)?.selected,
+            selected: runtimeVariable.options.find((option) => option.value === value)?.selected || false,
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
             name: key,
@@ -139,22 +144,49 @@ export const useTable = ({
     /**
      * Use Variable Options
      */
-    return runtimeVariable.options.map((option) => {
-      return getItemWithStatus(
-        {
-          value: option.text,
-          selected: !!option.selected,
-          variable: runtimeVariable,
-          isFavorite: favorites.isAdded(runtimeVariable.name, option.text),
-        },
-        {
-          namesArray,
-          statusField: statusArray,
-          isSelectedAll,
-          favoritesEnabled: options.favorites,
-        }
-      );
-    });
+    if (isVariableWithOptions(runtimeVariable)) {
+      return runtimeVariable.options.map((option) => {
+        return getItemWithStatus(
+          {
+            value: option.text.toString(),
+            selected: !!option.selected,
+            variable: runtimeVariable,
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.text.toString()),
+          },
+          {
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+            favoritesEnabled: options.favorites,
+          }
+        );
+      });
+    }
+
+    /**
+     * Text Box Variable
+     */
+    if (runtimeVariable.type === VariableType.TEXTBOX) {
+      return [
+        getItemWithStatus(
+          {
+            value: runtimeVariable.current.value?.toString() || '',
+            selected: false,
+            variable: runtimeVariable,
+            isFavorite: false,
+            name: runtimeVariable?.name,
+          },
+          {
+            namesArray,
+            statusField: statusArray,
+            isSelectedAll,
+            favoritesEnabled: options.favorites,
+          }
+        ),
+      ];
+    }
+
+    return [];
   }, [runtimeVariable, data, levels, options.name, options.status, options.favorites, getRuntimeVariable, favorites]);
 
   /**
@@ -175,7 +207,9 @@ export const useTable = ({
         .map((item) => ({
           variable: item.variable,
           values: item.values.filter((value) =>
-            item.variable?.options.some((option) => option.text === value && !option.selected)
+            isVariableWithOptions(item.variable)
+              ? item.variable?.options.some((option) => option.text === value && !option.selected)
+              : value
           ),
         }))
         .filter((item) => item.values.length > 0)
@@ -196,7 +230,7 @@ export const useTable = ({
    */
   const onClick = useCallback(
     (item: TableItem) => {
-      if (item.selected && !item.variable?.multi) {
+      if (item.selected && isVariableWithOptions(item.variable) && !item.variable?.multi) {
         onChange(item);
       }
     },
@@ -244,7 +278,9 @@ export const useTable = ({
             >
               {row.original.selectable && (
                 <input
-                  type={runtimeVariable?.multi ? 'checkbox' : 'radio'}
+                  type={
+                    isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
+                  }
                   onChange={() => onChange(row.original)}
                   onClick={() => onClick(row.original)}
                   checked={row.original.selected}
@@ -266,38 +302,42 @@ export const useTable = ({
                 />
               )}
 
-              <label
-                onClick={() => {
-                  /**
-                   * Html For causes loosing panel focus
-                   * So we have to call onChange manually
-                   */
-                  if (row.original.selectable) {
-                    onChange(row.original);
-                  }
-                }}
-                data-testid={TestIds.table.label}
-                className={styles.label}
-              >
-                {row.original.showStatus && (
-                  <span
-                    className={styles.status}
-                    style={{
-                      backgroundColor: row.original.statusColor,
-                    }}
-                  />
-                )}
-                <span
-                  style={{
-                    fontWeight: row.original.selected
-                      ? theme.typography.fontWeightBold
-                      : theme.typography.fontWeightRegular,
+              {isVariableWithOptions(runtimeVariable) && (
+                <label
+                  onClick={() => {
+                    /**
+                     * Html For causes loosing panel focus
+                     * So we have to call onChange manually
+                     */
+                    if (row.original.selectable) {
+                      onChange(row.original);
+                    }
                   }}
+                  data-testid={TestIds.table.label}
+                  className={styles.label}
                 >
-                  {options.showName && row.original.name ? `${row.original.name}: ` : ''}
-                  {value}
-                </span>
-              </label>
+                  {row.original.showStatus && (
+                    <span
+                      className={styles.status}
+                      style={{
+                        backgroundColor: row.original.statusColor,
+                      }}
+                    />
+                  )}
+                  <span
+                    style={{
+                      fontWeight: row.original.selected
+                        ? theme.typography.fontWeightBold
+                        : theme.typography.fontWeightRegular,
+                    }}
+                  >
+                    {options.showName && row.original.name ? `${row.original.name}: ` : ''}
+                    {value}
+                  </span>
+                </label>
+              )}
+
+              {runtimeVariable?.type === VariableType.TEXTBOX && <TextVariable variable={runtimeVariable} />}
             </div>
           );
         },
@@ -344,14 +384,12 @@ export const useTable = ({
 
     return columns;
   }, [
-    runtimeVariable?.name,
-    runtimeVariable?.label,
-    runtimeVariable?.multi,
+    runtimeVariable,
     variable,
     options.filter,
+    options.statusSort,
     options.favorites,
     options.showName,
-    options.statusSort,
     styles.expandButton,
     styles.rowContent,
     styles.selectControl,

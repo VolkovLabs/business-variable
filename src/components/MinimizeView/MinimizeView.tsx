@@ -1,11 +1,12 @@
 import React from 'react';
 import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
-import { Alert } from '@grafana/ui';
+import { Alert, InlineField } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
+import { TextVariable } from '../TextVariable';
 
 /**
  * Properties
@@ -30,7 +31,11 @@ interface Props {
 /**
  * Minimize View
  */
-export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName, padding } = {}, eventBus }) => {
+export const MinimizeView: React.FC<Props> = ({
+  options: { variable: variableName, padding = 0 } = {},
+  eventBus,
+  width,
+}) => {
   /**
    * Runtime Variables
    */
@@ -47,6 +52,13 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
     );
   }
 
+  /**
+   * Label and Select Width
+   */
+  const labelWidth = 10;
+  const labelWidthPx = labelWidth * 8;
+  const maxWidth = width - labelWidthPx - padding * 2;
+
   return (
     <div
       className={css`
@@ -54,9 +66,16 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
       `}
       data-testid={TestIds.minimizeView.root}
     >
-      {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-        <OptionsVariable variable={variable} />
-      )}
+      <InlineField grow label={variable.label || variable.name} labelWidth={labelWidth}>
+        <>
+          {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
+            <div style={{ maxWidth }}>
+              <OptionsVariable variable={variable} />
+            </div>
+          )}
+          {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}
+        </>
+      </InlineField>
     </div>
   );
 };

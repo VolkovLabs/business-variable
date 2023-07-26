@@ -2,7 +2,7 @@ import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { AllValue, TestIds } from '../constants';
-import { TableItem } from '../types';
+import { TableItem, VariableType } from '../types';
 import { getItemWithStatus, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
@@ -56,6 +56,7 @@ describe('Use Table Hook', () => {
       () =>
         ({
           variable: {
+            type: VariableType.CUSTOM,
             options: [
               {
                 text: 'option1',
@@ -97,6 +98,7 @@ describe('Use Table Hook', () => {
     const variable = {
       multi: true,
       includeAll: true,
+      type: VariableType.CUSTOM,
       options: [
         {
           text: AllValue,
@@ -167,6 +169,7 @@ describe('Use Table Hook', () => {
     const variable = {
       multi: true,
       includeAll: true,
+      type: VariableType.CUSTOM,
       options: [
         {
           text: AllValue,
@@ -253,6 +256,7 @@ describe('Use Table Hook', () => {
     const variable = {
       multi: true,
       includeAll: false,
+      type: VariableType.CUSTOM,
       options: [
         {
           text: AllValue,
@@ -422,6 +426,7 @@ describe('Use Table Hook', () => {
       const deviceVariable = {
         multi: true,
         includeAll: true,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,
@@ -537,6 +542,7 @@ describe('Use Table Hook', () => {
       const deviceVariable = {
         multi: true,
         includeAll: true,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,
@@ -652,6 +658,7 @@ describe('Use Table Hook', () => {
       const variable = {
         multi: false,
         includeAll: false,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: 'device1',
@@ -712,6 +719,7 @@ describe('Use Table Hook', () => {
       const variable = {
         multi: false,
         includeAll: true,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,
@@ -780,6 +788,7 @@ describe('Use Table Hook', () => {
       const variable = {
         multi: true,
         includeAll: true,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,
@@ -875,6 +884,7 @@ describe('Use Table Hook', () => {
       const deviceVariable = {
         multi: true,
         includeAll: true,
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,
@@ -962,11 +972,167 @@ describe('Use Table Hook', () => {
       expect(within(device1).getByText('device: device1')).toBeInTheDocument();
     });
 
+    it('Should work for text variable', () => {
+      const deviceVariable = {
+        type: VariableType.TEXTBOX,
+        current: {
+          value: '123',
+        },
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn(() => deviceVariable),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            showName: true,
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [{ name: 'device', source: 'A' }],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TestIds.table.cell('123', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+    });
+
+    it('Should work for text variable without value', () => {
+      const deviceVariable = {
+        type: VariableType.TEXTBOX,
+        current: {},
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn(() => deviceVariable),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            showName: true,
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [{ name: 'device', source: 'A' }],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TestIds.table.cell('', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+    });
+
+    it('Should work for not supported variable', () => {
+      const deviceVariable = {
+        type: VariableType.ADHOC,
+        current: {
+          value: '123',
+        },
+      };
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn(() => deviceVariable),
+          } as any)
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            showName: true,
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [{ name: 'device', source: 'A' }],
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      const { container } = render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      expect(container.querySelector('div')).not.toBeInTheDocument();
+    });
+
     describe('Favorites', () => {
       const deviceVariable = {
         multi: true,
         includeAll: true,
         name: 'device',
+        type: VariableType.CUSTOM,
         options: [
           {
             text: AllValue,

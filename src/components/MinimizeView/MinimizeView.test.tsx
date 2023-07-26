@@ -11,6 +11,7 @@ import { MinimizeView } from './MinimizeView';
  */
 const InTestIds = {
   optionsVariable: 'data-testid options-variable',
+  textVariable: 'data-testid text-variable',
 };
 
 /**
@@ -18,6 +19,13 @@ const InTestIds = {
  */
 jest.mock('../OptionsVariable', () => ({
   OptionsVariable: jest.fn(() => <div data-testid={InTestIds.optionsVariable} />),
+}));
+
+/**
+ * Mock Text Variable
+ */
+jest.mock('../TextVariable', () => ({
+  TextVariable: jest.fn(() => <div data-testid={InTestIds.textVariable} />),
 }));
 
 /**
@@ -48,7 +56,7 @@ describe('Minimize View', () => {
    * Get Tested Component
    */
   const getComponent = ({ options, ...restProps }: Partial<Props>) => {
-    return <MinimizeView options={options} {...(restProps as any)} />;
+    return <MinimizeView options={options} {...(restProps as any)} width={400} />;
   };
 
   it('Should show no variable message', () => {
@@ -87,5 +95,53 @@ describe('Minimize View', () => {
 
     expect(selectors.root()).toBeInTheDocument();
     expect(selectors.optionsVariable()).toBeInTheDocument();
+  });
+
+  it('Should show variable control for text box type', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.TEXTBOX,
+          },
+        } as any)
+    );
+    render(getComponent({}));
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.textVariable()).toBeInTheDocument();
+  });
+
+  it('Should show variable label', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.TEXTBOX,
+          },
+        } as any)
+    );
+
+    render(getComponent({}));
+
+    expect(screen.getByText('123')).toBeInTheDocument();
+  });
+
+  it('Should show variable name', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            name: '123',
+            type: VariableType.TEXTBOX,
+          },
+        } as any)
+    );
+
+    render(getComponent({}));
+
+    expect(screen.getByText('123')).toBeInTheDocument();
   });
 });
