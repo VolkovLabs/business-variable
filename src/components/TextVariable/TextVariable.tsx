@@ -49,7 +49,7 @@ export const TextVariable: React.FC<Props> = ({ variable }) => {
 
   return (
     <InlineField label={variable.label || variable.name}>
-      <Input data-testid={TestIds.optionsVariable.root} onChange={onChange} onBlur={onSave} value={value} />
+      <Input data-testid={TestIds.textVariable.root} onChange={onChange} onBlur={onSave} value={value} />
     </InlineField>
   );
 };

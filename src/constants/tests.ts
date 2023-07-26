@@ -44,4 +44,7 @@ export const TestIds = {
     root: 'options-variable',
     option: (name: string) => `options-variable option-${name}`,
   },
+  textVariable: {
+    root: 'data-testid text-variable',
+  },
 };
