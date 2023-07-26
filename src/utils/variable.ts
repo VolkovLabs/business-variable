@@ -96,11 +96,15 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
   }
 };
 
+/**
+ * Variable with Options
+ */
 export const isVariableWithOptions = (
   variable?: RuntimeVariable
 ): variable is CustomVariableModel | QueryVariableModel => {
   if (!variable) {
     return false;
   }
+
   return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
 };
