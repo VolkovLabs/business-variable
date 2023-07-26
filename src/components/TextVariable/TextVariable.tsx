@@ -35,9 +35,7 @@ export const TextVariable: React.FC<Props> = ({ variable }) => {
    * On Change
    */
   const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-
-    setValue(value);
+    setValue(event.target.value);
   }, []);
 
   /**

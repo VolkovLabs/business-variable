@@ -427,13 +427,12 @@
         "favorites": false,
         "filter": false,
         "header": true,
-        "padding": 10,
+        "padding": 20,
         "showName": false,
         "statusSort": false,
         "sticky": false,
         "variable": "text"
       },
-      "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -1121,20 +1120,20 @@
       {
         "current": {
           "selected": false,
-          "text": "",
-          "value": ""
+          "text": "12344343333",
+          "value": "12344343333"
         },
         "hide": 0,
         "label": "Input",
         "name": "text",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "test",
             "value": "test"
           }
         ],
-        "query": "",
+        "query": "12344343333",
         "skipUrlSync": false,
         "type": "textbox"
       }
