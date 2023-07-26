@@ -66,7 +66,7 @@ export const MinimizeView: React.FC<Props> = ({
       `}
       data-testid={TestIds.minimizeView.root}
     >
-      <InlineField label={variable.label || variable.name} labelWidth={labelWidth}>
+      <InlineField grow label={variable.label || variable.name} labelWidth={labelWidth}>
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
             <div style={{ maxWidth }}>

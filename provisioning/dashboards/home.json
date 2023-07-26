@@ -63,9 +63,11 @@
       "id": 3,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": true,
         "filter": true,
         "header": true,
+        "padding": 10,
         "showName": false,
         "statusSort": false,
         "sticky": false,
@@ -131,7 +133,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 5,
         "w": 6,
         "x": 6,
         "y": 0
@@ -139,9 +141,11 @@
       "id": 4,
       "options": {
         "autoScroll": false,
+        "displayMode": "minimize",
         "favorites": false,
         "filter": false,
         "header": true,
+        "padding": 20,
         "showName": false,
         "statusSort": false,
         "sticky": false,
@@ -215,9 +219,11 @@
       "id": 5,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": false,
         "filter": false,
         "header": true,
+        "padding": 10,
         "showName": false,
         "statusSort": false,
         "sticky": false,
@@ -291,6 +297,7 @@
       "id": 6,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": false,
         "filter": false,
         "groups": [
@@ -317,6 +324,7 @@
           }
         ],
         "header": false,
+        "padding": 10,
         "showName": false,
         "statusSort": false,
         "sticky": false,
@@ -385,6 +393,51 @@
     },
     {
       "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "autoScroll": false,
+        "displayMode": "minimize",
+        "favorites": false,
+        "filter": false,
+        "header": true,
+        "padding": 10,
+        "showName": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "text"
+      },
+      "title": "Panel Title",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
         "type": "postgres",
         "uid": "timescale"
       },
@@ -419,6 +472,7 @@
       "id": 7,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": true,
         "filter": true,
         "groups": [
@@ -458,6 +512,7 @@
           }
         ],
         "header": true,
+        "padding": 10,
         "showName": false,
         "statusSort": true,
         "sticky": true,
@@ -991,9 +1046,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": ["All"],
-          "value": ["$__all"]
+          "selected": false,
+          "text": ["Singapore", "Stockholm", "Tokyo", "Moscow", "NY"],
+          "value": ["Singapore", "Stockholm", "Tokyo", "Moscow", "NY"]
         },
         "datasource": {
           "type": "postgres",
@@ -1015,7 +1070,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -1062,6 +1117,26 @@
         "skipUrlSync": false,
         "sort": 3,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "label": "Input",
+        "name": "text",
+        "options": [
+          {
+            "selected": true,
+            "text": "test",
+            "value": "test"
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
