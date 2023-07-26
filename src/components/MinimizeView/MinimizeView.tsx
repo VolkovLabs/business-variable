@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
-import { Alert } from '@grafana/ui';
+import { Alert, InlineField } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
@@ -55,10 +55,14 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
       `}
       data-testid={TestIds.minimizeView.root}
     >
-      {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-        <OptionsVariable variable={variable} />
-      )}
-      {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}
+      <InlineField label={variable.label || variable.name}>
+        <>
+          {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
+            <OptionsVariable variable={variable} />
+          )}
+          {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}
+        </>
+      </InlineField>
     </div>
   );
 };

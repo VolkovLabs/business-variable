@@ -112,4 +112,36 @@ describe('Minimize View', () => {
     expect(selectors.root()).toBeInTheDocument();
     expect(selectors.textVariable()).toBeInTheDocument();
   });
+
+  it('Should show variable label', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.TEXTBOX,
+          },
+        } as any)
+    );
+
+    render(getComponent({}));
+
+    expect(screen.getByText('123')).toBeInTheDocument();
+  });
+
+  it('Should show variable name', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            name: '123',
+            type: VariableType.TEXTBOX,
+          },
+        } as any)
+    );
+
+    render(getComponent({}));
+
+    expect(screen.getByText('123')).toBeInTheDocument();
+  });
 });

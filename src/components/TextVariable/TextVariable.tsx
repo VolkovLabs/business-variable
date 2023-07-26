@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { InlineField, Input } from '@grafana/ui';
+import { Input } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
@@ -47,9 +47,5 @@ export const TextVariable: React.FC<Props> = ({ variable }) => {
     selectVariableValues([value], variable);
   }, [value, variable]);
 
-  return (
-    <InlineField label={variable.label || variable.name}>
-      <Input data-testid={TestIds.textVariable.root} onChange={onChange} onBlur={onSave} value={value} />
-    </InlineField>
-  );
+  return <Input data-testid={TestIds.textVariable.root} onChange={onChange} onBlur={onSave} value={value} />;
 };

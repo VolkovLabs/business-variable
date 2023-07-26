@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { CustomVariableModel, QueryVariableModel, SelectableValue } from '@grafana/data';
-import { InlineField, Select } from '@grafana/ui';
+import { Select } from '@grafana/ui';
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { selectVariableValues } from '../../utils';
 
@@ -97,14 +97,12 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   }, [variable]);
 
   return (
-    <InlineField label={variable.label || variable.name}>
-      <Select
-        aria-label={TestIds.optionsVariable.root}
-        onChange={onChange}
-        options={options}
-        isMulti={variable.multi}
-        value={variable.multi ? values : values[0] || null}
-      />
-    </InlineField>
+    <Select
+      aria-label={TestIds.optionsVariable.root}
+      onChange={onChange}
+      options={options}
+      isMulti={variable.multi}
+      value={variable.multi ? values : values[0] || null}
+    />
   );
 };

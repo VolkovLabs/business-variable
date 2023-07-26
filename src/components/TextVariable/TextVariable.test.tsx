@@ -51,30 +51,6 @@ describe('Text Variable', () => {
     expect(selectors.root()).toHaveValue(defaultVariable.current.value);
   });
 
-  it('Should show variable label', () => {
-    render(
-      getComponent({
-        variable: defaultVariable as any,
-      })
-    );
-
-    expect(screen.getByText(defaultVariable.label)).toBeInTheDocument();
-  });
-
-  it('Should show variable name', () => {
-    render(
-      getComponent({
-        variable: {
-          ...defaultVariable,
-          label: '',
-          name: 'name',
-        } as any,
-      })
-    );
-
-    expect(screen.getByText('name')).toBeInTheDocument();
-  });
-
   it('Should apply empty string if variable value is undefined', () => {
     render(
       getComponent({
