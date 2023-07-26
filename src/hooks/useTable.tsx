@@ -87,21 +87,18 @@ export const useTable = ({
 
     const groupFields = levels || [];
 
-    if (groupFields.length) {
+    if (groupFields.length && isVariableWithOptions(runtimeVariable)) {
       /**
        * Use Group levels
        */
       const rows = getRows(data, groupFields, (item, key, children) => {
         const value = item[key as keyof typeof item];
         const levelVariable = getRuntimeVariable(key);
-        const selected = isVariableWithOptions(runtimeVariable)
-          ? runtimeVariable.options.find((option) => option.value === value)?.selected || false
-          : false;
 
         return getItemWithStatus(
           {
             value,
-            selected,
+            selected: runtimeVariable.options.find((option) => option.value === value)?.selected || false,
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
             name: key,
@@ -120,12 +117,7 @@ export const useTable = ({
         /**
          * Add all option if only 1 level
          */
-        if (
-          groupFields.length === 1 &&
-          isVariableWithOptions(runtimeVariable) &&
-          runtimeVariable?.multi &&
-          runtimeVariable?.includeAll
-        ) {
+        if (groupFields.length === 1 && runtimeVariable?.multi && runtimeVariable?.includeAll) {
           return [
             getItemWithStatus(
               {
@@ -182,6 +174,7 @@ export const useTable = ({
             selected: false,
             variable: runtimeVariable,
             isFavorite: false,
+            name: runtimeVariable?.name,
           },
           {
             namesArray,
