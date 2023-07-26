@@ -1,3 +1,4 @@
+import { CustomVariableModel, QueryVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { AllValue } from '../constants';
 import { RuntimeVariable, VariableType } from '../types';
@@ -93,4 +94,13 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       return;
     }
   }
+};
+
+export const isVariableWithOptions = (
+  variable?: RuntimeVariable
+): variable is CustomVariableModel | QueryVariableModel => {
+  if (!variable) {
+    return false;
+  }
+  return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
 };
