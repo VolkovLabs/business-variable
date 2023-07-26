@@ -31,7 +31,11 @@ interface Props {
 /**
  * Minimize View
  */
-export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName, padding } = {}, eventBus }) => {
+export const MinimizeView: React.FC<Props> = ({
+  options: { variable: variableName, padding = 0 } = {},
+  eventBus,
+  width,
+}) => {
   /**
    * Runtime Variables
    */
@@ -48,6 +52,16 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
     );
   }
 
+  /**
+   * Label Width
+   */
+  const labelWidth = 10;
+
+  /**
+   * Label Width px
+   */
+  const labelWidthPx = labelWidth * 8;
+
   return (
     <div
       className={css`
@@ -55,10 +69,12 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
       `}
       data-testid={TestIds.minimizeView.root}
     >
-      <InlineField label={variable.label || variable.name}>
+      <InlineField label={variable.label || variable.name} labelWidth={labelWidth}>
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-            <OptionsVariable variable={variable} />
+            <div style={{ maxWidth: width - labelWidthPx - 4 }}>
+              <OptionsVariable variable={variable} />
+            </div>
           )}
           {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}
         </>
