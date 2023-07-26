@@ -30,7 +30,11 @@ interface Props {
 /**
  * Minimize View
  */
-export const MinimizeView: React.FC<Props> = ({ options: { variable: variableName, padding } = {}, eventBus }) => {
+export const MinimizeView: React.FC<Props> = ({
+  options: { variable: variableName, padding } = {},
+  eventBus,
+  width,
+}) => {
   /**
    * Runtime Variables
    */
@@ -55,7 +59,7 @@ export const MinimizeView: React.FC<Props> = ({ options: { variable: variableNam
       data-testid={TestIds.minimizeView.root}
     >
       {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-        <OptionsVariable variable={variable} />
+        <OptionsVariable variable={variable} width={width - padding * 2} />
       )}
     </div>
   );
