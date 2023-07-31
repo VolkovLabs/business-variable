@@ -96,14 +96,16 @@ export const useTable = ({
       const rows = getRows(data, groupFields, (item, key, children) => {
         const value = item[key as keyof typeof item];
         const levelVariable = getRuntimeVariable(key);
+        const variableOption = runtimeVariable.options.find((option) => option.value === value);
 
         return getItemWithStatus(
           {
             value,
-            selected: runtimeVariable.options.find((option) => option.value === value)?.selected || false,
+            selected: variableOption?.selected || false,
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
             name: key,
+            label: variableOption?.text.toString() || value,
           },
           {
             children,
@@ -175,6 +177,7 @@ export const useTable = ({
         getItemWithStatus(
           {
             value: runtimeVariable.current.value?.toString() || '',
+            label: runtimeVariable.current.text?.toString() || '',
             selected: false,
             variable: runtimeVariable,
             isFavorite: false,

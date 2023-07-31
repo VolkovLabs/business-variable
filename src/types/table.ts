@@ -84,5 +84,5 @@ export interface TableItem {
   /**
    * Label
    */
-  label?: string;
+  label: string;
 }

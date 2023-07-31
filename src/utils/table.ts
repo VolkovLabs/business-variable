@@ -68,7 +68,7 @@ const getGroupArray = (
     return {
       ...item,
       childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.value]),
+        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.label]),
         item.childValues || []
       ),
       childFavoritesCount: children.reduce(
@@ -110,6 +110,7 @@ export const getRows = (
    */
   const defaultGetItem = (item: object, key: string): TableItem => ({
     value: item[key as keyof typeof item],
+    label: item[key as keyof typeof item],
     selected: false,
     showStatus: false,
     selectable: true,
@@ -138,7 +139,7 @@ export const getItemWithStatus = (
     variable?: RuntimeVariable;
     isFavorite: boolean;
     name?: string;
-    label?: string;
+    label: string;
   },
   {
     namesArray,
@@ -246,20 +247,20 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
  * Value Filter
  * @param row
  * @param columnId
- * @param value
+ * @param searchTerm
  */
-export const valueFilter: FilterFn<TableItem> = (row, columnId, value) => {
+export const valueFilter: FilterFn<TableItem> = (row, columnId, searchTerm: string) => {
   /**
    * Filter parent rows
    */
   if (row.original.childValues) {
-    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(value.toLowerCase()));
+    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
   /**
    * Filter last level row
    */
-  return row.original.value.toLowerCase().includes(value.toLowerCase());
+  return row.original.label.toLowerCase().includes(searchTerm.toLowerCase());
 };
 
 /**
