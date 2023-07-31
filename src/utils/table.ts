@@ -1,6 +1,6 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
-import { AllValue } from '../constants';
+import { AllValue, AllValueParameter } from '../constants';
 import { Level, RuntimeVariable, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
@@ -132,7 +132,14 @@ export const getRows = (
  * @param favoritesEnabled
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean; name?: string },
+  item: {
+    value: string;
+    selected: boolean;
+    variable?: RuntimeVariable;
+    isFavorite: boolean;
+    name?: string;
+    label?: string;
+  },
   {
     namesArray,
     statusField,
@@ -166,7 +173,11 @@ export const getItemWithStatus = (
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable)) {
-    selectable = item.variable?.options?.some((option) => option.text.toString() === item.value) && !children;
+    selectable =
+      item.variable?.options?.some((option) => {
+        const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+        return optionValue === item.value;
+      }) && !children;
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
@@ -181,6 +192,7 @@ export const getItemWithStatus = (
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
     name: item.name,
     status,
+    label: item.label,
   };
 };
 

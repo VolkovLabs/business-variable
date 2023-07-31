@@ -3,7 +3,7 @@ import { EventBus, FieldType, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
-import { AllValue, TestIds } from '../constants';
+import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { Level, PanelOptions, TableItem, VariableType } from '../types';
 import { TextVariable } from '../components/TextVariable';
 import {
@@ -61,7 +61,9 @@ export const useTable = ({
 
     let isSelectedAll = false;
     if (isVariableWithOptions(runtimeVariable)) {
-      isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes('__all') && rt.selected === true);
+      isSelectedAll = !!runtimeVariable.options.find(
+        (rt) => rt.value.includes(AllValueParameter) && rt.selected === true
+      );
     }
 
     /**
@@ -126,6 +128,7 @@ export const useTable = ({
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,
                 name: groupFields[0].name,
+                label: AllValue,
               },
               {
                 namesArray,
@@ -148,10 +151,11 @@ export const useTable = ({
       return runtimeVariable.options.map((option) => {
         return getItemWithStatus(
           {
-            value: option.text.toString(),
+            value: option.value.toString() === AllValueParameter ? AllValue : option.value.toString(),
             selected: !!option.selected,
             variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable.name, option.text.toString()),
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.value.toString()),
+            label: option.text.toString(),
           },
           {
             namesArray,
@@ -268,7 +272,7 @@ export const useTable = ({
         enableSorting: options.statusSort,
         sortingFn: statusSort,
         cell: ({ row, getValue }) => {
-          const value = getValue() as string;
+          const value = row.original.label || (getValue() as string);
 
           return (
             <div
