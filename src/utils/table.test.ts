@@ -23,6 +23,7 @@ describe('Table Utils', () => {
         selected: false,
         showStatus: false,
         selectable: true,
+        label: value,
       };
     };
 
@@ -42,10 +43,12 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           ...defaultItem,
         },
         {
           value: 'Japan',
+          label: 'Japan',
           ...defaultItem,
         },
       ]);
@@ -74,24 +77,28 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           ...defaultItem,
           childValues: ['FL'],
           childFavoritesCount: 0,
           children: [
             {
               value: 'FL',
+              label: 'FL',
               ...defaultItem,
             },
           ],
         },
         {
           value: 'Japan',
+          label: 'Japan',
           ...defaultItem,
           childValues: ['Tokio'],
           childFavoritesCount: 0,
           children: [
             {
               value: 'Tokio',
+              label: 'Tokio',
               ...defaultItem,
             },
           ],
@@ -132,24 +139,28 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           ...defaultItem,
           childValues: ['device1', 'device11'],
           childFavoritesCount: 0,
           children: [
             {
               value: 'FL',
+              label: 'FL',
               childValues: ['device1'],
               ...defaultItem,
               childFavoritesCount: 0,
               children: [
                 {
                   value: 'Tampa',
+                  label: 'Tampa',
                   childValues: ['device1'],
                   ...defaultItem,
                   childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device1',
+                      label: 'device1',
                       ...defaultItem,
                     },
                   ],
@@ -158,18 +169,21 @@ describe('Table Utils', () => {
             },
             {
               value: 'NY',
+              label: 'NY',
               ...defaultItem,
               childValues: ['device11'],
               childFavoritesCount: 0,
               children: [
                 {
                   value: 'New York',
+                  label: 'New York',
                   childValues: ['device11'],
                   ...defaultItem,
                   childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device11',
+                      label: 'device11',
                       ...defaultItem,
                     },
                   ],
@@ -180,24 +194,28 @@ describe('Table Utils', () => {
         },
         {
           value: 'Japan',
+          label: 'Japan',
           ...defaultItem,
           childValues: ['device12'],
           childFavoritesCount: 0,
           children: [
             {
               value: 'Tokio',
+              label: 'Tokio',
               ...defaultItem,
               childValues: ['device12'],
               childFavoritesCount: 0,
               children: [
                 {
                   value: 'Tokio',
+                  label: 'Tokio',
                   ...defaultItem,
                   childValues: ['device12'],
                   childFavoritesCount: 0,
                   children: [
                     {
                       value: 'device12',
+                      label: 'device12',
                       ...defaultItem,
                     },
                   ],
@@ -246,6 +264,7 @@ describe('Table Utils', () => {
           selected: false,
           showStatus: false,
           selectable: value === 'device1' || value === 'device11',
+          label: value,
         };
       };
 
@@ -254,6 +273,7 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           ...defaultItem,
           selectable: false,
           childValues: ['device1', 'device11'],
@@ -261,6 +281,7 @@ describe('Table Utils', () => {
           children: [
             {
               value: 'FL',
+              label: 'FL',
               childValues: ['device1'],
               ...defaultItem,
               selectable: false,
@@ -268,6 +289,7 @@ describe('Table Utils', () => {
               children: [
                 {
                   value: 'Tampa',
+                  label: 'Tampa',
                   childValues: ['device1'],
                   ...defaultItem,
                   selectable: false,
@@ -275,6 +297,7 @@ describe('Table Utils', () => {
                   children: [
                     {
                       value: 'device1',
+                      label: 'device1',
                       ...defaultItem,
                     },
                   ],
@@ -283,6 +306,7 @@ describe('Table Utils', () => {
             },
             {
               value: 'NY',
+              label: 'NY',
               ...defaultItem,
               selectable: false,
               childValues: ['device11'],
@@ -290,6 +314,7 @@ describe('Table Utils', () => {
               children: [
                 {
                   value: 'New York',
+                  label: 'New York',
                   childValues: ['device11'],
                   ...defaultItem,
                   selectable: false,
@@ -297,6 +322,7 @@ describe('Table Utils', () => {
                   children: [
                     {
                       value: 'device11',
+                      label: 'device11',
                       ...defaultItem,
                     },
                   ],
@@ -346,6 +372,7 @@ describe('Table Utils', () => {
           showStatus: false,
           selectable: value === 'device1' || value === 'device11' || value === 'device12',
           isFavorite: value === 'device1' || value === 'device12',
+          label: value,
         };
       };
 
@@ -354,6 +381,7 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           ...defaultItem,
           selectable: false,
           isFavorite: false,
@@ -362,6 +390,7 @@ describe('Table Utils', () => {
           children: [
             {
               value: 'FL',
+              label: 'FL',
               childValues: ['device1'],
               ...defaultItem,
               selectable: false,
@@ -370,6 +399,7 @@ describe('Table Utils', () => {
               children: [
                 {
                   value: 'Tampa',
+                  label: 'Tampa',
                   childValues: ['device1'],
                   ...defaultItem,
                   selectable: false,
@@ -378,6 +408,7 @@ describe('Table Utils', () => {
                   children: [
                     {
                       value: 'device1',
+                      label: 'device1',
                       ...defaultItem,
                       isFavorite: true,
                       selectable: true,
@@ -388,6 +419,7 @@ describe('Table Utils', () => {
             },
             {
               value: 'NY',
+              label: 'NY',
               ...defaultItem,
               selectable: false,
               isFavorite: false,
@@ -396,6 +428,7 @@ describe('Table Utils', () => {
               children: [
                 {
                   value: 'New York',
+                  label: 'New York',
                   childValues: ['device11'],
                   ...defaultItem,
                   selectable: false,
@@ -404,6 +437,7 @@ describe('Table Utils', () => {
                   children: [
                     {
                       value: 'device11',
+                      label: 'device11',
                       ...defaultItem,
                       isFavorite: false,
                       selectable: true,
@@ -416,6 +450,7 @@ describe('Table Utils', () => {
         },
         {
           value: 'Japan',
+          label: 'Japan',
           ...defaultItem,
           selectable: false,
           childValues: ['device12'],
@@ -424,6 +459,7 @@ describe('Table Utils', () => {
           children: [
             {
               value: 'Tokio',
+              label: 'Tokio',
               childValues: ['device12'],
               ...defaultItem,
               selectable: false,
@@ -432,6 +468,7 @@ describe('Table Utils', () => {
               children: [
                 {
                   value: 'Tokio',
+                  label: 'Tokio',
                   childValues: ['device12'],
                   ...defaultItem,
                   selectable: false,
@@ -440,6 +477,7 @@ describe('Table Utils', () => {
                   children: [
                     {
                       value: 'device12',
+                      label: 'device12',
                       ...defaultItem,
                       isFavorite: true,
                       selectable: true,
@@ -485,12 +523,14 @@ describe('Table Utils', () => {
       expect(result).toEqual([
         {
           value: 'USA',
+          label: 'USA',
           selected: false,
           showStatus: false,
           selectable: true,
         },
         {
           value: 'Japan',
+          label: 'Japan',
           selected: false,
           showStatus: false,
           selectable: true,
@@ -569,8 +609,8 @@ describe('Table Utils', () => {
       expect(valueFilter(parentRow as any, {} as any, 'Device3', () => {})).toBeFalsy();
     });
 
-    it('Should include row if value matches', () => {
-      const row = { original: { value: 'device1' } };
+    it('Should include row if label matches', () => {
+      const row = { original: { value: '1', label: 'Device1' } };
 
       expect(valueFilter(row as any, {} as any, 'Device1', () => {})).toBeTruthy();
       expect(valueFilter(row as any, {} as any, 'Device2', () => {})).toBeFalsy();

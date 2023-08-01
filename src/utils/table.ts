@@ -1,6 +1,6 @@
 import { DataFrame, Field, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
-import { AllValue } from '../constants';
+import { AllValue, AllValueParameter } from '../constants';
 import { Level, RuntimeVariable, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
@@ -68,7 +68,7 @@ const getGroupArray = (
     return {
       ...item,
       childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.value]),
+        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.label]),
         item.childValues || []
       ),
       childFavoritesCount: children.reduce(
@@ -110,6 +110,7 @@ export const getRows = (
    */
   const defaultGetItem = (item: object, key: string): TableItem => ({
     value: item[key as keyof typeof item],
+    label: item[key as keyof typeof item],
     selected: false,
     showStatus: false,
     selectable: true,
@@ -132,7 +133,14 @@ export const getRows = (
  * @param favoritesEnabled
  */
 export const getItemWithStatus = (
-  item: { value: string; selected: boolean; variable?: RuntimeVariable; isFavorite: boolean; name?: string },
+  item: {
+    value: string;
+    selected: boolean;
+    variable?: RuntimeVariable;
+    isFavorite: boolean;
+    name?: string;
+    label: string;
+  },
   {
     namesArray,
     statusField,
@@ -166,7 +174,11 @@ export const getItemWithStatus = (
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable)) {
-    selectable = item.variable?.options?.some((option) => option.text.toString() === item.value) && !children;
+    selectable =
+      item.variable?.options?.some((option) => {
+        const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+        return optionValue === item.value;
+      }) && !children;
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
@@ -181,6 +193,7 @@ export const getItemWithStatus = (
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
     name: item.name,
     status,
+    label: item.label,
   };
 };
 
@@ -234,20 +247,20 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
  * Value Filter
  * @param row
  * @param columnId
- * @param value
+ * @param searchTerm
  */
-export const valueFilter: FilterFn<TableItem> = (row, columnId, value) => {
+export const valueFilter: FilterFn<TableItem> = (row, columnId, searchTerm: string) => {
   /**
    * Filter parent rows
    */
   if (row.original.childValues) {
-    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(value.toLowerCase()));
+    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(searchTerm.toLowerCase()));
   }
 
   /**
    * Filter last level row
    */
-  return row.original.value.toLowerCase().includes(value.toLowerCase());
+  return row.original.label.toLowerCase().includes(searchTerm.toLowerCase());
 };
 
 /**

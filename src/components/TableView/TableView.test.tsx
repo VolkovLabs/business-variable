@@ -152,7 +152,7 @@ describe('Table View', () => {
 
   it('Should switch groups', () => {
     jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [{ value: 'device1', selected: false, showStatus: false }],
+      tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
     }));
@@ -222,8 +222,8 @@ describe('Table View', () => {
 
       jest.mocked(useTable).mockImplementation(() => ({
         tableData: [
-          { value: 'device1', selected: false, showStatus: false },
-          { value: 'device2', selected: true, showStatus: false },
+          { value: 'device1', selected: false, showStatus: false, label: 'Device 1' },
+          { value: 'device2', selected: true, showStatus: false, label: 'Device 2' },
         ],
         columns: [{ id: 'value', accessorKey: 'value' }],
         getSubRows: () => undefined,

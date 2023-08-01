@@ -1,7 +1,7 @@
 import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { AllValue, TestIds } from '../constants';
+import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { TableItem, VariableType } from '../types';
 import { getItemWithStatus, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -59,12 +59,17 @@ describe('Use Table Hook', () => {
             type: VariableType.CUSTOM,
             options: [
               {
-                text: 'option1',
+                text: AllValue,
+                value: AllValueParameter,
+                selected: false,
+              },
+              {
+                text: 'Option 1',
                 value: 'option1',
                 selected: true,
               },
               {
-                text: 'option2',
+                text: 'Option 2',
                 value: 'option2',
                 selected: false,
               },
@@ -82,12 +87,20 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
+        value: AllValue,
+        label: AllValue,
+        selected: false,
+        selectable: true,
+      }),
+      expect.objectContaining({
         value: 'option1',
+        label: 'Option 1',
         selected: true,
         selectable: true,
       }),
       expect.objectContaining({
         value: 'option2',
+        label: 'Option 2',
         selected: false,
         selectable: true,
       }),
@@ -102,16 +115,16 @@ describe('Use Table Hook', () => {
       options: [
         {
           text: AllValue,
-          value: '__all',
+          value: AllValueParameter,
           selected: false,
         },
         {
-          text: 'device1',
+          text: 'Device 1',
           value: 'device1',
           selected: true,
         },
         {
-          text: 'device2',
+          text: 'Device 2',
           value: 'device2',
           selected: false,
         },
@@ -151,6 +164,7 @@ describe('Use Table Hook', () => {
         value: AllValue,
         selected: false,
         selectable: true,
+        label: AllValue,
       }),
       expect.objectContaining({
         value: 'device1',

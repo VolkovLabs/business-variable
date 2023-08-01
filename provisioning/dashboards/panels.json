@@ -51,7 +51,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 17,
+        "h": 5,
         "w": 7,
         "x": 0,
         "y": 0
@@ -59,9 +59,11 @@
       "id": 8,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": false,
         "filter": false,
         "header": true,
+        "padding": 10,
         "showName": false,
         "statusSort": false,
         "sticky": false,
@@ -102,10 +104,12 @@
       "id": 7,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": true,
         "filter": true,
         "header": true,
         "heading": "Devices",
+        "padding": 10,
         "selectedVariables": ["device"],
         "showName": false,
         "statusSort": true,
@@ -164,10 +168,12 @@
       "id": 6,
       "options": {
         "autoScroll": false,
+        "displayMode": "table",
         "favorites": true,
         "filter": true,
         "header": true,
         "heading": "Devices",
+        "padding": 10,
         "selectedVariables": ["device"],
         "showName": false,
         "statusSort": true,
@@ -192,6 +198,125 @@
           "refId": "A"
         }
       ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 0,
+        "y": 5
+      },
+      "id": 9,
+      "options": {
+        "autoScroll": false,
+        "displayMode": "minimize",
+        "favorites": false,
+        "filter": false,
+        "header": true,
+        "padding": 10,
+        "showName": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "test"
+      },
+      "title": "Panel Title",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 0,
+        "y": 8
+      },
+      "id": 10,
+      "options": {
+        "autoScroll": false,
+        "displayMode": "table",
+        "favorites": false,
+        "filter": false,
+        "header": true,
+        "name": "value",
+        "padding": 10,
+        "showName": false,
+        "status": "status",
+        "statusSort": false,
+        "sticky": false,
+        "variable": "test"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "P1D2C73DC01F2359B"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "value",
+                "type": "string",
+                "values": ["myvalue", "anothervalue"]
+              },
+              {
+                "config": {},
+                "name": "status",
+                "type": "number",
+                "values": [10, 399]
+              }
+            ],
+            "meta": {},
+            "name": "Test"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     }
   ],
@@ -309,6 +434,37 @@
         "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": ["mykey", "anotherkey"],
+          "value": ["myvalue", "anothervalue"]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "test",
+        "options": [
+          {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": true,
+            "text": "mykey",
+            "value": "myvalue"
+          },
+          {
+            "selected": true,
+            "text": "anotherkey",
+            "value": "anothervalue"
+          }
+        ],
+        "query": "mykey : myvalue, anotherkey : anothervalue",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
@@ -320,6 +476,6 @@
   "timezone": "",
   "title": "Panels",
   "uid": "O4tc_E6Gz",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }

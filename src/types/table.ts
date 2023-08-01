@@ -80,4 +80,9 @@ export interface TableItem {
    * Name
    */
   name?: string;
+
+  /**
+   * Label
+   */
+  label: string;
 }
