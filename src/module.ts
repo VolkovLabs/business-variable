@@ -6,6 +6,7 @@ import {
   DisplayModeOptions,
   FavoritesOptions,
   FilterOptions,
+  GroupSelectionOptions,
   HeaderOptions,
   ShowNameOptions,
   StatusSortOptions,
@@ -92,6 +93,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         showIf: showForTableView,
+      })
+      .addRadio({
+        path: 'groupSelection',
+        name: 'Allow to entire group selection.',
+        settings: {
+          options: GroupSelectionOptions,
+        },
+        defaultValue: false,
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
     /**

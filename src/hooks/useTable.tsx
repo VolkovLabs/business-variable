@@ -113,6 +113,7 @@ export const useTable = ({
             statusField: statusArray,
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         );
       });
@@ -137,6 +138,7 @@ export const useTable = ({
                 statusField: statusArray,
                 isSelectedAll,
                 favoritesEnabled: options.favorites,
+                groupSelection: options.groupSelection,
               }
             ),
           ].concat(rows);
@@ -164,6 +166,7 @@ export const useTable = ({
             statusField: statusArray,
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         );
       });
@@ -188,13 +191,24 @@ export const useTable = ({
             statusField: statusArray,
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         ),
       ];
     }
 
     return [];
-  }, [runtimeVariable, data, levels, options.name, options.status, options.favorites, getRuntimeVariable, favorites]);
+  }, [
+    runtimeVariable,
+    data,
+    levels,
+    options.name,
+    options.status,
+    options.favorites,
+    options.groupSelection,
+    getRuntimeVariable,
+    favorites,
+  ]);
 
   /**
    * Value Cell Select
@@ -237,11 +251,16 @@ export const useTable = ({
    */
   const onClick = useCallback(
     (item: TableItem) => {
-      if (item.selected && isVariableWithOptions(item.variable) && !item.variable?.multi) {
+      if (
+        item.selected &&
+        isVariableWithOptions(item.variable) &&
+        !item.variable?.multi &&
+        item.variable === runtimeVariable
+      ) {
         onChange(item);
       }
     },
-    [onChange]
+    [onChange, runtimeVariable]
   );
 
   /**
@@ -254,22 +273,46 @@ export const useTable = ({
       {
         id: 'value',
         accessorKey: 'value',
-        header: ({ table }) => (
-          <>
-            {table.getCanSomeRowsExpand() && (
-              <Button
-                className={styles.expandButton}
-                onClick={table.getToggleAllRowsExpandedHandler()}
-                variant="secondary"
-                fill="text"
-                size="sm"
-                icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
-                data-testid={TestIds.table.buttonExpandAll}
-              />
-            )}
-            {runtimeVariable?.label || variable}
-          </>
-        ),
+        header: ({ table }) => {
+          const isSelectedAll = tableData.every((item) => item.selected);
+          const rootRow: TableItem = {
+            childValues: tableData.reduce((acc: string[], item) => acc.concat(item.childValues || item.value), []),
+            selected: isSelectedAll,
+            value: '',
+            showStatus: false,
+            label: '',
+          };
+          return (
+            <>
+              {options.groupSelection && (
+                <input
+                  type={
+                    isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
+                  }
+                  onChange={() => onChange(rootRow)}
+                  onClick={() => onClick(rootRow)}
+                  checked={isSelectedAll}
+                  className={styles.selectControl}
+                  id={`${prefix}-all`}
+                  data-testid={TestIds.table.control}
+                  title="Select all"
+                />
+              )}
+              {table.getCanSomeRowsExpand() && (
+                <Button
+                  className={styles.expandButton}
+                  onClick={table.getToggleAllRowsExpandedHandler()}
+                  variant="secondary"
+                  fill="text"
+                  size="sm"
+                  icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
+                  data-testid={TestIds.table.buttonExpandAll}
+                />
+              )}
+              {runtimeVariable?.label || variable}
+            </>
+          );
+        },
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
         enableSorting: options.statusSort,
@@ -396,15 +439,17 @@ export const useTable = ({
     options.filter,
     options.statusSort,
     options.favorites,
+    options.groupSelection,
     options.showName,
+    tableData,
+    styles.selectControl,
     styles.expandButton,
     styles.rowContent,
-    styles.selectControl,
     styles.label,
     styles.status,
-    theme,
     onChange,
     onClick,
+    theme,
     favorites,
   ]);
 

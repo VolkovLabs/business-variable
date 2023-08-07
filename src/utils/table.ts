@@ -131,6 +131,7 @@ export const getRows = (
  * @param children
  * @param isSelectedAll
  * @param favoritesEnabled
+ * @param groupSelection
  */
 export const getItemWithStatus = (
   item: {
@@ -147,12 +148,14 @@ export const getItemWithStatus = (
     children,
     isSelectedAll,
     favoritesEnabled,
+    groupSelection,
   }: {
     namesArray?: unknown[];
     statusField?: Field;
     children?: TableItem[];
     isSelectedAll: boolean;
     favoritesEnabled: boolean;
+    groupSelection: boolean;
   }
 ): TableItem => {
   let statusColor;
@@ -173,12 +176,11 @@ export const getItemWithStatus = (
 
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   let selectable = false;
-  if (isVariableWithOptions(item.variable)) {
-    selectable =
-      item.variable?.options?.some((option) => {
-        const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
-        return optionValue === item.value;
-      }) && !children;
+  if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
+    selectable = item.variable?.options?.some((option) => {
+      const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+      return optionValue === item.value;
+    });
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
