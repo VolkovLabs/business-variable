@@ -1,7 +1,7 @@
-import { DataFrame, Field, PanelData } from '@grafana/data';
+import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
 import { AllValue, AllValueParameter } from '../constants';
-import { Level, RuntimeVariable, TableItem } from '../types';
+import { Level, RuntimeVariable, Status, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
 /**
@@ -126,8 +126,7 @@ export const getRows = (
 /**
  * Get Item With Status
  * @param item
- * @param namesArray
- * @param statusField
+ * @param status
  * @param children
  * @param isSelectedAll
  * @param favoritesEnabled
@@ -142,35 +141,17 @@ export const getItemWithStatus = (
     label: string;
   },
   {
-    namesArray,
-    statusField,
+    status,
     children,
     isSelectedAll,
     favoritesEnabled,
   }: {
-    namesArray?: unknown[];
-    statusField?: Field;
+    status: Status;
     children?: TableItem[];
     isSelectedAll: boolean;
     favoritesEnabled: boolean;
   }
 ): TableItem => {
-  let statusColor;
-  let showStatus = false;
-
-  /**
-   * Status
-   */
-  const index = namesArray?.findIndex((name) => name === item.value);
-  let status;
-  if (index !== undefined && index >= 0) {
-    showStatus = true;
-    const lastValue = statusField?.values.get(index);
-    const displayValue = statusField?.display?.(lastValue);
-    statusColor = displayValue?.color;
-    status = lastValue;
-  }
-
   const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable)) {
@@ -185,14 +166,14 @@ export const getItemWithStatus = (
   return {
     value: item.value,
     selected: selectable ? isSelectedAll || item.selected || isAllChildrenSelected : false,
-    showStatus,
-    statusColor,
+    showStatus: status.exist,
+    statusColor: status.exist ? status.color : undefined,
     variable: item.variable,
     selectable,
     canBeFavorite,
     isFavorite: canBeFavorite ? item.isFavorite : undefined,
     name: item.name,
-    status,
+    status: status.exist ? status.value : undefined,
     label: item.label,
   };
 };

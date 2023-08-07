@@ -45,6 +45,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      * Visibility
      */
     const showForMinimizeView = (config: PanelOptions) => config.displayMode === DisplayMode.MINIMIZE;
+    const showForButtonView = (config: PanelOptions) => config.displayMode === DisplayMode.BUTTON;
     const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
 
     /**
@@ -70,7 +71,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         min: 0,
         max: 20,
       },
-      showIf: showForMinimizeView,
+      showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
     });
 
     builder
@@ -181,7 +182,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           noFieldsMessage: 'No strings fields found',
         },
         category: ['Status'],
-        showIf: showForTableView,
+        showIf: (config) => showForTableView(config) || showForButtonView(config),
       })
       .addFieldNamePicker({
         path: 'status',
@@ -191,7 +192,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           noFieldsMessage: 'No number fields found',
         },
         category: ['Status'],
-        showIf: showForTableView,
+        showIf: (config) => showForTableView(config) || showForButtonView(config),
       });
 
     return builder;

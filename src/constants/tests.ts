@@ -47,4 +47,8 @@ export const TestIds = {
   textVariable: {
     root: 'data-testid text-variable',
   },
+  buttonView: {
+    root: 'data-testid button-view',
+    noVariableMessage: 'data-testid button-view no-variable-message',
+  },
 };
