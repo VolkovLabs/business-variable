@@ -89,6 +89,7 @@ export const ButtonView: React.FC<Props> = ({
               onClick={() => {
                 selectVariableValues([value], variable);
               }}
+              data-testid={TestIds.buttonView.item(value)}
             >
               {option.text.toString()}
             </Button>
