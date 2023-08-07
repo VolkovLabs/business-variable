@@ -96,7 +96,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'groupSelection',
-        name: 'Allow to entire group selection.',
+        name: 'Allow to entire group selection',
         settings: {
           options: GroupSelectionOptions,
         },

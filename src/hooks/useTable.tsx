@@ -275,6 +275,10 @@ export const useTable = ({
         accessorKey: 'value',
         header: ({ table }) => {
           const isSelectedAll = tableData.every((item) => item.selected);
+
+          /**
+           * Root row
+           */
           const rootRow: TableItem = {
             childValues: tableData.reduce((acc: string[], item) => acc.concat(item.childValues || item.value), []),
             selected: isSelectedAll,
@@ -282,19 +286,19 @@ export const useTable = ({
             showStatus: false,
             label: '',
           };
+
           return (
             <>
               {options.groupSelection && (
                 <input
-                  type={
-                    isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
-                  }
-                  onChange={() => onChange(rootRow)}
-                  onClick={() => onClick(rootRow)}
+                  type="checkbox"
+                  onChange={() => {
+                    onChange(rootRow);
+                  }}
                   checked={isSelectedAll}
                   className={styles.selectControl}
-                  id={`${prefix}-all`}
-                  data-testid={TestIds.table.control}
+                  id={`${prefix}-select-all`}
+                  data-testid={TestIds.table.allControl}
                   title="Select all"
                 />
               )}

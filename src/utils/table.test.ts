@@ -227,7 +227,7 @@ describe('Table Utils', () => {
       ]);
     });
 
-    it('Should filter unselectable values', () => {
+    it('Should filter groups with unselectable child values', () => {
       const fields = [
         { name: 'country', source: 'a' },
         { name: 'state', source: 'a' },
