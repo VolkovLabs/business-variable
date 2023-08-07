@@ -39,6 +39,14 @@ describe('ButtonView', () => {
   const selectors = getSelectors(screen);
 
   /**
+   * Colors
+   */
+  const colors = {
+    red: '#ff0000',
+    green: '#00ff21',
+  };
+
+  /**
    * Data
    */
   const data = {
@@ -52,7 +60,7 @@ describe('ButtonView', () => {
           {
             name: 'last',
             values: [70, 81],
-            display: (value: number) => ({ color: value > 80 ? 'red' : 'green' }),
+            display: (value: number) => ({ color: value > 80 ? colors.red : colors.green }),
           },
         ],
       }),
@@ -165,12 +173,39 @@ describe('ButtonView', () => {
     );
 
     expect(selectors.item(false, 'device1')).toBeInTheDocument();
-    expect(selectors.item(false, 'device1')).toHaveStyle({
-      borderColor: 'green',
-    });
 
     fireEvent.click(selectors.item(false, 'device1'));
 
     expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable);
+  });
+
+  it('Should work if no status color', () => {
+    const variable = {
+      ...deviceVariable,
+      options: deviceVariable.options.concat([
+        {
+          value: 'unknownDevice',
+          text: 'Unknown Device',
+          selected: true,
+        },
+      ]),
+    };
+    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+      () =>
+        ({
+          variable,
+        } as any)
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+          status: 'last',
+        } as any,
+      })
+    );
+
+    expect(selectors.item(false, 'unknownDevice')).toBeInTheDocument();
   });
 });

@@ -77,6 +77,11 @@ export const ButtonView: React.FC<Props> = ({
         variable.options.map((option) => {
           const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
           const status = getStatus(value);
+          const backgroundColor = option.selected
+            ? status.exist
+              ? theme.colors.emphasize(status.color, 0.49)
+              : theme.colors.background.secondary
+            : theme.colors.background.primary;
           return (
             <Button
               key={value}
@@ -84,7 +89,8 @@ export const ButtonView: React.FC<Props> = ({
               fill="outline"
               style={{
                 borderColor: status.exist ? status.color : '',
-                backgroundColor: option.selected ? theme.colors.border.weak : '',
+                backgroundColor: backgroundColor,
+                color: theme.colors.getContrastText(backgroundColor),
               }}
               onClick={() => {
                 selectVariableValues([value], variable);
