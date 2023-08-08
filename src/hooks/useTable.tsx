@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { EventBus, FieldType, PanelData } from '@grafana/data';
+import { EventBus, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
+import { TextVariable } from '../components/TextVariable';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { Level, PanelOptions, TableItem, VariableType } from '../types';
-import { TextVariable } from '../components/TextVariable';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -19,6 +19,7 @@ import {
 } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
+import { useStatus } from './useStatus';
 
 /**
  * Table
@@ -52,6 +53,11 @@ export const useTable = ({
   const favorites = useFavorites();
 
   /**
+   * Status
+   */
+  const getStatus = useStatus({ data, status: options.status, name: options.name });
+
+  /**
    * Update Table Data
    */
   const tableData: TableItem[] = useMemo(() => {
@@ -61,31 +67,8 @@ export const useTable = ({
 
     let isSelectedAll = false;
     if (isVariableWithOptions(runtimeVariable)) {
-      isSelectedAll = !!runtimeVariable.options.find(
-        (rt) => rt.value.includes(AllValueParameter) && rt.selected === true
-      );
+      isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes(AllValueParameter) && rt.selected);
     }
-
-    /**
-     * Variable values from data source
-     */
-    const namesArray = data.series
-      .map((series) =>
-        series.fields.find((field) => field.type === FieldType.string && (!options.name || field.name === options.name))
-      )
-      .find((field) => field?.values)
-      ?.values?.toArray();
-
-    /**
-     * Status values from data source
-     */
-    const statusArray = data.series
-      .map((series) =>
-        series.fields.find(
-          (field) => field.type === FieldType.number && (!options.status || field.name === options.status)
-        )
-      )
-      .find((field) => field?.values);
 
     const groupFields = levels || [];
 
@@ -109,8 +92,7 @@ export const useTable = ({
           },
           {
             children,
-            namesArray,
-            statusField: statusArray,
+            status: getStatus(value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -134,8 +116,7 @@ export const useTable = ({
                 label: AllValue,
               },
               {
-                namesArray,
-                statusField: statusArray,
+                status: getStatus(AllValue),
                 isSelectedAll,
                 favoritesEnabled: options.favorites,
                 groupSelection: options.groupSelection,
@@ -153,17 +134,17 @@ export const useTable = ({
      */
     if (isVariableWithOptions(runtimeVariable)) {
       return runtimeVariable.options.map((option) => {
+        const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
         return getItemWithStatus(
           {
-            value: option.value.toString() === AllValueParameter ? AllValue : option.value.toString(),
-            selected: !!option.selected,
+            value,
+            selected: option.selected,
             variable: runtimeVariable,
             isFavorite: favorites.isAdded(runtimeVariable.name, option.value.toString()),
             label: option.text.toString(),
           },
           {
-            namesArray,
-            statusField: statusArray,
+            status: getStatus(value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -187,8 +168,7 @@ export const useTable = ({
             name: runtimeVariable?.name,
           },
           {
-            namesArray,
-            statusField: statusArray,
+            status: getStatus(''),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -198,17 +178,7 @@ export const useTable = ({
     }
 
     return [];
-  }, [
-    runtimeVariable,
-    data,
-    levels,
-    options.name,
-    options.status,
-    options.favorites,
-    options.groupSelection,
-    getRuntimeVariable,
-    favorites,
-  ]);
+  }, [runtimeVariable, levels, data, getRuntimeVariable, favorites, getStatus, options.favorites]);
 
   /**
    * Value Cell Select

@@ -15,6 +15,7 @@ type Props = React.ComponentProps<typeof VariablePanel>;
 const InTestIds = {
   tableView: 'data-testid table-view',
   minimizeView: 'data-testid minimize-view',
+  buttonView: 'data-testid button-view',
 };
 
 /**
@@ -29,6 +30,13 @@ jest.mock('../TableView', () => ({
  */
 jest.mock('../MinimizeView', () => ({
   MinimizeView: jest.fn(() => <div data-testid={InTestIds.minimizeView} />),
+}));
+
+/**
+ * Mock ButtonView
+ */
+jest.mock('../ButtonView', () => ({
+  ButtonView: jest.fn(() => <div data-testid={InTestIds.buttonView} />),
 }));
 
 /**
@@ -56,6 +64,11 @@ describe('Panel', () => {
   it('Should render minimize view', async () => {
     render(getComponent({ options: { displayMode: DisplayMode.MINIMIZE } as any }));
     expect(selectors.minimizeView()).toBeInTheDocument();
+  });
+
+  it('Should render button view', async () => {
+    render(getComponent({ options: { displayMode: DisplayMode.BUTTON } as any }));
+    expect(selectors.buttonView()).toBeInTheDocument();
   });
 
   it('Should render table view by default', async () => {
