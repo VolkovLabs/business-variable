@@ -82,6 +82,7 @@ export const ButtonView: React.FC<Props> = ({
               ? theme.colors.emphasize(status.color, 0.49)
               : theme.colors.background.secondary
             : theme.colors.background.primary;
+
           return (
             <Button
               key={value}

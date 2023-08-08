@@ -1,8 +1,8 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { DisplayMode, PanelOptions } from '../../types';
-import { MinimizeView } from '../MinimizeView';
 import { ButtonView } from '../ButtonView';
+import { MinimizeView } from '../MinimizeView';
 import { TableView } from '../TableView';
 
 /**

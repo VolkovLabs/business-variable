@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.7.0 (2023-08-08)
+
+### Features / Enhancements
+
+- Add variables with text and value in Table/Tree View (#57)
+- Add Button View (#59)
+
 ## 1.6.0 (2023-07-26)
 
 ### Features / Enhancements

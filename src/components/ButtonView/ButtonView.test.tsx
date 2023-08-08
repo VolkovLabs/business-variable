@@ -3,8 +3,8 @@ import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
-import { VariableType } from '../../types';
 import { useRuntimeVariables } from '../../hooks';
+import { VariableType } from '../../types';
 import { selectVariableValues } from '../../utils';
 import { ButtonView } from './ButtonView';
 
