@@ -64,3 +64,11 @@ export const AutoScrollOptions = [
   { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
   { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
 ];
+
+/**
+ * Group Selection Options
+ */
+export const GroupSelectionOptions = [
+  { value: true, label: 'Enabled', description: 'Enable to allow group selection.' },
+  { value: false, label: 'Disabled', description: 'Disable group selection.' },
+];

@@ -3,9 +3,9 @@ import { EventBus, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
+import { TextVariable } from '../components/TextVariable';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { Level, PanelOptions, TableItem, VariableType } from '../types';
-import { TextVariable } from '../components/TextVariable';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -95,6 +95,7 @@ export const useTable = ({
             status: getStatus(value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         );
       });
@@ -118,6 +119,7 @@ export const useTable = ({
                 status: getStatus(AllValue),
                 isSelectedAll,
                 favoritesEnabled: options.favorites,
+                groupSelection: options.groupSelection,
               }
             ),
           ].concat(rows);
@@ -145,6 +147,7 @@ export const useTable = ({
             status: getStatus(value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         );
       });
@@ -168,13 +171,23 @@ export const useTable = ({
             status: getStatus(''),
             isSelectedAll,
             favoritesEnabled: options.favorites,
+            groupSelection: options.groupSelection,
           }
         ),
       ];
     }
 
     return [];
-  }, [runtimeVariable, levels, data, getRuntimeVariable, favorites, getStatus, options.favorites]);
+  }, [
+    runtimeVariable,
+    levels,
+    data,
+    getRuntimeVariable,
+    favorites,
+    getStatus,
+    options.favorites,
+    options.groupSelection,
+  ]);
 
   /**
    * Value Cell Select
@@ -217,11 +230,16 @@ export const useTable = ({
    */
   const onClick = useCallback(
     (item: TableItem) => {
-      if (item.selected && isVariableWithOptions(item.variable) && !item.variable?.multi) {
+      if (
+        item.selected &&
+        isVariableWithOptions(item.variable) &&
+        !item.variable?.multi &&
+        item.variable === runtimeVariable
+      ) {
         onChange(item);
       }
     },
-    [onChange]
+    [onChange, runtimeVariable]
   );
 
   /**
@@ -234,22 +252,50 @@ export const useTable = ({
       {
         id: 'value',
         accessorKey: 'value',
-        header: ({ table }) => (
-          <>
-            {table.getCanSomeRowsExpand() && (
-              <Button
-                className={styles.expandButton}
-                onClick={table.getToggleAllRowsExpandedHandler()}
-                variant="secondary"
-                fill="text"
-                size="sm"
-                icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
-                data-testid={TestIds.table.buttonExpandAll}
-              />
-            )}
-            {runtimeVariable?.label || variable}
-          </>
-        ),
+        header: ({ table }) => {
+          const isSelectedAll = tableData.every((item) => item.selected);
+
+          /**
+           * Root row
+           */
+          const rootRow: TableItem = {
+            childValues: tableData.reduce((acc: string[], item) => acc.concat(item.childValues || item.value), []),
+            selected: isSelectedAll,
+            value: '',
+            showStatus: false,
+            label: '',
+          };
+
+          return (
+            <>
+              {options.groupSelection && (
+                <input
+                  type="checkbox"
+                  onChange={() => {
+                    onChange(rootRow);
+                  }}
+                  checked={isSelectedAll}
+                  className={styles.selectControl}
+                  id={`${prefix}-select-all`}
+                  data-testid={TestIds.table.allControl}
+                  title="Select all"
+                />
+              )}
+              {table.getCanSomeRowsExpand() && (
+                <Button
+                  className={styles.expandButton}
+                  onClick={table.getToggleAllRowsExpandedHandler()}
+                  variant="secondary"
+                  fill="text"
+                  size="sm"
+                  icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
+                  data-testid={TestIds.table.buttonExpandAll}
+                />
+              )}
+              {runtimeVariable?.label || variable}
+            </>
+          );
+        },
         enableColumnFilter: options.filter,
         filterFn: valueFilter,
         enableSorting: options.statusSort,
@@ -376,15 +422,17 @@ export const useTable = ({
     options.filter,
     options.statusSort,
     options.favorites,
+    options.groupSelection,
     options.showName,
+    tableData,
+    styles.selectControl,
     styles.expandButton,
     styles.rowContent,
-    styles.selectControl,
     styles.label,
     styles.status,
-    theme,
     onChange,
     onClick,
+    theme,
     favorites,
   ]);
 

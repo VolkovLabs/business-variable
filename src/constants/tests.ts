@@ -15,6 +15,7 @@ export const TestIds = {
     buttonSort: 'data-testidd table button-sort',
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
+    allControl: 'data-testid table all-control',
     favoritesControl: 'data-testid table favorites-control',
     favoritesFilter: 'data-testid table favorites-filter',
     fieldFilterValue: 'data-testid table field-filter-value',
@@ -50,6 +51,7 @@ export const TestIds = {
   buttonView: {
     root: 'data-testid button-view',
     noVariableMessage: 'data-testid button-view no-variable-message',
+    noOptionsMessage: 'data-testid button-view no-options-message',
     item: (value: string) => `data-testid button-view item-${value}`,
   },
 };

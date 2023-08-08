@@ -126,4 +126,9 @@ export interface PanelOptions extends TableViewOptions {
    * @type {number}
    */
   padding: number;
+
+  /**
+   * Group Selection
+   */
+  groupSelection: boolean;
 }

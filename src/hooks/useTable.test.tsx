@@ -3,7 +3,7 @@ import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { TableItem, VariableType } from '../types';
-import { getItemWithStatus, selectVariableValues } from '../utils';
+import { selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
@@ -35,7 +35,6 @@ jest.mock('./useFavorites', () => ({
 jest.mock('../utils', () => ({
   ...jest.requireActual('../utils'),
   selectVariableValues: jest.fn(),
-  getItemWithStatus: jest.fn((...args: [any, any]) => jest.requireActual('../utils').getItemWithStatus(...args)),
 }));
 
 /**
@@ -49,6 +48,7 @@ const InTestIds = {
 describe('Use Table Hook', () => {
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
+    jest.mocked(useRuntimeVariables).mockReset();
   });
 
   it('Should return variable options if no levels', () => {
@@ -187,7 +187,7 @@ describe('Use Table Hook', () => {
       options: [
         {
           text: AllValue,
-          value: '__all',
+          value: AllValueParameter,
           selected: false,
         },
         {
@@ -274,7 +274,7 @@ describe('Use Table Hook', () => {
       options: [
         {
           text: AllValue,
-          value: '__all',
+          value: AllValueParameter,
           selected: false,
         },
         {
@@ -444,7 +444,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: false,
           },
           {
@@ -560,7 +560,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: false,
           },
           {
@@ -578,6 +578,7 @@ describe('Use Table Hook', () => {
       const countryVariable = {
         multi: true,
         name: 'country',
+        type: VariableType.CUSTOM,
         options: [
           {
             text: 'USA',
@@ -612,16 +613,6 @@ describe('Use Table Hook', () => {
         refId: 'A',
       });
 
-      jest.mocked(getItemWithStatus).mockImplementation((item, options) =>
-        item.variable?.name === 'country'
-          ? {
-              ...item,
-              showStatus: false,
-              selectable: true,
-            }
-          : jest.requireActual('../utils').getItemWithStatus(item, options)
-      );
-
       /**
        * Use Table
        */
@@ -630,6 +621,7 @@ describe('Use Table Hook', () => {
           data: { series: [dataFrame] } as any,
           options: {
             favorites: true,
+            groupSelection: true,
           } as any,
           eventBus: null as any,
           levels: [
@@ -737,7 +729,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: true,
           },
           {
@@ -806,7 +798,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: false,
           },
           {
@@ -902,7 +894,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: false,
           },
           {
@@ -1150,7 +1142,7 @@ describe('Use Table Hook', () => {
         options: [
           {
             text: AllValue,
-            value: '__all',
+            value: AllValueParameter,
             selected: false,
           },
           {
@@ -1336,6 +1328,55 @@ describe('Use Table Hook', () => {
     });
 
     describe('Header', () => {
+      const deviceVariable = {
+        multi: true,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: AllValue,
+            value: AllValueParameter,
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: false,
+          },
+        ],
+      };
+      const countryVariable = {
+        multi: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+          {
+            text: 'Japan',
+            value: 'Japan',
+            selected: false,
+          },
+        ],
+      };
+
+      beforeEach(() => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
+            } as any)
+        );
+      });
+
       it('Should render expand all button', () => {
         /**
          * Use Table
@@ -1460,6 +1501,68 @@ describe('Use Table Hook', () => {
         expect(valueHeader).toBeInTheDocument();
 
         expect(within(valueHeader).queryByTestId(TestIds.table.buttonExpandAll)).not.toBeInTheDocument();
+      });
+
+      it('Should render select all control', () => {
+        const dataFrame = toDataFrame({
+          fields: [
+            {
+              name: 'country',
+              values: ['USA', 'Japan'],
+            },
+            {
+              name: 'device',
+              values: ['device1', 'device2'],
+            },
+          ],
+          refId: 'A',
+        });
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              header: true,
+              groupSelection: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => jest.fn(),
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
+        expect(valueHeader).toBeInTheDocument();
+
+        const selectAllControl = within(valueHeader).getByTestId(TestIds.table.allControl);
+        expect(selectAllControl).toBeInTheDocument();
+
+        fireEvent.click(selectAllControl);
+
+        /**
+         * Should select country
+         */
+        expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable);
+        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
       });
     });
   });
