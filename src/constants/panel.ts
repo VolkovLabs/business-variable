@@ -6,6 +6,7 @@ import { DisplayMode } from '../types';
 export const DisplayModeOptions = [
   { value: DisplayMode.TABLE, label: 'Table', description: 'Full featured table view.' },
   { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Minimized select view.' },
+  { value: DisplayMode.BUTTON, label: 'Button', description: 'Button select view.' },
 ];
 
 /**

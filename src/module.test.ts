@@ -96,6 +96,50 @@ describe('plugin', () => {
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['filter']));
     });
+
+    it('Should show status fields if table view', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addFieldNamePicker.mockImplementation(
+        addInputImplementation({ displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['name', 'status']));
+    });
+
+    it('Should show status fields if button view', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addFieldNamePicker.mockImplementation(
+        addInputImplementation({ displayMode: DisplayMode.BUTTON }, shownOptionsPaths)
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['name', 'status']));
+    });
+
+    it('Should show padding field if minimize view', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addSliderInput.mockImplementation(
+        addInputImplementation({ displayMode: DisplayMode.MINIMIZE }, shownOptionsPaths)
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['padding']));
+    });
+
+    it('Should show padding field if button view', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addSliderInput.mockImplementation(
+        addInputImplementation({ displayMode: DisplayMode.BUTTON }, shownOptionsPaths)
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['padding']));
+    });
   });
 
   describe('Settings', () => {
