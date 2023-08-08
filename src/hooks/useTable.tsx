@@ -178,7 +178,16 @@ export const useTable = ({
     }
 
     return [];
-  }, [runtimeVariable, levels, data, getRuntimeVariable, favorites, getStatus, options.favorites]);
+  }, [
+    runtimeVariable,
+    levels,
+    data,
+    getRuntimeVariable,
+    favorites,
+    getStatus,
+    options.favorites,
+    options.groupSelection,
+  ]);
 
   /**
    * Value Cell Select
