@@ -94,15 +94,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         showIf: showForTableView,
-      })
-      .addRadio({
-        path: 'groupSelection',
-        name: 'Allow to entire group selection',
-        settings: {
-          options: GroupSelectionOptions,
-        },
-        defaultValue: false,
-        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
     /**
@@ -177,6 +168,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Display variable names',
         settings: {
           options: ShowNameOptions,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
+      })
+      .addRadio({
+        path: 'groupSelection',
+        name: 'Allow selecting the entire group',
+        settings: {
+          options: GroupSelectionOptions,
         },
         defaultValue: false,
         category: ['Layout'],
