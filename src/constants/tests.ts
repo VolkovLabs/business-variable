@@ -51,6 +51,7 @@ export const TestIds = {
   buttonView: {
     root: 'data-testid button-view',
     noVariableMessage: 'data-testid button-view no-variable-message',
+    noOptionsMessage: 'data-testid button-view no-options-message',
     item: (value: string) => `data-testid button-view item-${value}`,
   },
 };

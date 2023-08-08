@@ -63,6 +63,18 @@ export const ButtonView: React.FC<Props> = ({
     );
   }
 
+  /**
+   * Check options
+   */
+  const options = isVariableWithOptions(variable) && variable.options.length;
+  if (!options) {
+    return (
+      <Alert severity="info" title="Variable" data-testid={TestIds.buttonView.noOptionsMessage}>
+        Options are not available.
+      </Alert>
+    );
+  }
+
   return (
     <div
       className={cx(
@@ -73,35 +85,34 @@ export const ButtonView: React.FC<Props> = ({
       )}
       data-testid={TestIds.buttonView.root}
     >
-      {isVariableWithOptions(variable) &&
-        variable.options.map((option) => {
-          const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
-          const status = getStatus(value);
-          const backgroundColor = option.selected
-            ? status.exist
-              ? status.color
-              : theme.colors.background.secondary
-            : theme.colors.background.primary;
+      {variable.options.map((option) => {
+        const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+        const status = getStatus(value);
+        const backgroundColor = option.selected
+          ? status.exist
+            ? status.color
+            : theme.colors.background.secondary
+          : theme.colors.background.primary;
 
-          return (
-            <Button
-              key={value}
-              variant="secondary"
-              fill="outline"
-              style={{
-                borderColor: status.exist ? status.color : '',
-                backgroundColor: backgroundColor,
-                color: theme.colors.getContrastText(backgroundColor),
-              }}
-              onClick={() => {
-                selectVariableValues([value], variable);
-              }}
-              data-testid={TestIds.buttonView.item(value)}
-            >
-              {option.text.toString()}
-            </Button>
-          );
-        })}
+        return (
+          <Button
+            key={value}
+            variant="secondary"
+            fill="outline"
+            style={{
+              borderColor: status.exist ? status.color : '',
+              backgroundColor: backgroundColor,
+              color: theme.colors.getContrastText(backgroundColor),
+            }}
+            onClick={() => {
+              selectVariableValues([value], variable);
+            }}
+            data-testid={TestIds.buttonView.item(value)}
+          >
+            {option.text.toString()}
+          </Button>
+        );
+      })}
     </div>
   );
 };

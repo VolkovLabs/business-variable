@@ -122,6 +122,26 @@ describe('ButtonView', () => {
     expect(selectors.noVariableMessage());
   });
 
+  it('Should show no options', () => {
+    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+      () =>
+        ({
+          variable: { ...deviceVariable, options: [] },
+        } as any)
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+          status: 'last',
+        } as any,
+      })
+    );
+
+    expect(selectors.noOptionsMessage());
+  });
+
   it('Should render variable options', () => {
     jest.mocked(useRuntimeVariables).mockImplementationOnce(
       () =>
