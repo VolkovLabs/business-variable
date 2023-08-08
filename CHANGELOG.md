@@ -6,7 +6,7 @@
 
 - Add variables with text and value in Table/Tree View (#57)
 - Add Button View (#59)
-- Allow group selection (#58)
+- Add group selection (#58)
 - Update dependencies to Grafana 10.0.3 (#60)
 
 ## 1.6.0 (2023-07-26)
