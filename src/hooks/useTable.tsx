@@ -77,9 +77,14 @@ export const useTable = ({
        * Use Group levels
        */
       const rows = getRows(data, groupFields, (item, key, children) => {
-        const value = item[key as keyof typeof item];
+        /**
+         * Convert value to string
+         */
+        const value = `${item[key as keyof typeof item]}`;
         const levelVariable = getRuntimeVariable(key);
-        const variableOption = runtimeVariable.options.find((option) => option.value === value);
+        const variableOption = isVariableWithOptions(levelVariable)
+          ? levelVariable.options.find((option) => option.value === value)
+          : runtimeVariable.options.find((option) => option.value === value);
 
         return getItemWithStatus(
           {
