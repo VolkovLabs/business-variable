@@ -180,7 +180,7 @@ describe('Use Table Hook', () => {
   });
 
   it('Should return rows with subRows if nested levels', () => {
-    const variable = {
+    const deviceVariable = {
       multi: true,
       includeAll: true,
       type: VariableType.CUSTOM,
@@ -202,18 +202,35 @@ describe('Use Table Hook', () => {
         },
       ],
     };
+    const countryVariable = {
+      multi: true,
+      name: 'country',
+      type: VariableType.CUSTOM,
+      options: [
+        {
+          text: 'USA',
+          value: 'country1',
+          selected: false,
+        },
+        {
+          text: 'Japan',
+          value: 'country2',
+          selected: false,
+        },
+      ],
+    };
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
-          variable,
-          getVariable: jest.fn(() => variable),
+          variable: deviceVariable,
+          getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
         } as any)
     );
     const dataFrame = toDataFrame({
       fields: [
         {
           name: 'country',
-          values: ['USA', 'Japan'],
+          values: ['country1', 'country2'],
         },
         {
           name: 'device',
@@ -240,7 +257,8 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: 'USA',
+        value: 'country1',
+        label: 'USA',
         selected: false,
         selectable: false,
         childValues: ['device1'],
@@ -252,7 +270,8 @@ describe('Use Table Hook', () => {
         ],
       }),
       expect.objectContaining({
-        value: 'Japan',
+        value: 'country2',
+        label: 'Japan',
         selected: false,
         selectable: false,
         childValues: ['device2'],

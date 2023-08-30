@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.8.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Update variable option label for parent items in tree view (#62)
+
 ## 1.7.0 (2023-08-08)
 
 ### Features / Enhancements
