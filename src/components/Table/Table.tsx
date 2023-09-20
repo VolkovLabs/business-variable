@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject, useState } from 'react';
+import React, { Fragment, RefObject, useRef, useState } from 'react';
 import { cx } from '@emotion/css';
 import { Button, useStyles2 } from '@grafana/ui';
 import {
@@ -13,6 +13,7 @@ import {
   TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
+import { useVirtual } from 'react-virtual';
 import { TestIds } from '../../constants';
 import { Filter } from './Filter';
 import { Styles } from './styles';
@@ -90,6 +91,8 @@ export const Table = <TableData extends object>({
   const [expanded, setExpanded] = useState<ExpandedState>(true);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+
   /**
    * Instance
    */
@@ -116,78 +119,104 @@ export const Table = <TableData extends object>({
     },
   });
 
+  const { rows } = tableInstance.getRowModel();
+
+  const rowVirtualizer = useVirtual({
+    parentRef: tableContainerRef,
+    size: rows.length,
+    overscan: 10,
+  });
+
+  const { virtualItems: virtualRows, totalSize } = rowVirtualizer;
+
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
+
   let isSelectedRowFound = false;
 
   return (
-    <table className={cx(styles.table, className)} ref={tableRef}>
-      {showHeader && (
-        <thead
-          data-testid={TestIds.table.header}
-          className={styles.header}
-          style={{ top: topOffset }}
-          ref={tableHeaderRef}
-        >
-          {tableInstance.getHeaderGroups().map((headerGroup) => {
+    <div ref={tableContainerRef} style={{ height: 500, overflow: 'auto' }}>
+      <table className={cx(styles.table, className)} ref={tableRef}>
+        {showHeader && (
+          <thead
+            data-testid={TestIds.table.header}
+            className={styles.header}
+            style={{ top: topOffset }}
+            ref={tableHeaderRef}
+          >
+            {tableInstance.getHeaderGroups().map((headerGroup) => {
+              return (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <th
+                        key={header.id}
+                        className={cx(styles.headerCell, {
+                          [styles.disableGrow]: !header.column.getCanResize(),
+                          [styles.sortableHeader]: header.column.getCanSort(),
+                        })}
+                        colSpan={header.colSpan}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanSort() && (
+                          <Button
+                            icon={
+                              !header.column.getIsSorted()
+                                ? 'list-ul'
+                                : header.column.getIsSorted() === 'asc'
+                                ? 'sort-amount-up'
+                                : 'sort-amount-down'
+                            }
+                            fill="text"
+                            onClick={header.column.getToggleSortingHandler()}
+                            size="sm"
+                            className={styles.headerButton}
+                            variant={header.column.getIsSorted() ? 'primary' : 'secondary'}
+                            data-testid={TestIds.table.buttonSort}
+                            title="Sort by status"
+                          />
+                        )}
+                        {header.column.getCanFilter() && <Filter column={header.column} />}
+                      </th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </thead>
+        )}
+
+        <tbody>
+          {paddingTop > 0 && (
+            <tr>
+              <td style={{ height: `${paddingTop}px` }} />
+            </tr>
+          )}
+          {virtualRows.map((virtualRow) => {
+            const row = rows[virtualRow.index];
+            const selected = (row.original as any).selected;
+            let ref = undefined;
+            if (selected && !isSelectedRowFound) {
+              isSelectedRowFound = true;
+              ref = firstSelectedRowRef;
+            }
             return (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <th
-                      key={header.id}
-                      className={cx(styles.headerCell, {
-                        [styles.disableGrow]: !header.column.getCanResize(),
-                        [styles.sortableHeader]: header.column.getCanSort(),
-                      })}
-                      colSpan={header.colSpan}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {header.column.getCanSort() && (
-                        <Button
-                          icon={
-                            !header.column.getIsSorted()
-                              ? 'list-ul'
-                              : header.column.getIsSorted() === 'asc'
-                              ? 'sort-amount-up'
-                              : 'sort-amount-down'
-                          }
-                          fill="text"
-                          onClick={header.column.getToggleSortingHandler()}
-                          size="sm"
-                          className={styles.headerButton}
-                          variant={header.column.getIsSorted() ? 'primary' : 'secondary'}
-                          data-testid={TestIds.table.buttonSort}
-                          title="Sort by status"
-                        />
-                      )}
-                      {header.column.getCanFilter() && <Filter column={header.column} />}
-                    </th>
-                  );
-                })}
-              </tr>
+              <Fragment key={row.id}>
+                <tr className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)} ref={ref}>
+                  {row.getVisibleCells().map((cell) => {
+                    return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
+                  })}
+                </tr>
+              </Fragment>
             );
           })}
-        </thead>
-      )}
-
-      <tbody>
-        {tableInstance.getRowModel().rows.map((row) => {
-          const selected = (row.original as any).selected;
-          let ref = undefined;
-          if (selected && !isSelectedRowFound) {
-            isSelectedRowFound = true;
-            ref = firstSelectedRowRef;
-          }
-          return (
-            <Fragment key={row.id}>
-              <tr className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)} ref={ref}>
-                {row.getVisibleCells().map((cell) => {
-                  return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
-                })}
-              </tr>
-            </Fragment>
-          );
-        })}
-      </tbody>
-    </table>
+          {paddingBottom > 0 && (
+            <tr>
+              <td style={{ height: `${paddingBottom}px` }} />
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
