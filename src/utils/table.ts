@@ -177,11 +177,12 @@ export const getItemWithStatus = (
     groupSelection: boolean;
   }
 ): TableItem => {
-  const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+  const isAllChildrenSelected = children ? !children.some((child) => !child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
     selectable = item.variable?.options?.some((option) => {
-      const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+      const stringValue = Array.isArray(option.value) ? option.value.toString() : option.value;
+      const optionValue = stringValue === AllValueParameter ? AllValue : stringValue;
       return optionValue === item.value;
     });
   }

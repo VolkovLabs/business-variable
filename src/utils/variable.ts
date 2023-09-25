@@ -108,3 +108,16 @@ export const isVariableWithOptions = (
 
   return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
 };
+
+/**
+ * Get Variables Map
+ */
+export const getVariablesMap = (variables: RuntimeVariable[]): Record<string, RuntimeVariable> => {
+  return variables.reduce(
+    (acc, variable) => ({
+      ...acc,
+      [variable.name]: variable,
+    }),
+    {}
+  );
+};
