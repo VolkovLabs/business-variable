@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { TestIds } from '../../constants';
@@ -13,9 +13,25 @@ const InTestIds = {
 };
 
 describe('Table', () => {
-  const getComponent = (props: any) => {
-    return <Table {...props} />;
+  /**
+   * Wrapper with ref
+   * @param props
+   * @constructor
+   */
+  const Wrapper = (props: any) => {
+    const ref = useRef<HTMLDivElement>(null);
+    return (
+      <div ref={ref}>
+        <Table scrollableContainerRef={ref} {...props} />
+      </div>
+    );
   };
+
+  /**
+   * Get Tested Component
+   * @param props
+   */
+  const getComponent = (props: any) => <Wrapper {...props} />;
 
   it('Should render all levels', () => {
     const data = [

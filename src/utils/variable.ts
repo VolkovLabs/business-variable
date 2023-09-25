@@ -109,30 +109,35 @@ export const isVariableWithOptions = (
   return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
 };
 
+export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariable | undefined => {
+  if (variable.type === VariableType.TEXTBOX) {
+    return variable;
+  }
+  if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
+    return {
+      ...variable,
+      optionsMap: variable.options.reduce(
+        (acc, option) => ({
+          ...acc,
+          [option.value === AllValueParameter ? AllValue : (option.value as string)]: option,
+        }),
+        {}
+      ),
+    } as RuntimeVariable;
+  }
+  return;
+};
+
 /**
  * Get Variables Map
  */
 export const getVariablesMap = (variables: TypedVariableModel[]): Record<string, RuntimeVariable> => {
   return variables.reduce((acc, variable) => {
-    if (variable.type === VariableType.TEXTBOX) {
+    const runtimeVariable = getRuntimeVariable(variable);
+    if (runtimeVariable) {
       return {
         ...acc,
-        [variable.name]: variable,
-      };
-    }
-    if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
-      return {
-        ...acc,
-        [variable.name]: {
-          ...variable,
-          optionsMap: variable.options.reduce(
-            (acc, option) => ({
-              ...acc,
-              [option.value === AllValueParameter ? AllValue : (option.value as string)]: option,
-            }),
-            {}
-          ),
-        },
+        [runtimeVariable.name]: runtimeVariable,
       };
     }
     return acc;
