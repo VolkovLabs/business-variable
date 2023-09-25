@@ -169,6 +169,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
               tableRef={tableRef}
               tableHeaderRef={tableHeaderRef}
               topOffset={tableTopOffset}
+              scrollableContainerRef={scrollableContainerRef}
             />
           </div>
         )}

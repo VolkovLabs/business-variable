@@ -15,6 +15,7 @@ import {
   isVariableWithOptions,
   selectVariableValues,
   statusSort,
+  toPlainArray,
   valueFilter,
 } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -258,28 +259,22 @@ export const useTable = ({
         id: 'value',
         accessorKey: 'value',
         header: ({ table }) => {
-          const isSelectedAll = tableData.every((item) => item.selected);
-
-          /**
-           * Root row
-           */
-          const rootRow: TableItem = {
-            childValues: tableData.reduce((acc: string[], item) => acc.concat(item.childValues || item.value), []),
-            selected: isSelectedAll,
-            value: '',
-            showStatus: false,
-            label: '',
-          };
-
           return (
             <>
               {options.groupSelection && (
                 <input
                   type="checkbox"
                   onChange={() => {
+                    const rootRow: TableItem = {
+                      childValues: toPlainArray(tableData, (item) => item.childValues || item.value, []),
+                      selected: table.getIsAllRowsSelected(),
+                      value: '',
+                      showStatus: false,
+                      label: '',
+                    };
                     onChange(rootRow);
                   }}
-                  checked={isSelectedAll}
+                  checked={table.getIsAllRowsSelected()}
                   className={styles.selectControl}
                   id={`${prefix}-select-all`}
                   data-testid={TestIds.table.allControl}

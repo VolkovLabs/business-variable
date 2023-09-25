@@ -42,6 +42,31 @@ const groupBy = (items: object[] | undefined, fieldKey: string): Map<string, obj
 };
 
 /**
+ * To Plain Array
+ * @param array
+ * @param getValue
+ * @param initialValue
+ */
+export const toPlainArray = <TItem, TResult>(
+  array: TItem[],
+  getValue: (item: TItem) => unknown,
+  initialValue: TResult[]
+): TResult[] => {
+  return array.reduce(
+    (acc, child) => {
+      const value = getValue(child);
+      if (Array.isArray(value)) {
+        acc.push(...value);
+      } else {
+        acc.push(value as TResult);
+      }
+      return acc;
+    },
+    [...initialValue]
+  );
+};
+
+/**
  * Recursively Group items
  * @param items
  * @param fieldKeys
@@ -67,10 +92,7 @@ const getGroupArray = (
     const item = getItem({ [currentKey]: key }, currentKey, children);
     return {
       ...item,
-      childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.label]),
-        item.childValues || []
-      ),
+      childValues: toPlainArray(children, (child) => child.childValues || child.label, item.childValues || []),
       childFavoritesCount: children.reduce(
         (acc, child) => acc + (child.childFavoritesCount || child.isFavorite ? 1 : 0),
         item.childFavoritesCount || 0
