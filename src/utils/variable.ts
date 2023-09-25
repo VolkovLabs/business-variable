@@ -1,7 +1,7 @@
-import { CustomVariableModel, QueryVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { AllValue } from '../constants';
-import { RuntimeVariable, VariableType } from '../types';
+import { AllValue, AllValueParameter } from '../constants';
+import { CustomVariableModel, QueryVariableModel, RuntimeVariable, VariableType } from '../types';
+import { TypedVariableModel } from '@grafana/data';
 
 /**
  * Set Variable Value
@@ -49,7 +49,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
          */
         if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
           searchParams.push(
-            ...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text.toString())
+            ...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text)
           );
         }
 
@@ -112,12 +112,29 @@ export const isVariableWithOptions = (
 /**
  * Get Variables Map
  */
-export const getVariablesMap = (variables: RuntimeVariable[]): Record<string, RuntimeVariable> => {
-  return variables.reduce(
-    (acc, variable) => ({
-      ...acc,
-      [variable.name]: variable,
-    }),
-    {}
-  );
+export const getVariablesMap = (variables: TypedVariableModel[]): Record<string, RuntimeVariable> => {
+  return variables.reduce((acc, variable) => {
+    if (variable.type === VariableType.TEXTBOX) {
+      return {
+        ...acc,
+        [variable.name]: variable,
+      };
+    }
+    if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
+      return {
+        ...acc,
+        [variable.name]: {
+          ...variable,
+          optionsMap: variable.options.reduce(
+            (acc, option) => ({
+              ...acc,
+              [option.value === AllValueParameter ? AllValue : (option.value as string)]: option,
+            }),
+            {}
+          ),
+        },
+      };
+    }
+    return acc;
+  }, {});
 };

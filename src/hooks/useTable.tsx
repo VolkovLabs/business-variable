@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
 import { TextVariable } from '../components/TextVariable';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
-import { Level, PanelOptions, TableItem, VariableType } from '../types';
+import { Level, PanelOptions, RuntimeVariable, TableItem, VariableType } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -77,15 +77,21 @@ export const useTable = ({
       /**
        * Use Group levels
        */
+      const allVariables: Record<string, RuntimeVariable> = {};
       const rows = getRows(data, groupFields, (item, key, children) => {
         /**
          * Convert value to string
          */
         const value = `${item[key as keyof typeof item]}`;
-        const levelVariable = getRuntimeVariable(key);
+        let levelVariable = allVariables[key];
+        if (!levelVariable) {
+          const variable = getRuntimeVariable(key);
+          levelVariable = variable;
+          allVariables[key] = variable;
+        }
         const variableOption = isVariableWithOptions(levelVariable)
-          ? levelVariable.options.find((option) => option.value === value)
-          : runtimeVariable.options.find((option) => option.value === value);
+          ? levelVariable.optionsMap[value]
+          : runtimeVariable.optionsMap[value];
 
         return getItemWithStatus(
           {
@@ -94,7 +100,7 @@ export const useTable = ({
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
             name: key,
-            label: variableOption?.text.toString() || value,
+            label: variableOption?.text || value,
           },
           {
             children,
@@ -140,14 +146,14 @@ export const useTable = ({
      */
     if (isVariableWithOptions(runtimeVariable)) {
       return runtimeVariable.options.map((option) => {
-        const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+        const value = option.value === AllValueParameter ? AllValue : option.value;
         return getItemWithStatus(
           {
             value,
             selected: option.selected,
             variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable.name, option.value.toString()),
-            label: option.text.toString(),
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.value),
+            label: option.text,
           },
           {
             status: getStatus(value),

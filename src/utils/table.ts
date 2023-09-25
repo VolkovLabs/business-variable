@@ -1,6 +1,6 @@
 import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
-import { AllValue, AllValueParameter } from '../constants';
+import { AllValue } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
@@ -180,11 +180,7 @@ export const getItemWithStatus = (
   const isAllChildrenSelected = children ? !children.some((child) => !child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
-    selectable = item.variable?.options?.some((option) => {
-      const stringValue = Array.isArray(option.value) ? option.value.toString() : option.value;
-      const optionValue = stringValue === AllValueParameter ? AllValue : stringValue;
-      return optionValue === item.value;
-    });
+    selectable = !!item.variable.optionsMap[item.value];
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 
@@ -256,17 +252,18 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
  * @param searchTerm
  */
 export const valueFilter: FilterFn<TableItem> = (row, columnId, searchTerm: string) => {
+  const normalizedSearchTerm = searchTerm.toLowerCase();
   /**
    * Filter parent rows
    */
   if (row.original.childValues) {
-    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(searchTerm.toLowerCase()));
+    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(normalizedSearchTerm));
   }
 
   /**
    * Filter last level row
    */
-  return row.original.label.toLowerCase().includes(searchTerm.toLowerCase());
+  return row.original.label.toLowerCase().includes(normalizedSearchTerm);
 };
 
 /**

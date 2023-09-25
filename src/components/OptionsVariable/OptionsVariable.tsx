@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import { CustomVariableModel, QueryVariableModel, SelectableValue } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
+import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -25,7 +26,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
   const values = useMemo(() => {
     return variable.options
       .filter((option) => option.selected)
-      .map((option) => (option.value === AllValueParameter ? AllValue : option.value.toString()));
+      .map((option) => (option.value === AllValueParameter ? AllValue : option.value));
   }, [variable]);
 
   /**
@@ -87,9 +88,9 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    */
   const options = useMemo(() => {
     return variable.options.map((option) => {
-      const value = option.value === AllValueParameter ? AllValue : option.value.toString();
+      const value = option.value === AllValueParameter ? AllValue : option.value;
       return {
-        label: option.text.toString(),
+        label: option.text,
         value,
         ariaLabel: TestIds.optionsVariable.option(value),
       };
