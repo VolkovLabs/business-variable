@@ -13,7 +13,7 @@ import {
   TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
-import { useVirtual } from 'react-virtual';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { TestIds } from '../../constants';
 import { Filter } from './Filter';
 import { Styles } from './styles';
@@ -125,13 +125,19 @@ export const Table = <TableData extends object>({
 
   const { rows } = tableInstance.getRowModel();
 
-  const rowVirtualizer = useVirtual({
-    parentRef: scrollableContainerRef,
-    size: rows.length,
+  /**
+   * Row Virtualizer
+   * Options description - https://tanstack.com/virtual/v3/docs/api/virtualizer
+   */
+  const rowVirtualizer = useVirtualizer({
+    getScrollElement: () => scrollableContainerRef.current,
+    count: rows.length,
+    estimateSize: () => 38,
     overscan: 10,
   });
 
-  const { virtualItems: virtualRows, totalSize } = rowVirtualizer;
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const totalSize = rowVirtualizer.getTotalSize();
 
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;

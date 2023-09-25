@@ -6,10 +6,10 @@
     "@grafana/runtime": "^10.0.3",
     "@grafana/ui": "^10.0.0",
     "@tanstack/react-table": "^8.9.3",
+    "@tanstack/react-virtual": "^3.0.0-beta.60",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-virtual": "^2.10.4",
     "tslib": "^2.6.1"
   },
   "description": "Update Dashboard Variables",
