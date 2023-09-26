@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
-import { AllValueParameter, TestIds } from '../../constants';
+import { AllValueParameter, NoValueParameter, TestIds } from '../../constants';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { selectVariableValues } from '../../utils';
 
@@ -13,13 +13,18 @@ interface Props {
    * Variable
    */
   variable: QueryVariableModel | CustomVariableModel;
+
+  /**
+   * Empty Value
+   */
+  emptyValue: boolean;
 }
 
 /**
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable }) => {
+export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
   /**
    * Current values
    */
@@ -41,6 +46,14 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
        * Deselect values
        */
       if (values.length > updatedValues.length) {
+        /**
+         * Clear Value
+         */
+        if (updatedValues.length === 0 && emptyValue) {
+          selectVariableValues([NoValueParameter], variable);
+          return;
+        }
+
         /**
          * Select all
          */
@@ -82,7 +95,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
        */
       selectVariableValues(updatedValues, variable);
     },
-    [values, variable]
+    [emptyValue, values, variable]
   );
 
   /**
@@ -96,7 +109,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
         ariaLabel: TestIds.optionsVariable.option(option.value),
       };
     });
-  }, [variable]);
+  }, [variable.options]);
 
   return (
     <Select

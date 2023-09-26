@@ -1,5 +1,5 @@
 import { locationService } from '@grafana/runtime';
-import { AllValue, AllValueParameter } from '../constants';
+import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import {
   CustomVariableModel,
   QueryVariableModel,
@@ -15,6 +15,7 @@ import { TypedVariableModel } from '@grafana/data';
  * @param value
  */
 const setVariableValue = (name: string, value: unknown) => {
+  console.log('setVariableValue', name, value);
   locationService.partial({ [`var-${name}`]: value }, true);
 };
 
@@ -24,6 +25,7 @@ const setVariableValue = (name: string, value: unknown) => {
  * @param runtimeVariable
  */
 export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
+  console.log('selectVariableValues', values);
   if (!runtimeVariable) {
     return;
   }
@@ -39,6 +41,11 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       if (multi) {
         if (values.some((value) => value === AllValueParameter)) {
           setVariableValue(name, AllValue);
+          return;
+        }
+
+        if (values.some((value) => value === NoValueParameter)) {
+          setVariableValue(name, '');
           return;
         }
 
@@ -84,8 +91,15 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       /**
        * Single Value
        */
-      const value = values[0];
-      setVariableValue(name, value === AllValueParameter ? AllValue : value);
+      let value = values[0];
+
+      if (value === AllValueParameter) {
+        value = AllValue;
+      } else if (value === NoValueParameter) {
+        value = '';
+      }
+
+      setVariableValue(name, value);
       return;
     }
     case VariableType.TEXTBOX: {
