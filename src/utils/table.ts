@@ -180,7 +180,7 @@ export const getItemWithStatus = (
   const isAllChildrenSelected = children ? !children.some((child) => !child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
-    selectable = !!item.variable.optionsMap[item.value];
+    selectable = !!item.variable.helpers.getOption(item.value);
   }
   const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
 

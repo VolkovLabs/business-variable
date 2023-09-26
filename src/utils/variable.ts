@@ -1,6 +1,12 @@
 import { locationService } from '@grafana/runtime';
 import { AllValue, AllValueParameter } from '../constants';
-import { CustomVariableModel, QueryVariableModel, RuntimeVariable, VariableType } from '../types';
+import {
+  CustomVariableModel,
+  QueryVariableModel,
+  RuntimeVariable,
+  RuntimeVariableWithOptions,
+  VariableType,
+} from '../types';
 import { TypedVariableModel } from '@grafana/data';
 
 /**
@@ -118,16 +124,19 @@ export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariabl
     return variable;
   }
   if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
-    return {
+    const runtimeVariable = {
       ...variable,
-      optionsMap: variable.options.reduce(
-        (acc, option) => ({
-          ...acc,
-          [option.value === AllValueParameter ? AllValue : (option.value as string)]: option,
-        }),
-        {}
-      ),
-    } as RuntimeVariable;
+      type: VariableType.CUSTOM,
+      optionIndexByName: variable.options.reduce((acc, option, index) => {
+        acc.set(option.value === AllValueParameter ? AllValue : (option.value as string), index);
+        return acc;
+      }, new Map()),
+      helpers: {
+        getOption: (value: string) => runtimeVariable.options[runtimeVariable.optionIndexByName.get(value) as number],
+      },
+    } as RuntimeVariableWithOptions;
+
+    return runtimeVariable;
   }
   return;
 };

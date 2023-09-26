@@ -65,8 +65,9 @@ describe('Use Runtime Variables', () => {
 
     expect(result.current.variable).toEqual({
       ...variableDevice,
-      optionsMap: {
-        1: variableDevice.options[0],
+      optionIndexByName: expect.any(Map),
+      helpers: {
+        getOption: expect.any(Function),
       },
     });
   });
@@ -76,8 +77,9 @@ describe('Use Runtime Variables', () => {
 
     expect(result.current.variable).toEqual({
       ...variableDevice,
-      optionsMap: {
-        1: variableDevice.options[0],
+      optionIndexByName: expect.any(Map),
+      helpers: {
+        getOption: expect.any(Function),
       },
     });
 

@@ -90,8 +90,8 @@ export const useTable = ({
           allVariables[key] = variable;
         }
         const variableOption = isVariableWithOptions(levelVariable)
-          ? levelVariable.optionsMap[value]
-          : runtimeVariable.optionsMap[value];
+          ? levelVariable.helpers.getOption(value)
+          : runtimeVariable.helpers.getOption(value);
 
         return getItemWithStatus(
           {

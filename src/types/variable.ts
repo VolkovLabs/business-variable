@@ -61,12 +61,24 @@ export interface RuntimeVariableOption {
 }
 
 /**
+ * Variable With Options Helpers
+ */
+interface VariableWithOptionsHelpers {
+  /**
+   * Get Option
+   * @param value
+   */
+  getOption: (value: string) => RuntimeVariableOption | undefined;
+}
+
+/**
  * Custom Variable Model
  */
 export type CustomVariableModel = Omit<CoreCustomVariableModel, 'options' | 'type'> & {
   type: VariableType.CUSTOM;
   options: RuntimeVariableOption[];
-  optionsMap: Record<string, RuntimeVariableOption>;
+  optionIndexByName: Map<string, number>;
+  helpers: VariableWithOptionsHelpers;
 };
 
 /**
@@ -75,15 +87,21 @@ export type CustomVariableModel = Omit<CoreCustomVariableModel, 'options' | 'typ
 export type QueryVariableModel = Omit<CoreQueryVariableModel, 'options' | 'type'> & {
   type: VariableType.QUERY;
   options: RuntimeVariableOption[];
-  optionsMap: Record<string, RuntimeVariableOption>;
+  optionIndexByName: Map<string, number>;
+  helpers: VariableWithOptionsHelpers;
 };
 
 /**
  * TextBox Variable
  */
-export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption> };
+export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption>; helpers?: never };
+
+/**
+ * Runtime Variable With Options
+ */
+export type RuntimeVariableWithOptions = CustomVariableModel | QueryVariableModel;
 
 /**
  * Runtime Variable
  */
-export type RuntimeVariable = CustomVariableModel | QueryVariableModel | TextBoxVariable;
+export type RuntimeVariable = RuntimeVariableWithOptions | TextBoxVariable;
