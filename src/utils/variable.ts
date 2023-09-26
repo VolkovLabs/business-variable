@@ -15,7 +15,6 @@ import { TypedVariableModel } from '@grafana/data';
  * @param value
  */
 const setVariableValue = (name: string, value: unknown) => {
-  console.log('setVariableValue', name, value);
   locationService.partial({ [`var-${name}`]: value }, true);
 };
 
@@ -25,7 +24,6 @@ const setVariableValue = (name: string, value: unknown) => {
  * @param runtimeVariable
  */
 export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
-  console.log('selectVariableValues', values);
   if (!runtimeVariable) {
     return;
   }

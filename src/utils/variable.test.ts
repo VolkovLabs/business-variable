@@ -1,5 +1,5 @@
 import { locationService } from '@grafana/runtime';
-import { AllValue, AllValueParameter } from '../constants';
+import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import { VariableType } from '../types';
 import { selectVariableValues } from './variable';
 
@@ -51,6 +51,18 @@ describe('Variable Utils', () => {
           true
         );
       });
+
+      it('Should apply no value', () => {
+        const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
+        selectVariableValues([NoValueParameter], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: '',
+          },
+          true
+        );
+      });
     });
 
     describe('Custom Multi', () => {
@@ -68,6 +80,18 @@ describe('Variable Utils', () => {
         expect(locationService.partial).toHaveBeenCalledWith(
           {
             [`var-${variable.name}`]: ['value1', 'value2'],
+          },
+          true
+        );
+      });
+
+      it('Should apply no value', () => {
+        const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
+        selectVariableValues([NoValueParameter], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: '',
           },
           true
         );
