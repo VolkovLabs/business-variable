@@ -136,9 +136,15 @@ export const Table = <TableData extends object>({
     overscan: 10,
   });
 
+  /**
+   * Virtualized instance options
+   */
   const virtualRows = rowVirtualizer.getVirtualItems();
   const totalSize = rowVirtualizer.getTotalSize();
 
+  /**
+   * Offsets for hidden rows
+   */
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
