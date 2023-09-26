@@ -1,5 +1,5 @@
 import { locationService } from '@grafana/runtime';
-import { AllValue } from '../constants';
+import { AllValue, AllValueParameter } from '../constants';
 import { VariableType } from '../types';
 import { selectVariableValues } from './variable';
 
@@ -25,7 +25,7 @@ describe('Variable Utils', () => {
         () =>
           ({
             getAll: jest.fn(() => []),
-          } as any)
+          }) as any
       );
 
       it('Should apply only first value', () => {
@@ -42,11 +42,11 @@ describe('Variable Utils', () => {
 
       it('Should apply all value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues(['all'], variable as any);
+        selectVariableValues([AllValueParameter], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: 'all',
+            [`var-${variable.name}`]: AllValue,
           },
           true
         );
@@ -58,7 +58,7 @@ describe('Variable Utils', () => {
         () =>
           ({
             getAll: jest.fn(() => []),
-          } as any)
+          }) as any
       );
 
       it('Should apply all values', () => {
@@ -78,7 +78,7 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => ['selected1', 'selected2']),
-            } as any)
+            }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
@@ -96,7 +96,7 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => ['value2', 'selected1', 'selected2']),
-            } as any)
+            }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
@@ -114,10 +114,10 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => ['value2', 'selected1', 'selected2']),
-            } as any)
+            }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', 'all'], variable as any);
+        selectVariableValues(['value1', AllValueParameter], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -130,7 +130,7 @@ describe('Variable Utils', () => {
          * Check case-insensitive of all value
          */
         jest.mocked(locationService.partial).mockClear();
-        selectVariableValues(['value1', AllValue], variable as any);
+        selectVariableValues(['value1', AllValueParameter], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -145,7 +145,7 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => ['value1', 'value2', 'selected1', 'selected2']),
-            } as any)
+            }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
@@ -163,7 +163,7 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => ['value1', 'selected1', 'selected2']),
-            } as any)
+            }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
@@ -181,7 +181,7 @@ describe('Variable Utils', () => {
           () =>
             ({
               getAll: jest.fn(() => []),
-            } as any)
+            }) as any
         );
         jest.mocked(locationService.getSearchObject).mockImplementation(() => ({}));
         const variable = {

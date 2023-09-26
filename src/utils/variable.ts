@@ -37,7 +37,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        * Multi update
        */
       if (multi) {
-        if (values.some((value) => value.toLowerCase() === 'all')) {
+        if (values.some((value) => value === AllValueParameter)) {
           setVariableValue(name, AllValue);
           return;
         }
@@ -85,7 +85,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        * Single Value
        */
       const value = values[0];
-      setVariableValue(name, value);
+      setVariableValue(name, value === AllValueParameter ? AllValue : value);
       return;
     }
     case VariableType.TEXTBOX: {
@@ -128,7 +128,7 @@ export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariabl
       ...variable,
       type: VariableType.CUSTOM,
       optionIndexByName: variable.options.reduce((acc, option, index) => {
-        acc.set(option.value === AllValueParameter ? AllValue : (option.value as string), index);
+        acc.set(option.value as string, index);
         return acc;
       }, new Map()),
       helpers: {

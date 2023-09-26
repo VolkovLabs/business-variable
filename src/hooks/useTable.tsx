@@ -68,7 +68,9 @@ export const useTable = ({
 
     let isSelectedAll = false;
     if (isVariableWithOptions(runtimeVariable)) {
-      isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes(AllValueParameter) && rt.selected);
+      isSelectedAll =
+        runtimeVariable.current.value.length === runtimeVariable.options.length ||
+        !!runtimeVariable.helpers.getOption(AllValueParameter)?.selected;
     }
 
     const groupFields = levels || [];
@@ -120,7 +122,7 @@ export const useTable = ({
           return [
             getItemWithStatus(
               {
-                value: AllValue,
+                value: AllValueParameter,
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,
@@ -146,17 +148,16 @@ export const useTable = ({
      */
     if (isVariableWithOptions(runtimeVariable)) {
       return runtimeVariable.options.map((option) => {
-        const value = option.value === AllValueParameter ? AllValue : option.value;
         return getItemWithStatus(
           {
-            value,
+            value: option.value,
             selected: option.selected,
             variable: runtimeVariable,
             isFavorite: favorites.isAdded(runtimeVariable.name, option.value),
             label: option.text,
           },
           {
-            status: getStatus(value),
+            status: getStatus(option.value === AllValueParameter ? AllValue : option.value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -265,22 +266,33 @@ export const useTable = ({
         id: 'value',
         accessorKey: 'value',
         header: ({ table }) => {
+          /**
+           * Calculate All Selection
+           */
+          let isSelectedAll = false;
+          if (isVariableWithOptions(runtimeVariable)) {
+            isSelectedAll = runtimeVariable.current.value?.length === runtimeVariable.options.length;
+          }
+
           return (
             <>
               {options.groupSelection && (
                 <input
                   type="checkbox"
                   onChange={() => {
+                    /**
+                     * Root Row
+                     */
                     const rootRow: TableItem = {
                       childValues: toPlainArray(tableData, (item) => item.childValues || item.value, []),
-                      selected: table.getIsAllRowsSelected(),
+                      selected: isSelectedAll,
                       value: '',
                       showStatus: false,
                       label: '',
                     };
                     onChange(rootRow);
                   }}
-                  checked={table.getIsAllRowsSelected()}
+                  checked={isSelectedAll}
                   className={styles.selectControl}
                   id={`${prefix}-select-all`}
                   data-testid={TestIds.table.allControl}
