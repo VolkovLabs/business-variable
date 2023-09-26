@@ -89,6 +89,9 @@ export const Table = <TableData extends object>({
   tableHeaderRef,
   scrollableContainerRef,
 }: Props<TableData>) => {
+  /**
+   * Styles
+   */
   const styles = useStyles2(Styles);
 
   /**
@@ -123,6 +126,9 @@ export const Table = <TableData extends object>({
     },
   });
 
+  /**
+   * Rows model
+   */
   const { rows } = tableInstance.getRowModel();
 
   /**

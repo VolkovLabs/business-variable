@@ -109,6 +109,10 @@ export const isVariableWithOptions = (
   return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
 };
 
+/**
+ * Get Runtime Variable
+ * @param variable
+ */
 export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariable | undefined => {
   if (variable.type === VariableType.TEXTBOX) {
     return variable;

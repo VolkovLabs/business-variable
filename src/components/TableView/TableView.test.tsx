@@ -377,7 +377,7 @@ describe('Table View', () => {
       );
 
       /**
-       * Virtualizer calls scrollTo once so just check if only once called
+       * Virtualizer calls scrollTo once so just check if only called by it
        */
       expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
     });
