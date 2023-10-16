@@ -12,6 +12,7 @@ import {
   getFilteredTree,
   getItemWithStatus,
   getRows,
+  isVariableAllSelected,
   isVariableWithOptions,
   selectVariableValues,
   statusSort,
@@ -66,12 +67,7 @@ export const useTable = ({
       return [];
     }
 
-    let isSelectedAll = false;
-    if (isVariableWithOptions(runtimeVariable)) {
-      isSelectedAll =
-        runtimeVariable.current.value.length === runtimeVariable.options.length ||
-        !!runtimeVariable.helpers.getOption(AllValueParameter)?.selected;
-    }
+    const isSelectedAll = isVariableAllSelected(runtimeVariable);
 
     const groupFields = levels || [];
 
@@ -269,10 +265,7 @@ export const useTable = ({
           /**
            * Calculate All Selection
            */
-          let isSelectedAll = false;
-          if (isVariableWithOptions(runtimeVariable)) {
-            isSelectedAll = runtimeVariable.current.value?.length === runtimeVariable.options.length;
-          }
+          const isSelectedAll = runtimeVariable ? isVariableAllSelected(runtimeVariable) : false;
 
           return (
             <>
