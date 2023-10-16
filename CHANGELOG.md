@@ -1,11 +1,12 @@
 # Change Log
 
-## 1.8.0 (IN PROGRESS)
+## 1.8.0 (2023-10-16)
 
 ### Features / Enhancements
 
 - Update variable option label for parent items in tree view (#62)
 - Add handling pressing enter and escape keys for Text Variable (#69)
+- Add table virtualization to improve performance (#64)
 
 ## 1.7.0 (2023-08-08)
 
