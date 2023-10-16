@@ -173,6 +173,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                           <IconButton
                             name="trash-alt"
                             onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
+                            aria-label="Remove"
                             data-testid={TestIds.levelsEditor.buttonRemove}
                           />
                           <Icon
