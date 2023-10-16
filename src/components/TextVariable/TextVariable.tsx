@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Input } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { TextBoxVariable } from '../../types';
@@ -45,5 +45,30 @@ export const TextVariable: React.FC<Props> = ({ variable }) => {
     selectVariableValues([value], variable);
   }, [value, variable]);
 
-  return <Input data-testid={TestIds.textVariable.root} onChange={onChange} onBlur={onSave} value={value} />;
+  /**
+   * On Key Down
+   */
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        onSave();
+      }
+
+      if (event.key === 'Escape') {
+        event.currentTarget.blur();
+      }
+    },
+    [onSave]
+  );
+
+  return (
+    <Input
+      data-testid={TestIds.textVariable.root}
+      onChange={onChange}
+      onBlur={onSave}
+      onKeyDown={onKeyDown}
+      value={value}
+      placeholder="Enter variable value"
+    />
+  );
 };

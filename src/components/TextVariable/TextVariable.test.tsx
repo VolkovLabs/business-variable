@@ -41,6 +41,10 @@ describe('Text Variable', () => {
     return <TextVariable variable={defaultVariable} {...(props as any)} />;
   };
 
+  beforeEach(() => {
+    jest.mocked(selectVariableValues).mockClear();
+  });
+
   it('Should apply initial variable value', () => {
     render(
       getComponent({
@@ -99,5 +103,35 @@ describe('Text Variable', () => {
     fireEvent.blur(selectors.root());
 
     expect(selectVariableValues).toHaveBeenCalledWith(['hello'], defaultVariable);
+  });
+
+  it('Should update variable value on enter', () => {
+    render(
+      getComponent({
+        variable: defaultVariable as any,
+      })
+    );
+
+    fireEvent.change(selectors.root(), { target: { value: 'hello' } });
+
+    fireEvent.keyDown(selectors.root(), { key: 'Enter' });
+
+    expect(selectVariableValues).toHaveBeenCalledWith(['hello'], defaultVariable);
+  });
+
+  it('Should blur field on escape', () => {
+    render(
+      getComponent({
+        variable: defaultVariable as any,
+      })
+    );
+
+    const blur = jest.fn();
+
+    fireEvent.change(selectors.root(), { target: { value: 'hello' } });
+
+    fireEvent.keyDown(selectors.root(), { key: 'Escape', target: { blur } });
+
+    expect(blur).toHaveBeenCalledWith();
   });
 });

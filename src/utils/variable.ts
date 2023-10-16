@@ -1,3 +1,4 @@
+import { TypedVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import {
@@ -7,7 +8,6 @@ import {
   RuntimeVariableWithOptions,
   VariableType,
 } from '../types';
-import { TypedVariableModel } from '@grafana/data';
 
 /**
  * Set Variable Value
