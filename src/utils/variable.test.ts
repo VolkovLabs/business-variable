@@ -212,8 +212,8 @@ describe('Variable Utils', () => {
           name: 'variable',
           type: VariableType.CUSTOM,
           options: [
-            { text: 'selected1', selected: true },
-            { text: 'notSelected', selected: false },
+            { value: 'selected1', selected: true },
+            { value: 'notSelected', selected: false },
           ],
           multi: true,
         };

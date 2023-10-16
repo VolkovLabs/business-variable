@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
-import { AllValueParameter, NoValueParameter, TestIds } from '../../constants';
+import { TestIds } from '../../constants';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
-import { selectVariableValues } from '../../utils';
+import { updateVariableOptions } from '../../utils';
 
 /**
  * Properties
@@ -37,63 +37,12 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
    */
   const onChange = useCallback(
     (value: Array<SelectableValue<string>> | SelectableValue<string>) => {
-      const options = Array.isArray(value) ? value : [value];
-      const updatedValues = options
-        .filter((option) => option.value !== undefined)
-        .map(({ value }) => value) as string[];
-
-      /**
-       * Deselect values
-       */
-      if (values.length > updatedValues.length) {
-        /**
-         * Clear Value
-         */
-        if (updatedValues.length === 0 && emptyValue) {
-          selectVariableValues([NoValueParameter], variable);
-          return;
-        }
-
-        /**
-         * Select all
-         */
-        if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
-          selectVariableValues([AllValueParameter], variable);
-          return;
-        }
-
-        const removedValues = values.filter((value) => !updatedValues.includes(value));
-        selectVariableValues(removedValues, variable);
-        return;
-      }
-
-      /**
-       * Selected value while All is selected
-       */
-      if (updatedValues.length > 1 && values.includes(AllValueParameter) && updatedValues.includes(AllValueParameter)) {
-        selectVariableValues(
-          updatedValues.filter((value) => value !== AllValueParameter),
-          variable
-        );
-        return;
-      }
-
-      /**
-       * Select All Value
-       */
-      if (
-        updatedValues.length > 1 &&
-        !values.includes(AllValueParameter) &&
-        updatedValues.includes(AllValueParameter)
-      ) {
-        selectVariableValues([AllValueParameter], variable);
-        return;
-      }
-
-      /**
-       * Select Values
-       */
-      selectVariableValues(updatedValues, variable);
+      updateVariableOptions({
+        previousValues: values,
+        value: Array.isArray(value) ? value.map((option: SelectableValue) => option.value) : value.value || '',
+        variable,
+        emptyValueEnabled: emptyValue,
+      });
     },
     [emptyValue, values, variable]
   );

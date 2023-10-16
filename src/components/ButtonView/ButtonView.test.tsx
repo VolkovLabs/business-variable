@@ -26,8 +26,8 @@ jest.mock('../../hooks', () => ({
 /**
  * Mock utils
  */
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
+jest.mock('../../utils/variable', () => ({
+  ...jest.requireActual('../../utils/variable'),
   selectVariableValues: jest.fn(),
 }));
 
@@ -100,6 +100,10 @@ describe('ButtonView', () => {
     return <ButtonView data={data} {...(props as any)} />;
   };
 
+  beforeEach(() => {
+    jest.mocked(selectVariableValues).mockClear();
+  });
+
   it('Should show no variable message', () => {
     render(
       getComponent({
@@ -127,7 +131,7 @@ describe('ButtonView', () => {
       () =>
         ({
           variable: { ...deviceVariable, options: [] },
-        } as any)
+        }) as any
     );
 
     render(
@@ -147,7 +151,7 @@ describe('ButtonView', () => {
       () =>
         ({
           variable: deviceVariable,
-        } as any)
+        }) as any
     );
 
     render(
@@ -180,7 +184,7 @@ describe('ButtonView', () => {
       () =>
         ({
           variable,
-        } as any)
+        }) as any
     );
 
     render(
@@ -194,9 +198,15 @@ describe('ButtonView', () => {
 
     expect(selectors.item(false, 'device1')).toBeInTheDocument();
 
+    /**
+     * Deselect item
+     */
     fireEvent.click(selectors.item(false, 'device1'));
 
-    expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable);
+    /**
+     * All should be selected
+     */
+    expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], variable);
   });
 
   it('Should work if no status color', () => {
@@ -214,7 +224,7 @@ describe('ButtonView', () => {
       () =>
         ({
           variable,
-        } as any)
+        }) as any
     );
 
     render(

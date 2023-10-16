@@ -6,9 +6,9 @@ import { selectVariableValues } from '../../utils';
 import { OptionsVariable } from './OptionsVariable';
 
 /**
- * Mock utils
+ * Mock utils/variable
  */
-jest.mock('../../utils', () => ({
+jest.mock('../../utils/variable', () => ({
   selectVariableValues: jest.fn(),
 }));
 
@@ -37,6 +37,10 @@ describe('Options Variable', () => {
   const getComponent = (props: Partial<Props>) => {
     return <OptionsVariable variable={defaultVariable} width={300} {...(props as any)} />;
   };
+
+  beforeEach(() => {
+    jest.mocked(selectVariableValues).mockClear();
+  });
 
   describe('Single variable', () => {
     const option1 = {
