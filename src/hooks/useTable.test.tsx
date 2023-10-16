@@ -1419,6 +1419,7 @@ describe('Use Table Hook', () => {
               getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
             }) as any
         );
+        jest.mocked(selectVariableValues).mockClear();
       });
 
       it('Should render expand all button', () => {
@@ -1547,7 +1548,7 @@ describe('Use Table Hook', () => {
         expect(within(valueHeader).queryByTestId(TestIds.table.buttonExpandAll)).not.toBeInTheDocument();
       });
 
-      it('Should render select all control', () => {
+      it('Should select all child items ', () => {
         const dataFrame = toDataFrame({
           fields: [
             {
@@ -1607,6 +1608,122 @@ describe('Use Table Hook', () => {
          * Should select country
          */
         expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable);
+        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
+      });
+
+      it('Should render correct all state and unselect all', () => {
+        const deviceVariable = createRuntimeVariableMock({
+          multi: true,
+          includeAll: true,
+          type: VariableType.CUSTOM,
+          options: [
+            {
+              text: AllValue,
+              value: AllValueParameter,
+              selected: false,
+            },
+            {
+              text: 'device1',
+              value: 'device1',
+              selected: true,
+            },
+            {
+              text: 'device2',
+              value: 'device2',
+              selected: true,
+            },
+          ],
+        } as any);
+        const countryVariable = createRuntimeVariableMock({
+          multi: true,
+          type: VariableType.CUSTOM,
+          options: [
+            {
+              text: 'USA',
+              value: 'USA',
+              selected: true,
+            },
+            {
+              text: 'Japan',
+              value: 'Japan',
+              selected: true,
+            },
+          ],
+        } as any);
+
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
+            }) as any
+        );
+
+        const dataFrame = toDataFrame({
+          fields: [
+            {
+              name: 'country',
+              values: ['USA', 'Japan'],
+            },
+            {
+              name: 'device',
+              values: ['device1', 'device2'],
+            },
+          ],
+          refId: 'A',
+        });
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              header: true,
+              groupSelection: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getIsAllRowsSelected: () => true,
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => jest.fn(),
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
+        expect(valueHeader).toBeInTheDocument();
+
+        /**
+         * Check if all selected
+         */
+        const selectAllControl = within(valueHeader).getByTestId(TestIds.table.allControl);
+        expect(selectAllControl).toBeInTheDocument();
+        expect(selectAllControl).toBeChecked();
+
+        /**
+         * Unselect all
+         */
+        fireEvent.click(selectAllControl);
+
+        /**
+         * Check if all items unselected
+         */
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
       });
     });

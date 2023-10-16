@@ -178,10 +178,27 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
       /**
        * Multi value
        */
-      return (
-        runtimeVariable.current.value.length === runtimeVariable.options.length ||
-        !!runtimeVariable.helpers.getOption(AllValueParameter)?.selected
-      );
+      if (runtimeVariable.includeAll) {
+        /**
+         * Options with all option
+         */
+        if (!!runtimeVariable.helpers.getOption(AllValueParameter)?.selected) {
+          /**
+           * All option selected
+           */
+          return true;
+        }
+
+        /**
+         * Comparing value with removed selected all option
+         */
+        return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+      }
+
+      /**
+       * Multi value without all option
+       */
+      return runtimeVariable.current.value.length === runtimeVariable.options.length;
     } else {
       /**
        * Single value
