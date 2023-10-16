@@ -13,6 +13,7 @@ import {
   TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { TestIds } from '../../constants';
 import { Filter } from './Filter';
 import { Styles } from './styles';
@@ -65,6 +66,11 @@ interface Props<TableData extends object> {
    * Top Offset
    */
   topOffset?: number;
+
+  /**
+   * Scrollable Container Ref
+   */
+  scrollableContainerRef: RefObject<HTMLDivElement>;
 }
 
 /**
@@ -81,7 +87,11 @@ export const Table = <TableData extends object>({
   tableRef,
   topOffset = 0,
   tableHeaderRef,
+  scrollableContainerRef,
 }: Props<TableData>) => {
+  /**
+   * Styles
+   */
   const styles = useStyles2(Styles);
 
   /**
@@ -115,6 +125,34 @@ export const Table = <TableData extends object>({
       columnFilters,
     },
   });
+
+  /**
+   * Rows model
+   */
+  const { rows } = tableInstance.getRowModel();
+
+  /**
+   * Row Virtualizer
+   * Options description - https://tanstack.com/virtual/v3/docs/api/virtualizer
+   */
+  const rowVirtualizer = useVirtualizer({
+    getScrollElement: () => scrollableContainerRef.current,
+    count: rows.length,
+    estimateSize: () => 38,
+    overscan: 10,
+  });
+
+  /**
+   * Virtualized instance options
+   */
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const totalSize = rowVirtualizer.getTotalSize();
+
+  /**
+   * Offsets for hidden rows
+   */
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
   let isSelectedRowFound = false;
 
@@ -170,7 +208,13 @@ export const Table = <TableData extends object>({
       )}
 
       <tbody>
-        {tableInstance.getRowModel().rows.map((row) => {
+        {paddingTop > 0 && (
+          <tr>
+            <td style={{ height: `${paddingTop}px` }} />
+          </tr>
+        )}
+        {virtualRows.map((virtualRow) => {
+          const row = rows[virtualRow.index];
           const selected = (row.original as any).selected;
           let ref = undefined;
           if (selected && !isSelectedRowFound) {
@@ -187,6 +231,11 @@ export const Table = <TableData extends object>({
             </Fragment>
           );
         })}
+        {paddingBottom > 0 && (
+          <tr>
+            <td style={{ height: `${paddingBottom}px` }} />
+          </tr>
+        )}
       </tbody>
     </table>
   );

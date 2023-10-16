@@ -1,4 +1,9 @@
-import { TextBoxVariableModel, TypedVariableModel, VariableOption } from '@grafana/data';
+import {
+  CustomVariableModel as CoreCustomVariableModel,
+  QueryVariableModel as CoreQueryVariableModel,
+  TextBoxVariableModel,
+  VariableOption,
+} from '@grafana/data';
 
 /**
  * Dashboard variable type
@@ -45,7 +50,7 @@ export interface RuntimeVariableOption {
    *
    * @type {boolean};
    */
-  selected?: boolean;
+  selected: boolean;
 
   /**
    * On Click
@@ -56,11 +61,62 @@ export interface RuntimeVariableOption {
 }
 
 /**
+ * Runtime Variable With Options Base
+ */
+interface RuntimeVariableWithOptionsBase {
+  /**
+   * Options
+   *
+   * @type {RuntimeVariableOption[]}
+   */
+  options: RuntimeVariableOption[];
+
+  /**
+   * Option Index By Name
+   *
+   * @type {Map}
+   */
+  optionIndexByName: Map<string, number>;
+
+  /**
+   * Helpers
+   */
+  helpers: {
+    /**
+     * Get Option
+     * @param value
+     */
+    getOption: (value: string) => RuntimeVariableOption | undefined;
+  };
+}
+
+/**
+ * Custom Variable Model
+ */
+export type CustomVariableModel = Omit<CoreCustomVariableModel, 'options' | 'type'> &
+  ({
+    type: VariableType.CUSTOM;
+  } & RuntimeVariableWithOptionsBase);
+
+/**
+ * Query Variable Model
+ */
+export type QueryVariableModel = Omit<CoreQueryVariableModel, 'options' | 'type'> &
+  ({
+    type: VariableType.QUERY;
+  } & RuntimeVariableWithOptionsBase);
+
+/**
  * TextBox Variable
  */
-export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption> };
+export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption>; helpers?: never };
+
+/**
+ * Runtime Variable With Options
+ */
+export type RuntimeVariableWithOptions = CustomVariableModel | QueryVariableModel;
 
 /**
  * Runtime Variable
  */
-export type RuntimeVariable = TypedVariableModel | TextBoxVariable;
+export type RuntimeVariable = RuntimeVariableWithOptions | TextBoxVariable;

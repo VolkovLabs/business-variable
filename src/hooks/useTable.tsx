@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Styles } from '../components/TableView/styles';
 import { TextVariable } from '../components/TextVariable';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
-import { Level, PanelOptions, TableItem, VariableType } from '../types';
+import { Level, PanelOptions, RuntimeVariable, TableItem, VariableType } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -15,6 +15,7 @@ import {
   isVariableWithOptions,
   selectVariableValues,
   statusSort,
+  toPlainArray,
   valueFilter,
 } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -67,7 +68,9 @@ export const useTable = ({
 
     let isSelectedAll = false;
     if (isVariableWithOptions(runtimeVariable)) {
-      isSelectedAll = !!runtimeVariable.options.find((rt) => rt.value.includes(AllValueParameter) && rt.selected);
+      isSelectedAll =
+        runtimeVariable.current.value.length === runtimeVariable.options.length ||
+        !!runtimeVariable.helpers.getOption(AllValueParameter)?.selected;
     }
 
     const groupFields = levels || [];
@@ -76,15 +79,21 @@ export const useTable = ({
       /**
        * Use Group levels
        */
+      const allVariables: Record<string, RuntimeVariable> = {};
       const rows = getRows(data, groupFields, (item, key, children) => {
         /**
          * Convert value to string
          */
         const value = `${item[key as keyof typeof item]}`;
-        const levelVariable = getRuntimeVariable(key);
+        let levelVariable = allVariables[key];
+        if (!levelVariable) {
+          const variable = getRuntimeVariable(key);
+          levelVariable = variable;
+          allVariables[key] = variable;
+        }
         const variableOption = isVariableWithOptions(levelVariable)
-          ? levelVariable.options.find((option) => option.value === value)
-          : runtimeVariable.options.find((option) => option.value === value);
+          ? levelVariable.helpers.getOption(value)
+          : runtimeVariable.helpers.getOption(value);
 
         return getItemWithStatus(
           {
@@ -93,7 +102,7 @@ export const useTable = ({
             variable: levelVariable,
             isFavorite: favorites.isAdded(key, value),
             name: key,
-            label: variableOption?.text.toString() || value,
+            label: variableOption?.text || value,
           },
           {
             children,
@@ -113,7 +122,7 @@ export const useTable = ({
           return [
             getItemWithStatus(
               {
-                value: AllValue,
+                value: AllValueParameter,
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,
@@ -139,17 +148,16 @@ export const useTable = ({
      */
     if (isVariableWithOptions(runtimeVariable)) {
       return runtimeVariable.options.map((option) => {
-        const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
         return getItemWithStatus(
           {
-            value,
+            value: option.value,
             selected: option.selected,
             variable: runtimeVariable,
-            isFavorite: favorites.isAdded(runtimeVariable.name, option.value.toString()),
-            label: option.text.toString(),
+            isFavorite: favorites.isAdded(runtimeVariable.name, option.value),
+            label: option.text,
           },
           {
-            status: getStatus(value),
+            status: getStatus(option.value === AllValueParameter ? AllValue : option.value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -258,18 +266,13 @@ export const useTable = ({
         id: 'value',
         accessorKey: 'value',
         header: ({ table }) => {
-          const isSelectedAll = tableData.every((item) => item.selected);
-
           /**
-           * Root row
+           * Calculate All Selection
            */
-          const rootRow: TableItem = {
-            childValues: tableData.reduce((acc: string[], item) => acc.concat(item.childValues || item.value), []),
-            selected: isSelectedAll,
-            value: '',
-            showStatus: false,
-            label: '',
-          };
+          let isSelectedAll = false;
+          if (isVariableWithOptions(runtimeVariable)) {
+            isSelectedAll = runtimeVariable.current.value?.length === runtimeVariable.options.length;
+          }
 
           return (
             <>
@@ -277,6 +280,16 @@ export const useTable = ({
                 <input
                   type="checkbox"
                   onChange={() => {
+                    /**
+                     * Root Row
+                     */
+                    const rootRow: TableItem = {
+                      childValues: toPlainArray(tableData, (item) => item.childValues || item.value, []),
+                      selected: isSelectedAll,
+                      value: '',
+                      showStatus: false,
+                      label: '',
+                    };
                     onChange(rootRow);
                   }}
                   checked={isSelectedAll}

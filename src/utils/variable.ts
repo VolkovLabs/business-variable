@@ -1,7 +1,13 @@
-import { CustomVariableModel, QueryVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { AllValue } from '../constants';
-import { RuntimeVariable, VariableType } from '../types';
+import { AllValue, AllValueParameter } from '../constants';
+import {
+  CustomVariableModel,
+  QueryVariableModel,
+  RuntimeVariable,
+  RuntimeVariableWithOptions,
+  VariableType,
+} from '../types';
+import { TypedVariableModel } from '@grafana/data';
 
 /**
  * Set Variable Value
@@ -31,7 +37,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        * Multi update
        */
       if (multi) {
-        if (values.some((value) => value.toLowerCase() === 'all')) {
+        if (values.some((value) => value === AllValueParameter)) {
           setVariableValue(name, AllValue);
           return;
         }
@@ -49,7 +55,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
          */
         if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
           searchParams.push(
-            ...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text.toString())
+            ...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text)
           );
         }
 
@@ -79,7 +85,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        * Single Value
        */
       const value = values[0];
-      setVariableValue(name, value);
+      setVariableValue(name, value === AllValueParameter ? AllValue : value);
       return;
     }
     case VariableType.TEXTBOX: {
@@ -107,4 +113,46 @@ export const isVariableWithOptions = (
   }
 
   return variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY;
+};
+
+/**
+ * Get Runtime Variable
+ * @param variable
+ */
+export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariable | undefined => {
+  if (variable.type === VariableType.TEXTBOX) {
+    return variable;
+  }
+  if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
+    const runtimeVariable = {
+      ...variable,
+      type: VariableType.CUSTOM,
+      optionIndexByName: variable.options.reduce((acc, option, index) => {
+        acc.set(option.value as string, index);
+        return acc;
+      }, new Map()),
+      helpers: {
+        getOption: (value: string) => runtimeVariable.options[runtimeVariable.optionIndexByName.get(value) as number],
+      },
+    } as RuntimeVariableWithOptions;
+
+    return runtimeVariable;
+  }
+  return;
+};
+
+/**
+ * Get Variables Map
+ */
+export const getVariablesMap = (variables: TypedVariableModel[]): Record<string, RuntimeVariable> => {
+  return variables.reduce((acc, variable) => {
+    const runtimeVariable = getRuntimeVariable(variable);
+    if (runtimeVariable) {
+      return {
+        ...acc,
+        [runtimeVariable.name]: runtimeVariable,
+      };
+    }
+    return acc;
+  }, {});
 };

@@ -1,6 +1,6 @@
 import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
-import { AllValue, AllValueParameter } from '../constants';
+import { AllValueParameter } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
@@ -42,6 +42,31 @@ const groupBy = (items: object[] | undefined, fieldKey: string): Map<string, obj
 };
 
 /**
+ * To Plain Array
+ * @param array
+ * @param getValue
+ * @param initialValue
+ */
+export const toPlainArray = <TItem, TResult>(
+  array: TItem[],
+  getValue: (item: TItem) => unknown,
+  initialValue: TResult[]
+): TResult[] => {
+  return array.reduce(
+    (acc, child) => {
+      const value = getValue(child);
+      if (Array.isArray(value)) {
+        acc.push(...value);
+      } else {
+        acc.push(value as TResult);
+      }
+      return acc;
+    },
+    [...initialValue]
+  );
+};
+
+/**
  * Recursively Group items
  * @param items
  * @param fieldKeys
@@ -67,10 +92,7 @@ const getGroupArray = (
     const item = getItem({ [currentKey]: key }, currentKey, children);
     return {
       ...item,
-      childValues: children.reduce(
-        (acc, child) => acc.concat(child.childValues ? child.childValues : [child.label]),
-        item.childValues || []
-      ),
+      childValues: toPlainArray(children, (child) => child.childValues || child.label, item.childValues || []),
       childFavoritesCount: children.reduce(
         (acc, child) => acc + (child.childFavoritesCount || child.isFavorite ? 1 : 0),
         item.childFavoritesCount || 0
@@ -155,15 +177,12 @@ export const getItemWithStatus = (
     groupSelection: boolean;
   }
 ): TableItem => {
-  const isAllChildrenSelected = children ? children.every((child) => child.selected) : false;
+  const isAllChildrenSelected = children ? !children.some((child) => !child.selected) : false;
   let selectable = false;
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
-    selectable = item.variable?.options?.some((option) => {
-      const optionValue = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
-      return optionValue === item.value;
-    });
+    selectable = !!item.variable.helpers.getOption(item.value);
   }
-  const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValue;
+  const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValueParameter;
 
   return {
     value: item.value,
@@ -233,17 +252,18 @@ export const convertTreeToPlain = (rows: TableItem[], result: TreePlain[] = [], 
  * @param searchTerm
  */
 export const valueFilter: FilterFn<TableItem> = (row, columnId, searchTerm: string) => {
+  const normalizedSearchTerm = searchTerm.toLowerCase();
   /**
    * Filter parent rows
    */
   if (row.original.childValues) {
-    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(searchTerm.toLowerCase()));
+    return row.original.childValues.some((childValue) => childValue.toLowerCase().includes(normalizedSearchTerm));
   }
 
   /**
    * Filter last level row
    */
-  return row.original.label.toLowerCase().includes(searchTerm.toLowerCase());
+  return row.original.label.toLowerCase().includes(normalizedSearchTerm);
 };
 
 /**

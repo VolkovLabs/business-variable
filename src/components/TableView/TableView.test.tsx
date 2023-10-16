@@ -278,12 +278,18 @@ describe('Table View', () => {
       );
 
       /**
+       * Get Scroll Element
+       */
+      const scrollElement = screen.getByTestId(TestIds.tableView.content);
+      expect(scrollElement).toBeInTheDocument();
+
+      /**
        * Make panel is not focused
        */
       fireEvent.mouseDown(screen.getByTestId(TestIds.tableView.root));
       fireEvent.click(screen.getByTestId(InTestIds.outsideElement));
 
-      scrollTo.mockClear();
+      jest.mocked(scrollElement.scrollTo).mockClear();
 
       rerender(
         <OutsideWrapper>
@@ -305,7 +311,10 @@ describe('Table View', () => {
         </OutsideWrapper>
       );
 
-      expect(scrollTo).toHaveBeenCalled();
+      /**
+       * Virtualizer calls scrollTo once so just check if component called additional
+       */
+      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(2);
     });
 
     it('Should not scroll to selected element if panel is focused', () => {
@@ -329,12 +338,23 @@ describe('Table View', () => {
         </OutsideWrapper>
       );
 
-      scrollTo.mockClear();
+      /**
+       * Get Scroll Element
+       */
+      const scrollElement = screen.getByTestId(TestIds.tableView.content);
+      expect(scrollElement).toBeInTheDocument();
+
+      /**
+       * Clear mock
+       */
+      jest.mocked(scrollElement.scrollTo).mockClear();
 
       /**
        * Make panel is focused
        */
       fireEvent.mouseDown(screen.getByTestId(TestIds.tableView.root));
+
+      expect(scrollElement.scrollTo).not.toHaveBeenCalled();
 
       rerender(
         <OutsideWrapper>
@@ -356,7 +376,10 @@ describe('Table View', () => {
         </OutsideWrapper>
       );
 
-      expect(scrollTo).not.toHaveBeenCalled();
+      /**
+       * Virtualizer calls scrollTo once so just check if only called by it
+       */
+      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
     });
   });
 });

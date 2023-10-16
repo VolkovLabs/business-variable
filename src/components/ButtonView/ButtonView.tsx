@@ -86,7 +86,7 @@ export const ButtonView: React.FC<Props> = ({
       data-testid={TestIds.buttonView.root}
     >
       {variable.options.map((option) => {
-        const value = option.value.toString() === AllValueParameter ? AllValue : option.value.toString();
+        const value = option.value === AllValueParameter ? AllValue : option.value;
         const status = getStatus(value);
         const backgroundColor = option.selected
           ? status.exist

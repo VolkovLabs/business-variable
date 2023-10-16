@@ -1,6 +1,7 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { useRuntimeVariables } from './useRuntimeVariables';
+import { VariableType } from '../types';
 
 /**
  * Mock @grafana/runtime
@@ -39,27 +40,48 @@ describe('Use Runtime Variables', () => {
 
   const variableDevice = {
     name: 'device',
+    type: VariableType.CUSTOM,
+    options: [
+      {
+        text: 'Device1',
+        value: '1',
+      },
+    ],
   };
   const variableCountry = {
     name: 'country',
+    type: VariableType.CUSTOM,
+    options: [],
   };
   jest.mocked(getTemplateSrv).mockImplementation(
     () =>
       ({
         getVariables: jest.fn(() => [variableCountry, variableDevice]),
-      } as any)
+      }) as any
   );
 
   it('Should return variable', () => {
     const { result } = renderHook(() => useRuntimeVariables(eventBus, 'device'));
 
-    expect(result.current.variable).toEqual(variableDevice);
+    expect(result.current.variable).toEqual({
+      ...variableDevice,
+      optionIndexByName: expect.any(Map),
+      helpers: {
+        getOption: expect.any(Function),
+      },
+    });
   });
 
   it('Should update variable', async () => {
     const { result } = renderHook(() => useRuntimeVariables(eventBus, 'device'));
 
-    expect(result.current.variable).toEqual(variableDevice);
+    expect(result.current.variable).toEqual({
+      ...variableDevice,
+      optionIndexByName: expect.any(Map),
+      helpers: {
+        getOption: expect.any(Function),
+      },
+    });
 
     /**
      * Update variables
@@ -68,7 +90,7 @@ describe('Use Runtime Variables', () => {
       () =>
         ({
           getVariables: jest.fn(() => []),
-        } as any)
+        }) as any
     );
 
     /**

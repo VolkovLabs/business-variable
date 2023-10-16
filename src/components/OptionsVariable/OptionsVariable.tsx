@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import { CustomVariableModel, QueryVariableModel, SelectableValue } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
-import { AllValue, AllValueParameter, TestIds } from '../../constants';
+import { AllValueParameter, TestIds } from '../../constants';
+import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -23,9 +24,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    * Current values
    */
   const values = useMemo(() => {
-    return variable.options
-      .filter((option) => option.selected)
-      .map((option) => (option.value === AllValueParameter ? AllValue : option.value.toString()));
+    return variable.options.filter((option) => option.selected).map((option) => option.value);
   }, [variable]);
 
   /**
@@ -46,7 +45,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
          * Select all
          */
         if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
-          selectVariableValues([AllValue], variable);
+          selectVariableValues([AllValueParameter], variable);
           return;
         }
 
@@ -58,9 +57,9 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
       /**
        * Selected value while All is selected
        */
-      if (updatedValues.length > 1 && values.includes(AllValue) && updatedValues.includes(AllValue)) {
+      if (updatedValues.length > 1 && values.includes(AllValueParameter) && updatedValues.includes(AllValueParameter)) {
         selectVariableValues(
-          updatedValues.filter((value) => value !== AllValue),
+          updatedValues.filter((value) => value !== AllValueParameter),
           variable
         );
         return;
@@ -69,8 +68,12 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
       /**
        * Select All Value
        */
-      if (updatedValues.length > 1 && !values.includes(AllValue) && updatedValues.includes(AllValue)) {
-        selectVariableValues([AllValue], variable);
+      if (
+        updatedValues.length > 1 &&
+        !values.includes(AllValueParameter) &&
+        updatedValues.includes(AllValueParameter)
+      ) {
+        selectVariableValues([AllValueParameter], variable);
         return;
       }
 
@@ -87,11 +90,10 @@ export const OptionsVariable: React.FC<Props> = ({ variable }) => {
    */
   const options = useMemo(() => {
     return variable.options.map((option) => {
-      const value = option.value === AllValueParameter ? AllValue : option.value.toString();
       return {
-        label: option.text.toString(),
-        value,
-        ariaLabel: TestIds.optionsVariable.option(value),
+        label: option.text,
+        value: option.value,
+        ariaLabel: TestIds.optionsVariable.option(option.value),
       };
     });
   }, [variable]);

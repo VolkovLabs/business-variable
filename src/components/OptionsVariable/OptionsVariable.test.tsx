@@ -186,7 +186,7 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: [AllValue, option1.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [AllValueParameter, option1.value] } });
 
       expect(selectVariableValues).toHaveBeenCalledWith([option1.value], expect.any(Object));
     });
@@ -208,9 +208,9 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: [AllValue, option2.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [AllValueParameter, option2.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([AllValue], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], expect.any(Object));
     });
 
     it('Should select all value if no selected values', () => {
@@ -232,7 +232,7 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([AllValue], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], expect.any(Object));
     });
 
     it('Should deselect values', () => {

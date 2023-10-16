@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { EventBus } from '@grafana/data';
 import { getTemplateSrv, RefreshEvent } from '@grafana/runtime';
 import { RuntimeVariable } from '../types';
+import { getVariablesMap } from '../utils';
 
 /**
  * Runtime Variables
@@ -9,17 +10,17 @@ import { RuntimeVariable } from '../types';
  * @param variableName
  */
 export const useRuntimeVariables = (eventBus: EventBus, variableName: string) => {
-  const [variables, setVariables] = useState<RuntimeVariable[]>();
+  const [variables, setVariables] = useState<Record<string, RuntimeVariable>>({});
   const [variable, setVariable] = useState<RuntimeVariable>();
 
   useEffect(() => {
-    setVariables(getTemplateSrv().getVariables() as RuntimeVariable[]);
+    setVariables(getVariablesMap(getTemplateSrv().getVariables()));
 
     /**
      * Update variable on Refresh
      */
     const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
-      setVariables(getTemplateSrv().getVariables() as RuntimeVariable[]);
+      setVariables(getVariablesMap(getTemplateSrv().getVariables()));
     });
 
     return () => {
@@ -29,7 +30,7 @@ export const useRuntimeVariables = (eventBus: EventBus, variableName: string) =>
 
   const getVariable = useCallback(
     (variableName: string) => {
-      return variables?.find((dv) => variableName === dv.name) as RuntimeVariable | undefined;
+      return variables[variableName] || undefined;
     },
     [variables]
   );

@@ -1,9 +1,9 @@
 import React from 'react';
-import { toDataFrame } from '@grafana/data';
+import { toDataFrame, TypedVariableModel } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { TableItem, VariableType } from '../types';
-import { selectVariableValues } from '../utils';
+import { getRuntimeVariable, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
@@ -46,6 +46,30 @@ const InTestIds = {
 };
 
 describe('Use Table Hook', () => {
+  /**
+   * Create Runtime Variable Mock
+   */
+  const createRuntimeVariableMock = (variable: Partial<TypedVariableModel>) => {
+    if (variable.type === VariableType.TEXTBOX) {
+      return getRuntimeVariable(variable as any);
+    }
+
+    if (variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) {
+      return getRuntimeVariable({
+        ...variable,
+        current: {
+          ...(variable.current || {}),
+          value:
+            variable.options?.filter((option) => option.selected).map(({ value }) => value.toString()) ||
+            variable.current?.value ||
+            [],
+        } as any,
+      } as any);
+    }
+
+    return getRuntimeVariable(variable as any);
+  };
+
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
     jest.mocked(useRuntimeVariables).mockReset();
@@ -55,7 +79,7 @@ describe('Use Table Hook', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
-          variable: {
+          variable: createRuntimeVariableMock({
             type: VariableType.CUSTOM,
             options: [
               {
@@ -74,8 +98,8 @@ describe('Use Table Hook', () => {
                 selected: false,
               },
             ],
-          },
-        } as any)
+          } as any),
+        }) as any
     );
 
     /**
@@ -87,7 +111,7 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: AllValue,
+        value: AllValueParameter,
         label: AllValue,
         selected: false,
         selectable: true,
@@ -108,10 +132,11 @@ describe('Use Table Hook', () => {
   });
 
   it('Should add All option for single level', () => {
-    const variable = {
+    const variable = createRuntimeVariableMock({
       multi: true,
       includeAll: true,
       type: VariableType.CUSTOM,
+      name: 'device',
       options: [
         {
           text: AllValue,
@@ -129,13 +154,13 @@ describe('Use Table Hook', () => {
           selected: false,
         },
       ],
-    };
+    } as any);
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable,
           getVariable: jest.fn(() => variable),
-        } as any)
+        }) as any
     );
     const dataFrame = toDataFrame({
       fields: [
@@ -161,7 +186,7 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: AllValue,
+        value: AllValueParameter,
         selected: false,
         selectable: true,
         label: AllValue,
@@ -180,7 +205,7 @@ describe('Use Table Hook', () => {
   });
 
   it('Should return rows with subRows if nested levels', () => {
-    const deviceVariable = {
+    const deviceVariable = createRuntimeVariableMock({
       multi: true,
       includeAll: true,
       type: VariableType.CUSTOM,
@@ -201,8 +226,8 @@ describe('Use Table Hook', () => {
           selected: false,
         },
       ],
-    };
-    const countryVariable = {
+    } as any);
+    const countryVariable = createRuntimeVariableMock({
       multi: true,
       name: 'country',
       type: VariableType.CUSTOM,
@@ -218,13 +243,13 @@ describe('Use Table Hook', () => {
           selected: false,
         },
       ],
-    };
+    } as any);
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable: deviceVariable,
           getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
-        } as any)
+        }) as any
     );
     const dataFrame = toDataFrame({
       fields: [
@@ -286,7 +311,7 @@ describe('Use Table Hook', () => {
   });
 
   it('Should apply status', () => {
-    const variable = {
+    const variable = createRuntimeVariableMock({
       multi: true,
       includeAll: false,
       type: VariableType.CUSTOM,
@@ -307,13 +332,13 @@ describe('Use Table Hook', () => {
           selected: false,
         },
       ],
-    };
+    } as any);
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable,
           getVariable: jest.fn(() => variable),
-        } as any)
+        }) as any
     );
     const dataFrame = toDataFrame({
       fields: [
@@ -380,7 +405,7 @@ describe('Use Table Hook', () => {
         ({
           variable: null,
           getVariable: jest.fn(),
-        } as any)
+        }) as any
     );
 
     /**
@@ -456,7 +481,7 @@ describe('Use Table Hook', () => {
     );
 
     it('Should select unselected values', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -477,8 +502,8 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
-      const countryVariable = {
+      } as any);
+      const countryVariable = createRuntimeVariableMock({
         multi: true,
         options: [
           {
@@ -487,13 +512,13 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable: deviceVariable,
             getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -572,7 +597,7 @@ describe('Use Table Hook', () => {
     });
 
     it('Should select unselected parent values', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -593,8 +618,8 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
-      const countryVariable = {
+      } as any);
+      const countryVariable = createRuntimeVariableMock({
         multi: true,
         name: 'country',
         type: VariableType.CUSTOM,
@@ -610,13 +635,13 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable: deviceVariable,
             getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -680,7 +705,7 @@ describe('Use Table Hook', () => {
     });
 
     it('Should use radio for single value', () => {
-      const variable = {
+      const variable = createRuntimeVariableMock({
         multi: false,
         includeAll: false,
         type: VariableType.CUSTOM,
@@ -696,13 +721,13 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable,
             getVariable: jest.fn(() => variable),
-          } as any)
+          }) as any
       );
 
       /**
@@ -741,7 +766,7 @@ describe('Use Table Hook', () => {
     });
 
     it('Should select value if single all value is selected', () => {
-      const variable = {
+      const variable = createRuntimeVariableMock({
         multi: false,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -762,13 +787,13 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable,
             getVariable: jest.fn(() => variable),
-          } as any)
+          }) as any
       );
 
       /**
@@ -810,7 +835,7 @@ describe('Use Table Hook', () => {
     });
 
     it('Row with subRows should not be selectable and expandable', () => {
-      const variable = {
+      const variable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -826,13 +851,13 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable,
             getVariable: jest.fn(() => variable),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -906,7 +931,7 @@ describe('Use Table Hook', () => {
     });
 
     it('Should show variable names', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -927,8 +952,8 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
-      const countryVariable = {
+      } as any);
+      const countryVariable = createRuntimeVariableMock({
         multi: true,
         options: [
           {
@@ -937,13 +962,13 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable: deviceVariable,
             getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -998,18 +1023,18 @@ describe('Use Table Hook', () => {
     });
 
     it('Should work for text variable', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         type: VariableType.TEXTBOX,
         current: {
           value: '123',
         },
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable: deviceVariable,
             getVariable: jest.fn(() => deviceVariable),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -1052,16 +1077,16 @@ describe('Use Table Hook', () => {
     });
 
     it('Should work for text variable without value', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         type: VariableType.TEXTBOX,
         current: {},
-      };
+      } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
             variable: deviceVariable,
             getVariable: jest.fn(() => deviceVariable),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -1115,7 +1140,7 @@ describe('Use Table Hook', () => {
           ({
             variable: deviceVariable,
             getVariable: jest.fn(() => deviceVariable),
-          } as any)
+          }) as any
       );
       const dataFrame = toDataFrame({
         fields: [
@@ -1153,7 +1178,7 @@ describe('Use Table Hook', () => {
     });
 
     describe('Favorites', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         name: 'device',
@@ -1175,7 +1200,7 @@ describe('Use Table Hook', () => {
             selected: true,
           },
         ],
-      };
+      } as any);
 
       const favoritesMock = {
         add: jest.fn(),
@@ -1205,7 +1230,7 @@ describe('Use Table Hook', () => {
             ({
               variable: deviceVariable,
               getVariable: jest.fn(() => deviceVariable),
-            } as any)
+            }) as any
         );
         /**
          * Use Table
@@ -1232,7 +1257,7 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowAll = screen.getByTestId(InTestIds.row(AllValue, 0));
+        const rowAll = screen.getByTestId(InTestIds.row(AllValueParameter, 0));
 
         expect(rowAll).toBeInTheDocument();
 
@@ -1248,7 +1273,7 @@ describe('Use Table Hook', () => {
             ({
               variable: deviceVariable,
               getVariable: jest.fn(() => deviceVariable),
-            } as any)
+            }) as any
         );
         /**
          * Use Table
@@ -1299,7 +1324,7 @@ describe('Use Table Hook', () => {
             ({
               variable: deviceVariable,
               getVariable: jest.fn(() => deviceVariable),
-            } as any)
+            }) as any
         );
 
         /**
@@ -1347,7 +1372,7 @@ describe('Use Table Hook', () => {
     });
 
     describe('Header', () => {
-      const deviceVariable = {
+      const deviceVariable = createRuntimeVariableMock({
         multi: true,
         includeAll: true,
         type: VariableType.CUSTOM,
@@ -1368,8 +1393,8 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
-      const countryVariable = {
+      } as any);
+      const countryVariable = createRuntimeVariableMock({
         multi: true,
         type: VariableType.CUSTOM,
         options: [
@@ -1384,7 +1409,7 @@ describe('Use Table Hook', () => {
             selected: false,
           },
         ],
-      };
+      } as any);
 
       beforeEach(() => {
         jest.mocked(useRuntimeVariables).mockImplementation(
@@ -1392,7 +1417,7 @@ describe('Use Table Hook', () => {
             ({
               variable: deviceVariable,
               getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
-            } as any)
+            }) as any
         );
       });
 
@@ -1562,6 +1587,7 @@ describe('Use Table Hook', () => {
           <TableHeader
             columns={result.current.columns}
             table={{
+              getIsAllRowsSelected: () => true,
               getCanSomeRowsExpand: () => true,
               getToggleAllRowsExpandedHandler: () => jest.fn(),
               getIsAllRowsExpanded: () => true,
