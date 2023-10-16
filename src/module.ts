@@ -2,6 +2,7 @@ import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/dat
 import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
 import {
+  AllowEmptyValueOptions,
   AutoScrollOptions,
   DisplayModeOptions,
   FavoritesOptions,
@@ -64,16 +65,27 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     /**
      * Minimize Mode Options
      */
-    builder.addSliderInput({
-      path: 'padding',
-      name: 'Padding',
-      defaultValue: 10,
-      settings: {
-        min: 0,
-        max: 20,
-      },
-      showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
-    });
+    builder
+      .addSliderInput({
+        path: 'padding',
+        name: 'Padding',
+        defaultValue: 10,
+        settings: {
+          min: 0,
+          max: 20,
+        },
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addRadio({
+        path: 'emptyValue',
+        name: 'Empty Value',
+        description: 'Allow Empty Value for multi-choice variable.',
+        defaultValue: false,
+        settings: {
+          options: AllowEmptyValueOptions,
+        },
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      });
 
     builder
       .addRadio({

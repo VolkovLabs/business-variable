@@ -1,5 +1,6 @@
+import { TypedVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { AllValue, AllValueParameter } from '../constants';
+import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import {
   CustomVariableModel,
   QueryVariableModel,
@@ -7,7 +8,6 @@ import {
   RuntimeVariableWithOptions,
   VariableType,
 } from '../types';
-import { TypedVariableModel } from '@grafana/data';
 
 /**
  * Set Variable Value
@@ -39,6 +39,11 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       if (multi) {
         if (values.some((value) => value === AllValueParameter)) {
           setVariableValue(name, AllValue);
+          return;
+        }
+
+        if (values.some((value) => value === NoValueParameter)) {
+          setVariableValue(name, '');
           return;
         }
 
@@ -84,8 +89,15 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
       /**
        * Single Value
        */
-      const value = values[0];
-      setVariableValue(name, value === AllValueParameter ? AllValue : value);
+      let value = values[0];
+
+      if (value === AllValueParameter) {
+        value = AllValue;
+      } else if (value === NoValueParameter) {
+        value = '';
+      }
+
+      setVariableValue(name, value);
       return;
     }
     case VariableType.TEXTBOX: {

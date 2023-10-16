@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import { AllValue, AllValueParameter, TestIds } from '../../constants';
+import { AllValue, AllValueParameter, NoValueParameter, TestIds } from '../../constants';
 import { selectVariableValues } from '../../utils';
 import { OptionsVariable } from './OptionsVariable';
 
@@ -233,6 +233,29 @@ describe('Options Variable', () => {
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
       expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], expect.any(Object));
+    });
+
+    it('Should clear value if no selected values and emptyValue enabled', () => {
+      render(
+        getComponent({
+          variable: {
+            ...multiVariable,
+            options: [
+              allOption,
+              {
+                ...option1,
+                selected: true,
+              },
+              option2,
+            ],
+          } as any,
+          emptyValue: true,
+        })
+      );
+
+      fireEvent.change(selectors.root(), { target: { values: [] } });
+
+      expect(selectVariableValues).toHaveBeenCalledWith([NoValueParameter], expect.any(Object));
     });
 
     it('Should deselect values', () => {

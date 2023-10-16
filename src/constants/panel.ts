@@ -72,3 +72,11 @@ export const GroupSelectionOptions = [
   { value: true, label: 'Enabled', description: 'Enable to allow group selection.' },
   { value: false, label: 'Disabled', description: 'Disable group selection.' },
 ];
+
+/**
+ * Allow Empty Value Options
+ */
+export const AllowEmptyValueOptions = [
+  { value: true, label: 'Enabled', description: 'Empty value enabled.' },
+  { value: false, label: 'Disabled', description: 'Empty value disabled.' },
+];
