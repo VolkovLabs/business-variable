@@ -26,7 +26,7 @@ type Props = React.ComponentProps<typeof TableView>;
  * In Test Ids
  */
 const InTestIds = {
-  outsideElement: 'outside-element',
+  outsideElement: 'data-testid outside-element',
 };
 
 /**
