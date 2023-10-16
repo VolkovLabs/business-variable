@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject, useState } from 'react';
+import React, { RefObject, useState } from 'react';
 import { cx } from '@emotion/css';
 import { Button, useStyles2 } from '@grafana/ui';
 import {
@@ -222,13 +222,16 @@ export const Table = <TableData extends object>({
             ref = firstSelectedRowRef;
           }
           return (
-            <Fragment key={row.id}>
-              <tr className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)} ref={ref}>
-                {row.getVisibleCells().map((cell) => {
-                  return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
-                })}
-              </tr>
-            </Fragment>
+            <tr
+              key={row.id}
+              className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)}
+              ref={ref}
+              data-testid={TestIds.table.row(row.id)}
+            >
+              {row.getVisibleCells().map((cell) => {
+                return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
+              })}
+            </tr>
           );
         })}
         {paddingBottom > 0 && (

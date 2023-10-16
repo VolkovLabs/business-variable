@@ -170,3 +170,44 @@ export const getVariablesMap = (variables: TypedVariableModel[]): Record<string,
     return acc;
   }, {});
 };
+
+/**
+ * Is Variable All Selected
+ */
+export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean => {
+  if (isVariableWithOptions(runtimeVariable)) {
+    if (Array.isArray(runtimeVariable.current.value)) {
+      /**
+       * Multi value
+       */
+      if (runtimeVariable.includeAll) {
+        /**
+         * Options with all option
+         */
+        if (!!runtimeVariable.helpers.getOption(AllValueParameter)?.selected) {
+          /**
+           * All option selected
+           */
+          return true;
+        }
+
+        /**
+         * Comparing value with removed selected all option
+         */
+        return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+      }
+
+      /**
+       * Multi value without all option
+       */
+      return runtimeVariable.current.value.length === runtimeVariable.options.length;
+    } else {
+      /**
+       * Single value
+       */
+      return runtimeVariable.current.value === AllValueParameter;
+    }
+  }
+
+  return false;
+};

@@ -6,10 +6,11 @@
 
 - Update variable option label for parent items in tree view (#62)
 - Add handling pressing enter and escape keys for Text Variable (#69)
-- Add table virtualization to improve performance (#64)
+- Add table virtualization to improve performance (#64, #74)
 - Clear value for multi-choice variable (#66)
 - Update to Plugin Tools 2.1.1 (#72)
 - Use Grafana Access Policy to sign plugin (#72)
+- Update to Grafana 10.1.5 (#73)
 
 ## 1.7.0 (2023-08-08)
 
