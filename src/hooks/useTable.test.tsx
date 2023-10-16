@@ -1611,7 +1611,7 @@ describe('Use Table Hook', () => {
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
       });
 
-      it('Should render correct all state and unselect all', () => {
+      it('Should render calculated all state by selected child items and unselect them', () => {
         const deviceVariable = createRuntimeVariableMock({
           multi: true,
           includeAll: true,
