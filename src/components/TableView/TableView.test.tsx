@@ -1,5 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import { TestIds } from '../../constants';
 import { useTable } from '../../hooks';
 import { TableView } from './TableView';
@@ -41,6 +42,18 @@ describe('Table View', () => {
   };
 
   /**
+   * Selectors
+   */
+  const getSelectors = getJestSelectors({ ...TestIds.tableView, ...InTestIds });
+  const selectors = getSelectors(screen);
+
+  /**
+   * Table Selectors
+   */
+  const getTableSelectors = getJestSelectors(TestIds.table);
+  const tableSelectors = getTableSelectors(screen);
+
+  /**
    * Get Tested Component
    */
   const getComponent = ({ options = {} as any, ...restProps }: Partial<Props>) => {
@@ -49,12 +62,12 @@ describe('Table View', () => {
 
   it('Should find component', async () => {
     render(getComponent({}));
-    expect(screen.getByTestId(TestIds.tableView.root)).toBeInTheDocument();
+    expect(selectors.root()).toBeInTheDocument();
   });
 
   it('Should show info message if no variables', async () => {
     render(getComponent({}));
-    expect(screen.getByTestId(TestIds.tableView.infoMessage)).toBeInTheDocument();
+    expect(selectors.infoMessage()).toBeInTheDocument();
   });
 
   it('Should use first group', () => {
@@ -185,7 +198,7 @@ describe('Table View', () => {
     /**
      * Select group2
      */
-    fireEvent.click(screen.getByTestId(TestIds.tableView.tab('group2')));
+    fireEvent.click(selectors.tab(false, 'group2'));
 
     expect(useTable).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -214,6 +227,7 @@ describe('Table View', () => {
       const getBoundingClientRect = function (this: HTMLElement) {
         return {
           top: this.tagName === 'TR' ? 40 : 0,
+          height: this.tagName === 'TR' ? 38 : 100,
         };
       };
       Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
@@ -234,7 +248,7 @@ describe('Table View', () => {
       scrollTo.mockClear();
     });
 
-    it('Should scroll to selected element on initial load', () => {
+    it('Should scroll to selected element on initial load', async () => {
       render(
         getComponent({
           options: {
@@ -252,6 +266,12 @@ describe('Table View', () => {
           } as any,
         })
       );
+
+      /**
+       * Rows should be rendered
+       */
+      expect(tableSelectors.row(false, '0')).toBeInTheDocument();
+      expect(tableSelectors.row(false, '1')).toBeInTheDocument();
 
       expect(scrollTo).toHaveBeenCalledWith({ top: 40 });
     });
@@ -280,14 +300,14 @@ describe('Table View', () => {
       /**
        * Get Scroll Element
        */
-      const scrollElement = screen.getByTestId(TestIds.tableView.content);
+      const scrollElement = selectors.content();
       expect(scrollElement).toBeInTheDocument();
 
       /**
        * Make panel is not focused
        */
-      fireEvent.mouseDown(screen.getByTestId(TestIds.tableView.root));
-      fireEvent.click(screen.getByTestId(InTestIds.outsideElement));
+      fireEvent.mouseDown(selectors.root());
+      fireEvent.click(selectors.outsideElement());
 
       jest.mocked(scrollElement.scrollTo).mockClear();
 
@@ -341,7 +361,7 @@ describe('Table View', () => {
       /**
        * Get Scroll Element
        */
-      const scrollElement = screen.getByTestId(TestIds.tableView.content);
+      const scrollElement = selectors.content();
       expect(scrollElement).toBeInTheDocument();
 
       /**
@@ -352,7 +372,7 @@ describe('Table View', () => {
       /**
        * Make panel is focused
        */
-      fireEvent.mouseDown(screen.getByTestId(TestIds.tableView.root));
+      fireEvent.mouseDown(selectors.root());
 
       expect(scrollElement.scrollTo).not.toHaveBeenCalled();
 

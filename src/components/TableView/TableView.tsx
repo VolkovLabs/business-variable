@@ -138,41 +138,39 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
           </Alert>
         )}
 
-        {tableData.length > 0 && (
-          <div
-            style={style}
-            className={styles.content}
-            ref={scrollableContainerRef}
-            data-testid={TestIds.tableView.content}
-          >
-            {options.groups?.length > 1 && (
-              <div ref={headerRef} className={styles.header}>
-                <TabsBar>
-                  {options.groups?.map((group) => (
-                    <Tab
-                      key={group.name}
-                      label={group.name}
-                      onChangeTab={() => setCurrentGroup(group.name)}
-                      active={currentGroup === group.name}
-                      data-testid={TestIds.tableView.tab(group.name)}
-                    />
-                  ))}
-                </TabsBar>
-              </div>
-            )}
-            <Table
-              columns={columns}
-              data={tableData}
-              getSubRows={getSubRows}
-              showHeader={options.header}
-              firstSelectedRowRef={firstSelectedRowRef}
-              tableRef={tableRef}
-              tableHeaderRef={tableHeaderRef}
-              topOffset={tableTopOffset}
-              scrollableContainerRef={scrollableContainerRef}
-            />
-          </div>
-        )}
+        <div
+          style={style}
+          className={styles.content}
+          ref={scrollableContainerRef}
+          data-testid={TestIds.tableView.content}
+        >
+          {options.groups?.length > 1 && (
+            <div ref={headerRef} className={styles.header}>
+              <TabsBar>
+                {options.groups?.map((group) => (
+                  <Tab
+                    key={group.name}
+                    label={group.name}
+                    onChangeTab={() => setCurrentGroup(group.name)}
+                    active={currentGroup === group.name}
+                    data-testid={TestIds.tableView.tab(group.name)}
+                  />
+                ))}
+              </TabsBar>
+            </div>
+          )}
+          <Table
+            columns={columns}
+            data={tableData}
+            getSubRows={getSubRows}
+            showHeader={options.header}
+            firstSelectedRowRef={firstSelectedRowRef}
+            tableRef={tableRef}
+            tableHeaderRef={tableHeaderRef}
+            topOffset={tableTopOffset}
+            scrollableContainerRef={scrollableContainerRef}
+          />
+        </div>
       </div>
     </ClickOutsideWrapper>
   );
