@@ -1,12 +1,15 @@
 # Change Log
 
-## 1.8.0 (2023-10-16)
+## 1.8.0 (IN PROGRESS)
 
 ### Features / Enhancements
 
 - Update variable option label for parent items in tree view (#62)
 - Add handling pressing enter and escape keys for Text Variable (#69)
 - Add table virtualization to improve performance (#64)
+- Clear value for multi-choice variable (#66)
+- Update to Plugin Tools 2.1.1 (#72)
+- Use Grafana Access Policy to sign plugin (#72)
 
 ## 1.7.0 (2023-08-08)
 
