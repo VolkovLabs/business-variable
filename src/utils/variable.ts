@@ -60,7 +60,9 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
          */
         if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
           searchParams.push(
-            ...runtimeVariable.options.filter((option) => option.selected).map((option) => option.text)
+            ...runtimeVariable.options
+              .filter((option) => option.selected)
+              .map((option) => (option.value === AllValueParameter ? option.text : option.value))
           );
         }
 

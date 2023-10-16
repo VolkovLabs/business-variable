@@ -18,7 +18,7 @@ The variable panel offers you single- and multi-variable layouts along with an a
 
 ## Requirements
 
-- Variable Panel 1.X requires **Grafana 9** or **Grafana 10**.
+- Variable Panel 1.X, 2.X requires **Grafana 9** or **Grafana 10**.
 
 ## Getting Started
 
@@ -32,12 +32,13 @@ grafana-cli plugins install volkovlabs-variable-panel
 
 ## Highlights
 
-- Allows working with dashboard variables in Table and Tree View layouts.
+- Allows working with dashboard variables in Table, Tree View, Minimized and Button layouts.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
 - Allows filtering values by pattern and selected favorites.
 - Supports follow when scrolling (sticky).
 - Supports multiple Tree Views using tabs.
+- Supports input text variables.
 
 ## Documentation
 

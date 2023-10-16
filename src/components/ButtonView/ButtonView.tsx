@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelData } from '@grafana/data';
 import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';
-import { isVariableWithOptions, selectVariableValues } from '../../utils';
+import { isVariableWithOptions, updateVariableOptions } from '../../utils';
 import { Styles } from './styles';
 
 /**
@@ -33,7 +33,7 @@ interface Props {
  */
 export const ButtonView: React.FC<Props> = ({
   data,
-  options: { variable: variableName, padding = 0, status, name } = {},
+  options: { variable: variableName, padding = 0, status, name, emptyValue = false } = {},
   eventBus,
 }) => {
   /**
@@ -46,6 +46,16 @@ export const ButtonView: React.FC<Props> = ({
    * Runtime Variables
    */
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
+
+  /**
+   * Current values
+   */
+  const values = useMemo(() => {
+    if (isVariableWithOptions(variable)) {
+      return variable?.options.filter((option) => option.selected).map((option) => option.value);
+    }
+    return [];
+  }, [variable]);
 
   /**
    * Status
@@ -105,7 +115,21 @@ export const ButtonView: React.FC<Props> = ({
               color: theme.colors.getContrastText(backgroundColor),
             }}
             onClick={() => {
-              selectVariableValues([value], variable);
+              let value: string | string[] = option.value;
+
+              /**
+               * Calc all selected values if multi value
+               */
+              if (variable.multi) {
+                value = option.selected ? values?.filter((value) => value !== option.value) : [...values, option.value];
+              }
+
+              updateVariableOptions({
+                previousValues: values,
+                variable,
+                emptyValueEnabled: emptyValue,
+                value,
+              });
             }}
             data-testid={TestIds.buttonView.item(value)}
           >
