@@ -168,3 +168,27 @@ export const getVariablesMap = (variables: TypedVariableModel[]): Record<string,
     return acc;
   }, {});
 };
+
+/**
+ * Is Variable All Selected
+ */
+export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean => {
+  if (isVariableWithOptions(runtimeVariable)) {
+    if (Array.isArray(runtimeVariable.current.value)) {
+      /**
+       * Multi value
+       */
+      return (
+        runtimeVariable.current.value.length === runtimeVariable.options.length ||
+        !!runtimeVariable.helpers.getOption(AllValueParameter)?.selected
+      );
+    } else {
+      /**
+       * Single value
+       */
+      return runtimeVariable.current.value === AllValueParameter;
+    }
+  }
+
+  return false;
+};
