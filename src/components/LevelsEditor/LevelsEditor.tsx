@@ -108,7 +108,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
 
       if (dataFrame) {
         return (
-          dataFrame?.fields
+          dataFrame.fields
             .map(({ name }) => ({
               label: name,
               source: dataFrame.refId ?? dataFrameIndex,
