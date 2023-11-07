@@ -223,6 +223,10 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                                 icon="save"
                                 size="sm"
                                 onClick={onSaveName}
+                                disabled={!isUpdatedNameValid}
+                                tooltip={
+                                  isUpdatedNameValid ? '' : 'Name is empty or group with the same name already exists.'
+                                }
                               />
                             </div>
                           ) : (
