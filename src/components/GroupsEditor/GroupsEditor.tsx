@@ -145,17 +145,6 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
    * On Save Name
    */
   const onSaveName = useCallback(() => {
-    if (!isUpdatedNameValid) {
-      onCancelEdit();
-      return;
-    }
-
-    const item = items.find((item) => item.name === editItem);
-
-    if (!item) {
-      return;
-    }
-
     onChangeItems(
       items.map((item) =>
         item.name === editItem
@@ -167,7 +156,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
       )
     );
     onCancelEdit();
-  }, [isUpdatedNameValid, items, onChangeItems, onCancelEdit, editItem, editName]);
+  }, [items, onChangeItems, onCancelEdit, editItem, editName]);
 
   return (
     <>

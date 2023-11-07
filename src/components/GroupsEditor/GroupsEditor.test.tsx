@@ -215,6 +215,424 @@ describe('GroupsEditor', () => {
     expect(onChange).toHaveBeenCalledWith([{ name: 'group1', items: [] }]);
   });
 
+  describe('Rename', () => {
+    it('Should save new group name', async () => {
+      const onChange = jest.fn();
+
+      render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options: {
+              groups: [
+                {
+                  name: 'group1',
+                  items: [],
+                },
+                {
+                  name: 'group2',
+                  items: [],
+                },
+              ],
+            } as any,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item1 = selectors.item(false, 'group1');
+      const item1Selectors = getSelectors(within(item1));
+      const item2 = selectors.item(false, 'group2');
+      const item2Selectors = getSelectors(within(item2));
+
+      /**
+       * Check item presence
+       */
+      expect(item2).toBeInTheDocument();
+
+      /**
+       * Check rename is not started
+       */
+      expect(item1Selectors.fieldName(true)).not.toBeInTheDocument();
+      expect(item2Selectors.fieldName(true)).not.toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(item2Selectors.buttonStartRename()));
+
+      /**
+       * Check rename is started only for item2
+       */
+      expect(item1Selectors.fieldName(true)).not.toBeInTheDocument();
+      expect(item2Selectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(item2Selectors.fieldName(), { target: { value: 'hello' } });
+
+      /**
+       * Save Name
+       */
+      expect(item2Selectors.buttonSaveRename()).not.toBeDisabled();
+      fireEvent.click(item2Selectors.buttonSaveRename());
+
+      /**
+       * Check if saved
+       */
+      expect(onChange).toHaveBeenCalledWith([
+        { name: 'group1', items: [] },
+        { name: 'hello', items: [] },
+      ]);
+    });
+
+    it('Should cancel renaming', async () => {
+      const onChange = jest.fn();
+
+      render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options: {
+              groups: [
+                {
+                  name: 'group1',
+                  items: [],
+                },
+                {
+                  name: 'group2',
+                  items: [],
+                },
+              ],
+            } as any,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item = selectors.item(false, 'group2');
+      const itemSelectors = getSelectors(within(item));
+
+      /**
+       * Check item presence
+       */
+      expect(item).toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(itemSelectors.buttonStartRename()));
+
+      /**
+       * Check rename is started
+       */
+      expect(itemSelectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: 'hello' } });
+
+      /**
+       * Cancel Renaming
+       */
+      expect(itemSelectors.buttonCancelRename()).not.toBeDisabled();
+      fireEvent.click(itemSelectors.buttonCancelRename());
+
+      /**
+       * Check if renaming canceled
+       */
+      expect(itemSelectors.fieldName(true)).not.toBeInTheDocument();
+
+      /**
+       * Check if not saved
+       */
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('Should not allow to save invalid name', async () => {
+      const onChange = jest.fn();
+
+      render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options: {
+              groups: [
+                {
+                  name: 'group1',
+                  items: [],
+                },
+                {
+                  name: 'group2',
+                  items: [],
+                },
+              ],
+            } as any,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item = selectors.item(false, 'group2');
+      const itemSelectors = getSelectors(within(item));
+
+      /**
+       * Check item presence
+       */
+      expect(item).toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(itemSelectors.buttonStartRename()));
+
+      /**
+       * Check rename is started
+       */
+      expect(itemSelectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: 'group1' } });
+
+      /**
+       * Check if unable to save
+       */
+      expect(itemSelectors.buttonSaveRename()).toBeDisabled();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: '' } });
+
+      /**
+       * Check if unable to save
+       */
+      expect(itemSelectors.buttonSaveRename()).toBeDisabled();
+    });
+
+    it('Should save name by enter', async () => {
+      const onChange = jest.fn();
+
+      render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options: {
+              groups: [
+                {
+                  name: 'group1',
+                  items: [],
+                },
+                {
+                  name: 'group2',
+                  items: [],
+                },
+              ],
+            } as any,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item = selectors.item(false, 'group2');
+      const itemSelectors = getSelectors(within(item));
+
+      /**
+       * Check item presence
+       */
+      expect(item).toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(itemSelectors.buttonStartRename()));
+
+      /**
+       * Check rename is started
+       */
+      expect(itemSelectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: 'hello' } });
+
+      /**
+       * Press Enter
+       */
+      await act(async () => fireEvent.keyDown(selectors.fieldName(), { key: 'Enter' }));
+
+      /**
+       * Check if saved
+       */
+      expect(onChange).toHaveBeenCalledWith([
+        { name: 'group1', items: [] },
+        { name: 'hello', items: [] },
+      ]);
+    });
+
+    it('Should cancel renaming by escape', async () => {
+      const onChange = jest.fn();
+
+      render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options: {
+              groups: [
+                {
+                  name: 'group1',
+                  items: [],
+                },
+                {
+                  name: 'group2',
+                  items: [],
+                },
+              ],
+            } as any,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item = selectors.item(false, 'group2');
+      const itemSelectors = getSelectors(within(item));
+
+      /**
+       * Check item presence
+       */
+      expect(item).toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(itemSelectors.buttonStartRename()));
+
+      /**
+       * Check rename is started
+       */
+      expect(itemSelectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: 'hello' } });
+
+      /**
+       * Press Escape
+       */
+      await act(async () => fireEvent.keyDown(selectors.fieldName(), { key: 'Escape' }));
+
+      /**
+       * Check if renaming canceled
+       */
+      expect(itemSelectors.fieldName(true)).not.toBeInTheDocument();
+
+      /**
+       * Check if not saved
+       */
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('Should keep toggled state after save', async () => {
+      let options = {
+        groups: [
+          {
+            name: 'group1',
+            items: [],
+          },
+          {
+            name: 'group2',
+            items: [],
+          },
+        ],
+      };
+      const onChange = jest.fn((updated) => (options = updated));
+
+      const { rerender } = render(
+        getComponent({
+          context: {
+            data: [dataFrameA, dataFrameB],
+            options,
+          } as any,
+          onChange,
+        })
+      );
+
+      const item = selectors.item(false, 'group2');
+      const itemSelectors = getSelectors(within(item));
+
+      /**
+       * Check item presence
+       */
+      expect(item).toBeInTheDocument();
+
+      /**
+       * Expand Item
+       */
+      fireEvent.click(item);
+
+      /**
+       * Check if item expanded
+       */
+      expect(levelsSelectors.root()).toBeInTheDocument();
+
+      /**
+       * Check rename is not started
+       */
+      expect(itemSelectors.fieldName(true)).not.toBeInTheDocument();
+
+      /**
+       * Start Renaming
+       */
+      await act(() => fireEvent.click(itemSelectors.buttonStartRename()));
+
+      /**
+       * Check rename is started
+       */
+      expect(itemSelectors.fieldName()).toBeInTheDocument();
+
+      /**
+       * Change name
+       */
+      fireEvent.change(itemSelectors.fieldName(), { target: { value: 'hello' } });
+
+      /**
+       * Save Name
+       */
+      expect(itemSelectors.buttonSaveRename()).not.toBeDisabled();
+      fireEvent.click(itemSelectors.buttonSaveRename());
+
+      /**
+       * Check if saved
+       */
+      expect(onChange).toHaveBeenCalledWith([
+        { name: 'group1', items: [] },
+        { name: 'hello', items: [] },
+      ]);
+
+      /**
+       * Rerender
+       */
+      rerender(
+        getComponent({
+          context: {
+            options: options as any,
+          } as any,
+        })
+      );
+
+      /**
+       * Check if item still expanded
+       */
+      expect(levelsSelectors.root()).toBeInTheDocument();
+    });
+  });
+
   it('Should show group content', async () => {
     const onChange = jest.fn();
 
