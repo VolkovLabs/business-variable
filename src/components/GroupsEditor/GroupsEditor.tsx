@@ -206,6 +206,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                                       onCancelEdit();
                                     }
                                   }}
+                                  data-testid={TestIds.groupsEditor.fieldName}
                                 />
                               </InlineField>
                               <Button
@@ -215,6 +216,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                                 icon="times"
                                 size="sm"
                                 onClick={onCancelEdit}
+                                data-testid={TestIds.groupsEditor.buttonCancelRename}
                               />
                               <Button
                                 variant="secondary"
@@ -227,6 +229,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                                 tooltip={
                                   isUpdatedNameValid ? '' : 'Name is empty or group with the same name already exists.'
                                 }
+                                data-testid={TestIds.groupsEditor.buttonSaveRename}
                               />
                             </div>
                           ) : (
