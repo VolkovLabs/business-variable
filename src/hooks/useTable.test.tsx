@@ -460,7 +460,7 @@ describe('Use Table Hook', () => {
                     original: row,
                     depth,
                     getCanExpand: () => !!row.children,
-                    getToggleExpandedHandler: () => {},
+                    getToggleExpandedHandler: () => () => {},
                     getIsExpanded: () => index % 2 === 0,
                   },
                   getValue: () => row.value,
