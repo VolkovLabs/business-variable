@@ -12,13 +12,18 @@ interface Props<TableData extends object> {
    * Column
    */
   column: Column<TableData, unknown>;
+
+  /**
+   * Always Visible
+   */
+  alwaysVisible: boolean;
 }
 
 /**
  * Filter
  * @param props
  */
-export const Filter = <TableData extends object>({ column }: Props<TableData>) => {
+export const Filter = <TableData extends object>({ column, alwaysVisible }: Props<TableData>) => {
   /**
    * Styles
    */
@@ -27,7 +32,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
   /**
    * States
    */
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(alwaysVisible);
 
   /**
    * Current filter value
@@ -70,6 +75,20 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
     );
   }
 
+  const search = (
+    <Input
+      placeholder="Search values"
+      value={typeof columnFilterValue === 'string' ? columnFilterValue : ''}
+      onChange={onChangeFilterValue}
+      className={styles.filterInput}
+      data-testid={TestIds.table.fieldFilterValue}
+    />
+  );
+
+  if (alwaysVisible) {
+    return search;
+  }
+
   /**
    * Render filter for other columns
    */
@@ -83,15 +102,7 @@ export const Filter = <TableData extends object>({ column }: Props<TableData>) =
         className={styles.headerButton}
         data-testid={TestIds.table.buttonFilter}
       />
-      {isOpen && (
-        <Input
-          placeholder="Search values"
-          value={typeof columnFilterValue === 'string' ? columnFilterValue : ''}
-          onChange={onChangeFilterValue}
-          className={styles.filterInput}
-          data-testid={TestIds.table.fieldFilterValue}
-        />
-      )}
+      {isOpen && search}
     </>
   );
 };

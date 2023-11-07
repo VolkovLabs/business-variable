@@ -3,6 +3,7 @@ import { getTemplateSrv } from '@grafana/runtime';
 import { GroupsEditor, VariablePanel } from './components';
 import {
   AllowEmptyValueOptions,
+  AlwaysVisibleFilterOptions,
   AutoScrollOptions,
   DisplayModeOptions,
   FavoritesOptions,
@@ -131,6 +132,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Header'],
         showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'alwaysVisibleFilter',
+        name: 'Always Visible Search',
+        settings: {
+          options: AlwaysVisibleFilterOptions,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header && config.filter,
       })
       .addRadio({
         path: 'favorites',
