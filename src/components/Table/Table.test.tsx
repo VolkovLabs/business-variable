@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import { TestIds } from '../../constants';
 import { Table } from './Table';
 
@@ -8,8 +9,8 @@ import { Table } from './Table';
  * Test Ids only for tests
  */
 const InTestIds = {
-  cell: (value: string, depth: number) => `cell-${depth}-${value},`,
-  favoriteCell: (value: string, depth: number) => `cell-favorite-${depth}-${value}`,
+  cell: (value: string, depth: number) => `data-testid cell-${depth}-${value},`,
+  favoriteCell: (value: string, depth: number) => `data-testid cell-favorite-${depth}-${value}`,
 };
 
 describe('Table', () => {
@@ -32,6 +33,15 @@ describe('Table', () => {
    * @param props
    */
   const getComponent = (props: any) => <Wrapper {...props} />;
+
+  /**
+   * Selectors
+   */
+  const getSelectors = getJestSelectors({
+    ...TestIds.table,
+    ...InTestIds,
+  });
+  const selectors = getSelectors(screen);
 
   it('Should render all levels', () => {
     const data = [
@@ -73,28 +83,28 @@ describe('Table', () => {
     /**
      * Check first row with sub rows
      */
-    expect(screen.getByTestId(InTestIds.cell('1', 0))).toBeInTheDocument();
-    expect(screen.getByTestId(InTestIds.cell('1-1', 1))).toBeInTheDocument();
-    expect(screen.getByTestId(InTestIds.cell('1-2', 1))).toBeInTheDocument();
+    expect(selectors.cell(false, '1', 0)).toBeInTheDocument();
+    expect(selectors.cell(false, '1-1', 1)).toBeInTheDocument();
+    expect(selectors.cell(false, '1-2', 1)).toBeInTheDocument();
 
     /**
      * Check second row with sub rows
      */
-    expect(screen.getByTestId(InTestIds.cell('2', 0))).toBeInTheDocument();
-    expect(screen.getByTestId(InTestIds.cell('2-1', 1))).toBeInTheDocument();
-    expect(screen.getByTestId(InTestIds.cell('2-2', 1))).toBeInTheDocument();
+    expect(selectors.cell(false, '2', 0)).toBeInTheDocument();
+    expect(selectors.cell(false, '2-1', 1)).toBeInTheDocument();
+    expect(selectors.cell(false, '2-2', 1)).toBeInTheDocument();
   });
 
   it('Should render header', () => {
     render(getComponent({ showHeader: true, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
 
-    expect(screen.getByTestId(TestIds.table.header)).toBeInTheDocument();
+    expect(selectors.header()).toBeInTheDocument();
   });
 
   it('Should not render header', () => {
     render(getComponent({ showHeader: false, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
 
-    expect(screen.queryByTestId(TestIds.table.header)).not.toBeInTheDocument();
+    expect(selectors.header(true)).not.toBeInTheDocument();
   });
 
   it('Should show value filter', async () => {
@@ -120,28 +130,26 @@ describe('Table', () => {
     /**
      * Check Filter presence
      */
-    expect(screen.getByTestId(TestIds.table.buttonFilter)).toBeInTheDocument();
-    expect(screen.queryByTestId(TestIds.table.fieldFilterValue)).not.toBeInTheDocument();
+    expect(selectors.buttonFilter()).toBeInTheDocument();
+    expect(selectors.fieldFilterValue(true)).not.toBeInTheDocument();
 
     /**
      * Open Filter
      */
-    fireEvent.click(screen.getByTestId(TestIds.table.buttonFilter));
+    fireEvent.click(selectors.buttonFilter());
 
     /**
      * Check Filter Content Presence
      */
-    expect(screen.getByTestId(TestIds.table.fieldFilterValue)).toBeInTheDocument();
+    expect(selectors.fieldFilterValue()).toBeInTheDocument();
 
     /**
      * Apply filter
      */
-    await act(() =>
-      fireEvent.change(screen.getByTestId(TestIds.table.fieldFilterValue), { target: { value: 'device1' } })
-    );
+    await act(() => fireEvent.change(selectors.fieldFilterValue(), { target: { value: 'device1' } }));
 
-    expect(screen.getByTestId(InTestIds.cell('device1', 0))).toBeInTheDocument();
-    expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();
+    expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
+    expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
   });
 
   it('Should show value sorting', async () => {
@@ -171,12 +179,12 @@ describe('Table', () => {
     /**
      * Check Sort presence
      */
-    expect(screen.getByTestId(TestIds.table.buttonSort)).toBeInTheDocument();
+    expect(selectors.buttonSort()).toBeInTheDocument();
 
     /**
      * Apply asc sorting
      */
-    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+    await act(async () => fireEvent.click(selectors.buttonSort()));
 
     /**
      * Check Asc Sort order
@@ -188,7 +196,7 @@ describe('Table', () => {
     /**
      * Apply desc sorting
      */
-    await act(async () => fireEvent.click(screen.getByTestId(TestIds.table.buttonSort)));
+    await act(async () => fireEvent.click(selectors.buttonSort()));
 
     /**
      * Check Desc Sort order
@@ -234,15 +242,15 @@ describe('Table', () => {
     /**
      * Check Filter presence
      */
-    expect(screen.getByTestId(TestIds.table.favoritesFilter)).toBeInTheDocument();
+    expect(selectors.favoritesFilter()).toBeInTheDocument();
 
     /**
      * Apply Favorite filter
      */
     await act(() => fireEvent.click(screen.getByTestId(TestIds.table.favoritesFilter)));
 
-    expect(screen.getByTestId(InTestIds.cell('device1', 0))).toBeInTheDocument();
-    expect(screen.queryByTestId(InTestIds.cell('device2', 0))).not.toBeInTheDocument();
+    expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
+    expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
   });
 
   it('Should not show filter', () => {
@@ -254,6 +262,6 @@ describe('Table', () => {
       })
     );
 
-    expect(screen.queryByTestId(TestIds.table.buttonFilter)).not.toBeInTheDocument();
+    expect(selectors.buttonFilter(true)).not.toBeInTheDocument();
   });
 });
