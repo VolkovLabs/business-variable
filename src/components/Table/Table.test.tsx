@@ -6,6 +6,11 @@ import { TestIds } from '../../constants';
 import { Table } from './Table';
 
 /**
+ * Props
+ */
+type Props = React.ComponentProps<typeof Table>;
+
+/**
  * Test Ids only for tests
  */
 const InTestIds = {
@@ -32,7 +37,7 @@ describe('Table', () => {
    * Get Tested Component
    * @param props
    */
-  const getComponent = (props: any) => <Wrapper {...props} />;
+  const getComponent = (props: Partial<Props>) => <Wrapper {...props} />;
 
   /**
    * Selectors
@@ -78,7 +83,7 @@ describe('Table', () => {
       },
     ];
 
-    render(getComponent({ data, columns, getSubRows: (row: any) => row.children }));
+    render(getComponent({ data, columns: columns as any, getSubRows: (row: any) => row.children }));
 
     /**
      * Check first row with sub rows
@@ -150,6 +155,33 @@ describe('Table', () => {
 
     expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
     expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
+  });
+
+  it('Should always show value filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [{ value: 'device1' }, { value: 'device2' }],
+        alwaysVisibleFilter: true,
+      })
+    );
+
+    /**
+     * Check Filter Content Presence
+     */
+    expect(selectors.fieldFilterValue()).toBeInTheDocument();
   });
 
   it('Should show value sorting', async () => {
