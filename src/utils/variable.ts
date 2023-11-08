@@ -50,7 +50,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
         /**
          * All Selected values for variable
          */
-        const searchParams = locationService
+        const selectedValues = locationService
           .getSearch()
           .getAll(`var-${name}`)
           .filter((s) => s.toLowerCase().indexOf('all') !== 0);
@@ -58,18 +58,17 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
         /**
          * Values selected, but not defined in the URL
          */
-        if (searchParams.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
-          searchParams.push(
-            ...runtimeVariable.options
-              .filter((option) => option.selected)
-              .map((option) => (option.value === AllValueParameter ? option.text : option.value))
-          );
+        if (selectedValues.length === 0 && !locationService.getSearchObject()[`var-${name}`]) {
+          const selectedValue = runtimeVariable.current.value;
+          const selectedArray = Array.isArray(selectedValue) ? selectedValue : [selectedValue];
+
+          selectedValues.push(...selectedArray.filter((value) => value !== AllValueParameter));
         }
 
         /**
          * Get Already Selected Values
          */
-        const alreadySelectedValues = values.filter((value) => searchParams.includes(value));
+        const alreadySelectedValues = values.filter((value) => selectedValues.includes(value));
 
         /**
          * Deselect values
@@ -77,12 +76,12 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
         if (alreadySelectedValues.length === values.length) {
           setVariableValue(
             name,
-            searchParams.filter((value) => !alreadySelectedValues.includes(value))
+            selectedValues.filter((value) => !alreadySelectedValues.includes(value))
           );
           return;
         }
 
-        const uniqueValues = [...new Set(values.concat(searchParams)).values()];
+        const uniqueValues = [...new Set(values.concat(selectedValues)).values()];
 
         setVariableValue(name, uniqueValues);
         return;
