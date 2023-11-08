@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add an option for always visible search filter (#83)
+
 ## 2.0.0 (2023-10-16)
 
 ### Features / Enhancements
