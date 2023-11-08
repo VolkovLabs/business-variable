@@ -83,6 +83,11 @@ export interface TableViewOptions {
   filter: boolean;
 
   /**
+   * Always Visible Filter
+   */
+  alwaysVisibleFilter: boolean;
+
+  /**
    * Select Favorites
    */
   favorites: boolean;

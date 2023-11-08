@@ -12,7 +12,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     header: css`
       label: Header;
-      padding: ${theme.spacing(0.5, 0.5)};
+      padding: ${theme.spacing(0, 0.5)};
       min-height: ${theme.spacing(4)};
       display: flex;
       align-items: center;
