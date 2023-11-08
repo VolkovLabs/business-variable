@@ -19,9 +19,9 @@ export interface Level {
   name: string;
 
   /**
-   * Data Frame Id
+   * Data Frame ID or Frame Index if no specified
    */
-  source: string;
+  source: string | number;
 }
 
 /**

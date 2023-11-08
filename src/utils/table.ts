@@ -114,7 +114,9 @@ export const getRows = (
   getItem?: (item: object, key: string, children?: TableItem[]) => TableItem
 ): TableItem[] | null => {
   const lastLevel = levels[levels.length - 1];
-  const dataFrame = data.series.find((dataFrame) => dataFrame.refId === lastLevel.source);
+  const dataFrame = data.series.find((dataFrame, index) =>
+    dataFrame.refId === undefined ? index === lastLevel.source : dataFrame.refId === lastLevel.source
+  );
 
   if (!dataFrame) {
     return null;
