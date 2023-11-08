@@ -1,6 +1,6 @@
 # Change Log
 
-## 2.1.0 (IN PROGRESS)
+## 2.1.0 (2023-11-08)
 
 ### Features / Enhancements
 
@@ -8,7 +8,11 @@
 - Add Group rename functionality (#84)
 - Add selecting fields from data frames without RefId (#85)
 - Add toggle expanded row state by clicking on the label (#86)
-- Add the deselection of All variable value which is not defined in the URL (#87)
+
+## Bugfixes
+
+- Update the deselection of All variable value which is not defined in the URL (#87)
+- Removed ability to add group to favorites (#88)
 
 ## 2.0.0 (2023-10-16)
 
