@@ -13,8 +13,21 @@ export const Styles = (theme: GrafanaTheme2) => {
       margin-bottom: ${theme.spacing(1)};
     `,
     groupHeader: css`
+      min-height: ${theme.spacing(4)};
+      padding: ${theme.spacing(0.5, 0, 0.5, 0.5)};
+    `,
+    groupHeaderForm: css`
+      display: flex;
+      align-items: center;
+      gap: ${theme.spacing(0.5)};
+    `,
+    groupHeaderText: css`
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: ${theme.spacing(4)};
+    `,
+    fieldName: css`
+      margin: 0;
     `,
     dragIcon: css`
       cursor: grab;
@@ -24,7 +37,7 @@ export const Styles = (theme: GrafanaTheme2) => {
         color: ${theme.colors.text};
       }
     `,
-    removeButton: css`
+    actionButton: css`
       color: ${theme.colors.text.secondary};
     `,
   };
