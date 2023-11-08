@@ -4,9 +4,9 @@ import { PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
-import { Styles } from './styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
+import { Styles } from './styles';
 
 /**
  * Properties
@@ -169,6 +169,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
             tableHeaderRef={tableHeaderRef}
             topOffset={tableTopOffset}
             scrollableContainerRef={scrollableContainerRef}
+            alwaysVisibleFilter={options.alwaysVisibleFilter}
           />
         </div>
       </div>
