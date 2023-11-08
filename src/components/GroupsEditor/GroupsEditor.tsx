@@ -7,9 +7,9 @@ import {
   DropResult,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
+import { cx } from '@emotion/css';
 import { StandardEditorProps } from '@grafana/data';
 import { Button, Icon, InlineField, InlineFieldRow, Input, useTheme2 } from '@grafana/ui';
-import { cx } from '@emotion/css';
 import { TestIds } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { reorder } from '../../utils';
@@ -130,6 +130,9 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     }));
   }, [editItem, editName]);
 
+  /**
+   * Check Updated Name
+   */
   const isUpdatedNameValid = useMemo(() => {
     if (!editName.trim()) {
       return false;
