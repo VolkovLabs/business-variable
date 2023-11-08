@@ -227,6 +227,32 @@ describe('Table Utils', () => {
       ]);
     });
 
+    it('Should find correct dataFrame by index ', () => {
+      const fields = [{ name: 'country', source: 0 }];
+      const frameA = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+        ],
+      });
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
+
+      expect(result).toEqual([
+        {
+          value: 'USA',
+          label: 'USA',
+          ...defaultItem,
+        },
+        {
+          value: 'Japan',
+          label: 'Japan',
+          ...defaultItem,
+        },
+      ]);
+    });
+
     it('Should filter groups with unselectable child values', () => {
       const fields = [
         { name: 'country', source: 'a' },

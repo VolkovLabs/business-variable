@@ -7,6 +7,7 @@ import {
   DropResult,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
+import { cx } from '@emotion/css';
 import { StandardEditorProps } from '@grafana/data';
 import { Button, Icon, InlineField, InlineFieldRow, Input, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
@@ -48,6 +49,8 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
   const [items, setItems] = useState<LevelsGroup[]>(options?.groups || []);
   const [newGroup, setNewGroup] = useState('');
   const [collapseState, setCollapseState] = useState<Record<string, boolean>>({});
+  const [editItem, setEditItem] = useState('');
+  const [editName, setEditName] = useState('');
 
   /**
   /**
@@ -114,6 +117,50 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
     return items.some((item) => item.name === newGroup);
   }, [items, newGroup]);
 
+  /**
+   * On Cancel Edit
+   */
+  const onCancelEdit = useCallback(() => {
+    setEditItem('');
+    setEditName('');
+    setCollapseState((prev) => ({
+      ...prev,
+      [editItem]: prev[editItem] ? editItem === editName : false,
+      [editName]: prev[editItem],
+    }));
+  }, [editItem, editName]);
+
+  /**
+   * Check Updated Name
+   */
+  const isUpdatedNameValid = useMemo(() => {
+    if (!editName.trim()) {
+      return false;
+    }
+
+    if (editItem !== editName) {
+      return !items.some((item) => item.name === editName);
+    }
+    return true;
+  }, [editItem, editName, items]);
+
+  /**
+   * On Save Name
+   */
+  const onSaveName = useCallback(() => {
+    onChangeItems(
+      items.map((item) =>
+        item.name === editItem
+          ? {
+              ...item,
+              name: editName,
+            }
+          : item
+      )
+    );
+    onCancelEdit();
+  }, [items, onChangeItems, onCancelEdit, editItem, editName]);
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -131,16 +178,82 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                     >
                       <Collapse
                         key={name}
-                        title={<div className={styles.groupHeader}>{name}</div>}
+                        title={
+                          editItem === name ? (
+                            <div
+                              className={cx(styles.groupHeader, styles.groupHeaderForm)}
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              <InlineField className={styles.fieldName} invalid={!isUpdatedNameValid}>
+                                <Input
+                                  autoFocus={true}
+                                  value={editName}
+                                  onChange={(event) => setEditName(event.currentTarget.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && isUpdatedNameValid) {
+                                      onSaveName();
+                                    }
+
+                                    if (e.key === 'Escape') {
+                                      onCancelEdit();
+                                    }
+                                  }}
+                                  data-testid={TestIds.groupsEditor.fieldName}
+                                />
+                              </InlineField>
+                              <Button
+                                variant="secondary"
+                                fill="text"
+                                className={styles.actionButton}
+                                icon="times"
+                                size="sm"
+                                onClick={onCancelEdit}
+                                data-testid={TestIds.groupsEditor.buttonCancelRename}
+                              />
+                              <Button
+                                variant="secondary"
+                                fill="text"
+                                className={styles.actionButton}
+                                icon="save"
+                                size="sm"
+                                onClick={onSaveName}
+                                disabled={!isUpdatedNameValid}
+                                tooltip={
+                                  isUpdatedNameValid ? '' : 'Name is empty or group with the same name already exists.'
+                                }
+                                data-testid={TestIds.groupsEditor.buttonSaveRename}
+                              />
+                            </div>
+                          ) : (
+                            <div className={cx(styles.groupHeader, styles.groupHeaderText)}>{name}</div>
+                          )
+                        }
                         headerTestId={TestIds.groupsEditor.item(name)}
                         actions={
                           <>
+                            {editItem !== name && (
+                              <Button
+                                icon="edit"
+                                variant="secondary"
+                                fill="text"
+                                size="sm"
+                                className={styles.actionButton}
+                                onClick={() => {
+                                  /**
+                                   * Start Edit
+                                   */
+                                  setEditName(name);
+                                  setEditItem(name);
+                                }}
+                                data-testid={TestIds.groupsEditor.buttonStartRename}
+                              />
+                            )}
                             <Button
                               icon="trash-alt"
                               variant="secondary"
                               fill="text"
                               size="sm"
-                              className={styles.removeButton}
+                              className={styles.actionButton}
                               onClick={() => {
                                 /**
                                  * Remove group

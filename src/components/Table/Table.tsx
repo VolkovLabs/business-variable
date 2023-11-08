@@ -71,6 +71,11 @@ interface Props<TableData extends object> {
    * Scrollable Container Ref
    */
   scrollableContainerRef: RefObject<HTMLDivElement>;
+
+  /**
+   * Always Visible Filter
+   */
+  alwaysVisibleFilter: boolean;
 }
 
 /**
@@ -88,6 +93,7 @@ export const Table = <TableData extends object>({
   topOffset = 0,
   tableHeaderRef,
   scrollableContainerRef,
+  alwaysVisibleFilter,
 }: Props<TableData>) => {
   /**
    * Styles
@@ -197,7 +203,9 @@ export const Table = <TableData extends object>({
                           title="Sort by status"
                         />
                       )}
-                      {header.column.getCanFilter() && <Filter column={header.column} />}
+                      {header.column.getCanFilter() && (
+                        <Filter column={header.column} alwaysVisible={alwaysVisibleFilter} />
+                      )}
                     </th>
                   );
                 })}

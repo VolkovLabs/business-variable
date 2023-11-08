@@ -19,9 +19,9 @@ export interface Level {
   name: string;
 
   /**
-   * Data Frame Id
+   * Data Frame ID or Frame Index if no specified
    */
-  source: string;
+  source: string | number;
 }
 
 /**
@@ -81,6 +81,11 @@ export interface TableViewOptions {
    * Values Filter
    */
   filter: boolean;
+
+  /**
+   * Always Visible Filter
+   */
+  alwaysVisibleFilter: boolean;
 
   /**
    * Select Favorites

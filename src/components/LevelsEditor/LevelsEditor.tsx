@@ -101,28 +101,37 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
     const nameField = items[items.length - 1];
 
     if (nameField) {
-      const dataFrame = data.find((dataFrame) => dataFrame.refId === nameField?.source);
-
-      return (
-        dataFrame?.fields
-          .map(({ name }) => ({
-            label: name,
-            source: dataFrame.refId,
-            value: name,
-            fieldName: name,
-          }))
-          .filter((option) => !items.some((item) => item.name === option.value)) || []
+      const dataFrameIndex = data.findIndex((dataFrame, index) =>
+        dataFrame.refId === undefined ? index === nameField.source : dataFrame.refId === nameField.source
       );
+      const dataFrame = data[dataFrameIndex];
+
+      if (dataFrame) {
+        return (
+          dataFrame.fields
+            .map(({ name }) => ({
+              label: name,
+              source: dataFrame.refId ?? dataFrameIndex,
+              value: name,
+              fieldName: name,
+            }))
+            .filter((option) => !items.some((item) => item.name === option.value)) || []
+        );
+      }
     }
 
-    return data.reduce((acc: SelectableValue[], dataFrame) => {
+    return data.reduce((acc: SelectableValue[], dataFrame, index) => {
       return acc.concat(
-        dataFrame.fields.map((field) => ({
-          value: `${dataFrame.refId}:${field.name}`,
-          fieldName: field.name,
-          label: `${dataFrame.refId}:${field.name}`,
-          source: dataFrame.refId,
-        }))
+        dataFrame.fields.map((field) => {
+          const source = dataFrame.refId || index;
+
+          return {
+            value: `${source}:${field.name}`,
+            fieldName: field.name,
+            label: `${source}:${field.name}`,
+            source,
+          };
+        })
       );
     }, []);
   }, [data, items]);

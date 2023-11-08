@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add an option for an always-visible search filter (#83)
+- Add Group rename functionality (#84)
+- Add selecting fields from data frames without RefId (#85)
+
 ## 2.0.0 (2023-10-16)
 
 ### Features / Enhancements

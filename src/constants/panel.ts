@@ -34,6 +34,14 @@ export const FilterOptions = [
 ];
 
 /**
+ * Always Visible Filter
+ */
+export const AlwaysVisibleFilterOptions = [
+  { value: true, label: 'Enabled', description: 'Always Visible Search.' },
+  { value: false, label: 'Disabled', description: 'Toggleable Search Visibility.' },
+];
+
+/**
  * Favorites Options
  */
 export const FavoritesOptions = [

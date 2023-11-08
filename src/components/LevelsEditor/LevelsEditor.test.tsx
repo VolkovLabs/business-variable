@@ -90,6 +90,10 @@ describe('LevelsEditor', () => {
     refId: 'B',
   });
 
+  beforeEach(() => {
+    jest.mocked(Select).mockClear();
+  });
+
   it('Should render levels', () => {
     render(
       getComponent({
@@ -152,6 +156,56 @@ describe('LevelsEditor', () => {
     );
   });
 
+  it('Should allow select any fields from frames without id', () => {
+    render(
+      getComponent({
+        data: [
+          {
+            fields: dataFrameA.fields,
+            length: dataFrameA.length,
+          },
+          {
+            fields: dataFrameB.fields,
+            length: dataFrameB.length,
+          },
+        ],
+        items: [],
+      })
+    );
+
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        options: [
+          {
+            value: '0:field1',
+            source: 0,
+            fieldName: 'field1',
+            label: '0:field1',
+          },
+          {
+            value: '0:field2',
+            source: 0,
+            fieldName: 'field2',
+            label: '0:field2',
+          },
+          {
+            value: '1:fieldB1',
+            source: 1,
+            fieldName: 'fieldB1',
+            label: '1:fieldB1',
+          },
+          {
+            value: '1:fieldB2',
+            source: 1,
+            fieldName: 'fieldB2',
+            label: '1:fieldB2',
+          },
+        ],
+      }),
+      expect.anything()
+    );
+  });
+
   it('Should allow select fields only from the current data frame', () => {
     render(
       getComponent({
@@ -171,6 +225,43 @@ describe('LevelsEditor', () => {
           {
             value: 'field2',
             source: 'A',
+            fieldName: 'field2',
+            label: 'field2',
+          },
+        ],
+      }),
+      expect.anything()
+    );
+  });
+
+  it('Should allow select fields only from the current data frame without id', () => {
+    render(
+      getComponent({
+        data: [
+          {
+            fields: dataFrameA.fields,
+            length: dataFrameA.length,
+          },
+          {
+            fields: dataFrameB.fields,
+            length: dataFrameB.length,
+          },
+        ],
+        items: [
+          {
+            name: 'field1',
+            source: 0,
+          },
+        ],
+      })
+    );
+
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        options: [
+          {
+            value: 'field2',
+            source: 0,
             fieldName: 'field2',
             label: 'field2',
           },
