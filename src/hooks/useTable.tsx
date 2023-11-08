@@ -355,6 +355,14 @@ export const useTable = ({
                      */
                     if (row.original.selectable) {
                       onChange(row.original);
+                      return;
+                    }
+
+                    /**
+                     * Toggle Expanded State
+                     */
+                    if (row.getCanExpand()) {
+                      row.getToggleExpandedHandler()();
                     }
                   }}
                   data-testid={TestIds.table.label}

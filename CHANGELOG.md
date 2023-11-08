@@ -7,6 +7,7 @@
 - Add an option for an always-visible search filter (#83)
 - Add Group rename functionality (#84)
 - Add selecting fields from data frames without RefId (#85)
+- Add toggle expanded row state by clicking on the label (#86)
 
 ## 2.0.0 (2023-10-16)
 

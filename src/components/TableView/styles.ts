@@ -1,5 +1,5 @@
-import { GrafanaTheme2 } from '@grafana/data';
 import { css } from '@emotion/css';
+import { GrafanaTheme2 } from '@grafana/data';
 
 /**
  * Styles
@@ -20,6 +20,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     rowContent: css`
       display: flex;
+      justify-content: stretch;
     `,
     expandButton: css`
       margin-right: ${theme.spacing(1)};
@@ -28,6 +29,7 @@ export const Styles = (theme: GrafanaTheme2) => {
       display: flex;
       align-items: center;
       cursor: pointer;
+      flex: auto;
     `,
     selectControl: css`
       vertical-align: middle;
