@@ -74,7 +74,7 @@ describe('Variable Utils', () => {
       );
 
       it('Should apply all values', () => {
-        const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
+        const variable = { name: 'variable', type: VariableType.CUSTOM, current: { value: [] }, multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
@@ -189,7 +189,7 @@ describe('Variable Utils', () => {
               getAll: jest.fn(() => ['value1', 'selected1', 'selected2']),
             }) as any
         );
-        const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
+        const variable = { name: 'variable', type: VariableType.CUSTOM, current: { value: [] }, multi: true };
         selectVariableValues(['value1', 'value2'], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
@@ -211,10 +211,9 @@ describe('Variable Utils', () => {
         const variable = {
           name: 'variable',
           type: VariableType.CUSTOM,
-          options: [
-            { value: 'selected1', selected: true },
-            { value: 'notSelected', selected: false },
-          ],
+          current: {
+            value: ['selected1'],
+          },
           multi: true,
         };
         selectVariableValues(['value1', 'value2'], variable as any);
@@ -222,6 +221,32 @@ describe('Variable Utils', () => {
         expect(locationService.partial).toHaveBeenCalledWith(
           {
             [`var-${variable.name}`]: ['value1', 'value2', 'selected1'],
+          },
+          true
+        );
+      });
+
+      it('Should deselect all value if it not defined in url ', () => {
+        jest.mocked(locationService.getSearch).mockImplementation(
+          () =>
+            ({
+              getAll: jest.fn(() => []),
+            }) as any
+        );
+        jest.mocked(locationService.getSearchObject).mockImplementation(() => ({}));
+        const variable = {
+          name: 'variable',
+          type: VariableType.CUSTOM,
+          current: {
+            value: [AllValueParameter],
+          },
+          multi: true,
+        };
+        selectVariableValues(['value1', 'value2'], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: ['value1', 'value2'],
           },
           true
         );
