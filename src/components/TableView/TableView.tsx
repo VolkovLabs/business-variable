@@ -4,9 +4,9 @@ import { PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import { TestIds } from '../../constants';
 import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
-import { Styles } from './styles';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
+import { Styles } from './styles';
 
 /**
  * Properties

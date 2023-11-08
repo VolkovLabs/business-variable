@@ -75,6 +75,9 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
     );
   }
 
+  /**
+   * Search
+   */
   const search = (
     <Input
       placeholder="Search values"
@@ -85,6 +88,9 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
     />
   );
 
+  /**
+   * Always visible enabled
+   */
   if (alwaysVisible) {
     return search;
   }
