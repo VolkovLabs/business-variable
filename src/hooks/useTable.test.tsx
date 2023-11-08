@@ -453,28 +453,30 @@ describe('Use Table Hook', () => {
         {data.map((row, index) => {
           const subRows = getSubRows(row);
           return (
-            <div key={`${depth}-${row.value}`} data-testid={InTestIds.row(row.value, depth)}>
-              <div>
-                {columns[0].cell({
-                  row: {
-                    original: row,
-                    depth,
-                    getCanExpand: () => !!row.children,
-                    getToggleExpandedHandler: () => () => {},
-                    getIsExpanded: () => index % 2 === 0,
-                  },
-                  getValue: () => row.value,
-                })}
-                {columns[1].cell({
-                  row: {
-                    original: row,
-                    depth,
-                  },
-                  getValue: () => row.isFavorite,
-                })}
+            <React.Fragment key={`${depth}-${row.value}`}>
+              <div data-testid={InTestIds.row(row.value, depth)}>
+                <div>
+                  {columns[0].cell({
+                    row: {
+                      original: row,
+                      depth,
+                      getCanExpand: () => !!row.children,
+                      getToggleExpandedHandler: () => () => {},
+                      getIsExpanded: () => index % 2 === 0,
+                    },
+                    getValue: () => row.value,
+                  })}
+                  {columns[1].cell({
+                    row: {
+                      original: row,
+                      depth,
+                    },
+                    getValue: () => row.isFavorite,
+                  })}
+                </div>
               </div>
               {subRows && <Rows data={subRows} columns={columns} depth={depth + 1} getSubRows={getSubRows} />}
-            </div>
+            </React.Fragment>
           );
         })}
       </>
@@ -1202,6 +1204,23 @@ describe('Use Table Hook', () => {
         ],
       } as any);
 
+      const countryVariable = createRuntimeVariableMock({
+        multi: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+          {
+            text: 'Japan',
+            value: 'Japan',
+            selected: false,
+          },
+        ],
+      } as any);
+
       const favoritesMock = {
         add: jest.fn(),
         remove: jest.fn(),
@@ -1214,6 +1233,10 @@ describe('Use Table Hook', () => {
           {
             name: 'device',
             values: ['device1', 'device2'],
+          },
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
           },
         ],
         refId: 'A',
@@ -1267,7 +1290,7 @@ describe('Use Table Hook', () => {
         expect(within(rowAll).queryByTestId(TestIds.table.favoritesControl)).not.toBeInTheDocument();
       });
 
-      it('Show added to favorites control for device1', () => {
+      it('Show add to favorites selectable row', () => {
         jest.mocked(useRuntimeVariables).mockImplementation(
           () =>
             ({
@@ -1318,7 +1341,7 @@ describe('Use Table Hook', () => {
         expect(favoritesMock.remove).toHaveBeenCalledWith('device', 'device1');
       });
 
-      it('Show not added to favorites control for device1', () => {
+      it('Show remove from favorites selectable row', () => {
         jest.mocked(useRuntimeVariables).mockImplementation(
           () =>
             ({
@@ -1368,6 +1391,54 @@ describe('Use Table Hook', () => {
         fireEvent.click(favoritesControl);
 
         expect(favoritesMock.add).toHaveBeenCalledWith('device', 'device2');
+      });
+
+      it('Show not allow to add to favorites group', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn((name) => (name === deviceVariable?.name ? deviceVariable : countryVariable)),
+            }) as any
+        );
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: {
+              favorites: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+          })
+        );
+
+        /**
+         * Render rows
+         */
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowCountry = screen.getByTestId(InTestIds.row('USA', 0));
+
+        expect(rowCountry).toBeInTheDocument();
+
+        /**
+         * Group can't be added to favorites
+         */
+        const favoritesControl = within(rowCountry).queryByTestId(TestIds.table.favoritesControl);
+        expect(favoritesControl).not.toBeInTheDocument();
       });
     });
 

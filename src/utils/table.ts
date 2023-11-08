@@ -184,7 +184,7 @@ export const getItemWithStatus = (
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
     selectable = !!item.variable.helpers.getOption(item.value);
   }
-  const canBeFavorite = favoritesEnabled && selectable && item.value !== AllValueParameter;
+  const canBeFavorite = favoritesEnabled && !children && item.value !== AllValueParameter;
 
   return {
     value: item.value,
