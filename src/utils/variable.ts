@@ -190,7 +190,7 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
           return true;
         }
 
-        /**v
+        /**
          * Comparing value with removed selected all option
          */
         return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
