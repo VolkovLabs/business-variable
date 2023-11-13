@@ -141,4 +141,11 @@ export interface PanelOptions extends TableViewOptions {
    * Group Selection
    */
   groupSelection: boolean;
+
+  /**
+   * Dashboard Variable
+   *
+   * @type {string}
+   */
+  dashboardVariable: string;
 }

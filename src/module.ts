@@ -207,6 +207,18 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
+    builder.addSelect({
+      path: 'dashboardVariable',
+      name: 'Select variable to follow on dashboard url',
+      settings: {
+        options: variableOptions,
+      },
+      category: ['Dashboard'],
+    });
+
+    /**
+     * Status
+     */
     builder
       .addFieldNamePicker({
         path: 'name',

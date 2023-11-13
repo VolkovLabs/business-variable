@@ -4,3 +4,4 @@ export * from './useTable';
 export * from './useContentSizes';
 export * from './useRuntimeVariables';
 export * from './useStatus';
+export * from './useDashboardRedirect';
