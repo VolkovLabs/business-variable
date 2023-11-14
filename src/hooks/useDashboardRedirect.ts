@@ -13,13 +13,17 @@ export const useDashboardRedirect = ({ eventBus, variableName }: { eventBus: Eve
   const { variable } = useRuntimeVariables(eventBus, variableName);
 
   /**
+   * Variable Current
+   */
+  const current = variable?.current;
+
+  /**
    * Update dashboard url
    */
   useEffect(() => {
-    if (variable?.current.value) {
+    if (current?.value) {
       const location = locationService.getLocation();
-      locationService.replace(`/d/${variable.current.value}${location.search}`);
+      locationService.replace(`/d/${current.value}${location.search}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [variable?.current.value]);
+  }, [current?.value]);
 };
