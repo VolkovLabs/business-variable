@@ -1,10 +1,11 @@
-import React from 'react';
 import { PanelProps } from '@grafana/data';
+import React from 'react';
+
+import { useDashboardRedirect } from '../../hooks';
 import { DisplayMode, PanelOptions } from '../../types';
 import { ButtonView } from '../ButtonView';
 import { MinimizeView } from '../MinimizeView';
 import { TableView } from '../TableView';
-import { useDashboardRedirect } from '../../hooks';
 
 /**
  * Properties

@@ -1,5 +1,6 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Input } from '@grafana/ui';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+
 import { TestIds } from '../../constants';
 import { TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';

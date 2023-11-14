@@ -1,7 +1,8 @@
-import React from 'react';
 import { toDataFrame } from '@grafana/data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
+import React from 'react';
+
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { VariableType } from '../../types';

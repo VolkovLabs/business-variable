@@ -1,6 +1,6 @@
-import { selectVariableValues } from './variable';
 import { AllValueParameter, NoValueParameter } from '../constants';
 import { RuntimeVariableWithOptions } from '../types';
+import { selectVariableValues } from './variable';
 
 /**
  * Update Variable Options

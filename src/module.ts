@@ -1,5 +1,6 @@
 import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
+
 import { GroupsEditor, VariablePanel } from './components';
 import {
   AllowEmptyValueOptions,

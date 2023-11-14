@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+
 import { TestIds } from '../../constants';
 import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';

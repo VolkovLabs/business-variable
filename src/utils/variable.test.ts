@@ -1,4 +1,5 @@
 import { locationService } from '@grafana/runtime';
+
 import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import { VariableType } from '../types';
 import { selectVariableValues } from './variable';

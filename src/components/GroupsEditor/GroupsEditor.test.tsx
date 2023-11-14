@@ -1,8 +1,9 @@
-import React from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { toDataFrame } from '@grafana/data';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
+import React from 'react';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+
 import { TestIds } from '../../constants';
 import { LevelsEditor } from '../LevelsEditor';
 import { GroupsEditor } from './GroupsEditor';

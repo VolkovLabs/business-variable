@@ -1,4 +1,5 @@
 import { toDataFrame } from '@grafana/data';
+
 import { TableItem } from '../types';
 import { convertTreeToPlain, favoriteFilter, getRows, statusSort, valueFilter } from './table';
 

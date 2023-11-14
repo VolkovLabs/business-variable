@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
 import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
+import React, { useCallback, useMemo } from 'react';
+
 import { TestIds } from '../../constants';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { updateVariableOptions } from '../../utils';

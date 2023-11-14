@@ -6,9 +6,11 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["deprecation"],
+  "plugins": ["deprecation", "simple-import-sort"],
   "rules": {
     "deprecation/deprecation": ["warn"],
+    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
     "sort-imports": [
       "error",
       {

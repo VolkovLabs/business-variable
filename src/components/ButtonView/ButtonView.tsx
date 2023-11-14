@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelData } from '@grafana/data';
 import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
+import React, { useMemo } from 'react';
+
 import { AllValue, AllValueParameter, TestIds } from '../../constants';
 import { useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';

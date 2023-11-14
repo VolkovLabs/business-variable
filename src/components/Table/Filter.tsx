@@ -1,6 +1,7 @@
-import React, { FormEvent, useCallback, useState } from 'react';
 import { Button, Icon, Input, useStyles2 } from '@grafana/ui';
 import { Column } from '@tanstack/react-table';
+import React, { FormEvent, useCallback, useState } from 'react';
+
 import { TestIds } from '../../constants';
 import { Styles } from './styles';
 

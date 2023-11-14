@@ -1,5 +1,6 @@
 import { TypedVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+
 import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
 import {
   CustomVariableModel,

@@ -1,5 +1,6 @@
-import { renderHook } from '@testing-library/react';
 import { toDataFrame } from '@grafana/data';
+import { renderHook } from '@testing-library/react';
+
 import { useStatus } from './useStatus';
 
 describe('Use Status', () => {
