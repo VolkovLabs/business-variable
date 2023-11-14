@@ -15,6 +15,11 @@ CREATE TABLE devices (
     country text NOT NULL
 );
 
+CREATE TABLE dashboards (
+    device_id text NOT NULL,
+    dashboard_id text NOT NULL
+);
+
 CREATE SEQUENCE seq_metrics START 1;
 CREATE SEQUENCE seq_devices START 1;
 
@@ -38,3 +43,7 @@ insert into devices values (nextval('seq_devices'), 'device13', 'Tokyo', 'Tokyo'
 insert into devices values (nextval('seq_devices'), 'device14', 'Tokyo', 'Tokyo', 'Japan');
 insert into devices values (nextval('seq_devices'), 'device15', 'Singapore', 'Singapore', 'Singapore');
 insert into devices values (nextval('seq_devices'), 'device16', 'Singapore', 'Singapore', 'Singapore');
+
+insert into dashboards values('device1', 'e591d2bb-5bce-40ae-9df7-70c1aace684c');
+insert into dashboards values('device2', 'O4tc_E6Gz');
+insert into dashboards values('device3', 'e591d2bb-5bce-40ae-9df7-70c1aace684c');

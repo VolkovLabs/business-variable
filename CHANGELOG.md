@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add dashboard redirect option (#92)
+
 ## 2.1.0 (2023-11-08)
 
 ### Features / Enhancements

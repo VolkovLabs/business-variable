@@ -209,7 +209,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
 
     builder.addSelect({
       path: 'dashboardVariable',
-      name: 'Select variable of dashboard id to make redirects',
+      name: 'Select variable with dashboard UID',
+      description: 'Allows to redirect to different dashboards',
       settings: {
         options: variableOptions,
       },
