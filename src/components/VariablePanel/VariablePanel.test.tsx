@@ -1,7 +1,9 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
+import { locationService } from '@grafana/runtime';
 import { DisplayMode } from '../../types';
+import { useRuntimeVariables } from '../../hooks';
 import { VariablePanel } from './VariablePanel';
 
 /**
@@ -17,6 +19,28 @@ const InTestIds = {
   minimizeView: 'data-testid minimize-view',
   buttonView: 'data-testid button-view',
 };
+
+/**
+ * Mock useRuntimeVariables hook
+ */
+jest.mock('../../hooks/useRuntimeVariables', () => ({
+  useRuntimeVariables: jest.fn(() => ({
+    variable: null,
+  })),
+}));
+
+/**
+ * Mock @grafana/runtime
+ */
+jest.mock('@grafana/runtime', () => ({
+  ...jest.requireActual('@grafana/runtime'),
+  locationService: {
+    getLocation: jest.fn(() => ({
+      search: '',
+    })),
+    replace: jest.fn(),
+  },
+}));
 
 /**
  * Mock TableView
@@ -74,5 +98,47 @@ describe('Panel', () => {
   it('Should render table view by default', async () => {
     render(getComponent({ options: { displayMode: undefined } as any }));
     expect(selectors.tableView()).toBeInTheDocument();
+  });
+
+  describe('Dashboard Redirect', () => {
+    beforeEach(() => {
+      jest.mocked(locationService.replace).mockClear();
+    });
+
+    it('Should redirect if variable value changed', () => {
+      jest.mocked(useRuntimeVariables).mockImplementationOnce(
+        () =>
+          ({
+            variable: {
+              name: 'dashboardId',
+              current: {
+                value: '123',
+              },
+            },
+          }) as any
+      );
+
+      const search = '?var-device=1';
+      jest.mocked(locationService.getLocation).mockReturnValueOnce({
+        search,
+      });
+
+      render(getComponent({ options: {} as any }));
+
+      expect(locationService.replace).toHaveBeenCalledWith(`/d/123${search}`);
+    });
+
+    it('Should not redirect if variable not defined', () => {
+      jest.mocked(useRuntimeVariables).mockImplementationOnce(
+        () =>
+          ({
+            variable: undefined,
+          }) as any
+      );
+
+      render(getComponent({ options: {} as any }));
+
+      expect(locationService.replace).not.toHaveBeenCalled();
+    });
   });
 });

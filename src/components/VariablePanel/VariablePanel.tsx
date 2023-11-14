@@ -20,13 +20,22 @@ export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps
    */
   useDashboardRedirect({ eventBus, variableName: options.dashboardVariable });
 
+  /**
+   * Minimize View
+   */
   if (options.displayMode === DisplayMode.MINIMIZE) {
     return <MinimizeView options={options} eventBus={eventBus} {...restProps} />;
   }
 
+  /**
+   * Button View
+   */
   if (options.displayMode === DisplayMode.BUTTON) {
     return <ButtonView options={options} eventBus={eventBus} {...restProps} />;
   }
 
+  /**
+   * Table View
+   */
   return <TableView options={options} eventBus={eventBus} {...restProps} />;
 };
