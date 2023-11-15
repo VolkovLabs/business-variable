@@ -1,7 +1,8 @@
-import React from 'react';
 import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
 import { Alert, InlineField } from '@grafana/ui';
+import React from 'react';
+
 import { TestIds } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';

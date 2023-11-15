@@ -1,9 +1,10 @@
-import React from 'react';
+import { locationService } from '@grafana/runtime';
 import { render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import { locationService } from '@grafana/runtime';
-import { DisplayMode } from '../../types';
+import React from 'react';
+
 import { useRuntimeVariables } from '../../hooks';
+import { DisplayMode } from '../../types';
 import { VariablePanel } from './VariablePanel';
 
 /**

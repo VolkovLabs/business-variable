@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
+import React, { useRef } from 'react';
+
 import { TestIds } from '../../constants';
 import { Table } from './Table';
 

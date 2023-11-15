@@ -1,4 +1,5 @@
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
+
 import { useFavorites } from './useFavorites';
 
 /**

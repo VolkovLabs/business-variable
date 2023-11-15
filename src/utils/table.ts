@@ -1,5 +1,6 @@
 import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
+
 import { AllValueParameter } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';

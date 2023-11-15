@@ -1,6 +1,7 @@
-import React from 'react';
 import { toDataFrame, TypedVariableModel } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
+import React from 'react';
+
 import { AllValue, AllValueParameter, TestIds } from '../constants';
 import { TableItem, VariableType } from '../types';
 import { getRuntimeVariable, selectVariableValues } from '../utils';

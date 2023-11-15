@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
 import { EventBus } from '@grafana/data';
 import { getTemplateSrv, RefreshEvent } from '@grafana/runtime';
+import { useCallback, useEffect, useState } from 'react';
+
 import { RuntimeVariable } from '../types';
 import { getVariablesMap } from '../utils';
 

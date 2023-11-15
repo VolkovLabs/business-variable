@@ -1,4 +1,3 @@
-import React, { RefObject, useState } from 'react';
 import { cx } from '@emotion/css';
 import { Button, useStyles2 } from '@grafana/ui';
 import {
@@ -14,6 +13,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import React, { RefObject, useState } from 'react';
+
 import { TestIds } from '../../constants';
 import { Filter } from './Filter';
 import { Styles } from './styles';

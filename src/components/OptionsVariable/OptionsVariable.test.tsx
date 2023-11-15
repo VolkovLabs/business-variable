@@ -1,6 +1,7 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
+import React from 'react';
+
 import { AllValue, AllValueParameter, NoValueParameter, TestIds } from '../../constants';
 import { selectVariableValues } from '../../utils';
 import { OptionsVariable } from './OptionsVariable';

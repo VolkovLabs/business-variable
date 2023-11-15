@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
 import { EventBus } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+import { useEffect } from 'react';
+
 import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**

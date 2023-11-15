@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
 import { EventBus, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
+import React, { useCallback, useMemo } from 'react';
+
 import { Styles } from '../components/TableView/styles';
 import { TextVariable } from '../components/TextVariable';
 import { AllValue, AllValueParameter, TestIds } from '../constants';

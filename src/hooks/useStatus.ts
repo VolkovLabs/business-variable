@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from 'react';
 import { FieldType, PanelData } from '@grafana/data';
+import { useCallback, useMemo } from 'react';
+
 import { Status } from '../types';
 
 /**

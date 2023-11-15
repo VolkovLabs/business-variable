@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Add dashboard redirect option (#92)
+- Update ESLint configuration and sort imports (#93)
 
 ## 2.1.0 (2023-11-08)
 

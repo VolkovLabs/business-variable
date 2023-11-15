@@ -1,7 +1,8 @@
 import { getTemplateSrv } from '@grafana/runtime';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { useRuntimeVariables } from './useRuntimeVariables';
+
 import { VariableType } from '../types';
+import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
  * Mock @grafana/runtime

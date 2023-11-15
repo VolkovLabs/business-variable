@@ -1,3 +1,6 @@
+import { cx } from '@emotion/css';
+import { DataFrame, SelectableValue } from '@grafana/data';
+import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   DragDropContext,
@@ -7,9 +10,7 @@ import {
   DropResult,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
-import { cx } from '@emotion/css';
-import { DataFrame, SelectableValue } from '@grafana/data';
-import { Button, Icon, IconButton, InlineField, InlineFieldRow, Select, useTheme2 } from '@grafana/ui';
+
 import { TestIds } from '../../constants';
 import { Level, LevelsGroup } from '../../types';
 import { reorder } from '../../utils';
