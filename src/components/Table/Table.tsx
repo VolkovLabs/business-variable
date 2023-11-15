@@ -184,6 +184,7 @@ export const Table = <TableData extends object>({
                         [styles.sortableHeader]: header.column.getCanSort(),
                       })}
                       colSpan={header.colSpan}
+                      style={{ width: header.column.columnDef.id === 'isFavorite' ? 48 : 'auto' }}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getCanSort() && (
