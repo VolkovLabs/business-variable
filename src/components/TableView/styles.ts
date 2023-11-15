@@ -21,6 +21,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     rowContent: css`
       display: flex;
       justify-content: stretch;
+      align-items: center;
     `,
     expandButton: css`
       margin-right: ${theme.spacing(1)};
@@ -30,6 +31,7 @@ export const Styles = (theme: GrafanaTheme2) => {
       align-items: center;
       cursor: pointer;
       flex: auto;
+      word-break: break-all;
     `,
     selectControl: css`
       vertical-align: middle;
