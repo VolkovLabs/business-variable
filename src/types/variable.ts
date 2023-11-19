@@ -57,7 +57,7 @@ export interface RuntimeVariableOption {
    *
    * @type {Function | null}
    */
-  onClick?: Function | null;
+  onClick?: () => void;
 }
 
 /**

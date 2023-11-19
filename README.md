@@ -2,7 +2,7 @@
 
 ![Dashboard](https://github.com/VolkovLabs/volkovlabs-variable-panel/raw/main/src/img/dashboard.png)
 
-![Grafana 10](https://img.shields.io/badge/Grafana-10.1-orange)
+![Grafana](https://img.shields.io/badge/Grafana-10.2-orange)
 ![CI](https://github.com/volkovlabs/volkovlabs-variable-panel/workflows/CI/badge.svg)
 ![E2E](https://github.com/volkovlabs/volkovlabs-variable-panel/workflows/E2E/badge.svg)
 [![codecov](https://codecov.io/gh/VolkovLabs/volkovlabs-variable-panel/branch/main/graph/badge.svg)](https://codecov.io/gh/VolkovLabs/volkovlabs-variable-panel)
@@ -42,11 +42,11 @@ grafana-cli plugins install volkovlabs-variable-panel
 
 ## Documentation
 
-| Section                     | Description                                                         |
-| --------------------------- | ------------------------------------------------------------------- |
-| [Layout](https://volkovlabs.io/plugins/volkovlabs-variable-panel/layout/) | Explains how to display variables in a table and tree view. |
-| [Features](https://volkovlabs.io/plugins/volkovlabs-variable-panel/features/) | Demonstrates panel features. |
-| [Release Notes](https://volkovlabs.io/plugins/volkovlabs-variable-panel/release/)    | Stay up to date with the latest features and updates.               |
+| Section                                                                           | Description                                                 |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [Layout](https://volkovlabs.io/plugins/volkovlabs-variable-panel/layout/)         | Explains how to display variables in a table and tree view. |
+| [Features](https://volkovlabs.io/plugins/volkovlabs-variable-panel/features/)     | Demonstrates panel features.                                |
+| [Release Notes](https://volkovlabs.io/plugins/volkovlabs-variable-panel/release/) | Stay up to date with the latest features and updates.       |
 
 ## Feedback
 
