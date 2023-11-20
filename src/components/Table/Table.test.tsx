@@ -158,6 +158,57 @@ describe('Table', () => {
     expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
   });
 
+  it('Should clean value filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [{ value: 'device1' }, { value: 'device2' }],
+      })
+    );
+
+    /**
+     * Check Filter presence
+     */
+    expect(selectors.buttonFilter()).toBeInTheDocument();
+    expect(selectors.fieldFilterValue(true)).not.toBeInTheDocument();
+
+    /**
+     * Open Filter
+     */
+    fireEvent.click(selectors.buttonFilter());
+
+    /**
+     * Check Filter Content Presence
+     */
+    expect(selectors.fieldFilterValue()).toBeInTheDocument();
+
+    /**
+     * Apply filter
+     */
+    await act(() => fireEvent.change(selectors.fieldFilterValue(), { target: { value: 'device1' } }));
+
+    expect(selectors.buttonCleanFilterValue()).toBeInTheDocument();
+
+    /**
+     * Clean filter value
+     */
+    await act(async () => fireEvent.click(selectors.buttonCleanFilterValue()));
+
+    expect(selectors.fieldFilterValue()).toHaveValue('');
+  });
+
   it('Should always show value filter', async () => {
     render(
       getComponent({

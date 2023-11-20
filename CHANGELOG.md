@@ -8,6 +8,7 @@
 - Update ESLint configuration and sort imports (#93)
 - Update Safari layout for favorites (#97)
 - Update to Grafana 10.2.1 (#98)
+- Add clean filter value button (#99)
 
 ## 2.1.0 (2023-11-08)
 

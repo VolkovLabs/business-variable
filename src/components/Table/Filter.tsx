@@ -86,6 +86,16 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
       onChange={onChangeFilterValue}
       className={styles.filterInput}
       data-testid={TestIds.table.fieldFilterValue}
+      addonAfter={
+        columnFilterValue ? (
+          <Button
+            variant="secondary"
+            icon="times"
+            onClick={() => column.setFilterValue('')}
+            data-testid={TestIds.table.buttonCleanFilterValue}
+          />
+        ) : null
+      }
     />
   );
 

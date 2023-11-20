@@ -20,6 +20,7 @@ export const TestIds = {
     favoritesControl: 'data-testid table favorites-control',
     favoritesFilter: 'data-testid table favorites-filter',
     fieldFilterValue: 'data-testid table field-filter-value',
+    buttonCleanFilterValue: 'data-testid table button-clean-filter-value',
     header: 'data-testid table header',
     label: 'data-testid table label',
   },
