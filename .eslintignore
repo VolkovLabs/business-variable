@@ -11,3 +11,7 @@ websocket/
 
 # Not included in app code
 timescale/
+
+**/*.test.ts
+**/*.test.tsx
+__mocks__
