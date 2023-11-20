@@ -193,8 +193,8 @@ export const Table = <TableData extends object>({
                             !header.column.getIsSorted()
                               ? 'list-ul'
                               : header.column.getIsSorted() === 'asc'
-                              ? 'sort-amount-up'
-                              : 'sort-amount-down'
+                                ? 'sort-amount-up'
+                                : 'sort-amount-down'
                           }
                           fill="text"
                           onClick={header.column.getToggleSortingHandler()}
@@ -225,7 +225,7 @@ export const Table = <TableData extends object>({
         )}
         {virtualRows.map((virtualRow) => {
           const row = rows[virtualRow.index];
-          const selected = (row.original as any).selected;
+          const selected = 'selected' in row.original ? row.original.selected : false;
           let ref = undefined;
           if (selected && !isSelectedRowFound) {
             isSelectedRowFound = true;

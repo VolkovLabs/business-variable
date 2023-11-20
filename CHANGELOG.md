@@ -7,6 +7,7 @@
 - Add dashboard redirect option (#92)
 - Update ESLint configuration and sort imports (#93)
 - Update Safari layout for favorites (#97)
+- Update to Grafana 10.2.1 (#98)
 
 ## 2.1.0 (2023-11-08)
 

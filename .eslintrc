@@ -1,22 +1,9 @@
 {
-  "extends": "./.config/.eslintrc",
+  "extends": ["./.config/.eslintrc", "@volkovlabs/eslint-config"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "project": "./tsconfig.json",
     "sourceType": "module"
-  },
-  "plugins": ["deprecation", "simple-import-sort"],
-  "rules": {
-    "deprecation/deprecation": ["warn"],
-    "simple-import-sort/exports": "error",
-    "simple-import-sort/imports": "error",
-    "sort-imports": [
-      "error",
-      {
-        "ignoreCase": true,
-        "ignoreDeclarationSort": true
-      }
-    ]
   }
 }
