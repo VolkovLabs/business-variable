@@ -9,7 +9,7 @@ export const Styles = (theme: GrafanaTheme2) => {
 
   return {
     table: css`
-      border-radius: ${theme.shape.radius.default};
+      border-radius: ${theme.shape.radius?.default};
       width: 100%;
 
       td {
