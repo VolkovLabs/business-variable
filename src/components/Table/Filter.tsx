@@ -2,17 +2,17 @@ import { Button, Icon, Input, useStyles2 } from '@grafana/ui';
 import { Column } from '@tanstack/react-table';
 import React, { FormEvent, useCallback, useState } from 'react';
 
-import { TestIds } from '../../constants';
-import { Styles } from './styles';
+import { TEST_IDS } from '../../constants';
+import { getStyles } from './Table.styles';
 
 /**
  * Props
  */
-interface Props<TableData extends object> {
+interface Props<TTableData extends object> {
   /**
    * Column
    */
-  column: Column<TableData, unknown>;
+  column: Column<TTableData, unknown>;
 
   /**
    * Always Visible
@@ -24,11 +24,11 @@ interface Props<TableData extends object> {
  * Filter
  * @param props
  */
-export const Filter = <TableData extends object>({ column, alwaysVisible }: Props<TableData>) => {
+export const Filter = <TTableData extends object>({ column, alwaysVisible }: Props<TTableData>) => {
   /**
    * Styles
    */
-  const styles = useStyles2(Styles);
+  const styles = useStyles2(getStyles);
 
   /**
    * States
@@ -69,7 +69,7 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
         onClick={() => {
           column.setFilterValue(!columnFilterValue);
         }}
-        data-testid={TestIds.table.favoritesFilter}
+        data-testid={TEST_IDS.table.favoritesFilter}
       >
         {columnFilterValue ? <Icon name="favorite" /> : <Icon name="star" />}
       </Button>
@@ -85,14 +85,14 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
       value={typeof columnFilterValue === 'string' ? columnFilterValue : ''}
       onChange={onChangeFilterValue}
       className={styles.filterInput}
-      data-testid={TestIds.table.fieldFilterValue}
+      data-testid={TEST_IDS.table.fieldFilterValue}
       addonAfter={
         columnFilterValue ? (
           <Button
             variant="secondary"
             icon="times"
             onClick={() => column.setFilterValue('')}
-            data-testid={TestIds.table.buttonCleanFilterValue}
+            data-testid={TEST_IDS.table.buttonCleanFilterValue}
           />
         ) : null
       }
@@ -117,7 +117,7 @@ export const Filter = <TableData extends object>({ column, alwaysVisible }: Prop
         onClick={onToggleVisibility}
         size="sm"
         className={styles.headerButton}
-        data-testid={TestIds.table.buttonFilter}
+        data-testid={TEST_IDS.table.buttonFilter}
       />
       {isOpen && search}
     </>

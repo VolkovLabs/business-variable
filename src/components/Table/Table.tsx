@@ -15,23 +15,23 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual';
 import React, { RefObject, useState } from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { Filter } from './Filter';
-import { Styles } from './styles';
+import { getStyles } from './Table.styles';
 
 /**
  * Props
  */
-interface Props<TableData extends object> {
+interface Props<TTableData extends object> {
   /**
    * Table's columns definition. Must be memoized.
    */
-  columns: Array<ColumnDef<TableData>>;
+  columns: Array<ColumnDef<TTableData>>;
 
   /**
    * The data to display in the table. Must be memoized.
    */
-  data: TableData[];
+  data: TTableData[];
 
   /**
    * Class Name
@@ -41,7 +41,7 @@ interface Props<TableData extends object> {
   /**
    * Get Sub Rows
    */
-  getSubRows?: TableOptions<TableData>['getSubRows'];
+  getSubRows?: TableOptions<TTableData>['getSubRows'];
 
   /**
    * Show Header Cells
@@ -83,7 +83,7 @@ interface Props<TableData extends object> {
  * Table Component
  * @param props
  */
-export const Table = <TableData extends object>({
+export const Table = <TTableData extends object>({
   data,
   className,
   columns,
@@ -95,11 +95,11 @@ export const Table = <TableData extends object>({
   tableHeaderRef,
   scrollableContainerRef,
   alwaysVisibleFilter,
-}: Props<TableData>) => {
+}: Props<TTableData>) => {
   /**
    * Styles
    */
-  const styles = useStyles2(Styles);
+  const styles = useStyles2(getStyles);
 
   /**
    * States
@@ -110,7 +110,7 @@ export const Table = <TableData extends object>({
   /**
    * Instance
    */
-  const tableInstance = useReactTable<TableData>({
+  const tableInstance = useReactTable<TTableData>({
     columns,
     data,
     autoResetExpanded: false,
@@ -167,7 +167,7 @@ export const Table = <TableData extends object>({
     <table className={cx(styles.table, className)} ref={tableRef}>
       {showHeader && (
         <thead
-          data-testid={TestIds.table.header}
+          data-testid={TEST_IDS.table.header}
           className={styles.header}
           style={{ top: topOffset }}
           ref={tableHeaderRef}
@@ -201,7 +201,7 @@ export const Table = <TableData extends object>({
                           size="sm"
                           className={styles.headerButton}
                           variant={header.column.getIsSorted() ? 'primary' : 'secondary'}
-                          data-testid={TestIds.table.buttonSort}
+                          data-testid={TEST_IDS.table.buttonSort}
                           title="Sort by status"
                         />
                       )}
@@ -236,7 +236,7 @@ export const Table = <TableData extends object>({
               key={row.id}
               className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)}
               ref={ref}
-              data-testid={TestIds.table.row(row.id)}
+              data-testid={TEST_IDS.table.row(row.id)}
             >
               {row.getVisibleCells().map((cell) => {
                 return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;

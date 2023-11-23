@@ -2,7 +2,7 @@ import { toDataFrame, TypedVariableModel } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import React from 'react';
 
-import { AllValue, AllValueParameter, TestIds } from '../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
 import { TableItem, VariableType } from '../types';
 import { getRuntimeVariable, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
@@ -84,8 +84,8 @@ describe('Use Table Hook', () => {
             type: VariableType.CUSTOM,
             options: [
               {
-                text: AllValue,
-                value: AllValueParameter,
+                text: ALL_VALUE,
+                value: ALL_VALUE_PARAMETER,
                 selected: false,
               },
               {
@@ -112,8 +112,8 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: AllValueParameter,
-        label: AllValue,
+        value: ALL_VALUE_PARAMETER,
+        label: ALL_VALUE,
         selected: false,
         selectable: true,
       }),
@@ -140,8 +140,8 @@ describe('Use Table Hook', () => {
       name: 'device',
       options: [
         {
-          text: AllValue,
-          value: AllValueParameter,
+          text: ALL_VALUE,
+          value: ALL_VALUE_PARAMETER,
           selected: false,
         },
         {
@@ -187,10 +187,10 @@ describe('Use Table Hook', () => {
 
     expect(result.current.tableData).toEqual([
       expect.objectContaining({
-        value: AllValueParameter,
+        value: ALL_VALUE_PARAMETER,
         selected: false,
         selectable: true,
-        label: AllValue,
+        label: ALL_VALUE,
       }),
       expect.objectContaining({
         value: 'device1',
@@ -212,8 +212,8 @@ describe('Use Table Hook', () => {
       type: VariableType.CUSTOM,
       options: [
         {
-          text: AllValue,
-          value: AllValueParameter,
+          text: ALL_VALUE,
+          value: ALL_VALUE_PARAMETER,
           selected: false,
         },
         {
@@ -318,8 +318,8 @@ describe('Use Table Hook', () => {
       type: VariableType.CUSTOM,
       options: [
         {
-          text: AllValue,
-          value: AllValueParameter,
+          text: ALL_VALUE,
+          value: ALL_VALUE_PARAMETER,
           selected: false,
         },
         {
@@ -490,8 +490,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -561,7 +561,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('device1', 1));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 1));
 
       /**
        * Check row presence
@@ -571,14 +571,14 @@ describe('Use Table Hook', () => {
       /**
        * Check if device1 is not selected
        */
-      const device1Control = within(device1).getByTestId(TestIds.table.control);
+      const device1Control = within(device1).getByTestId(TEST_IDS.table.control);
       expect(device1Control).not.toBeChecked();
 
       /**
        * Check if device2 is selected
        */
-      const device2Control = within(screen.getByTestId(TestIds.table.cell('device2', 1))).getByTestId(
-        TestIds.table.control
+      const device2Control = within(screen.getByTestId(TEST_IDS.table.cell('device2', 1))).getByTestId(
+        TEST_IDS.table.control
       );
       expect(device2Control).toBeChecked();
 
@@ -594,7 +594,7 @@ describe('Use Table Hook', () => {
       /**
        * Should select values by clicking on label
        */
-      fireEvent.click(within(device1).getByTestId(TestIds.table.label));
+      fireEvent.click(within(device1).getByTestId(TEST_IDS.table.label));
 
       expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable);
     });
@@ -606,8 +606,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -685,7 +685,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const country = screen.getByTestId(TestIds.table.cell('Japan', 0));
+      const country = screen.getByTestId(TEST_IDS.table.cell('Japan', 0));
 
       /**
        * Check row presence
@@ -695,7 +695,7 @@ describe('Use Table Hook', () => {
       /**
        * Check if Japan is not selected
        */
-      const countryControl = within(country).getByTestId(TestIds.table.control);
+      const countryControl = within(country).getByTestId(TEST_IDS.table.control);
       expect(countryControl).not.toBeChecked();
 
       /**
@@ -754,7 +754,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 0));
 
       /**
        * Check row presence
@@ -764,7 +764,7 @@ describe('Use Table Hook', () => {
       /**
        * Check if control is radio
        */
-      const device1Control = within(device1).getByTestId(TestIds.table.control);
+      const device1Control = within(device1).getByTestId(TEST_IDS.table.control);
       expect(device1Control).toHaveAttribute('type', 'radio');
     });
 
@@ -775,8 +775,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: true,
           },
           {
@@ -820,7 +820,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('device1', 0));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 0));
 
       /**
        * Check row presence
@@ -830,7 +830,7 @@ describe('Use Table Hook', () => {
       /**
        * Select device 1
        */
-      const device1Control = within(device1).getByTestId(TestIds.table.control);
+      const device1Control = within(device1).getByTestId(TEST_IDS.table.control);
 
       fireEvent.click(device1Control);
 
@@ -844,8 +844,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -903,34 +903,34 @@ describe('Use Table Hook', () => {
       /**
        * Check if country row is not selectable
        */
-      const usaRow = screen.getByTestId(TestIds.table.cell('USA', 0));
+      const usaRow = screen.getByTestId(TEST_IDS.table.cell('USA', 0));
       expect(usaRow).toBeInTheDocument();
-      expect(within(usaRow).queryByTestId(TestIds.table.control)).not.toBeInTheDocument();
+      expect(within(usaRow).queryByTestId(TEST_IDS.table.control)).not.toBeInTheDocument();
 
       /**
        * Check if label clicking doesn't update values
        */
-      fireEvent.click(within(usaRow).getByTestId(TestIds.table.label));
+      fireEvent.click(within(usaRow).getByTestId(TEST_IDS.table.label));
 
       expect(selectVariableValues).not.toHaveBeenCalled();
 
       /**
        * Check if country row is expandable
        */
-      expect(within(usaRow).getByTestId(TestIds.table.buttonExpand)).toBeInTheDocument();
+      expect(within(usaRow).getByTestId(TEST_IDS.table.buttonExpand)).toBeInTheDocument();
 
       /**
        * Check if device row is selectable and not expandable if value exists in variable options
        */
-      const device1Row = screen.getByTestId(TestIds.table.cell('device1', 1));
+      const device1Row = screen.getByTestId(TEST_IDS.table.cell('device1', 1));
       expect(device1Row).toBeInTheDocument();
-      expect(within(device1Row).getByTestId(TestIds.table.control)).toBeInTheDocument();
-      expect(within(device1Row).queryByTestId(TestIds.table.buttonExpand)).not.toBeInTheDocument();
+      expect(within(device1Row).getByTestId(TEST_IDS.table.control)).toBeInTheDocument();
+      expect(within(device1Row).queryByTestId(TEST_IDS.table.buttonExpand)).not.toBeInTheDocument();
 
       /**
        * Check if unselectable device2 row doesn't exist
        */
-      expect(screen.queryByTestId(TestIds.table.cell('device2', 1))).not.toBeInTheDocument();
+      expect(screen.queryByTestId(TEST_IDS.table.cell('device2', 1))).not.toBeInTheDocument();
     });
 
     it('Should show variable names', () => {
@@ -940,8 +940,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -1012,7 +1012,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('device1', 1));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 1));
 
       /**
        * Check row presence
@@ -1071,7 +1071,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('123', 0));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('123', 0));
 
       /**
        * Check row presence
@@ -1123,7 +1123,7 @@ describe('Use Table Hook', () => {
         <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
       );
 
-      const device1 = screen.getByTestId(TestIds.table.cell('', 0));
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('', 0));
 
       /**
        * Check row presence
@@ -1188,8 +1188,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -1281,14 +1281,14 @@ describe('Use Table Hook', () => {
           />
         );
 
-        const rowAll = screen.getByTestId(InTestIds.row(AllValueParameter, 0));
+        const rowAll = screen.getByTestId(InTestIds.row(ALL_VALUE_PARAMETER, 0));
 
         expect(rowAll).toBeInTheDocument();
 
         /**
          * All value can't be added to favorites
          */
-        expect(within(rowAll).queryByTestId(TestIds.table.favoritesControl)).not.toBeInTheDocument();
+        expect(within(rowAll).queryByTestId(TEST_IDS.table.favoritesControl)).not.toBeInTheDocument();
       });
 
       it('Show add to favorites selectable row', () => {
@@ -1331,7 +1331,7 @@ describe('Use Table Hook', () => {
         /**
          * Device can be removed to favorites
          */
-        const favoritesControl = within(rowDevice1).getByTestId(TestIds.table.favoritesControl);
+        const favoritesControl = within(rowDevice1).getByTestId(TEST_IDS.table.favoritesControl);
         expect(favoritesControl).toBeInTheDocument();
 
         /**
@@ -1383,7 +1383,7 @@ describe('Use Table Hook', () => {
         /**
          * Device can be added to favorites
          */
-        const favoritesControl = within(rowDevice2).getByTestId(TestIds.table.favoritesControl);
+        const favoritesControl = within(rowDevice2).getByTestId(TEST_IDS.table.favoritesControl);
         expect(favoritesControl).toBeInTheDocument();
 
         /**
@@ -1438,7 +1438,7 @@ describe('Use Table Hook', () => {
         /**
          * Group can't be added to favorites
          */
-        const favoritesControl = within(rowCountry).queryByTestId(TestIds.table.favoritesControl);
+        const favoritesControl = within(rowCountry).queryByTestId(TEST_IDS.table.favoritesControl);
         expect(favoritesControl).not.toBeInTheDocument();
       });
     });
@@ -1450,8 +1450,8 @@ describe('Use Table Hook', () => {
         type: VariableType.CUSTOM,
         options: [
           {
-            text: AllValue,
-            value: AllValueParameter,
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
             selected: false,
           },
           {
@@ -1531,7 +1531,7 @@ describe('Use Table Hook', () => {
         const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
         expect(valueHeader).toBeInTheDocument();
 
-        const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
+        const buttonExpandAll = within(valueHeader).getByTestId(TEST_IDS.table.buttonExpandAll);
         expect(buttonExpandAll).toBeInTheDocument();
         expect(within(buttonExpandAll).getByTestId('angle-double-down')).toBeInTheDocument();
 
@@ -1577,7 +1577,7 @@ describe('Use Table Hook', () => {
         const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
         expect(valueHeader).toBeInTheDocument();
 
-        const buttonExpandAll = within(valueHeader).getByTestId(TestIds.table.buttonExpandAll);
+        const buttonExpandAll = within(valueHeader).getByTestId(TEST_IDS.table.buttonExpandAll);
         expect(buttonExpandAll).toBeInTheDocument();
         expect(within(buttonExpandAll).getByTestId('angle-double-right')).toBeInTheDocument();
       });
@@ -1617,7 +1617,7 @@ describe('Use Table Hook', () => {
         const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
         expect(valueHeader).toBeInTheDocument();
 
-        expect(within(valueHeader).queryByTestId(TestIds.table.buttonExpandAll)).not.toBeInTheDocument();
+        expect(within(valueHeader).queryByTestId(TEST_IDS.table.buttonExpandAll)).not.toBeInTheDocument();
       });
 
       it('Should select all child items ', () => {
@@ -1671,7 +1671,7 @@ describe('Use Table Hook', () => {
         const valueHeader = screen.getByTestId(InTestIds.headerRow('value'));
         expect(valueHeader).toBeInTheDocument();
 
-        const selectAllControl = within(valueHeader).getByTestId(TestIds.table.allControl);
+        const selectAllControl = within(valueHeader).getByTestId(TEST_IDS.table.allControl);
         expect(selectAllControl).toBeInTheDocument();
 
         fireEvent.click(selectAllControl);
@@ -1690,8 +1690,8 @@ describe('Use Table Hook', () => {
           type: VariableType.CUSTOM,
           options: [
             {
-              text: AllValue,
-              value: AllValueParameter,
+              text: ALL_VALUE,
+              value: ALL_VALUE_PARAMETER,
               selected: false,
             },
             {
@@ -1784,7 +1784,7 @@ describe('Use Table Hook', () => {
         /**
          * Check if all selected
          */
-        const selectAllControl = within(valueHeader).getByTestId(TestIds.table.allControl);
+        const selectAllControl = within(valueHeader).getByTestId(TEST_IDS.table.allControl);
         expect(selectAllControl).toBeInTheDocument();
         expect(selectAllControl).toBeChecked();
 

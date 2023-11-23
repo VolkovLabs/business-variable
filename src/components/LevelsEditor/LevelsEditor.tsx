@@ -11,10 +11,10 @@ import {
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { Level, LevelsGroup } from '../../types';
 import { reorder } from '../../utils';
-import { Styles } from './styles';
+import { getStyles } from './LevelsEditor.styles';
 
 /**
  * Get Item Style
@@ -56,7 +56,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
    * Styles and Theme
    */
   const theme = useTheme2();
-  const styles = Styles(theme);
+  const styles = getStyles(theme);
 
   /**
    * States
@@ -154,7 +154,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
   }, [items, newLevel, onChangeItems]);
 
   return (
-    <div data-testid={TestIds.levelsEditor.root}>
+    <div data-testid={TEST_IDS.levelsEditor.root}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={name}>
           {(provided) => (
@@ -168,7 +168,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                       {...provided.dragHandleProps}
                       style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, index)}
                       className={styles.item}
-                      data-testid={TestIds.levelsEditor.item(item.name)}
+                      data-testid={TEST_IDS.levelsEditor.item(item.name)}
                     >
                       <div className={styles.header}>
                         <div className={styles.column}>
@@ -184,7 +184,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                             name="trash-alt"
                             onClick={() => onChangeItems(items.filter((field) => field.name !== item.name))}
                             aria-label="Remove"
-                            data-testid={TestIds.levelsEditor.buttonRemove}
+                            data-testid={TEST_IDS.levelsEditor.buttonRemove}
                           />
                           <Icon
                             title="Drag and drop to reorder"
@@ -205,12 +205,12 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
         </Droppable>
       </DragDropContext>
 
-      <InlineFieldRow data-testid={TestIds.levelsEditor.newItem}>
+      <InlineFieldRow data-testid={TEST_IDS.levelsEditor.newItem}>
         <InlineField label="New Level" grow={true}>
           <Select
             options={availableFieldOptions}
             value={newLevel?.value || null}
-            aria-label={TestIds.levelsEditor.newItemName}
+            aria-label={TEST_IDS.levelsEditor.newItemName}
             onChange={(event) => {
               setNewLevel({
                 value: event.value,
@@ -225,7 +225,7 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
           title="Add Level"
           disabled={!newLevel}
           onClick={onAddNewLevel}
-          data-testid={TestIds.levelsEditor.buttonAddNew}
+          data-testid={TEST_IDS.levelsEditor.buttonAddNew}
         >
           Add
         </Button>

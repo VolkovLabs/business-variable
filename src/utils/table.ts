@@ -1,7 +1,7 @@
 import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, SortingFn } from '@tanstack/react-table';
 
-import { AllValueParameter } from '../constants';
+import { ALL_VALUE_PARAMETER } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
@@ -185,7 +185,7 @@ export const getItemWithStatus = (
   if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
     selectable = !!item.variable.helpers.getOption(item.value);
   }
-  const canBeFavorite = favoritesEnabled && !children && item.value !== AllValueParameter;
+  const canBeFavorite = favoritesEnabled && !children && item.value !== ALL_VALUE_PARAMETER;
 
   return {
     value: item.value,

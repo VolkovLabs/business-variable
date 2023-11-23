@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.3.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add clean table state on tab change (#101)
+- Update ESLint configuration and refactor (#102)
+
 ## 2.2.0 (2023-11-20)
 
 ### Features / Enhancements

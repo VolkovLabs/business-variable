@@ -1,4 +1,4 @@
-import { AllValueParameter, NoValueParameter } from '../constants';
+import { ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import { RuntimeVariableWithOptions } from '../types';
 import { selectVariableValues } from './variable';
 
@@ -27,7 +27,7 @@ export const updateVariableOptions = ({
      * Clear Value
      */
     if (updatedValues.length === 0 && emptyValueEnabled) {
-      selectVariableValues([NoValueParameter], variable);
+      selectVariableValues([NO_VALUE_PARAMETER], variable);
       return;
     }
 
@@ -35,7 +35,7 @@ export const updateVariableOptions = ({
      * Select all
      */
     if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
-      selectVariableValues([AllValueParameter], variable);
+      selectVariableValues([ALL_VALUE_PARAMETER], variable);
       return;
     }
 
@@ -49,11 +49,11 @@ export const updateVariableOptions = ({
    */
   if (
     updatedValues.length > 1 &&
-    previousValues.includes(AllValueParameter) &&
-    updatedValues.includes(AllValueParameter)
+    previousValues.includes(ALL_VALUE_PARAMETER) &&
+    updatedValues.includes(ALL_VALUE_PARAMETER)
   ) {
     selectVariableValues(
-      updatedValues.filter((value) => value !== AllValueParameter),
+      updatedValues.filter((value) => value !== ALL_VALUE_PARAMETER),
       variable
     );
     return;
@@ -64,10 +64,10 @@ export const updateVariableOptions = ({
    */
   if (
     updatedValues.length > 1 &&
-    !previousValues.includes(AllValueParameter) &&
-    updatedValues.includes(AllValueParameter)
+    !previousValues.includes(ALL_VALUE_PARAMETER) &&
+    updatedValues.includes(ALL_VALUE_PARAMETER)
   ) {
-    selectVariableValues([AllValueParameter], variable);
+    selectVariableValues([ALL_VALUE_PARAMETER], variable);
     return;
   }
 

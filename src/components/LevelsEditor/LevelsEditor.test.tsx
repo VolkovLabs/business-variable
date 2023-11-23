@@ -4,7 +4,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { LevelsEditor } from './LevelsEditor';
 
 /**
@@ -112,8 +112,8 @@ describe('LevelsEditor', () => {
       })
     );
 
-    expect(screen.getByTestId(TestIds.levelsEditor.item('field1'))).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.levelsEditor.item('field2'))).toBeInTheDocument();
+    expect(screen.getByTestId(TEST_IDS.levelsEditor.item('field1'))).toBeInTheDocument();
+    expect(screen.getByTestId(TEST_IDS.levelsEditor.item('field2'))).toBeInTheDocument();
   });
 
   it('Should allow select any fields', () => {
@@ -290,13 +290,13 @@ describe('LevelsEditor', () => {
     );
 
     await act(() =>
-      fireEvent.change(screen.getByLabelText(TestIds.levelsEditor.newItemName), { target: { value: 'field2' } })
+      fireEvent.change(screen.getByLabelText(TEST_IDS.levelsEditor.newItemName), { target: { value: 'field2' } })
     );
 
-    expect(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)).toBeInTheDocument();
-    expect(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)).not.toBeDisabled();
+    expect(screen.getByTestId(TEST_IDS.levelsEditor.buttonAddNew)).toBeInTheDocument();
+    expect(screen.getByTestId(TEST_IDS.levelsEditor.buttonAddNew)).not.toBeDisabled();
 
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.levelsEditor.buttonAddNew)));
+    await act(() => fireEvent.click(screen.getByTestId(TEST_IDS.levelsEditor.buttonAddNew)));
 
     expect(onChange).toHaveBeenCalledWith({
       name: 'Group 1',
@@ -328,7 +328,7 @@ describe('LevelsEditor', () => {
       })
     );
 
-    const field2 = screen.getByTestId(TestIds.levelsEditor.item('field2'));
+    const field2 = screen.getByTestId(TEST_IDS.levelsEditor.item('field2'));
 
     /**
      * Check field presence
@@ -338,7 +338,7 @@ describe('LevelsEditor', () => {
     /**
      * Remove
      */
-    await act(() => fireEvent.click(within(field2).getByTestId(TestIds.levelsEditor.buttonRemove)));
+    await act(() => fireEvent.click(within(field2).getByTestId(TEST_IDS.levelsEditor.buttonRemove)));
 
     expect(onChange).toHaveBeenCalledWith({ name: 'Group 1', items: [{ name: 'field1', source: 'A' }] });
   });
@@ -357,7 +357,7 @@ describe('LevelsEditor', () => {
       })
     );
 
-    expect(screen.getByTestId(TestIds.levelsEditor.root)).toBeInTheDocument();
+    expect(screen.getByTestId(TEST_IDS.levelsEditor.root)).toBeInTheDocument();
   });
 
   it('Should reorder items', async () => {

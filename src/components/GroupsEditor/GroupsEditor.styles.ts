@@ -4,7 +4,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 /**
  * Styles
  */
-export const Styles = (theme: GrafanaTheme2) => {
+export const getStyles = (theme: GrafanaTheme2) => {
   return {
     newGroup: css`
       margin: ${theme.spacing(2)} 0;
@@ -14,7 +14,7 @@ export const Styles = (theme: GrafanaTheme2) => {
     `,
     groupHeader: css`
       min-height: ${theme.spacing(4)};
-      padding: ${theme.spacing(0.5, 0, 0.5, 0.5)};
+      padding: ${theme.spacing(0.5)};
     `,
     groupHeaderForm: css`
       display: flex;

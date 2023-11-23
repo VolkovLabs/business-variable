@@ -1,6 +1,6 @@
 import { locationService } from '@grafana/runtime';
 
-import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import { VariableType } from '../types';
 import { selectVariableValues } from './variable';
 
@@ -43,11 +43,11 @@ describe('Variable Utils', () => {
 
       it('Should apply all value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues([AllValueParameter], variable as any);
+        selectVariableValues([ALL_VALUE_PARAMETER], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: AllValue,
+            [`var-${variable.name}`]: ALL_VALUE,
           },
           true
         );
@@ -55,7 +55,7 @@ describe('Variable Utils', () => {
 
       it('Should apply no value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues([NoValueParameter], variable as any);
+        selectVariableValues([NO_VALUE_PARAMETER], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -88,7 +88,7 @@ describe('Variable Utils', () => {
 
       it('Should apply no value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues([NoValueParameter], variable as any);
+        selectVariableValues([NO_VALUE_PARAMETER], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -142,11 +142,11 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', AllValueParameter], variable as any);
+        selectVariableValues(['value1', ALL_VALUE_PARAMETER], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: AllValue,
+            [`var-${variable.name}`]: ALL_VALUE,
           },
           true
         );
@@ -155,11 +155,11 @@ describe('Variable Utils', () => {
          * Check case-insensitive of all value
          */
         jest.mocked(locationService.partial).mockClear();
-        selectVariableValues(['value1', AllValueParameter], variable as any);
+        selectVariableValues(['value1', ALL_VALUE_PARAMETER], variable as any);
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
-            [`var-${variable.name}`]: AllValue,
+            [`var-${variable.name}`]: ALL_VALUE,
           },
           true
         );
@@ -227,6 +227,32 @@ describe('Variable Utils', () => {
         );
       });
 
+      it('Should adjust values if they not defined in url for non array', () => {
+        jest.mocked(locationService.getSearch).mockImplementation(
+          () =>
+            ({
+              getAll: jest.fn(() => []),
+            }) as any
+        );
+        jest.mocked(locationService.getSearchObject).mockImplementation(() => ({}));
+        const variable = {
+          name: 'variable',
+          type: VariableType.CUSTOM,
+          current: {
+            value: 'selected1',
+          },
+          multi: true,
+        };
+        selectVariableValues(['value1', 'value2'], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: ['value1', 'value2', 'selected1'],
+          },
+          true
+        );
+      });
+
       it('Should deselect all value if it not defined in url ', () => {
         jest.mocked(locationService.getSearch).mockImplementation(
           () =>
@@ -239,7 +265,7 @@ describe('Variable Utils', () => {
           name: 'variable',
           type: VariableType.CUSTOM,
           current: {
-            value: [AllValueParameter],
+            value: [ALL_VALUE_PARAMETER],
           },
           multi: true,
         };

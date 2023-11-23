@@ -4,7 +4,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { LevelsEditor } from '../LevelsEditor';
 import { GroupsEditor } from './GroupsEditor';
 
@@ -32,7 +32,7 @@ jest.mock('@grafana/ui', () => ({
  * Mock LevelsEditor
  */
 jest.mock('../LevelsEditor', () => ({
-  LevelsEditor: jest.fn(() => <div data-testid={TestIds.levelsEditor.root} />),
+  LevelsEditor: jest.fn(() => <div data-testid={TEST_IDS.levelsEditor.root} />),
 }));
 
 /**
@@ -94,7 +94,7 @@ describe('GroupsEditor', () => {
    * Selectors
    */
   const getSelectors = getJestSelectors({
-    ...TestIds.groupsEditor,
+    ...TEST_IDS.groupsEditor,
     ...InTestIds,
   });
   const selectors = getSelectors(screen);
@@ -102,7 +102,7 @@ describe('GroupsEditor', () => {
   /**
    * Levels Selectors
    */
-  const getLevelsSelectors = getJestSelectors(TestIds.levelsEditor);
+  const getLevelsSelectors = getJestSelectors(TEST_IDS.levelsEditor);
   const levelsSelectors = getLevelsSelectors(screen);
 
   it('Should render groups', () => {
@@ -677,7 +677,7 @@ describe('GroupsEditor', () => {
     const onChange = jest.fn();
 
     jest.mocked(LevelsEditor).mockImplementation(({ name, onChange }) => (
-      <div data-testid={TestIds.levelsEditor.root}>
+      <div data-testid={TEST_IDS.levelsEditor.root}>
         <button
           data-testid={InTestIds.buttonLevelsUpdate}
           onClick={() =>

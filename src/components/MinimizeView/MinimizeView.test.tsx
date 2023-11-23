@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { VariableType } from '../../types';
 import { MinimizeView } from './MinimizeView';
@@ -50,7 +50,7 @@ describe('Minimize View', () => {
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors({ ...TestIds.minimizeView, ...InTestIds });
+  const getSelectors = getJestSelectors({ ...TEST_IDS.minimizeView, ...InTestIds });
   const selectors = getSelectors(screen);
 
   /**
@@ -74,7 +74,7 @@ describe('Minimize View', () => {
             label: '123',
             type: VariableType.QUERY,
           },
-        } as any)
+        }) as any
     );
     render(getComponent({}));
 
@@ -90,7 +90,7 @@ describe('Minimize View', () => {
             label: '123',
             type: VariableType.CUSTOM,
           },
-        } as any)
+        }) as any
     );
     render(getComponent({}));
 
@@ -106,7 +106,7 @@ describe('Minimize View', () => {
             label: '123',
             type: VariableType.TEXTBOX,
           },
-        } as any)
+        }) as any
     );
     render(getComponent({}));
 
@@ -122,7 +122,7 @@ describe('Minimize View', () => {
             label: '123',
             type: VariableType.TEXTBOX,
           },
-        } as any)
+        }) as any
     );
 
     render(getComponent({}));
@@ -138,7 +138,7 @@ describe('Minimize View', () => {
             name: '123',
             type: VariableType.TEXTBOX,
           },
-        } as any)
+        }) as any
     );
 
     render(getComponent({}));

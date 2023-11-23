@@ -20,8 +20,8 @@ describe('Use Favorites', () => {
    * Render Hook without errors
    * @param hook
    */
-  const renderHookWithoutErrors = async <T>(hook: () => T): Promise<RenderHookResult<T, {}>> => {
-    const result = await renderHook(() => hook());
+  const renderHookWithoutErrors = async <T>(hook: () => T): Promise<RenderHookResult<T, null>> => {
+    const result = await act(async () => renderHook(() => hook()));
 
     await new Promise((resolve) => setTimeout(resolve));
     return result;
@@ -34,7 +34,7 @@ describe('Use Favorites', () => {
       })
     );
 
-    const { result } = await act(() => renderHookWithoutErrors(() => useFavorites()));
+    const { result } = await renderHookWithoutErrors(() => useFavorites());
 
     await waitFor(() => expect(result.current.isAdded('device', 'device1')).toBeTruthy());
     await waitFor(() => expect(result.current.isAdded('country', 'USA')).not.toBeTruthy());
@@ -44,7 +44,7 @@ describe('Use Favorites', () => {
   it('Should work without initial data', async () => {
     jest.mocked(window.localStorage.getItem).mockImplementation(() => null);
 
-    const { result } = await act(() => renderHookWithoutErrors(() => useFavorites()));
+    const { result } = await renderHookWithoutErrors(() => useFavorites());
 
     await waitFor(() => expect(result.current.isAdded('device', 'device1')).not.toBeTruthy());
   });
@@ -56,7 +56,7 @@ describe('Use Favorites', () => {
       })
     );
 
-    const { result } = await act(() => renderHookWithoutErrors(() => useFavorites()));
+    const { result } = await renderHookWithoutErrors(() => useFavorites());
 
     /**
      * Add to already existing list
@@ -87,7 +87,7 @@ describe('Use Favorites', () => {
       })
     );
 
-    const { result } = await act(() => renderHookWithoutErrors(() => useFavorites()));
+    const { result } = await renderHookWithoutErrors(() => useFavorites());
 
     /**
      * Remove from already existing list

@@ -3,9 +3,9 @@ import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useCallback, useMemo } from 'react';
 
-import { Styles } from '../components/TableView/styles';
+import { getStyles } from '../components/TableView/TableView.styles';
 import { TextVariable } from '../components/TextVariable';
-import { AllValue, AllValueParameter, TestIds } from '../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
 import { Level, PanelOptions, RuntimeVariable, TableItem, VariableType } from '../types';
 import {
   convertTreeToPlain,
@@ -42,7 +42,7 @@ export const useTable = ({
    * Styles and Theme
    */
   const theme = useTheme2();
-  const styles = Styles(theme);
+  const styles = getStyles(theme);
 
   /**
    * Runtime Variable
@@ -119,15 +119,15 @@ export const useTable = ({
           return [
             getItemWithStatus(
               {
-                value: AllValueParameter,
+                value: ALL_VALUE_PARAMETER,
                 selected: isSelectedAll,
                 variable: getRuntimeVariable(groupFields[0].name),
                 isFavorite: false,
                 name: groupFields[0].name,
-                label: AllValue,
+                label: ALL_VALUE,
               },
               {
-                status: getStatus(AllValue),
+                status: getStatus(ALL_VALUE),
                 isSelectedAll,
                 favoritesEnabled: options.favorites,
                 groupSelection: options.groupSelection,
@@ -154,7 +154,7 @@ export const useTable = ({
             label: option.text,
           },
           {
-            status: getStatus(option.value === AllValueParameter ? AllValue : option.value),
+            status: getStatus(option.value === ALL_VALUE_PARAMETER ? ALL_VALUE : option.value),
             isSelectedAll,
             favoritesEnabled: options.favorites,
             groupSelection: options.groupSelection,
@@ -289,7 +289,7 @@ export const useTable = ({
                   checked={isSelectedAll}
                   className={styles.selectControl}
                   id={`${prefix}-select-all`}
-                  data-testid={TestIds.table.allControl}
+                  data-testid={TEST_IDS.table.allControl}
                   title="Select all"
                 />
               )}
@@ -301,7 +301,7 @@ export const useTable = ({
                   fill="text"
                   size="sm"
                   icon={table.getIsAllRowsExpanded() ? 'angle-double-down' : 'angle-double-right'}
-                  data-testid={TestIds.table.buttonExpandAll}
+                  data-testid={TEST_IDS.table.buttonExpandAll}
                 />
               )}
               {runtimeVariable?.label || variable}
@@ -319,7 +319,7 @@ export const useTable = ({
             <div
               className={styles.rowContent}
               style={{ paddingLeft: theme.spacing(row.depth * 1.5) }}
-              data-testid={TestIds.table.cell(value, row.depth)}
+              data-testid={TEST_IDS.table.cell(value, row.depth)}
             >
               {row.original.selectable && (
                 <input
@@ -331,7 +331,7 @@ export const useTable = ({
                   checked={row.original.selected}
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
-                  data-testid={TestIds.table.control}
+                  data-testid={TEST_IDS.table.control}
                 />
               )}
 
@@ -343,7 +343,7 @@ export const useTable = ({
                   fill="text"
                   size="sm"
                   icon={row.getIsExpanded() ? 'angle-down' : 'angle-right'}
-                  data-testid={TestIds.table.buttonExpand}
+                  data-testid={TEST_IDS.table.buttonExpand}
                 />
               )}
 
@@ -366,7 +366,7 @@ export const useTable = ({
                       row.getToggleExpandedHandler()();
                     }
                   }}
-                  data-testid={TestIds.table.label}
+                  data-testid={TEST_IDS.table.label}
                   className={styles.label}
                 >
                   {row.original.showStatus && (
@@ -423,7 +423,7 @@ export const useTable = ({
                     favorites.add(row.original.variable?.name, row.original.value);
                   }
                 }}
-                data-testid={TestIds.table.favoritesControl}
+                data-testid={TEST_IDS.table.favoritesControl}
               >
                 {isFavorite ? <Icon name="favorite" /> : <Icon name="star" />}
               </Button>

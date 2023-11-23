@@ -3,17 +3,17 @@ import { getTemplateSrv } from '@grafana/runtime';
 
 import { GroupsEditor, VariablePanel } from './components';
 import {
-  AllowEmptyValueOptions,
-  AlwaysVisibleFilterOptions,
-  AutoScrollOptions,
-  DisplayModeOptions,
-  FavoritesOptions,
-  FilterOptions,
-  GroupSelectionOptions,
-  HeaderOptions,
-  ShowNameOptions,
-  StatusSortOptions,
-  StickyOptions,
+  ALLOW_EMPTY_VALUE_OPTIONS,
+  ALWAYS_VISIBLE_FILTER_OPTIONS,
+  AUTO_SCROLL_OPTIONS,
+  DISPLAY_MODE_OPTIONS,
+  FAVORITES_OPTIONS,
+  FILTER_OPTIONS,
+  GROUP_SELECTION_OPTIONS,
+  HEADER_OPTIONS,
+  SHOW_NAME_OPTIONS,
+  STATUS_SORT_OPTIONS,
+  STICKY_OPTIONS,
 } from './constants';
 import { DisplayMode, PanelOptions } from './types';
 
@@ -59,7 +59,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       path: 'displayMode',
       name: 'Display mode',
       settings: {
-        options: DisplayModeOptions,
+        options: DISPLAY_MODE_OPTIONS,
       },
       defaultValue: DisplayMode.TABLE,
     });
@@ -84,7 +84,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         description: 'Allow Empty Value for multi-choice variable.',
         defaultValue: false,
         settings: {
-          options: AllowEmptyValueOptions,
+          options: ALLOW_EMPTY_VALUE_OPTIONS,
         },
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       });
@@ -95,7 +95,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Sticky position',
         description: 'Variables will follow when scrolling.',
         settings: {
-          options: StickyOptions,
+          options: STICKY_OPTIONS,
         },
         defaultValue: false,
         showIf: showForTableView,
@@ -104,7 +104,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'autoScroll',
         name: 'Auto Scroll to the selected value',
         settings: {
-          options: AutoScrollOptions,
+          options: AUTO_SCROLL_OPTIONS,
         },
         defaultValue: false,
         showIf: showForTableView,
@@ -118,7 +118,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'header',
         name: 'Header',
         settings: {
-          options: HeaderOptions,
+          options: HEADER_OPTIONS,
         },
         category: ['Header'],
         defaultValue: true,
@@ -128,7 +128,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'filter',
         name: 'Values filtering',
         settings: {
-          options: FilterOptions,
+          options: FILTER_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],
@@ -138,7 +138,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'alwaysVisibleFilter',
         name: 'Always Visible Search',
         settings: {
-          options: AlwaysVisibleFilterOptions,
+          options: ALWAYS_VISIBLE_FILTER_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],
@@ -149,7 +149,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Select favorites',
         description: 'Saved in the browser storage for each user.',
         settings: {
-          options: FavoritesOptions,
+          options: FAVORITES_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],
@@ -159,7 +159,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'statusSort',
         name: 'Sort by status',
         settings: {
-          options: StatusSortOptions,
+          options: STATUS_SORT_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],
@@ -191,7 +191,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'showName',
         name: 'Display variable names',
         settings: {
-          options: ShowNameOptions,
+          options: SHOW_NAME_OPTIONS,
         },
         defaultValue: false,
         category: ['Layout'],
@@ -201,7 +201,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'groupSelection',
         name: 'Allow group selection.',
         settings: {
-          options: GroupSelectionOptions,
+          options: GROUP_SELECTION_OPTIONS,
         },
         defaultValue: false,
         category: ['Layout'],

@@ -3,7 +3,7 @@ import { DisplayMode } from '../types';
 /**
  * Display Mode Options
  */
-export const DisplayModeOptions = [
+export const DISPLAY_MODE_OPTIONS = [
   { value: DisplayMode.TABLE, label: 'Table', description: 'Full featured table view.' },
   { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Minimized select view.' },
   { value: DisplayMode.BUTTON, label: 'Button', description: 'Button select view.' },
@@ -12,7 +12,7 @@ export const DisplayModeOptions = [
 /**
  * Header Options
  */
-export const HeaderOptions = [
+export const HEADER_OPTIONS = [
   { value: true, label: 'Display', description: 'Display variable Label or Id. Allows to enable filtering.' },
   { value: false, label: 'Hide', description: 'Do not display header.' },
 ];
@@ -20,7 +20,7 @@ export const HeaderOptions = [
 /**
  * Sticky Position
  */
-export const StickyOptions = [
+export const STICKY_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Follow when scrolling.' },
   { value: false, label: 'Disabled', description: 'Scroll with dashboard.' },
 ];
@@ -28,7 +28,7 @@ export const StickyOptions = [
 /**
  * Filter Options
  */
-export const FilterOptions = [
+export const FILTER_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Display Table Filter.' },
   { value: false, label: 'Disabled', description: 'Hide Table Filter.' },
 ];
@@ -36,7 +36,7 @@ export const FilterOptions = [
 /**
  * Always Visible Filter
  */
-export const AlwaysVisibleFilterOptions = [
+export const ALWAYS_VISIBLE_FILTER_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Always Visible Search.' },
   { value: false, label: 'Disabled', description: 'Toggleable Search Visibility.' },
 ];
@@ -44,7 +44,7 @@ export const AlwaysVisibleFilterOptions = [
 /**
  * Favorites Options
  */
-export const FavoritesOptions = [
+export const FAVORITES_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.' },
   { value: false, label: 'Disabled', description: 'Hide favorites.' },
 ];
@@ -52,7 +52,7 @@ export const FavoritesOptions = [
 /**
  * Status Sort Options
  */
-export const StatusSortOptions = [
+export const STATUS_SORT_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Allows sort by status.' },
   { value: false, label: 'Disabled', description: 'Hide sorting.' },
 ];
@@ -60,7 +60,7 @@ export const StatusSortOptions = [
 /**
  * Show Name Options
  */
-export const ShowNameOptions = [
+export const SHOW_NAME_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Display variable names.' },
   { value: false, label: 'Disabled', description: 'Hide variable names.' },
 ];
@@ -68,7 +68,7 @@ export const ShowNameOptions = [
 /**
  * Auto Scroll Options
  */
-export const AutoScrollOptions = [
+export const AUTO_SCROLL_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
   { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
 ];
@@ -76,7 +76,7 @@ export const AutoScrollOptions = [
 /**
  * Group Selection Options
  */
-export const GroupSelectionOptions = [
+export const GROUP_SELECTION_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Enable to allow group selection.' },
   { value: false, label: 'Disabled', description: 'Disable group selection.' },
 ];
@@ -84,7 +84,7 @@ export const GroupSelectionOptions = [
 /**
  * Allow Empty Value Options
  */
-export const AllowEmptyValueOptions = [
+export const ALLOW_EMPTY_VALUE_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Empty value enabled.' },
   { value: false, label: 'Disabled', description: 'Empty value disabled.' },
 ];

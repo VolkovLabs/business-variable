@@ -7,6 +7,7 @@
     "@grafana/ui": "^10.2.1",
     "@tanstack/react-table": "8.9.3",
     "@tanstack/react-virtual": "3.0.0-beta.60",
+    "@volkovlabs/components": "^1.1.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
@@ -29,7 +30,7 @@
     "@types/node": "^18.18.10",
     "@types/react-beautiful-dnd": "^13.1.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@volkovlabs/eslint-config": "^1.1.0",
+    "@volkovlabs/eslint-config": "^1.2.1",
     "@volkovlabs/jest-selectors": "^1.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
@@ -75,5 +76,5 @@
     "test:ci": "jest --maxWorkers 4 --coverage",
     "upgrade": "npm upgrade --save"
   },
-  "version": "2.2.0"
+  "version": "2.3.0"
 }
