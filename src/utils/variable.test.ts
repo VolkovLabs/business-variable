@@ -227,6 +227,32 @@ describe('Variable Utils', () => {
         );
       });
 
+      it('Should adjust values if they not defined in url for non array', () => {
+        jest.mocked(locationService.getSearch).mockImplementation(
+          () =>
+            ({
+              getAll: jest.fn(() => []),
+            }) as any
+        );
+        jest.mocked(locationService.getSearchObject).mockImplementation(() => ({}));
+        const variable = {
+          name: 'variable',
+          type: VariableType.CUSTOM,
+          current: {
+            value: 'selected1',
+          },
+          multi: true,
+        };
+        selectVariableValues(['value1', 'value2'], variable as any);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: ['value1', 'value2', 'selected1'],
+          },
+          true
+        );
+      });
+
       it('Should deselect all value if it not defined in url ', () => {
         jest.mocked(locationService.getSearch).mockImplementation(
           () =>
