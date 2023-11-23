@@ -98,7 +98,7 @@ describe('Use Status', () => {
                 {
                   name: 'last',
                   values: [70, 81],
-                  display: (value: number) => ({}),
+                  display: () => ({}),
                 },
               ],
             }),

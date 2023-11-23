@@ -13,6 +13,4 @@ websocket/
 timescale/
 
 # Tests
-**/*.test.ts
-**/*.test.tsx
 __mocks__
