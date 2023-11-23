@@ -1,6 +1,7 @@
 import { cx } from '@emotion/css';
 import { StandardEditorProps } from '@grafana/data';
 import { Button, Icon, InlineField, InlineFieldRow, Input, useTheme2 } from '@grafana/ui';
+import { Collapse } from '@volkovlabs/components';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   DragDropContext,
@@ -14,7 +15,6 @@ import {
 import { TEST_IDS } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { reorder } from '../../utils';
-import { Collapse } from '../Collapse';
 import { LevelsEditor } from '../LevelsEditor';
 import { getStyles } from './GroupsEditor.styles';
 
