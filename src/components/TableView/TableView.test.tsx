@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { useTable } from '../../hooks';
 import { TableView } from './TableView';
 
@@ -45,13 +45,13 @@ describe('Table View', () => {
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors({ ...TestIds.tableView, ...InTestIds });
+  const getSelectors = getJestSelectors({ ...TEST_IDS.tableView, ...InTestIds });
   const selectors = getSelectors(screen);
 
   /**
    * Table Selectors
    */
-  const getTableSelectors = getJestSelectors(TestIds.table);
+  const getTableSelectors = getJestSelectors(TEST_IDS.table);
   const tableSelectors = getTableSelectors(screen);
 
   /**

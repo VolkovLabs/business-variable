@@ -3,11 +3,11 @@ import { PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
-import { Styles } from './styles';
+import { getStyles } from './TableView.styles';
 
 /**
  * Properties
@@ -105,7 +105,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
    * Styles and Theme
    */
   const theme = useTheme2();
-  const styles = Styles(theme);
+  const styles = getStyles(theme);
 
   /**
    * Return
@@ -120,7 +120,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
       useCapture={true}
     >
       <div
-        data-testid={TestIds.tableView.root}
+        data-testid={TEST_IDS.tableView.root}
         className={cx(
           styles.wrapper,
           css`
@@ -134,7 +134,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
         }}
       >
         {!tableData.length && (
-          <Alert data-testid={TestIds.tableView.infoMessage} severity="info" title="Variable">
+          <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
             Variable is not selected or do not match returned fields.
           </Alert>
         )}
@@ -143,7 +143,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
           style={style}
           className={styles.content}
           ref={scrollableContainerRef}
-          data-testid={TestIds.tableView.content}
+          data-testid={TEST_IDS.tableView.content}
         >
           {options.groups?.length > 1 && (
             <div ref={headerRef} className={styles.header}>
@@ -154,7 +154,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
                     label={group.name}
                     onChangeTab={() => setCurrentGroup(group.name)}
                     active={currentGroup === group.name}
-                    data-testid={TestIds.tableView.tab(group.name)}
+                    data-testid={TEST_IDS.tableView.tab(group.name)}
                   />
                 ))}
               </TabsBar>

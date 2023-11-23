@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
-import { AllValue, AllValueParameter, TestIds } from '../../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { VariableType } from '../../types';
 import { selectVariableValues } from '../../utils';
@@ -36,7 +36,7 @@ describe('ButtonView', () => {
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors(TestIds.buttonView);
+  const getSelectors = getJestSelectors(TEST_IDS.buttonView);
   const selectors = getSelectors(screen);
 
   /**
@@ -77,8 +77,8 @@ describe('ButtonView', () => {
     type: VariableType.CUSTOM,
     options: [
       {
-        text: AllValue,
-        value: AllValueParameter,
+        text: ALL_VALUE,
+        value: ALL_VALUE_PARAMETER,
         selected: false,
       },
       {
@@ -164,7 +164,7 @@ describe('ButtonView', () => {
       })
     );
 
-    expect(selectors.item(false, AllValue)).toBeInTheDocument();
+    expect(selectors.item(false, ALL_VALUE)).toBeInTheDocument();
     expect(selectors.item(false, 'device1')).toBeInTheDocument();
     expect(selectors.item(false, 'device2')).toBeInTheDocument();
   });
@@ -207,7 +207,7 @@ describe('ButtonView', () => {
     /**
      * All should be selected
      */
-    expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], variable);
+    expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], variable);
   });
 
   it('Should work if no status color', () => {

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
-import { AllValue, AllValueParameter, NoValueParameter, TestIds } from '../../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER, TEST_IDS } from '../../constants';
 import { selectVariableValues } from '../../utils';
 import { OptionsVariable } from './OptionsVariable';
 
@@ -29,7 +29,7 @@ describe('Options Variable', () => {
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors(TestIds.optionsVariable);
+  const getSelectors = getJestSelectors(TEST_IDS.optionsVariable);
   const selectors = getSelectors(screen);
 
   /**
@@ -108,8 +108,8 @@ describe('Options Variable', () => {
 
   describe('Multi variable', () => {
     const allOption = {
-      text: AllValue,
-      value: AllValueParameter,
+      text: ALL_VALUE,
+      value: ALL_VALUE_PARAMETER,
       selected: false,
     };
     const option1 = {
@@ -191,7 +191,7 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: [AllValueParameter, option1.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [ALL_VALUE_PARAMETER, option1.value] } });
 
       expect(selectVariableValues).toHaveBeenCalledWith([option1.value], expect.any(Object));
     });
@@ -213,9 +213,9 @@ describe('Options Variable', () => {
         })
       );
 
-      fireEvent.change(selectors.root(), { target: { values: [AllValueParameter, option2.value] } });
+      fireEvent.change(selectors.root(), { target: { values: [ALL_VALUE_PARAMETER, option2.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], expect.any(Object));
     });
 
     it('Should select all value if no selected values', () => {
@@ -237,7 +237,7 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([AllValueParameter], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], expect.any(Object));
     });
 
     it('Should clear value if no selected values and emptyValue enabled', () => {
@@ -260,7 +260,7 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([NoValueParameter], expect.any(Object));
+      expect(selectVariableValues).toHaveBeenCalledWith([NO_VALUE_PARAMETER], expect.any(Object));
     });
 
     it('Should deselect values', () => {

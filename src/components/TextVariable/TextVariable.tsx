@@ -1,7 +1,7 @@
 import { Input } from '@grafana/ui';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
@@ -64,7 +64,7 @@ export const TextVariable: React.FC<Props> = ({ variable }) => {
 
   return (
     <Input
-      data-testid={TestIds.textVariable.root}
+      data-testid={TEST_IDS.textVariable.root}
       onChange={onChange}
       onBlur={onSave}
       onKeyDown={onKeyDown}

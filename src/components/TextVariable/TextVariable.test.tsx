@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { selectVariableValues } from '../../utils';
 import { TextVariable } from './TextVariable';
 
@@ -32,7 +32,7 @@ describe('Text Variable', () => {
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors(TestIds.textVariable);
+  const getSelectors = getJestSelectors(TEST_IDS.textVariable);
   const selectors = getSelectors(screen);
 
   /**

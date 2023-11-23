@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React, { useRef } from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { Table } from './Table';
 
 /**
@@ -44,7 +44,7 @@ describe('Table', () => {
    * Selectors
    */
   const getSelectors = getJestSelectors({
-    ...TestIds.table,
+    ...TEST_IDS.table,
     ...InTestIds,
   });
   const selectors = getSelectors(screen);
@@ -331,7 +331,7 @@ describe('Table', () => {
     /**
      * Apply Favorite filter
      */
-    await act(() => fireEvent.click(screen.getByTestId(TestIds.table.favoritesFilter)));
+    await act(() => fireEvent.click(screen.getByTestId(TEST_IDS.table.favoritesFilter)));
 
     expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
     expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();

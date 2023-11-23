@@ -3,7 +3,7 @@ import { EventBus } from '@grafana/data';
 import { Alert, InlineField } from '@grafana/ui';
 import React from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
@@ -47,7 +47,7 @@ export const MinimizeView: React.FC<Props> = ({
    */
   if (!variable) {
     return (
-      <Alert severity="info" title="Variable" data-testid={TestIds.minimizeView.noVariableMessage}>
+      <Alert severity="info" title="Variable" data-testid={TEST_IDS.minimizeView.noVariableMessage}>
         Variable is not selected.
       </Alert>
     );
@@ -65,7 +65,7 @@ export const MinimizeView: React.FC<Props> = ({
       className={css`
         padding: ${padding}px;
       `}
-      data-testid={TestIds.minimizeView.root}
+      data-testid={TEST_IDS.minimizeView.root}
     >
       <InlineField grow label={variable.label || variable.name} labelWidth={labelWidth}>
         <>

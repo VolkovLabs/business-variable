@@ -2,7 +2,7 @@ import { SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
 import React, { useCallback, useMemo } from 'react';
 
-import { TestIds } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { updateVariableOptions } from '../../utils';
 
@@ -56,14 +56,14 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
       return {
         label: option.text,
         value: option.value,
-        ariaLabel: TestIds.optionsVariable.option(option.value),
+        ariaLabel: TEST_IDS.optionsVariable.option(option.value),
       };
     });
   }, [variable.options]);
 
   return (
     <Select
-      aria-label={TestIds.optionsVariable.root}
+      aria-label={TEST_IDS.optionsVariable.root}
       onChange={onChange}
       options={options}
       isMulti={variable.multi}

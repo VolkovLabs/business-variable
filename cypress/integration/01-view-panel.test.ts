@@ -1,5 +1,5 @@
 import { e2e } from '@grafana/e2e';
-import { TestIds } from '../../src/constants';
+import { TEST_IDS } from '../../src/constants';
 
 /**
  * Dashboard
@@ -29,7 +29,7 @@ describe('Viewing an Variable panel', () => {
     /**
      * Root
      */
-    const chart = currentPanel.find(getTestIdSelector(TestIds.tableView.root));
+    const chart = currentPanel.find(getTestIdSelector(TEST_IDS.tableView.root));
     chart.should('be.visible');
 
     /**

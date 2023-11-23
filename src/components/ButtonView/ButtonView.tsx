@@ -3,11 +3,11 @@ import { EventBus, PanelData } from '@grafana/data';
 import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
-import { AllValue, AllValueParameter, TestIds } from '../../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
 import { useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
-import { Styles } from './styles';
+import { getStyles } from './ButtonView.styles';
 
 /**
  * Properties
@@ -40,7 +40,7 @@ export const ButtonView: React.FC<Props> = ({
   /**
    * Styles and Theme
    */
-  const styles = useStyles2(Styles);
+  const styles = useStyles2(getStyles);
   const theme = useTheme2();
 
   /**
@@ -68,7 +68,7 @@ export const ButtonView: React.FC<Props> = ({
    */
   if (!variable) {
     return (
-      <Alert severity="info" title="Variable" data-testid={TestIds.buttonView.noVariableMessage}>
+      <Alert severity="info" title="Variable" data-testid={TEST_IDS.buttonView.noVariableMessage}>
         Variable is not selected.
       </Alert>
     );
@@ -80,7 +80,7 @@ export const ButtonView: React.FC<Props> = ({
   const options = isVariableWithOptions(variable) && variable.options.length;
   if (!options) {
     return (
-      <Alert severity="info" title="Variable" data-testid={TestIds.buttonView.noOptionsMessage}>
+      <Alert severity="info" title="Variable" data-testid={TEST_IDS.buttonView.noOptionsMessage}>
         Options are not available.
       </Alert>
     );
@@ -94,10 +94,10 @@ export const ButtonView: React.FC<Props> = ({
           padding: ${padding}px;
         `
       )}
-      data-testid={TestIds.buttonView.root}
+      data-testid={TEST_IDS.buttonView.root}
     >
       {variable.options.map((option) => {
-        const value = option.value === AllValueParameter ? AllValue : option.value;
+        const value = option.value === ALL_VALUE_PARAMETER ? ALL_VALUE : option.value;
         const status = getStatus(value);
         const backgroundColor = option.selected
           ? status.exist
@@ -132,7 +132,7 @@ export const ButtonView: React.FC<Props> = ({
                 value,
               });
             }}
-            data-testid={TestIds.buttonView.item(value)}
+            data-testid={TEST_IDS.buttonView.item(value)}
           >
             {option.text.toString()}
           </Button>

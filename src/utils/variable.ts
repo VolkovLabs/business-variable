@@ -1,7 +1,7 @@
 import { TypedVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 
-import { AllValue, AllValueParameter, NoValueParameter } from '../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import {
   CustomVariableModel,
   QueryVariableModel,
@@ -38,12 +38,12 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        * Multi update
        */
       if (multi) {
-        if (values.some((value) => value === AllValueParameter)) {
-          setVariableValue(name, AllValue);
+        if (values.some((value) => value === ALL_VALUE_PARAMETER)) {
+          setVariableValue(name, ALL_VALUE);
           return;
         }
 
-        if (values.some((value) => value === NoValueParameter)) {
+        if (values.some((value) => value === NO_VALUE_PARAMETER)) {
           setVariableValue(name, '');
           return;
         }
@@ -63,7 +63,7 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
           const selectedValue = runtimeVariable.current.value;
           const selectedArray = Array.isArray(selectedValue) ? selectedValue : [selectedValue];
 
-          selectedValues.push(...selectedArray.filter((value) => value !== AllValueParameter));
+          selectedValues.push(...selectedArray.filter((value) => value !== ALL_VALUE_PARAMETER));
         }
 
         /**
@@ -93,9 +93,9 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        */
       let value = values[0];
 
-      if (value === AllValueParameter) {
-        value = AllValue;
-      } else if (value === NoValueParameter) {
+      if (value === ALL_VALUE_PARAMETER) {
+        value = ALL_VALUE;
+      } else if (value === NO_VALUE_PARAMETER) {
         value = '';
       }
 
@@ -184,7 +184,7 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
         /**
          * Options with all option
          */
-        if (!!runtimeVariable.helpers.getOption(AllValueParameter)?.selected) {
+        if (!!runtimeVariable.helpers.getOption(ALL_VALUE_PARAMETER)?.selected) {
           /**
            * All option selected
            */
@@ -205,7 +205,7 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
       /**
        * Single value
        */
-      return runtimeVariable.current.value === AllValueParameter;
+      return runtimeVariable.current.value === ALL_VALUE_PARAMETER;
     }
   }
 

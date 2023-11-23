@@ -1,7 +1,7 @@
 import { IconButton, useTheme2 } from '@grafana/ui';
 import React from 'react';
 
-import { Styles } from './styles';
+import { getStyles } from './styles';
 
 /**
  * Properties
@@ -59,7 +59,7 @@ export const Collapse: React.FC<Props> = ({
    * Styles and Theme
    */
   const theme = useTheme2();
-  const styles = Styles(theme);
+  const styles = getStyles(theme);
 
   return (
     <div className={styles.root}>
