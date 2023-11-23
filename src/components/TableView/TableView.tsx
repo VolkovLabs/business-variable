@@ -161,6 +161,7 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
             </div>
           )}
           <Table
+            key={currentGroup}
             columns={columns}
             data={tableData}
             getSubRows={getSubRows}
