@@ -64,46 +64,64 @@ export interface TableViewOptions {
 
   /**
    * Tree View Level Groups
+   *
+   * @type {LevelsGroup[]}
    */
   groups: LevelsGroup[];
 
   /**
    * Display Header
+   *
+   * @type {boolean}
    */
   header: boolean;
 
   /**
    * Use Sticky position
+   *
+   * @type {boolean}
    */
   sticky: boolean;
 
   /**
    * Values Filter
+   *
+   * @type {boolean}
    */
   filter: boolean;
 
   /**
    * Always Visible Filter
+   *
+   * @type {boolean}
    */
   alwaysVisibleFilter: boolean;
 
   /**
    * Select Favorites
+   *
+   * @type {boolean}
    */
   favorites: boolean;
 
   /**
    * Show Variable Names
+   *
+   * @type {boolean}
    */
   showName: boolean;
 
   /**
    * Auto Scroll
+   *
+   * @type {boolean}
    */
   autoScroll: boolean;
 
   /**
    * Status Sort
+   *
+   * @type {boolean}
    */
   statusSort: boolean;
 }
@@ -115,6 +133,8 @@ export interface TableViewOptions {
 export interface PanelOptions extends TableViewOptions {
   /**
    * Display Mode
+   *
+   * @type {DisplayMode}
    */
   displayMode: DisplayMode;
 
@@ -134,11 +154,15 @@ export interface PanelOptions extends TableViewOptions {
 
   /**
    * Empty Value
+   *
+   * @type {boolean}
    */
   emptyValue: boolean;
 
   /**
    * Group Selection
+   *
+   * @type {boolean}
    */
   groupSelection: boolean;
 
@@ -148,4 +172,11 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   dashboardVariable: string;
+
+  /**
+   * Persistent
+   *
+   * @type {boolean}
+   */
+  persistent: boolean;
 }

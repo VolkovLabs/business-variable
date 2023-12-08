@@ -11,6 +11,7 @@ import {
   FILTER_OPTIONS,
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
+  PERSISTENT_OPTIONS,
   SHOW_NAME_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
@@ -85,6 +86,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         settings: {
           options: ALLOW_EMPTY_VALUE_OPTIONS,
+        },
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addRadio({
+        path: 'persistent',
+        name: 'Persistent',
+        description: 'Allow to keep non-existing values variable.',
+        defaultValue: false,
+        settings: {
+          options: PERSISTENT_OPTIONS,
         },
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       });

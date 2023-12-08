@@ -34,7 +34,7 @@ interface Props {
  */
 export const ButtonView: React.FC<Props> = ({
   data,
-  options: { variable: variableName, padding = 0, status, name, emptyValue = false } = {},
+  options: { variable: variableName, padding = 0, status, name, emptyValue = false, persistent = false } = {},
   eventBus,
 }) => {
   /**
@@ -129,6 +129,7 @@ export const ButtonView: React.FC<Props> = ({
                 previousValues: values,
                 variable,
                 emptyValueEnabled: emptyValue,
+                persistentEnabled: persistent,
                 value,
               });
             }}

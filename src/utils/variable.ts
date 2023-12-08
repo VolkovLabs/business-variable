@@ -15,7 +15,7 @@ import {
  * @param name
  * @param value
  */
-const setVariableValue = (name: string, value: unknown) => {
+export const setVariableValue = (name: string, value: unknown) => {
   locationService.partial({ [`var-${name}`]: value }, true);
 };
 

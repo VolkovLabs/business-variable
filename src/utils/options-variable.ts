@@ -11,10 +11,12 @@ export const updateVariableOptions = ({
   value,
   emptyValueEnabled,
   variable,
+  persistentEnabled,
 }: {
   previousValues: string[];
   value: string | string[];
   emptyValueEnabled: boolean;
+  persistentEnabled: boolean;
   variable: RuntimeVariableWithOptions;
 }) => {
   const updatedValues = Array.isArray(value) ? value : [value];
@@ -34,7 +36,7 @@ export const updateVariableOptions = ({
     /**
      * Select all
      */
-    if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
+    if (updatedValues.length === 0 && !persistentEnabled && variable?.multi && variable.includeAll) {
       selectVariableValues([ALL_VALUE_PARAMETER], variable);
       return;
     }

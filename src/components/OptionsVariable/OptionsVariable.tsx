@@ -43,6 +43,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
         value: Array.isArray(value) ? value.map((option: SelectableValue) => option.value) : value.value || '',
         variable,
         emptyValueEnabled: emptyValue,
+        persistentEnabled: false,
       });
     },
     [emptyValue, values, variable]
