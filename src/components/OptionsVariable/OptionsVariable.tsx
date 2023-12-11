@@ -3,6 +3,7 @@ import { Select } from '@grafana/ui';
 import React, { useCallback, useMemo } from 'react';
 
 import { TEST_IDS } from '../../constants';
+import { usePersistentStorage } from '../../hooks';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { updateVariableOptions } from '../../utils';
 
@@ -19,13 +20,23 @@ interface Props {
    * Empty Value
    */
   emptyValue: boolean;
+
+  /**
+   * Persistent
+   */
+  persistent: boolean;
 }
 
 /**
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
+export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persistent }) => {
+  /**
+   * Persistent storage
+   */
+  const persistentStorage = usePersistentStorage(variable.name);
+
   /**
    * Current values
    */
@@ -38,15 +49,21 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue }) => {
    */
   const onChange = useCallback(
     (value: Array<SelectableValue<string>> | SelectableValue<string>) => {
+      /**
+       * Clear saved values on override by user
+       */
+      if (persistent) {
+        persistentStorage.remove();
+      }
+
       updateVariableOptions({
         previousValues: values,
         value: Array.isArray(value) ? value.map((option: SelectableValue) => option.value) : value.value || '',
         variable,
         emptyValueEnabled: emptyValue,
-        persistentEnabled: false,
       });
     },
-    [emptyValue, values, variable]
+    [emptyValue, persistent, persistentStorage, values, variable]
   );
 
   /**

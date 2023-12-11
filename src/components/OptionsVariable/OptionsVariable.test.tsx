@@ -14,6 +14,21 @@ jest.mock('../../utils/variable', () => ({
 }));
 
 /**
+ * Persistent Storage Mock
+ */
+const persistentStorageMock = {
+  remove: jest.fn(),
+};
+
+/**
+ * Mock hooks
+ */
+jest.mock('../../hooks', () => ({
+  ...jest.requireActual('../../hooks'),
+  usePersistentStorage: jest.fn(() => persistentStorageMock),
+}));
+
+/**
  * Properties
  */
 type Props = React.ComponentProps<typeof OptionsVariable>;
@@ -103,6 +118,28 @@ describe('Options Variable', () => {
       fireEvent.change(selectors.root(), { target: { value: option2.value } });
 
       expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object));
+    });
+
+    it('Should remove persistent values on selection', () => {
+      render(
+        getComponent({
+          variable: {
+            ...singleVariable,
+            options: [
+              {
+                ...option1,
+                selected: true,
+              },
+              option2,
+            ],
+          } as any,
+          persistent: true,
+        })
+      );
+
+      fireEvent.change(selectors.root(), { target: { value: option2.value } });
+
+      expect(persistentStorageMock.remove).toHaveBeenCalled();
     });
   });
 

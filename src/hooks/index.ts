@@ -1,6 +1,7 @@
 export * from './useContentPosition';
 export * from './useContentSizes';
 export * from './useDashboardRedirect';
+export * from './usePersistentStorage';
 export * from './usePersistentValues';
 export * from './useRuntimeVariables';
 export * from './useScrollTo';

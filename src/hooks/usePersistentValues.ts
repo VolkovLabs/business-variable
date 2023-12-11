@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER } from '../constants';
 import { isVariableWithOptions, setVariableValue } from '../utils';
+import { usePersistentStorage } from './usePersistentStorage';
 import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
@@ -38,6 +39,11 @@ export const usePersistentValues = ({
   const { variable } = useRuntimeVariables(eventBus, variableName);
 
   /**
+   * Persistent storage
+   */
+  const persistentStorage = usePersistentStorage(variableName);
+
+  /**
    * Restore selected values before if available
    */
   useEffect(() => {
@@ -65,24 +71,15 @@ export const usePersistentValues = ({
       );
 
       /**
-       * Key to save values in storage
-       */
-      const key = `var-${variable.name}`;
-
-      /**
        * Save unavailable values and remove from url
        */
       if (unavailableQueryValues.length) {
-        const json = sessionStorage.getItem(key);
-        const savedUnavailableValues = json ? (JSON.parse(json) as string[]) : [];
+        const savedUnavailableValues = persistentStorage.get();
 
         /**
          * Save unavailable values
          */
-        sessionStorage.setItem(
-          key,
-          JSON.stringify(uniqueValues(savedUnavailableValues.concat(unavailableQueryValues)))
-        );
+        persistentStorage.save(uniqueValues(savedUnavailableValues.concat(unavailableQueryValues)));
 
         /**
          * Update variable values to remove unavailable from url
@@ -90,8 +87,7 @@ export const usePersistentValues = ({
         setVariableValue(variable.name, valuesInState.length ? valuesInState : [ALL_VALUE]);
       }
 
-      const json = sessionStorage.getItem(key);
-      const savedValues = json ? (JSON.parse(json) as string[]) : [];
+      const savedValues = persistentStorage.get();
 
       /**
        * Find values which are available to select
@@ -107,7 +103,7 @@ export const usePersistentValues = ({
         /**
          * Save unavailable values
          */
-        sessionStorage.setItem(key, JSON.stringify(savedValues.filter((value) => !valuesNotInState.includes(value))));
+        persistentStorage.save(savedValues.filter((value) => !valuesNotInState.includes(value)));
 
         /**
          * Update variable values with available values which were selected before
@@ -115,5 +111,5 @@ export const usePersistentValues = ({
         setVariableValue(variable.name, valuesInState.concat(valuesNotInState));
       }
     }
-  }, [enabled, variable]);
+  }, [enabled, persistentStorage, variable]);
 };
