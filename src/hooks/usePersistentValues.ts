@@ -65,7 +65,7 @@ export const usePersistentValues = ({
       );
 
       /**
-       * Values key
+       * Key to save values in storage
        */
       const key = `var-${variable.name}`;
 
@@ -96,7 +96,9 @@ export const usePersistentValues = ({
       /**
        * Find values which are available to select
        */
-      const valuesNotInState = savedValues.filter((value) => variable.options.some((option) => option.value === value));
+      const valuesNotInState = savedValues.length
+        ? savedValues.filter((value) => variable.options.some((option) => option.value === value))
+        : [];
 
       /**
        * Select values which were selected before and made available again
