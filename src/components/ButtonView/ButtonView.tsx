@@ -4,7 +4,7 @@ import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
-import { useRuntimeVariables, useStatus } from '../../hooks';
+import { usePersistentStorage, useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
 import { getStyles } from './ButtonView.styles';
@@ -34,7 +34,7 @@ interface Props {
  */
 export const ButtonView: React.FC<Props> = ({
   data,
-  options: { variable: variableName, padding = 0, status, name, emptyValue = false } = {},
+  options: { variable: variableName, padding = 0, status, name, emptyValue = false, persistent = false } = {},
   eventBus,
 }) => {
   /**
@@ -47,6 +47,11 @@ export const ButtonView: React.FC<Props> = ({
    * Runtime Variables
    */
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
+
+  /**
+   * Persistent storage
+   */
+  const persistentStorage = usePersistentStorage(variableName ?? '');
 
   /**
    * Current values
@@ -123,6 +128,13 @@ export const ButtonView: React.FC<Props> = ({
                */
               if (variable.multi) {
                 value = option.selected ? values?.filter((value) => value !== option.value) : [...values, option.value];
+              }
+
+              /**
+               * Clear saved values on override by user
+               */
+              if (persistent) {
+                persistentStorage.remove();
               }
 
               updateVariableOptions({

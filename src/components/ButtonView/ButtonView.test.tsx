@@ -15,6 +15,13 @@ import { ButtonView } from './ButtonView';
 type Props = React.ComponentProps<typeof ButtonView>;
 
 /**
+ * Persistent Storage Mock
+ */
+const persistentStorageMock = {
+  remove: jest.fn(),
+};
+
+/**
  * Mock hooks
  */
 jest.mock('../../hooks', () => ({
@@ -22,6 +29,7 @@ jest.mock('../../hooks', () => ({
   useRuntimeVariables: jest.fn(() => ({
     variable: null,
   })),
+  usePersistentStorage: jest.fn(() => persistentStorageMock),
 }));
 
 /**
@@ -193,6 +201,7 @@ describe('ButtonView', () => {
         options: {
           variable: 'device',
           status: 'last',
+          persistent: true,
         } as any,
       })
     );
@@ -208,6 +217,11 @@ describe('ButtonView', () => {
      * All should be selected
      */
     expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], variable);
+
+    /**
+     * Should clear persistent values
+     */
+    expect(persistentStorageMock.remove).toHaveBeenCalled();
   });
 
   it('Should work if no status color', () => {

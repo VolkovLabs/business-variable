@@ -1,7 +1,7 @@
 import { PanelProps } from '@grafana/data';
 import React from 'react';
 
-import { useDashboardRedirect } from '../../hooks';
+import { useDashboardRedirect, usePersistentValues } from '../../hooks';
 import { DisplayMode, PanelOptions } from '../../types';
 import { ButtonView } from '../ButtonView';
 import { MinimizeView } from '../MinimizeView';
@@ -20,6 +20,11 @@ export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps
    * Dashboard Redirect
    */
   useDashboardRedirect({ eventBus, variableName: options.dashboardVariable });
+
+  /**
+   * Persistent Values
+   */
+  usePersistentValues({ eventBus, variableName: options.variable, enabled: options.persistent });
 
   /**
    * Minimize View
