@@ -93,6 +93,6 @@ export const ALLOW_EMPTY_VALUE_OPTIONS = [
  * Persistent Options
  */
 export const PERSISTENT_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Persistent enabled.' },
-  { value: false, label: 'Disabled', description: 'Persistent disabled.' },
+  { value: true, label: 'Enabled', description: 'Persistence enabled.' },
+  { value: false, label: 'Disabled', description: 'Persistence disabled.' },
 ];

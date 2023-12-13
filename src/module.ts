@@ -92,7 +92,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'persistent',
         name: 'Persistent',
-        description: 'Allow to keep non-existing values variable.',
+        description: 'Allow to keep selected values if unavailable.',
         defaultValue: false,
         settings: {
           options: PERSISTENT_OPTIONS,
