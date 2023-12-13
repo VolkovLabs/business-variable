@@ -7,6 +7,7 @@
 - Add clean table state on tab change (#101)
 - Update ESLint configuration and refactor (#102)
 - Add persistent mode (#103)
+- Update to Grafana 10.2.2 and Volkov labs packages (#104)
 
 ## 2.2.0 (2023-11-20)
 
@@ -27,7 +28,7 @@
 - Add selecting fields from data frames without RefId (#85)
 - Add toggle expanded row state by clicking on the label (#86)
 
-## Bugfixes
+### Bugfixes
 
 - Update the deselection of All variable value which is not defined in the URL (#87)
 - Removed ability to add group to favorites (#88)
