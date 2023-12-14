@@ -263,7 +263,9 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                               }}
                               data-testid={TEST_IDS.groupsEditor.buttonRemove}
                             />
-                            <Icon name="draggabledots" {...provided.dragHandleProps} className={styles.dragIcon} />
+                            <div className={styles.dragHandle} {...provided.dragHandleProps}>
+                              <Icon name="draggabledots" className={styles.dragIcon} />
+                            </div>
                           </>
                         }
                         isOpen={collapseState[name]}
