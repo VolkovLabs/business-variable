@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.3.1 (2023-12-14)
+
+### Bugfixes
+
+- Fix draggable icon for Grafana 10.3 (#107)
+
 ## 2.3.0 (2023-12-13)
 
 ### Features / Enhancements
