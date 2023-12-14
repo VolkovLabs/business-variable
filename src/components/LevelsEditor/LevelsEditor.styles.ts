@@ -25,10 +25,13 @@ export const getStyles = (theme: GrafanaTheme2) => {
       display: flex;
       align-items: center;
     `,
+    dragHandle: css`
+      display: flex;
+      margin: ${theme.spacing(0, 0.5)};
+    `,
     dragIcon: css`
       cursor: grab;
       color: ${theme.colors.text.disabled};
-      margin: ${theme.spacing(0, 0.5)};
       &:hover {
         color: ${theme.colors.text};
       }

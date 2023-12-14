@@ -186,13 +186,14 @@ export const LevelsEditor: React.FC<Props> = ({ items: groupLevels, name, onChan
                             aria-label="Remove"
                             data-testid={TEST_IDS.levelsEditor.buttonRemove}
                           />
-                          <Icon
-                            title="Drag and drop to reorder"
-                            name="draggabledots"
-                            size="lg"
-                            className={styles.dragIcon}
-                            {...provided.dragHandleProps}
-                          />
+                          <div className={styles.dragHandle} {...provided.dragHandleProps}>
+                            <Icon
+                              title="Drag and drop to reorder"
+                              name="draggabledots"
+                              size="lg"
+                              className={styles.dragIcon}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
