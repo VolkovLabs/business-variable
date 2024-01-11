@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.4.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Update video tutorial
+
 ## 2.3.1 (2023-12-14)
 
 ### Bugfixes

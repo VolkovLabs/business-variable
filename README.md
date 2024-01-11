@@ -14,7 +14,7 @@ The Variable panel builds on top of the regular dashboard variables. It allows y
 
 The variable panel offers you single- and multi-variable layouts along with an advanced Tree View.
 
-[![Demonstrates the Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/tutorial.png)](https://youtu.be/mYYtMW9qiPA)
+[![Demonstrates the Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/overview.png)](https://youtu.be/1ogv2jstrlI)
 
 ## Requirements
 
