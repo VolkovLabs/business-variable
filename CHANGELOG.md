@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Update video tutorial in README (#111)
+- Update timescale data (#119)
 
 ## 2.3.1 (2023-12-14)
 
