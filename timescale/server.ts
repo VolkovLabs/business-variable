@@ -11,12 +11,14 @@ const client = new Client({
 client.connect();
 
 let temps = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+let names = ['Chicago North 125', 'Chicago North 242', 'Tampa South 124', 'Tampa South 232', 'NY Central 133', 'NY Central 221', 'NY Beach 213', 'NY South 432', 'Sweden 192', 'Sweden 299', 'RU 198 BU', 'RU 12 BU', 'JPY 398', 'JPY 176', 'Asia 287', 'Asia 987'];
+
 
 const addMetrics = async () => {
   temps = temps.map((temp) => temp + Math.random());
 
   temps.forEach(async (temp, i) => {
-    await client.query(`insert into metrics values(nextval('seq_metrics'), now(), 'device${i + 1}', ${temp});`);
+    await client.query(`insert into metrics values(nextval('seq_metrics'), now(), '${names[i]}', ${temp});`);
   });
 
   let timeout = 1000;
