@@ -3,7 +3,7 @@ import { EventBus, PanelData } from '@grafana/data';
 import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
-import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
+import { ALL_VALUE, ALL_VALUE_PARAMETER, BUTTON_BACKGROUND_SECONDARY, TEST_IDS } from '../../constants';
 import { usePersistentStorage, useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
@@ -107,7 +107,7 @@ export const ButtonView: React.FC<Props> = ({
         const backgroundColor = option.selected
           ? status.exist
             ? status.color
-            : theme.colors.background.secondary
+            : BUTTON_BACKGROUND_SECONDARY
           : theme.colors.background.primary;
 
         return (
