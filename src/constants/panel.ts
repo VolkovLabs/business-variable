@@ -96,8 +96,3 @@ export const PERSISTENT_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Persistence enabled.' },
   { value: false, label: 'Disabled', description: 'Persistence disabled.' },
 ];
-
-/**
- * Button background secondary
- */
-export const BUTTON_BACKGROUND_SECONDARY = '#DCDCDC';
