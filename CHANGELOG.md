@@ -2,11 +2,16 @@
 
 ## 2.4.0 (IN PROGRESS)
 
+### Breaking changes
+
+- Requires Grafana 9.2 and Grafana 10
+
 ### Features / Enhancements
 
 - Updated video tutorial in README (#111)
 - Updated timescale data (#119)
 - Updated dependencies and Actions (#120)
+- Update the default color contrast (#122)
 
 ## 2.3.1 (2023-12-14)
 

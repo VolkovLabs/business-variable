@@ -107,7 +107,7 @@ export const ButtonView: React.FC<Props> = ({
         const backgroundColor = option.selected
           ? status.exist
             ? status.color
-            : theme.colors.background.secondary
+            : theme.colors.border.weak
           : theme.colors.background.primary;
 
         return (
