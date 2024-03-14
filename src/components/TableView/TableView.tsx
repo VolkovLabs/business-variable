@@ -17,11 +17,19 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Table View
  */
-export const TableView: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
+export const TableView: React.FC<Props> = ({ data, id, options, width, height, eventBus }) => {
+  /**
+   * Current Preselected Group
+   */
+  const selectedGroup = localStorage.getItem(`volkovlabs.variable.panel.${id}`);
+  const currentPreselectedGroup =
+    options.groups?.find((group) => group.name === selectedGroup)?.name || options.groups?.[0]?.name;
+
   /**
    * Current Levels Group
    */
-  const [currentGroup, setCurrentGroup] = useState(options.groups?.[0]?.name);
+
+  const [currentGroup, setCurrentGroup] = useState(currentPreselectedGroup);
 
   /**
    * Current Levels
@@ -38,9 +46,10 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
    */
   useEffect(() => {
     if (!options.groups?.some((group) => group.name === currentGroup)) {
+      localStorage.removeItem(`volkovlabs.variable.panel.${id}`);
       setCurrentGroup(options.groups?.[0]?.name);
     }
-  }, [currentGroup, options.groups]);
+  }, [currentGroup, id, options.groups]);
 
   /**
    * Table config
@@ -152,7 +161,10 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
                   <Tab
                     key={group.name}
                     label={group.name}
-                    onChangeTab={() => setCurrentGroup(group.name)}
+                    onChangeTab={() => {
+                      localStorage.setItem(`volkovlabs.variable.panel.${id}`, group.name);
+                      setCurrentGroup(group.name);
+                    }}
                     active={currentGroup === group.name}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
                   />
