@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useState } from 'react';
+import React, { RefObject, useCallback, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { Filter } from './Filter';
@@ -143,9 +143,9 @@ export const Table = <TTableData extends object>({
    * Options description - https://tanstack.com/virtual/v3/docs/api/virtualizer
    */
   const rowVirtualizer = useVirtualizer({
-    getScrollElement: () => scrollableContainerRef.current,
+    getScrollElement: useCallback(() => scrollableContainerRef.current, [scrollableContainerRef]),
     count: rows.length,
-    estimateSize: () => 38,
+    estimateSize: useCallback(() => 38, []),
     overscan: 10,
   });
 

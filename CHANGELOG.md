@@ -4,41 +4,43 @@
 
 ### Features / Enhancements
 
-- Update video tutorial in README (#111)
+- Updated video tutorial in README (#111)
+- Updated timescale data (#119)
+- Updated dependencies and Actions (#120)
 
 ## 2.3.1 (2023-12-14)
 
 ### Bugfixes
 
-- Fix draggable icon for Grafana 10.3 (#107)
+- Fixed draggable icon for Grafana 10.3 (#107)
 
 ## 2.3.0 (2023-12-13)
 
 ### Features / Enhancements
 
-- Add clean table state on tab change (#101)
-- Update ESLint configuration and refactor (#102)
-- Add persistent mode (#103)
-- Update to Grafana 10.2.2 and Volkov labs packages (#104)
+- Added clean table state on tab change (#101)
+- Updated ESLint configuration and refactor (#102)
+- Added persistent mode (#103)
+- Updated to Grafana 10.2.2 and Volkov labs packages (#104)
 
 ## 2.2.0 (2023-11-20)
 
 ### Features / Enhancements
 
-- Add dashboard redirect option (#92)
-- Update ESLint configuration and sort imports (#93)
-- Update Safari layout for favorites (#97)
-- Update to Grafana 10.2.1 (#98)
-- Add clean filter value button (#99)
+- Added dashboard redirect option (#92)
+- Updated ESLint configuration and sort imports (#93)
+- Updated Safari layout for favorites (#97)
+- Updated to Grafana 10.2.1 (#98)
+- Added clean filter value button (#99)
 
 ## 2.1.0 (2023-11-08)
 
 ### Features / Enhancements
 
-- Add an option for an always-visible search filter (#83)
-- Add Group rename functionality (#84)
-- Add selecting fields from data frames without RefId (#85)
-- Add toggle expanded row state by clicking on the label (#86)
+- Added an option for an always-visible search filter (#83)
+- Added Group rename functionality (#84)
+- Added selecting fields from data frames without RefId (#85)
+- Added toggle expanded row state by clicking on the label (#86)
 
 ### Bugfixes
 
