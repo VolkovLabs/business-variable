@@ -110,15 +110,7 @@ export const ButtonView: React.FC<Props> = ({
       data-testid={TEST_IDS.buttonView.root}
     >
       {showLabel && (
-        <InlineLabel
-          className={css`
-            color: ${theme.colors.text.link};
-            background: ${theme.colors.background.primary};
-            border: 1px solid ${theme.colors.border.weak};
-          `}
-          width={10}
-          transparent={true}
-        >
+        <InlineLabel className={styles.label} width="auto" transparent={true}>
           {variable.label || variable.name}
         </InlineLabel>
       )}
