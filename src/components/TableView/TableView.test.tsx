@@ -14,12 +14,12 @@ jest.mock('../../hooks', () => ({
   useTable: jest.fn(() => ({
     tableData: [],
     columns: [],
-    getSubRows: () => undefined,
+    getSubRows: jest.fn(),
   })),
   useLocalStorage: jest.fn(() => ({
-    get: () => undefined,
-    updated: () => undefined,
-    remove: () => undefined,
+    get: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
   })),
 }));
 
