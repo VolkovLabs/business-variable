@@ -50,6 +50,14 @@ export const FAVORITES_OPTIONS = [
 ];
 
 /**
+ * Favorites Tab Options
+ */
+export const SELECT_FAVORITE_TAB_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Allows selecting and save favorite tab' },
+  { value: false, label: 'Disabled', description: 'Disables selecting and save favorite tab' },
+];
+
+/**
  * Status Sort Options
  */
 export const STATUS_SORT_OPTIONS = [

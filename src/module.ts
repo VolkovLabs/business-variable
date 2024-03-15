@@ -12,6 +12,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
+  SELECT_FAVORITE_TAB_OPTIONS,
   SHOW_NAME_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
@@ -161,6 +162,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         description: 'Saved in the browser storage for each user.',
         settings: {
           options: FAVORITES_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'selectFavoriteTab',
+        name: 'Select favorite Tab',
+        description: 'Saved in the browser storage for each user.',
+        settings: {
+          options: SELECT_FAVORITE_TAB_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],

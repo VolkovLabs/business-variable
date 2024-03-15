@@ -105,6 +105,13 @@ export interface TableViewOptions {
   favorites: boolean;
 
   /**
+   * Select Favorite Tab
+   *
+   * @type {boolean}
+   */
+  selectFavoriteTab: boolean;
+
+  /**
    * Show Variable Names
    *
    * @type {boolean}
