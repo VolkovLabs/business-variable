@@ -171,8 +171,8 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
                     key={group.name}
                     label={group.name}
                     onChangeTab={() => {
-                      saveValue(group.name);
                       setCurrentGroup(group.name);
+                      saveValue(group.name);
                     }}
                     active={currentGroup === group.name}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
