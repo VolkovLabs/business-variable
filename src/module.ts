@@ -98,6 +98,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: PERSISTENT_OPTIONS,
         },
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addRadio({
+        path: 'showLabel',
+        name: 'Show Label',
+        description: 'Display variable name',
+        defaultValue: false,
+        settings: {
+          options: PERSISTENT_OPTIONS,
+        },
+        showIf: (config) => showForButtonView(config),
       });
 
     builder
