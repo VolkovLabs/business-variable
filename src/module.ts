@@ -169,7 +169,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'selectFavoriteTab',
-        name: 'Select favorite Tab',
+        name: 'Save selected group',
         description: 'Saved in the browser storage for each user.',
         settings: {
           options: SELECT_FAVORITE_TAB_OPTIONS,
