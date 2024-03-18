@@ -105,6 +105,13 @@ export interface TableViewOptions {
   favorites: boolean;
 
   /**
+   * Save Selected Group
+   *
+   * @type {boolean}
+   */
+  saveSelectedGroup: boolean;
+
+  /**
    * Show Variable Names
    *
    * @type {boolean}

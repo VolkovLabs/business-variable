@@ -11,7 +11,8 @@
 - Updated video tutorial in README (#111)
 - Updated timescale data (#119)
 - Updated dependencies and Actions (#120)
-- Update the default color contrast (#122)
+- Updated the default color contrast (#122)
+- Added preserve selected group option (#124)
 
 ## 2.3.1 (2023-12-14)
 

@@ -3,7 +3,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useTable } from '../../hooks';
+import { useLocalStorage, useTable } from '../../hooks';
 import { TableView } from './TableView';
 
 /**
@@ -14,7 +14,12 @@ jest.mock('../../hooks', () => ({
   useTable: jest.fn(() => ({
     tableData: [],
     columns: [],
-    getSubRows: () => undefined,
+    getSubRows: jest.fn(),
+  })),
+  useLocalStorage: jest.fn(() => ({
+    get: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
   })),
 }));
 
@@ -102,6 +107,23 @@ describe('Table View', () => {
         ],
       })
     );
+  });
+
+  it('should select the selected group if saveSelectedGroup is true', () => {
+    const selectedGroup = 'group2';
+    const groups = [{ name: 'group1' }, { name: selectedGroup }, { name: 'group3' }];
+
+    render(
+      getComponent({
+        id: 15,
+        options: {
+          groups,
+          saveSelectedGroup: true,
+        } as any,
+      })
+    );
+
+    expect(useLocalStorage).toHaveBeenCalledTimes(4);
   });
 
   it('Should use first group if already selected group removed', () => {

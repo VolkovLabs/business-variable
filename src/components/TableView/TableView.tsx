@@ -4,7 +4,7 @@ import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useContentPosition, useContentSizes, useScrollTo, useTable } from '../../hooks';
+import { useContentPosition, useContentSizes, useLocalStorage, useScrollTo, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
 import { getStyles } from './TableView.styles';
@@ -17,11 +17,28 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Table View
  */
-export const TableView: React.FC<Props> = ({ data, options, width, height, eventBus }) => {
+export const TableView: React.FC<Props> = ({ data, id, options, width, height, eventBus }) => {
+  /**
+   * useLocalStorage Hook
+   */
+  const { get: getValue, update: saveValue, remove: removeValue } = useLocalStorage(`volkovlabs.variable.panel.${id}`);
+
+  /**
+   * Current Preselected Group
+   */
+  const currentPreselectedGroup = useMemo(() => {
+    if (options.saveSelectedGroup) {
+      const selectedGroup = getValue();
+      return options.groups?.find((group) => group.name === selectedGroup)?.name || options.groups?.[0]?.name;
+    }
+
+    return options.groups?.[0]?.name;
+  }, [getValue, options.groups, options.saveSelectedGroup]);
+
   /**
    * Current Levels Group
    */
-  const [currentGroup, setCurrentGroup] = useState(options.groups?.[0]?.name);
+  const [currentGroup, setCurrentGroup] = useState(currentPreselectedGroup);
 
   /**
    * Current Levels
@@ -38,9 +55,10 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
    */
   useEffect(() => {
     if (!options.groups?.some((group) => group.name === currentGroup)) {
+      removeValue();
       setCurrentGroup(options.groups?.[0]?.name);
     }
-  }, [currentGroup, options.groups]);
+  }, [currentGroup, id, options.groups, removeValue]);
 
   /**
    * Table config
@@ -152,7 +170,10 @@ export const TableView: React.FC<Props> = ({ data, options, width, height, event
                   <Tab
                     key={group.name}
                     label={group.name}
-                    onChangeTab={() => setCurrentGroup(group.name)}
+                    onChangeTab={() => {
+                      setCurrentGroup(group.name);
+                      saveValue(group.name);
+                    }}
                     active={currentGroup === group.name}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
                   />
