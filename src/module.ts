@@ -12,6 +12,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
+  SELECTED_GROUP_OPTIONS,
   SHOW_NAME_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
@@ -34,6 +35,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       FieldConfigProperty.NoValue,
       FieldConfigProperty.Links,
       FieldConfigProperty.Mappings,
+      'unitScale' as never,
+      'fieldMinMax' as never,
     ],
   })
   .setPanelOptions((builder) => {
@@ -113,7 +116,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'autoScroll',
-        name: 'Auto Scroll to the selected value',
+        name: 'Auto scroll to the selected value',
         settings: {
           options: AUTO_SCROLL_OPTIONS,
         },
@@ -137,7 +140,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'filter',
-        name: 'Values filtering',
+        name: 'Allow values filtering',
         settings: {
           options: FILTER_OPTIONS,
         },
@@ -147,7 +150,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'alwaysVisibleFilter',
-        name: 'Always Visible Search',
+        name: 'Always visible filter input',
         settings: {
           options: ALWAYS_VISIBLE_FILTER_OPTIONS,
         },
@@ -157,7 +160,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'favorites',
-        name: 'Select favorites',
+        name: 'Allow selecting favorites',
         description: 'Saved in the browser storage for each user.',
         settings: {
           options: FAVORITES_OPTIONS,
@@ -217,6 +220,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
+      })
+      .addRadio({
+        path: 'saveSelectedGroup',
+        name: 'Preserve selected group',
+        description: 'Saved in the browser storage for each user.',
+        settings: {
+          options: SELECTED_GROUP_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForTableView(config) && config.groups?.length > 1,
       });
 
     builder.addSelect({

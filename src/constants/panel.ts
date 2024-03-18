@@ -50,6 +50,14 @@ export const FAVORITES_OPTIONS = [
 ];
 
 /**
+ * Selected Group Options
+ */
+export const SELECTED_GROUP_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Allows saving selected group' },
+  { value: false, label: 'Disabled', description: 'Disables saving selected group' },
+];
+
+/**
  * Status Sort Options
  */
 export const STATUS_SORT_OPTIONS = [
