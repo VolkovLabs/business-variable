@@ -12,7 +12,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
-  SELECT_FAVORITE_TAB_OPTIONS,
+  SELECTED_GROUP_OPTIONS,
   SHOW_NAME_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
@@ -169,10 +169,10 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'saveSelectedGroup',
-        name: 'Save selected group',
+        name: 'Preserve selected group',
         description: 'Saved in the browser storage for each user.',
         settings: {
-          options: SELECT_FAVORITE_TAB_OPTIONS,
+          options: SELECTED_GROUP_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],

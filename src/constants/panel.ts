@@ -50,11 +50,11 @@ export const FAVORITES_OPTIONS = [
 ];
 
 /**
- * Favorites Tab Options
+ * Selected Group Options
  */
-export const SELECT_FAVORITE_TAB_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Allows selecting and save favorite tab' },
-  { value: false, label: 'Disabled', description: 'Disables selecting and save favorite tab' },
+export const SELECTED_GROUP_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Allows saving selected group' },
+  { value: false, label: 'Disabled', description: 'Disables saving selected group' },
 ];
 
 /**
