@@ -140,7 +140,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'filter',
-        name: 'Add Values filtering',
+        name: 'Allow values filtering',
         settings: {
           options: FILTER_OPTIONS,
         },
@@ -160,7 +160,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'favorites',
-        name: 'Select favorites',
+        name: 'Allow selecting favorites',
         description: 'Saved in the browser storage for each user.',
         settings: {
           options: FAVORITES_OPTIONS,
