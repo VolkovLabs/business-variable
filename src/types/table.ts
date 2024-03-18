@@ -85,4 +85,14 @@ export interface TableItem {
    * Label
    */
   label: string;
+
+  /**
+   * Is all children selected
+   */
+  isAllChildrenSelected?: boolean;
+
+  /**
+   *Has Children
+   */
+  hasChildren?: boolean;
 }
