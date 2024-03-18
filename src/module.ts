@@ -170,17 +170,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
-        path: 'saveSelectedGroup',
-        name: 'Preserve selected group',
-        description: 'Saved in the browser storage for each user.',
-        settings: {
-          options: SELECTED_GROUP_OPTIONS,
-        },
-        defaultValue: false,
-        category: ['Header'],
-        showIf: (config) => showForTableView(config) && config.header,
-      })
-      .addRadio({
         path: 'statusSort',
         name: 'Sort by status',
         settings: {
@@ -231,6 +220,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
+      })
+      .addRadio({
+        path: 'saveSelectedGroup',
+        name: 'Preserve selected group',
+        description: 'Saved in the browser storage for each user.',
+        settings: {
+          options: SELECTED_GROUP_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForTableView(config) && config.groups?.length > 1,
       });
 
     builder.addSelect({
