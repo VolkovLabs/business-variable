@@ -13,6 +13,7 @@
 - Updated dependencies and Actions (#120)
 - Updated the default color contrast (#122)
 - Added preserve selected group option (#124)
+- Added label for Button view (#125)
 
 ## 2.3.1 (2023-12-14)
 

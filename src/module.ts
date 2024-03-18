@@ -13,6 +13,7 @@ import {
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
+  SHOW_LABEL_OPTIONS,
   SHOW_NAME_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
@@ -84,8 +85,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'emptyValue',
-        name: 'Empty Value',
-        description: 'Allow Empty Value for multi-choice variable.',
+        name: 'Allow empty value',
+        description: 'Supports empty value for multi-choice variable.',
         defaultValue: false,
         settings: {
           options: ALLOW_EMPTY_VALUE_OPTIONS,
@@ -94,7 +95,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'persistent',
-        name: 'Persistent',
+        name: 'Persistent values',
         description: 'Allow to keep selected values if unavailable.',
         defaultValue: false,
         settings: {
@@ -108,7 +109,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         description: 'Display variable name',
         defaultValue: false,
         settings: {
-          options: PERSISTENT_OPTIONS,
+          options: SHOW_LABEL_OPTIONS,
         },
         showIf: (config) => showForButtonView(config),
       });
