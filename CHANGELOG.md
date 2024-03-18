@@ -12,7 +12,7 @@
 - Updated timescale data (#119)
 - Updated dependencies and Actions (#120)
 - Updated the default color contrast (#122)
-- Added favorite tabs option (#124)
+- Added saved selected group option (#124)
 
 ## 2.3.1 (2023-12-14)
 

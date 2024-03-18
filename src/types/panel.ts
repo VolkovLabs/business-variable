@@ -105,11 +105,11 @@ export interface TableViewOptions {
   favorites: boolean;
 
   /**
-   * Select Favorite Tab
+   * Save Selected Group
    *
    * @type {boolean}
    */
-  selectFavoriteTab: boolean;
+  saveSelectedGroup: boolean;
 
   /**
    * Show Variable Names

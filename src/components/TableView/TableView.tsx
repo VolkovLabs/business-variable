@@ -27,13 +27,13 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
    * Current Preselected Group
    */
   const currentPreselectedGroup = useMemo(() => {
-    if (options.selectFavoriteTab) {
+    if (options.saveSelectedGroup) {
       const selectedGroup = getValue();
       return options.groups?.find((group) => group.name === selectedGroup)?.name || options.groups?.[0]?.name;
     }
 
     return options.groups?.[0]?.name;
-  }, [getValue, options.groups, options.selectFavoriteTab]);
+  }, [getValue, options.groups, options.saveSelectedGroup]);
 
   /**
    * Current Levels Group

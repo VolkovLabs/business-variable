@@ -109,16 +109,16 @@ describe('Table View', () => {
     );
   });
 
-  it('should select the favorite group if selectFavoriteTab is true', () => {
-    const favoriteGroup = 'group2 favorite';
-    const groups = [{ name: 'group1' }, { name: favoriteGroup }, { name: 'group3' }];
+  it('should select the selected group if saveSelectedGroup is true', () => {
+    const selectedGroup = 'group2';
+    const groups = [{ name: 'group1' }, { name: selectedGroup }, { name: 'group3' }];
 
     render(
       getComponent({
         id: 15,
         options: {
           groups,
-          selectFavoriteTab: true,
+          saveSelectedGroup: true,
         } as any,
       })
     );

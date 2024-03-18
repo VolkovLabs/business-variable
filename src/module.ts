@@ -168,7 +168,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
-        path: 'selectFavoriteTab',
+        path: 'saveSelectedGroup',
         name: 'Save selected group',
         description: 'Saved in the browser storage for each user.',
         settings: {
