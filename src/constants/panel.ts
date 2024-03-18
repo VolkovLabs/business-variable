@@ -104,3 +104,11 @@ export const PERSISTENT_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Persistence enabled.' },
   { value: false, label: 'Disabled', description: 'Persistence disabled.' },
 ];
+
+/**
+ * Show label Options
+ */
+export const SHOW_LABEL_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Show labels enabled.' },
+  { value: false, label: 'Disabled', description: 'Show labels disabled.' },
+];

@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelData } from '@grafana/data';
-import { Alert, Button, useStyles2, useTheme2 } from '@grafana/ui';
+import { Alert, Button, InlineLabel, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
@@ -34,7 +34,15 @@ interface Props {
  */
 export const ButtonView: React.FC<Props> = ({
   data,
-  options: { variable: variableName, padding = 0, status, name, emptyValue = false, persistent = false } = {},
+  options: {
+    variable: variableName,
+    padding = 0,
+    status,
+    name,
+    emptyValue = false,
+    persistent = false,
+    showLabel = false,
+  } = {},
   eventBus,
 }) => {
   /**
@@ -101,6 +109,11 @@ export const ButtonView: React.FC<Props> = ({
       )}
       data-testid={TEST_IDS.buttonView.root}
     >
+      {showLabel && (
+        <InlineLabel className={styles.label} width="auto" transparent={true}>
+          {variable.label || variable.name}
+        </InlineLabel>
+      )}
       {variable.options.map((option) => {
         const value = option.value === ALL_VALUE_PARAMETER ? ALL_VALUE : option.value;
         const status = getStatus(value);
@@ -115,11 +128,12 @@ export const ButtonView: React.FC<Props> = ({
             key={value}
             variant="secondary"
             fill="outline"
-            style={{
-              borderColor: status.exist ? status.color : '',
-              backgroundColor: backgroundColor,
-              color: theme.colors.getContrastText(backgroundColor),
-            }}
+            className={css`
+              background-color: ${backgroundColor};
+              margin: ${theme.spacing(0.25)};
+              color: ${theme.colors.getContrastText(backgroundColor)};
+              border-color: ${status.exist ? status.color : ''};
+            `}
             onClick={() => {
               let value: string | string[] = option.value;
 

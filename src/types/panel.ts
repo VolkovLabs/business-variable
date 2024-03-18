@@ -186,4 +186,11 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   persistent: boolean;
+
+  /**
+   * Show Label
+   *
+   * @type {boolean}
+   */
+  showLabel: boolean;
 }

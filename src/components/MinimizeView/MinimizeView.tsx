@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
-import { Alert, InlineField } from '@grafana/ui';
+import { Alert, InlineField, useStyles2 } from '@grafana/ui';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
@@ -8,6 +8,7 @@ import { useRuntimeVariables } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
 import { TextVariable } from '../TextVariable';
+import { getStyles } from './MinimizeView.styles';
 
 /**
  * Properties
@@ -43,6 +44,11 @@ export const MinimizeView: React.FC<Props> = ({
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
 
   /**
+   * Styles
+   */
+  const styles = useStyles2(getStyles);
+
+  /**
    * No variable selected
    */
   if (!variable) {
@@ -67,7 +73,7 @@ export const MinimizeView: React.FC<Props> = ({
       `}
       data-testid={TEST_IDS.minimizeView.root}
     >
-      <InlineField grow label={variable.label || variable.name} labelWidth={labelWidth}>
+      <InlineField className={styles.field} grow={true} label={variable.label || variable.name} labelWidth={labelWidth}>
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
             <div style={{ maxWidth }}>
