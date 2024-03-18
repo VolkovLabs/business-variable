@@ -44,7 +44,7 @@ export const MinimizeView: React.FC<Props> = ({
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
 
   /**
-   * Styles and Theme
+   * Styles
    */
   const styles = useStyles2(getStyles);
 
