@@ -39,7 +39,10 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
 
           setStyle({
             width,
-            height: Math.min(Math.max(height - transformY, 0), visibleHeight),
+            height: Math.min(
+              Math.max(height - transformY, 0),
+              startY < 0 ? scrollableElementRect.height : visibleHeight
+            ),
             transform: `translateY(${transformY}px)`,
           });
 
