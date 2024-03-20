@@ -333,6 +333,9 @@ export const useTable = ({
                   id={`${prefix}-${row.original.value}`}
                   data-testid={TEST_IDS.table.control}
                   ref={(el) => {
+                    /**
+                     * Set indeterminate state for checkbox
+                     */
                     if (
                       el &&
                       el.type === 'checkbox' &&
