@@ -336,13 +336,9 @@ export const useTable = ({
                     /**
                      * Set indeterminate state for checkbox
                      */
-                    if (
-                      el &&
-                      el.type === 'checkbox' &&
-                      row.original.hasChildren &&
-                      !row.original.isAllChildrenSelected
-                    ) {
-                      el.indeterminate = true;
+                    if (el && el.type === 'checkbox') {
+                      const { childSelectedCount = 0, childValues } = row.original;
+                      el.indeterminate = (childValues?.length || 0) > childSelectedCount;
                     }
                   }}
                 />

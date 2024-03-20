@@ -1,9 +1,31 @@
-import { toDataFrame } from '@grafana/data';
+import { addRow, DataFrame, FieldType, toDataFrame } from '@grafana/data';
 
 import { TableItem } from '../types';
 import { convertTreeToPlain, favoriteFilter, getRows, statusSort, valueFilter } from './table';
 
 describe('Table Utils', () => {
+  /**
+   * Get Data Frame
+   */
+  const getDataFrame = <TObject extends Record<string, unknown>>(values: TObject[], refId = 'a'): DataFrame => {
+    const fields = Object.keys(values[0] || {}).map((key) => ({
+      name: key,
+      type: FieldType.string,
+      values: [],
+    }));
+
+    const dataFrame = toDataFrame({
+      refId,
+      fields,
+    });
+
+    for (const item of values) {
+      addRow(dataFrame, item);
+    }
+
+    return dataFrame;
+  };
+
   describe('getRows', () => {
     const defaultItem = {
       selected: false,
@@ -82,6 +104,7 @@ describe('Table Utils', () => {
           ...defaultItem,
           childValues: ['FL'],
           childFavoritesCount: 0,
+          childSelectedCount: 0,
           children: [
             {
               value: 'FL',
@@ -96,6 +119,7 @@ describe('Table Utils', () => {
           ...defaultItem,
           childValues: ['Tokio'],
           childFavoritesCount: 0,
+          childSelectedCount: 0,
           children: [
             {
               value: 'Tokio',
@@ -144,6 +168,7 @@ describe('Table Utils', () => {
           ...defaultItem,
           childValues: ['device1', 'device11'],
           childFavoritesCount: 0,
+          childSelectedCount: 0,
           children: [
             {
               value: 'FL',
@@ -151,6 +176,7 @@ describe('Table Utils', () => {
               childValues: ['device1'],
               ...defaultItem,
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'Tampa',
@@ -158,6 +184,7 @@ describe('Table Utils', () => {
                   childValues: ['device1'],
                   ...defaultItem,
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device1',
@@ -174,6 +201,7 @@ describe('Table Utils', () => {
               ...defaultItem,
               childValues: ['device11'],
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'New York',
@@ -181,6 +209,7 @@ describe('Table Utils', () => {
                   childValues: ['device11'],
                   ...defaultItem,
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device11',
@@ -199,6 +228,7 @@ describe('Table Utils', () => {
           ...defaultItem,
           childValues: ['device12'],
           childFavoritesCount: 0,
+          childSelectedCount: 0,
           children: [
             {
               value: 'Tokio',
@@ -206,6 +236,7 @@ describe('Table Utils', () => {
               ...defaultItem,
               childValues: ['device12'],
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'Tokio',
@@ -213,6 +244,7 @@ describe('Table Utils', () => {
                   ...defaultItem,
                   childValues: ['device12'],
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device12',
@@ -305,6 +337,7 @@ describe('Table Utils', () => {
           selectable: false,
           childValues: ['device1', 'device11'],
           childFavoritesCount: 0,
+          childSelectedCount: 0,
           children: [
             {
               value: 'FL',
@@ -313,6 +346,7 @@ describe('Table Utils', () => {
               ...defaultItem,
               selectable: false,
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'Tampa',
@@ -321,6 +355,7 @@ describe('Table Utils', () => {
                   ...defaultItem,
                   selectable: false,
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device1',
@@ -338,6 +373,7 @@ describe('Table Utils', () => {
               selectable: false,
               childValues: ['device11'],
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'New York',
@@ -346,6 +382,7 @@ describe('Table Utils', () => {
                   ...defaultItem,
                   selectable: false,
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device11',
@@ -414,6 +451,7 @@ describe('Table Utils', () => {
           isFavorite: false,
           childValues: ['device1', 'device11'],
           childFavoritesCount: 1,
+          childSelectedCount: 0,
           children: [
             {
               value: 'FL',
@@ -423,6 +461,7 @@ describe('Table Utils', () => {
               selectable: false,
               isFavorite: false,
               childFavoritesCount: 1,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'Tampa',
@@ -432,6 +471,7 @@ describe('Table Utils', () => {
                   selectable: false,
                   isFavorite: false,
                   childFavoritesCount: 1,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device1',
@@ -452,6 +492,7 @@ describe('Table Utils', () => {
               isFavorite: false,
               childValues: ['device11'],
               childFavoritesCount: 0,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'New York',
@@ -461,6 +502,7 @@ describe('Table Utils', () => {
                   selectable: false,
                   isFavorite: false,
                   childFavoritesCount: 0,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device11',
@@ -483,6 +525,7 @@ describe('Table Utils', () => {
           childValues: ['device12'],
           isFavorite: false,
           childFavoritesCount: 1,
+          childSelectedCount: 0,
           children: [
             {
               value: 'Tokio',
@@ -492,6 +535,7 @@ describe('Table Utils', () => {
               selectable: false,
               isFavorite: false,
               childFavoritesCount: 1,
+              childSelectedCount: 0,
               children: [
                 {
                   value: 'Tokio',
@@ -501,6 +545,7 @@ describe('Table Utils', () => {
                   selectable: false,
                   isFavorite: false,
                   childFavoritesCount: 1,
+                  childSelectedCount: 0,
                   children: [
                     {
                       value: 'device12',
@@ -515,6 +560,131 @@ describe('Table Utils', () => {
             },
           ],
         },
+      ]);
+    });
+
+    it('Should add childSelectedCount', () => {
+      const fields = [
+        { name: 'country', source: 'a' },
+        { name: 'state', source: 'a' },
+        { name: 'city', source: 'a' },
+        { name: 'name', source: 'a' },
+      ];
+      const frameA = getDataFrame([
+        {
+          country: 'USA',
+          state: 'FL',
+          city: 'Tampa',
+          name: 'device-usa-fl-tampa-1',
+        },
+        {
+          country: 'USA',
+          state: 'FL',
+          city: 'Tampa',
+          name: 'device-usa-fl-tampa-2',
+        },
+        {
+          country: 'USA',
+          state: 'NY',
+          city: 'New York',
+          name: 'device-usa-ny-ny-1',
+        },
+        {
+          country: 'Japan',
+          state: 'Tokio',
+          city: 'Tokio',
+          name: 'device-japan-tokyo-tokyo-1',
+        },
+      ]);
+
+      const getItem = (item: object, key: string): TableItem => {
+        const value = item[key as keyof typeof item];
+
+        return {
+          value,
+          selected: value !== 'device-usa-fl-tampa-2',
+          showStatus: false,
+          selectable: true,
+          isFavorite: false,
+          label: value,
+        };
+      };
+
+      const result = getRows({ series: [frameA] } as any, fields, getItem);
+
+      expect(result).toEqual([
+        expect.objectContaining({
+          value: 'USA',
+          childValues: ['device-usa-fl-tampa-1', 'device-usa-fl-tampa-2', 'device-usa-ny-ny-1'],
+          childSelectedCount: 2,
+          children: [
+            expect.objectContaining({
+              value: 'FL',
+              childValues: ['device-usa-fl-tampa-1', 'device-usa-fl-tampa-2'],
+              childSelectedCount: 1,
+              children: [
+                expect.objectContaining({
+                  value: 'Tampa',
+                  childSelectedCount: 1,
+                  childValues: ['device-usa-fl-tampa-1', 'device-usa-fl-tampa-2'],
+                  children: [
+                    expect.objectContaining({
+                      value: 'device-usa-fl-tampa-1',
+                      selected: true,
+                    }),
+                    expect.objectContaining({
+                      value: 'device-usa-fl-tampa-2',
+                      selected: false,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            expect.objectContaining({
+              value: 'NY',
+              childValues: ['device-usa-ny-ny-1'],
+              childSelectedCount: 1,
+              children: [
+                expect.objectContaining({
+                  value: 'New York',
+                  childSelectedCount: 1,
+                  childValues: ['device-usa-ny-ny-1'],
+                  children: [
+                    expect.objectContaining({
+                      value: 'device-usa-ny-ny-1',
+                      selected: true,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          value: 'Japan',
+          childValues: ['device-japan-tokyo-tokyo-1'],
+          childSelectedCount: 1,
+          children: [
+            expect.objectContaining({
+              value: 'Tokio',
+              childValues: ['device-japan-tokyo-tokyo-1'],
+              childSelectedCount: 1,
+              children: [
+                expect.objectContaining({
+                  value: 'Tokio',
+                  childSelectedCount: 1,
+                  childValues: ['device-japan-tokyo-tokyo-1'],
+                  children: [
+                    expect.objectContaining({
+                      value: 'device-japan-tokyo-tokyo-1',
+                      selected: true,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
       ]);
     });
 

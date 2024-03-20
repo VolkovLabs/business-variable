@@ -68,6 +68,13 @@ export interface TableItem {
   childValues?: string[];
 
   /**
+   * Child Selected Count
+   *
+   * @type {number}
+   */
+  childSelectedCount?: number;
+
+  /**
    * Can be added to favorites
    *
    * @type {boolean}
@@ -101,18 +108,4 @@ export interface TableItem {
    * @type {string}
    */
   label: string;
-
-  /**
-   * Is all children selected
-   *
-   * @type {boolean}
-   */
-  isAllChildrenSelected?: boolean;
-
-  /**
-   * Has Children
-   *
-   * @type {boolean}
-   */
-  hasChildren?: boolean;
 }

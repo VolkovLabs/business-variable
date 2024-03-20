@@ -94,8 +94,12 @@ const getGroupArray = (
     return {
       ...item,
       childValues: toPlainArray(children, (child) => child.childValues || child.label, item.childValues || []),
+      childSelectedCount: children.reduce(
+        (acc, child) => acc + (child.childSelectedCount ?? (child.selected ? 1 : 0)),
+        item.childSelectedCount || 0
+      ),
       childFavoritesCount: children.reduce(
-        (acc, child) => acc + (child.childFavoritesCount || child.isFavorite ? 1 : 0),
+        (acc, child) => acc + (child.childFavoritesCount || (child.isFavorite ? 1 : 0)),
         item.childFavoritesCount || 0
       ),
       children,
@@ -190,8 +194,6 @@ export const getItemWithStatus = (
   return {
     value: item.value,
     selected: selectable ? isSelectedAll || item.selected || isAllChildrenSelected : false,
-    isAllChildrenSelected,
-    hasChildren: !!children,
     showStatus: status.exist,
     statusColor: status.exist ? status.color : undefined,
     variable: item.variable,
