@@ -1,5 +1,5 @@
 import { EventBus, PanelData } from '@grafana/data';
-import { Button, Checkbox, Icon, useTheme2 } from '@grafana/ui';
+import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useCallback, useMemo } from 'react';
 
@@ -321,40 +321,29 @@ export const useTable = ({
               style={{ paddingLeft: theme.spacing(row.depth * 1.5) }}
               data-testid={TEST_IDS.table.cell(value, row.depth)}
             >
-              {row.original.selectable &&
-                (isVariableWithOptions(runtimeVariable) ? (
-                  runtimeVariable?.multi ? (
-                    <Checkbox
-                      value={row.original.selected}
-                      className={styles.selectControl}
-                      id={`${prefix}-${row.original.value}`}
-                      data-testid={TEST_IDS.table.control}
-                      onChange={() => onChange(row.original)}
-                      onClick={() => onClick(row.original)}
-                      indeterminate={row.original.hasChildren && !row.original.isAllChildrenSelected}
-                    />
-                  ) : (
-                    <input
-                      type="radio"
-                      onChange={() => onChange(row.original)}
-                      onClick={() => onClick(row.original)}
-                      checked={row.original.selected}
-                      className={styles.selectControl}
-                      id={`${prefix}-${row.original.value}`}
-                      data-testid={TEST_IDS.table.control}
-                    />
-                  )
-                ) : (
-                  <input
-                    type="text"
-                    onChange={() => onChange(row.original)}
-                    onClick={() => onClick(row.original)}
-                    checked={row.original.selected}
-                    className={styles.selectControl}
-                    id={`${prefix}-${row.original.value}`}
-                    data-testid={TEST_IDS.table.control}
-                  />
-                ))}
+              {row.original.selectable && (
+                <input
+                  type={
+                    isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
+                  }
+                  onChange={() => onChange(row.original)}
+                  onClick={() => onClick(row.original)}
+                  checked={row.original.selected}
+                  className={styles.selectControl}
+                  id={`${prefix}-${row.original.value}`}
+                  data-testid={TEST_IDS.table.control}
+                  ref={(el) => {
+                    if (
+                      el &&
+                      el.type === 'checkbox' &&
+                      row.original.hasChildren &&
+                      !row.original.isAllChildrenSelected
+                    ) {
+                      el.indeterminate = true;
+                    }
+                  }}
+                />
+              )}
 
               {row.getCanExpand() && (
                 <Button

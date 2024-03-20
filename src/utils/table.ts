@@ -169,6 +169,7 @@ export const getItemWithStatus = (
   {
     status,
     children,
+    isSelectedAll,
     favoritesEnabled,
     groupSelection,
   }: {
@@ -188,7 +189,7 @@ export const getItemWithStatus = (
 
   return {
     value: item.value,
-    selected: selectable ? item.selected || isAllChildrenSelected : false,
+    selected: selectable ? isSelectedAll || item.selected || isAllChildrenSelected : false,
     isAllChildrenSelected,
     hasChildren: !!children,
     showStatus: status.exist,
