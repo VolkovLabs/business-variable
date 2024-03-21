@@ -33,7 +33,7 @@ const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => 
 ));
 
 /**
- * Mock Page Toolbar
+ * Mock Button Row Toolbar
  */
 const ToolbarButtonRow = jest.fn(({ leftItems, children }) => {
   return (
