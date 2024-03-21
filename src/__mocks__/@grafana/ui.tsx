@@ -32,7 +32,20 @@ const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => 
   </select>
 ));
 
+/**
+ * Mock Page Toolbar
+ */
+const ToolbarButtonRow = jest.fn(({ leftItems, children }) => {
+  return (
+    <>
+      {leftItems}
+      {children}
+    </>
+  );
+});
+
 module.exports = {
   ...actual,
+  ToolbarButtonRow,
   Select,
 };
