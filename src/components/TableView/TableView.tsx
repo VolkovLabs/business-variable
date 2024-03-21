@@ -126,6 +126,25 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   const styles = getStyles(theme);
 
   /**
+   * Show selected group first
+   */
+  const sortedGroups = useMemo(() => {
+    if (!options.groups) {
+      return [];
+    }
+
+    const activeGroup = options.groups.find((group) => group.name === currentGroup);
+
+    if (!activeGroup) {
+      return options.groups;
+    }
+
+    const withoutActive = options.groups.filter((group) => group.name !== currentGroup);
+
+    return [activeGroup, ...withoutActive];
+  }, [currentGroup, options.groups]);
+
+  /**
    * Return
    */
   return (
@@ -163,10 +182,10 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
           ref={scrollableContainerRef}
           data-testid={TEST_IDS.tableView.content}
         >
-          {options.groups?.length > 1 && (
+          {sortedGroups.length > 1 && (
             <div ref={headerRef} className={styles.header}>
-              <ToolbarButtonRow alignment="left" className={styles.toolbar}>
-                {options.groups?.map((group) => (
+              <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
+                {sortedGroups.map((group, index) => (
                   <ToolbarButton
                     key={group.name}
                     variant={currentGroup === group.name ? 'active' : 'default'}
@@ -175,6 +194,10 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
                       saveValue(group.name);
                     }}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
+                    className={styles.toolbarButton}
+                    style={{
+                      maxWidth: index === 0 ? width - 60 : undefined,
+                    }}
                   >
                     {group.name}
                   </ToolbarButton>

@@ -50,9 +50,19 @@ export const getStyles = (theme: GrafanaTheme2) => {
     toolbar: css`
       div > div {
         flex-direction: column;
+        max-width: 100%;
       }
       padding: ${theme.spacing(0.5)} 0 ${theme.spacing(0.5)} ${theme.spacing(1)};
       border-bottom: 1px solid ${theme.colors.border.weak};
+    `,
+    toolbarButton: css`
+      overflow: hidden;
+      max-width: 100%;
+
+      > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     `,
   };
 };
