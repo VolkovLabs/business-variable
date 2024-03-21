@@ -94,8 +94,12 @@ const getGroupArray = (
     return {
       ...item,
       childValues: toPlainArray(children, (child) => child.childValues || child.label, item.childValues || []),
+      childSelectedCount: children.reduce(
+        (acc, child) => acc + (child.childSelectedCount ?? (child.selected ? 1 : 0)),
+        item.childSelectedCount || 0
+      ),
       childFavoritesCount: children.reduce(
-        (acc, child) => acc + (child.childFavoritesCount || child.isFavorite ? 1 : 0),
+        (acc, child) => acc + (child.childFavoritesCount || (child.isFavorite ? 1 : 0)),
         item.childFavoritesCount || 0
       ),
       children,

@@ -332,6 +332,15 @@ export const useTable = ({
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
                   data-testid={TEST_IDS.table.control}
+                  ref={(el) => {
+                    /**
+                     * Set indeterminate state for checkbox
+                     */
+                    if (el && el.type === 'checkbox') {
+                      const { childSelectedCount = 0, childValues } = row.original;
+                      el.indeterminate = (childValues?.length || 0) > childSelectedCount;
+                    }
+                  }}
                 />
               )}
 
