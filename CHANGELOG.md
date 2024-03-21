@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.5.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Added the indeterminate state to the checkboxes (#127)
+
 ## 2.4.0 (2024-03-17)
 
 ### Breaking changes
