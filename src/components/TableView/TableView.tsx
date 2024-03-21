@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
+import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
@@ -165,20 +165,21 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
         >
           {options.groups?.length > 1 && (
             <div ref={headerRef} className={styles.header}>
-              <TabsBar>
+              <ToolbarButtonRow alignment="left" className={styles.toolbar}>
                 {options.groups?.map((group) => (
-                  <Tab
+                  <ToolbarButton
                     key={group.name}
-                    label={group.name}
-                    onChangeTab={() => {
+                    variant={currentGroup === group.name ? 'active' : 'default'}
+                    onClick={() => {
                       setCurrentGroup(group.name);
                       saveValue(group.name);
                     }}
-                    active={currentGroup === group.name}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
-                  />
+                  >
+                    {group.name}
+                  </ToolbarButton>
                 ))}
-              </TabsBar>
+              </ToolbarButtonRow>
             </div>
           )}
           <Table

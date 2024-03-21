@@ -12,11 +12,13 @@ export const getStyles = (theme: GrafanaTheme2) => {
     content: css`
       position: absolute;
       overflow: auto;
+      overflow-x: hidden;
     `,
     header: css`
       position: sticky;
       top: 0;
       background-color: ${theme.colors.background.primary};
+      z-index: 120;
     `,
     rowContent: css`
       display: flex;
@@ -44,6 +46,13 @@ export const getStyles = (theme: GrafanaTheme2) => {
       border-radius: 50%;
       margin-right: ${theme.spacing(1)};
       flex: none;
+    `,
+    toolbar: css`
+      div > div {
+        flex-direction: column;
+      }
+      padding: ${theme.spacing(0.5)} 0 ${theme.spacing(0.5)} ${theme.spacing(1)};
+      border-bottom: 1px solid ${theme.colors.border.weak};
     `,
   };
 };

@@ -28,6 +28,7 @@ export const getStyles = (theme: GrafanaTheme2) => {
       position: sticky;
       background-color: ${theme.colors.background.primary};
       box-shadow: 0 1px ${theme.colors.border.weak};
+      z-index: 100;
     `,
     headerCell: css`
       padding: ${theme.spacing(1)};
