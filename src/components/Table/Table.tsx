@@ -146,6 +146,7 @@ export const Table = <TTableData extends object>({
     getScrollElement: useCallback(() => scrollableContainerRef.current, [scrollableContainerRef]),
     count: rows.length,
     estimateSize: useCallback(() => 38, []),
+    measureElement: useCallback((el: HTMLElement | HTMLTableRowElement) => el.offsetHeight, []),
     overscan: 10,
   });
 
@@ -239,7 +240,11 @@ export const Table = <TTableData extends object>({
               data-testid={TEST_IDS.table.row(row.id)}
             >
               {row.getVisibleCells().map((cell) => {
-                return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
+                return (
+                  <td data-index={virtualRow.index} ref={rowVirtualizer.measureElement} key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
               })}
             </tr>
           );

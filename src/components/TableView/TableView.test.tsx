@@ -356,8 +356,9 @@ describe('Table View', () => {
 
       /**
        * Virtualizer calls scrollTo once so just check if component called additional
+       * Virtualizer doesn`t call scrollTo once with dynamically measured elements.
        */
-      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(2);
+      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
     });
 
     it('Should not scroll to selected element if panel is focused', () => {
@@ -421,8 +422,9 @@ describe('Table View', () => {
 
       /**
        * Virtualizer calls scrollTo once so just check if only called by it
+       * Virtualizer doesn`t call scrollTo once with dynamically measured elements.
        */
-      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
+      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(0);
     });
   });
 });
