@@ -41,7 +41,27 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
    * Current values
    */
   const values = useMemo(() => {
-    return variable.options.filter((option) => option.selected).map((option) => option.value);
+    const selectedValues = variable.options.filter((option) => option.selected).map((option) => option.value);
+    let customValues: string[] = [];
+
+    /**
+     * Check custom values.
+     * Custom values could be string or string[]
+     */
+    if (variable?.current?.text) {
+      if (!Array.isArray(variable.current.text)) {
+        selectedValues.push(variable.current.text);
+      } else {
+        customValues = variable.current.text
+          .filter((value: string) => !selectedValues.includes(value))
+          .filter((value) => value !== 'All');
+      }
+    }
+
+    /**
+     * Return custom values with selected values
+     */
+    return [...selectedValues, ...customValues];
   }, [variable]);
 
   /**
@@ -86,6 +106,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
       options={options}
       isMulti={variable.multi}
       value={variable.multi ? values : values[0] || null}
+      allowCustomValue={true}
     />
   );
 };

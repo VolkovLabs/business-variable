@@ -325,4 +325,112 @@ describe('Options Variable', () => {
       expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object));
     });
   });
+
+  describe('OptionsVariable', () => {
+    const allOption = {
+      text: ALL_VALUE,
+      value: ALL_VALUE_PARAMETER,
+      selected: false,
+    };
+    const option1 = {
+      text: 'Option 1',
+      value: 'option1',
+      selected: false,
+    };
+    const option2 = {
+      text: 'Option 2',
+      value: 'option2',
+      selected: false,
+    };
+    const multiVariable = {
+      multi: true,
+      includeAll: true,
+      options: [allOption, option1, option2],
+    };
+    const arrayCustomOptions = ['Option 2', 'Option 4'];
+    const currentOptions = {
+      text: 'Option 5',
+    };
+
+    it('Should render component', () => {
+      render(
+        getComponent({
+          variable: {
+            ...multiVariable,
+            ...currentOptions,
+            current: {
+              ...currentOptions,
+            },
+            options: [
+              allOption,
+              {
+                ...option1,
+                selected: true,
+              },
+              {
+                ...option2,
+                selected: true,
+              },
+            ],
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toBeInTheDocument();
+    });
+
+    it('should push array custom value to selectedValues', () => {
+      render(
+        getComponent({
+          variable: {
+            ...multiVariable,
+            current: {
+              text: arrayCustomOptions,
+            },
+            options: [
+              allOption,
+              {
+                ...option1,
+                selected: true,
+              },
+              {
+                ...option2,
+                selected: true,
+              },
+            ],
+          } as any,
+        })
+      );
+
+      fireEvent.change(selectors.root(), { target: { values: [option1.value] } });
+      expect(selectVariableValues).toHaveBeenCalledWith([option2.value, ...arrayCustomOptions], expect.any(Object));
+    });
+
+    it('should push string custom value to selectedValues', () => {
+      render(
+        getComponent({
+          variable: {
+            ...multiVariable,
+            current: {
+              ...currentOptions,
+            },
+            options: [
+              allOption,
+              {
+                ...option1,
+                selected: true,
+              },
+              {
+                ...option2,
+                selected: true,
+              },
+            ],
+          } as any,
+        })
+      );
+
+      fireEvent.change(selectors.root(), { target: { values: [option1.value] } });
+      expect(selectVariableValues).toHaveBeenCalledWith([option2.value, currentOptions.text], expect.any(Object));
+    });
+  });
 });
