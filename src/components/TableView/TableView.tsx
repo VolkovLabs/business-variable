@@ -135,6 +135,9 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
 
     const activeGroup = options.groups.find((group) => group.name === currentGroup);
 
+    /**
+     * Selected group is not found
+     */
     if (!activeGroup) {
       return options.groups;
     }
