@@ -13,25 +13,38 @@ import { updateVariableOptions } from '../../utils';
 interface Props {
   /**
    * Variable
+   *
+   * @type {QueryVariableModel | CustomVariableModel}
    */
   variable: QueryVariableModel | CustomVariableModel;
 
   /**
    * Empty Value
+   *
+   * @type {boolean}
    */
   emptyValue: boolean;
 
   /**
    * Persistent
+   *
+   * @type {boolean}
    */
   persistent: boolean;
+
+  /**
+   * Custom Value
+   *
+   * @type {boolean}
+   */
+  customValue: boolean;
 }
 
 /**
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persistent }) => {
+export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persistent, customValue }) => {
   /**
    * Persistent storage
    */
@@ -41,27 +54,9 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
    * Current values
    */
   const values = useMemo(() => {
-    const selectedValues = variable.options.filter((option) => option.selected).map((option) => option.value);
-    let customValues: string[] = [];
+    const value = variable.current.value;
 
-    /**
-     * Check custom values.
-     * Custom values could be string or string[]
-     */
-    if (variable?.current?.text) {
-      if (!Array.isArray(variable.current.text)) {
-        selectedValues.push(variable.current.text);
-      } else {
-        customValues = variable.current.text
-          .filter((value: string) => !selectedValues.includes(value))
-          .filter((value) => value !== 'All');
-      }
-    }
-
-    /**
-     * Return custom values with selected values
-     */
-    return [...selectedValues, ...customValues];
+    return Array.isArray(value) ? value : [value];
   }, [variable]);
 
   /**
@@ -90,14 +85,32 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
    * Options
    */
   const options = useMemo(() => {
-    return variable.options.map((option) => {
+    const options = variable.options.map((option) => {
       return {
         label: option.text,
         value: option.value,
-        ariaLabel: TEST_IDS.optionsVariable.option(option.value),
       };
     });
-  }, [variable.options]);
+
+    /**
+     * Add options for custom entered values
+     */
+    values.forEach((value) => {
+      /**
+       * Skip for already exist option
+       */
+      if (options.some((option) => option.value === value)) {
+        return;
+      }
+
+      options.push({
+        label: value,
+        value,
+      });
+    });
+
+    return options;
+  }, [values, variable.options]);
 
   return (
     <Select
@@ -106,7 +119,7 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
       options={options}
       isMulti={variable.multi}
       value={variable.multi ? values : values[0] || null}
-      allowCustomValue={true}
+      allowCustomValue={customValue}
     />
   );
 };

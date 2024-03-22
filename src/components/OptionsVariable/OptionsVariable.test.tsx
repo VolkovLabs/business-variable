@@ -1,3 +1,4 @@
+import { Select } from '@grafana/ui';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
@@ -56,6 +57,8 @@ describe('Options Variable', () => {
 
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
+
+    jest.mocked(Select).mockClear();
   });
 
   describe('Single variable', () => {
@@ -70,6 +73,9 @@ describe('Options Variable', () => {
       selected: false,
     };
     const singleVariable = {
+      current: {
+        value: '',
+      },
       multi: false,
       options: [option1, option2],
     };
@@ -85,6 +91,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...singleVariable,
+            current: {
+              value: option1.value,
+            },
             options: [
               {
                 ...option1,
@@ -160,6 +169,9 @@ describe('Options Variable', () => {
       selected: false,
     };
     const multiVariable = {
+      current: {
+        value: [],
+      },
       multi: true,
       includeAll: true,
       options: [allOption, option1, option2],
@@ -176,6 +188,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               {
                 ...option1,
@@ -216,6 +231,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [ALL_VALUE_PARAMETER],
+            },
             options: [
               {
                 ...allOption,
@@ -260,6 +278,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               allOption,
               {
@@ -282,6 +303,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               allOption,
               {
@@ -305,6 +329,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value, option2.value],
+            },
             options: [
               allOption,
               {
@@ -326,111 +353,33 @@ describe('Options Variable', () => {
     });
   });
 
-  describe('OptionsVariable', () => {
-    const allOption = {
-      text: ALL_VALUE,
-      value: ALL_VALUE_PARAMETER,
-      selected: false,
-    };
-    const option1 = {
-      text: 'Option 1',
-      value: 'option1',
-      selected: false,
-    };
-    const option2 = {
-      text: 'Option 2',
-      value: 'option2',
-      selected: false,
-    };
-    const multiVariable = {
-      multi: true,
-      includeAll: true,
-      options: [allOption, option1, option2],
-    };
-    const arrayCustomOptions = ['Option 2', 'Option 4'];
-    const currentOptions = {
-      text: 'Option 5',
-    };
+  it('Should add custom options', () => {
+    render(
+      getComponent({
+        variable: {
+          multi: true,
+          current: {
+            value: ['hello', 'world'],
+          },
+          options: [],
+        } as any,
+        customValue: true,
+      })
+    );
 
-    it('Should render component', () => {
-      render(
-        getComponent({
-          variable: {
-            ...multiVariable,
-            ...currentOptions,
-            current: {
-              ...currentOptions,
-            },
-            options: [
-              allOption,
-              {
-                ...option1,
-                selected: true,
-              },
-              {
-                ...option2,
-                selected: true,
-              },
-            ],
-          } as any,
-        })
-      );
-
-      expect(selectors.root()).toBeInTheDocument();
-    });
-
-    it('should push array custom value to selectedValues', () => {
-      render(
-        getComponent({
-          variable: {
-            ...multiVariable,
-            current: {
-              text: arrayCustomOptions,
-            },
-            options: [
-              allOption,
-              {
-                ...option1,
-                selected: true,
-              },
-              {
-                ...option2,
-                selected: true,
-              },
-            ],
-          } as any,
-        })
-      );
-
-      fireEvent.change(selectors.root(), { target: { values: [option1.value] } });
-      expect(selectVariableValues).toHaveBeenCalledWith([option2.value, ...arrayCustomOptions], expect.any(Object));
-    });
-
-    it('should push string custom value to selectedValues', () => {
-      render(
-        getComponent({
-          variable: {
-            ...multiVariable,
-            current: {
-              ...currentOptions,
-            },
-            options: [
-              allOption,
-              {
-                ...option1,
-                selected: true,
-              },
-              {
-                ...option2,
-                selected: true,
-              },
-            ],
-          } as any,
-        })
-      );
-
-      fireEvent.change(selectors.root(), { target: { values: [option1.value] } });
-      expect(selectVariableValues).toHaveBeenCalledWith([option2.value, currentOptions.text], expect.any(Object));
-    });
+    /**
+     * Check if select has custom options based on values
+     */
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        allowCustomValue: true,
+        value: ['hello', 'world'],
+        options: [
+          { label: 'hello', value: 'hello' },
+          { label: 'world', value: 'world' },
+        ],
+      }),
+      expect.anything()
+    );
   });
 });
