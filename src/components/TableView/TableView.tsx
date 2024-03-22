@@ -22,18 +22,26 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
    * useLocalStorage Hook
    */
   const { get: getValue, update: saveValue, remove: removeValue } = useLocalStorage(`volkovlabs.variable.panel.${id}`);
+  const {
+    get: getCrossValue,
+    update: saveCrossValue,
+    remove: removeCrossValue,
+  } = useLocalStorage(options.uniqueCrossKey);
 
   /**
    * Current Preselected Group
    */
   const currentPreselectedGroup = useMemo(() => {
     if (options.saveSelectedGroup) {
-      const selectedGroup = getValue();
-      return options.groups?.find((group) => group.name === selectedGroup)?.name || options.groups?.[0]?.name;
+      /**
+       * Check if the uniqueCrossKey has been saved. The uniqueCrossKey is used as a link between dashboards.
+       */
+      const savedGroupValue = getCrossValue() || getValue();
+      return options.groups?.find((group) => group.name === savedGroupValue)?.name || options.groups?.[0]?.name;
     }
 
     return options.groups?.[0]?.name;
-  }, [getValue, options.groups, options.saveSelectedGroup]);
+  }, [getCrossValue, getValue, options.groups, options.saveSelectedGroup]);
 
   /**
    * Current Levels Group
@@ -56,9 +64,10 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   useEffect(() => {
     if (!options.groups?.some((group) => group.name === currentGroup)) {
       removeValue();
+      removeCrossValue();
       setCurrentGroup(options.groups?.[0]?.name);
     }
-  }, [currentGroup, id, options.groups, removeValue]);
+  }, [currentGroup, id, options.groups, removeCrossValue, removeValue]);
 
   /**
    * Table config
@@ -195,6 +204,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
                     onClick={() => {
                       setCurrentGroup(group.name);
                       saveValue(group.name);
+                      saveCrossValue(group.name);
                     }}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
                     className={styles.toolbarButton}

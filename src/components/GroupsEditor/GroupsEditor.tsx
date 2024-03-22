@@ -293,7 +293,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
           <Input
             placeholder="Unique name"
             value={newGroup}
-            onChange={(event) => setNewGroup(event.currentTarget.value)}
+            onChange={(event) => setNewGroup(event.currentTarget.value.trim())}
             data-testid={TEST_IDS.groupsEditor.newItemName}
           />
         </InlineField>

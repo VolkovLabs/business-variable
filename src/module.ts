@@ -242,6 +242,18 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && config.groups?.length > 1,
+      })
+      .addTextInput({
+        path: 'uniqueCrossKey',
+        name: 'Unique Cross Key',
+        description:
+          'Saved in the browser storage for each user. Set value to preserve the selection of the group between dashboards. The value must match in the linked panels',
+        defaultValue: '',
+        settings: {
+          placeholder: 'dashboard_panel_key',
+        },
+        showIf: (config) => showForTableView(config) && config.saveSelectedGroup,
+        category: ['Layout'],
       });
 
     builder.addSelect({

@@ -123,7 +123,7 @@ describe('Table View', () => {
       })
     );
 
-    expect(useLocalStorage).toHaveBeenCalledTimes(4);
+    expect(useLocalStorage).toHaveBeenCalledTimes(8);
   });
 
   it('Should use first group if already selected group removed', () => {

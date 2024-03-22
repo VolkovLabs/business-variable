@@ -193,4 +193,11 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   showLabel: boolean;
+
+  /**
+   * Unique Cross Key
+   *
+   * @type {string}
+   */
+  uniqueCrossKey: string;
 }
