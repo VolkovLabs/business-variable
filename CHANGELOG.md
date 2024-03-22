@@ -6,6 +6,7 @@
 
 - Added the indeterminate state to the checkboxes (#127)
 - Updated Tree View scrolling (#128)
+- Add Responsive tabs (#130)
 
 ## 2.4.0 (2024-03-17)
 

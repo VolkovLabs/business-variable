@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { PanelProps } from '@grafana/data';
-import { Alert, ClickOutsideWrapper, Tab, TabsBar, useTheme2 } from '@grafana/ui';
+import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
@@ -126,6 +126,28 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   const styles = getStyles(theme);
 
   /**
+   * Show selected group first
+   */
+  const sortedGroups = useMemo(() => {
+    if (!options.groups) {
+      return [];
+    }
+
+    const activeGroup = options.groups.find((group) => group.name === currentGroup);
+
+    /**
+     * Selected group is not found
+     */
+    if (!activeGroup) {
+      return options.groups;
+    }
+
+    const withoutActive = options.groups.filter((group) => group.name !== currentGroup);
+
+    return [activeGroup, ...withoutActive];
+  }, [currentGroup, options.groups]);
+
+  /**
    * Return
    */
   return (
@@ -163,22 +185,27 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
           ref={scrollableContainerRef}
           data-testid={TEST_IDS.tableView.content}
         >
-          {options.groups?.length > 1 && (
+          {sortedGroups.length > 1 && (
             <div ref={headerRef} className={styles.header}>
-              <TabsBar>
-                {options.groups?.map((group) => (
-                  <Tab
+              <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
+                {sortedGroups.map((group, index) => (
+                  <ToolbarButton
                     key={group.name}
-                    label={group.name}
-                    onChangeTab={() => {
+                    variant={currentGroup === group.name ? 'active' : 'default'}
+                    onClick={() => {
                       setCurrentGroup(group.name);
                       saveValue(group.name);
                     }}
-                    active={currentGroup === group.name}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
-                  />
+                    className={styles.toolbarButton}
+                    style={{
+                      maxWidth: index === 0 ? width - 60 : undefined,
+                    }}
+                  >
+                    {group.name}
+                  </ToolbarButton>
                 ))}
-              </TabsBar>
+              </ToolbarButtonRow>
             </div>
           )}
           <Table
