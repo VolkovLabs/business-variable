@@ -7,7 +7,7 @@
 - Added the indeterminate state to the checkboxes (#127)
 - Updated Tree View scrolling (#128)
 - Add Responsive tabs (#130)
-- Add support new items in Variable (minimize) (#134)
+- Add support new items in Variable (minimize mode) (#134)
 
 ## 2.4.0 (2024-03-17)
 
