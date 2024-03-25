@@ -167,6 +167,13 @@ export interface PanelOptions extends TableViewOptions {
   emptyValue: boolean;
 
   /**
+   * Custom Value
+   *
+   * @type {boolean}
+   */
+  customValue: boolean;
+
+  /**
    * Group Selection
    *
    * @type {boolean}

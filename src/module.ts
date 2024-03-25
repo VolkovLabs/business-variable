@@ -3,6 +3,7 @@ import { getTemplateSrv } from '@grafana/runtime';
 
 import { GroupsEditor, VariablePanel } from './components';
 import {
+  ALLOW_CUSTOM_VALUE_OPTIONS,
   ALLOW_EMPTY_VALUE_OPTIONS,
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
@@ -112,6 +113,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: SHOW_LABEL_OPTIONS,
         },
         showIf: (config) => showForButtonView(config),
+      })
+      .addRadio({
+        path: 'customValue',
+        name: 'Allow custom values',
+        description: 'Supports custom values for the variable.',
+        defaultValue: false,
+        settings: {
+          options: ALLOW_CUSTOM_VALUE_OPTIONS,
+        },
+        showIf: (config) => showForMinimizeView(config),
       });
 
     builder
