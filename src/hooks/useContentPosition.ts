@@ -1,9 +1,19 @@
-import { CSSProperties, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, RefObject, useLayoutEffect, useRef, useState } from 'react';
 
 /**
  * Content Position
  */
-export const useContentPosition = ({ width, height, sticky }: { width: number; height: number; sticky: boolean }) => {
+export const useContentPosition = ({
+  width,
+  height,
+  sticky,
+  scrollableContainerRef,
+}: {
+  width: number;
+  height: number;
+  sticky: boolean;
+  scrollableContainerRef: RefObject<HTMLDivElement>;
+}) => {
   /**
    * Element ref
    */
@@ -65,23 +75,29 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
 
           const scrollableElementRect = scrollableElement.getBoundingClientRect();
           let transformY = Math.abs(Math.min(startY - scrollableElementRect.top, 0));
+          const visibleHeight = scrollableElementRect.height - startY + scrollableElementRect.top;
+          let calculateHeight = Math.min(
+            Math.max(height - transformY, 0),
+            startY < 0 ? scrollableElementRect.height : visibleHeight
+          );
 
           /**
            * Calculate transformY with grafana variables section
            */
           if (isUseSection && top <= bottomPosition) {
             transformY = Math.abs(transformY + sectionHeight);
+            calculateHeight = Math.abs(calculateHeight - sectionHeight);
           }
 
-          const visibleHeight = scrollableElementRect.height - startY + scrollableElementRect.top;
+          requestAnimationFrame(() => {
+            if (scrollableContainerRef.current) {
+              scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
+              scrollableContainerRef.current.style.height = `${calculateHeight}px`;
+            }
+          });
 
           setStyle({
             width,
-            height: Math.min(
-              Math.max(height - transformY, 0),
-              startY < 0 ? scrollableElementRect.height : visibleHeight
-            ),
-            transform: `translateY(${transformY}px)`,
           });
 
           return;
@@ -108,7 +124,7 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
     }
 
     return () => {};
-  }, [containerRef, width, height, sticky]);
+  }, [containerRef, width, height, sticky, scrollableContainerRef]);
 
   return {
     containerRef,

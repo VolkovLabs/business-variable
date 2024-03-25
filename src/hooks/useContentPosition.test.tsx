@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { useContentPosition } from './useContentPosition';
 
@@ -13,15 +13,29 @@ const InTestIds = {
   grafanaVariablesSection: 'grafanaVariablesSection',
 };
 
+/**
+ *  Mock requestAnimationFrame and its callback
+ */
+const requestAnimationFrameMock = jest.fn((callback) => {
+  callback();
+  return 1;
+});
+window.requestAnimationFrame = requestAnimationFrameMock;
+
 describe('Use Content Position', () => {
   /**
    * Tested Component
    */
   const Component = (props: { width: number; height: number; sticky: boolean }) => {
-    const { containerRef, style } = useContentPosition(props);
+    /**
+     * Element ref
+     */
+    const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
+
+    const { containerRef, style } = useContentPosition({ ...props, scrollableContainerRef });
     return (
       <div ref={containerRef} style={{ width: props.width, height: props.height }}>
-        <div data-testid={InTestIds.content} style={style} />
+        <div data-testid={InTestIds.content} ref={scrollableContainerRef} style={style} />
       </div>
     );
   };
@@ -77,6 +91,11 @@ describe('Use Content Position', () => {
     );
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
 
+    /**
+     * Assert that requestAnimationFrame was called
+     */
+    expect(requestAnimationFrameMock).toHaveBeenCalledTimes(2);
+
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
   });
 
@@ -122,6 +141,11 @@ describe('Use Content Position', () => {
         }) as any
     );
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
+
+    /**
+     * Assert that requestAnimationFrame was called
+     */
+    expect(requestAnimationFrameMock).toHaveBeenCalledTimes(4);
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(300px)' });
   });

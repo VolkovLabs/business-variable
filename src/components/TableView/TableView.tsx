@@ -66,15 +66,6 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   const { tableData, columns, getSubRows } = useTable({ data, options, eventBus, levels: currentLevels });
 
   /**
-   * Sticky position
-   */
-  const { containerRef, style } = useContentPosition({
-    width,
-    height,
-    sticky: options.sticky,
-  });
-
-  /**
    * Content Sizes
    */
   const {
@@ -85,6 +76,16 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
     tableHeaderRef,
     tableContentTopOffset,
   } = useContentSizes({ height, options, tableData });
+
+  /**
+   * Sticky position
+   */
+  const { containerRef, style } = useContentPosition({
+    width,
+    height,
+    sticky: options.sticky,
+    scrollableContainerRef,
+  });
 
   /**
    * First selected row ref
