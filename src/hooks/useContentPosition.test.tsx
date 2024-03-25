@@ -10,6 +10,7 @@ const InTestIds = {
   scrollableElement: 'scrollable-element',
   container: 'container',
   content: 'content',
+  grafanaVariablesSection: 'grafanaVariablesSection',
 };
 
 describe('Use Content Position', () => {
@@ -65,17 +66,63 @@ describe('Use Content Position', () => {
         ({
           y: -100,
           height: 200,
-        } as any)
+        }) as any
     );
     scrollableElement.getBoundingClientRect = jest.fn(
       () =>
         ({
           top: 100,
           height: 1000,
-        } as any)
+        }) as any
     );
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
+  });
+
+  it('Should follow on scroll with grafana variables section', () => {
+    render(
+      <ScrollableContainer style={{ height: 1000 }}>
+        <>
+          <section
+            aria-label="Dashboard submenu"
+            data-testid={InTestIds.grafanaVariablesSection}
+            style={{ height: 80, position: 'fixed' }}
+          ></section>
+          <Component width={200} height={200} sticky={true} />
+        </>
+      </ScrollableContainer>
+    );
+
+    const scrollableElement = screen.getByTestId(InTestIds.scrollableElement);
+    const content = screen.getByTestId(InTestIds.content);
+    const grafanaVariablesSection = screen.getByTestId(InTestIds.grafanaVariablesSection);
+
+    expect(content).toHaveStyle({ transform: 'translateY(0px)' });
+
+    content.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          y: -100,
+          height: 200,
+        }) as any
+    );
+    scrollableElement.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          top: 100,
+          height: 1000,
+        }) as any
+    );
+    grafanaVariablesSection.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          bottom: 40,
+          height: 200,
+        }) as any
+    );
+    fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
+
+    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(300px)' });
   });
 });

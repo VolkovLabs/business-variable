@@ -19,6 +19,30 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
     height,
   });
 
+  /**
+   * Grafana variable section
+   */
+  const grafanaVariablesSection = () => {
+    const grafanaSection = document.querySelector('[aria-label="Dashboard submenu"]');
+
+    let bottomPosition = 0;
+    let sectionHeight = 0;
+
+    if (grafanaSection) {
+      bottomPosition = grafanaSection.getBoundingClientRect().bottom;
+      sectionHeight = grafanaSection.getBoundingClientRect().height;
+    }
+
+    return {
+      isUseSection:
+        !!grafanaSection &&
+        getComputedStyle(grafanaSection).position === 'fixed' &&
+        getComputedStyle(grafanaSection).visibility !== 'hidden',
+      bottomPosition,
+      sectionHeight,
+    };
+  };
+
   useLayoutEffect(() => {
     /**
      * Several scrollbar view elements exist
@@ -32,9 +56,23 @@ export const useContentPosition = ({ width, height, sticky }: { width: number; h
     const calcPosition = () => {
       if (containerRef.current && scrollableElement) {
         if (sticky) {
-          const { y: startY, height } = containerRef.current.getBoundingClientRect();
+          /**
+           * Use Grafana Section with variables
+           */
+          const { isUseSection, bottomPosition, sectionHeight } = grafanaVariablesSection();
+
+          const { y: startY, height, top } = containerRef.current.getBoundingClientRect();
+
           const scrollableElementRect = scrollableElement.getBoundingClientRect();
-          const transformY = Math.abs(Math.min(startY - scrollableElementRect.top, 0));
+          let transformY = Math.abs(Math.min(startY - scrollableElementRect.top, 0));
+
+          /**
+           * Calculate transformY with grafana variables section
+           */
+          if (isUseSection && top <= bottomPosition) {
+            transformY = Math.abs(transformY + sectionHeight);
+          }
+
           const visibleHeight = scrollableElementRect.height - startY + scrollableElementRect.top;
 
           setStyle({
