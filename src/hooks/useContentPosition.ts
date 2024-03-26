@@ -86,17 +86,17 @@ export const useContentPosition = ({
            */
           if (isUseSection && top <= bottomPosition) {
             transformY = Math.abs(transformY + sectionHeight);
-            calculateHeight = Math.abs(calculateHeight - sectionHeight);
+            calculateHeight = Math.min(Math.abs(calculateHeight - sectionHeight), calculateHeight);
           }
 
-          requestAnimationFrame(() => {
-            if (scrollableContainerRef.current) {
-              scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
-              scrollableContainerRef.current.style.height = `${calculateHeight}px`;
-            }
-          });
+          if (scrollableContainerRef.current) {
+            scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
+            scrollableContainerRef.current.style.height = `${calculateHeight}px`;
+          }
 
           setStyle({
+            height: calculateHeight,
+            transform: `translateY(${transformY}px)`,
             width,
           });
 

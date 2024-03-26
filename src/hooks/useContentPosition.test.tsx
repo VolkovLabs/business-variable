@@ -13,15 +13,6 @@ const InTestIds = {
   grafanaVariablesSection: 'grafanaVariablesSection',
 };
 
-/**
- *  Mock requestAnimationFrame and its callback
- */
-const requestAnimationFrameMock = jest.fn((callback) => {
-  callback();
-  return 1;
-});
-window.requestAnimationFrame = requestAnimationFrameMock;
-
 describe('Use Content Position', () => {
   /**
    * Tested Component
@@ -91,11 +82,6 @@ describe('Use Content Position', () => {
     );
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
 
-    /**
-     * Assert that requestAnimationFrame was called
-     */
-    expect(requestAnimationFrameMock).toHaveBeenCalledTimes(2);
-
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
   });
 
@@ -141,11 +127,6 @@ describe('Use Content Position', () => {
         }) as any
     );
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
-
-    /**
-     * Assert that requestAnimationFrame was called
-     */
-    expect(requestAnimationFrameMock).toHaveBeenCalledTimes(4);
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(300px)' });
   });
