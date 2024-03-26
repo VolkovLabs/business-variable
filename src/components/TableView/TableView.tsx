@@ -19,15 +19,10 @@ interface Props extends PanelProps<PanelOptions> {}
  */
 export const TableView: React.FC<Props> = ({ data, id, options, width, height, eventBus }) => {
   /**
-   * Preserve selected group
-   */
-  const saveSelectedGroupKey = options.saveSelectedGroupKey || id;
-
-  /**
-   * Saved Selected group
+   * Current group
    */
   const [currentGroup, setCurrentGroup] = useSavedState<string>({
-    key: `volkovlabs.variable.panel.${saveSelectedGroupKey}`,
+    key: `volkovlabs.variable.panel.${options.saveSelectedGroupKey || id}`,
     initialValue: options.groups?.[0]?.name || '',
     enabled: options.saveSelectedGroup,
   });
