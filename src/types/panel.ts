@@ -202,9 +202,20 @@ export interface PanelOptions extends TableViewOptions {
   showLabel: boolean;
 
   /**
-   * Unique Cross Key
+   * Save Selected Group Key
    *
    * @type {string}
    */
-  uniqueCrossKey: string;
+  saveSelectedGroupKey: string;
 }
+
+/**
+ * Recursive Partial
+ */
+export type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object | undefined
+      ? RecursivePartial<T[P]>
+      : T[P];
+};

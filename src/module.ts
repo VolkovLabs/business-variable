@@ -235,7 +235,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'groupSelection',
-        name: 'Allow group selection.',
+        name: 'Allow group selection',
         settings: {
           options: GROUP_SELECTION_OPTIONS,
         },
@@ -255,13 +255,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.groups?.length > 1,
       })
       .addTextInput({
-        path: 'uniqueCrossKey',
-        name: 'Unique Cross Key',
-        description:
-          'Saved in the browser storage for each user. Set value to preserve the selection of the group between dashboards. The value must match in the linked panels',
+        path: 'saveSelectedGroupKey',
+        name: 'Preserve selected group in',
+        description: 'Key to preserve selected group in the browser storage.',
         defaultValue: '',
         settings: {
-          placeholder: 'dashboard_panel_key',
+          placeholder: 'Will be unique per panel if empty',
         },
         showIf: (config) => showForTableView(config) && config.saveSelectedGroup,
         category: ['Layout'],

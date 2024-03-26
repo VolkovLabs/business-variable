@@ -1,9 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useLocalStorage, useTable } from '../../hooks';
+import { useSavedState, useTable } from '../../hooks';
 import { TableView } from './TableView';
 
 /**
@@ -21,6 +21,7 @@ jest.mock('../../hooks', () => ({
     update: jest.fn(),
     remove: jest.fn(),
   })),
+  useSavedState: jest.fn(jest.requireActual('../../hooks/useSavedState').useSavedState),
 }));
 
 /**
@@ -66,36 +67,42 @@ describe('Table View', () => {
     return <TableView width={100} height={100} eventBus={eventBus} options={options} {...(restProps as any)} />;
   };
 
+  beforeEach(() => {
+    jest.mocked(useTable).mockClear();
+  });
+
   it('Should find component', async () => {
-    render(getComponent({}));
+    await act(async () => render(getComponent({})));
     expect(selectors.root()).toBeInTheDocument();
   });
 
   it('Should show info message if no variables', async () => {
-    render(getComponent({}));
+    await act(async () => render(getComponent({})));
     expect(selectors.infoMessage()).toBeInTheDocument();
   });
 
-  it('Should use first group', () => {
-    render(
-      getComponent({
-        options: {
-          groups: [
-            {
-              name: 'group1',
-              items: [
-                {
-                  name: 'group1Field',
-                },
-              ],
-            },
-            {
-              name: 'group2',
-              items: [],
-            },
-          ],
-        } as any,
-      })
+  it('Should use first group', async () => {
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'group1Field',
+                  },
+                ],
+              },
+              {
+                name: 'group2',
+                items: [],
+              },
+            ],
+          } as any,
+        })
+      )
     );
 
     expect(useTable).toHaveBeenCalledWith(
@@ -109,43 +116,72 @@ describe('Table View', () => {
     );
   });
 
-  it('should select the selected group if saveSelectedGroup is true', () => {
-    const selectedGroup = 'group2';
-    const groups = [{ name: 'group1' }, { name: selectedGroup }, { name: 'group3' }];
+  it('Should open saved selected group', async () => {
+    jest.mocked(useSavedState).mockReturnValueOnce(['group2', jest.fn()] as any);
 
-    render(
-      getComponent({
-        id: 15,
-        options: {
-          groups,
-          saveSelectedGroup: true,
-        } as any,
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    /**
+     * Check if selected group key used
+     */
+    expect(useSavedState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        key: 'volkovlabs.variable.panel.myKey',
+        enabled: true,
       })
     );
 
-    expect(useLocalStorage).toHaveBeenCalledTimes(8);
+    /**
+     * Check if levels from current group used
+     */
+    expect(useTable).toHaveBeenCalledWith(
+      expect.objectContaining({
+        levels: [
+          {
+            name: '2',
+          },
+        ],
+      })
+    );
   });
 
-  it('Should use first group if already selected group removed', () => {
-    const { rerender } = render(
-      getComponent({
-        options: {
-          groups: [
-            {
-              name: 'group1',
-              items: [
-                {
-                  name: 'group1Field',
-                },
-              ],
-            },
-            {
-              name: 'group2',
-              items: [],
-            },
-          ],
-        } as any,
-      })
+  it('Should use first group if already selected group removed', async () => {
+    const { rerender } = await act(async () =>
+      render(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'group1Field',
+                  },
+                ],
+              },
+              {
+                name: 'group2',
+                items: [],
+              },
+            ],
+          } as any,
+        })
+      )
     );
 
     expect(useTable).toHaveBeenCalledWith(
@@ -158,21 +194,23 @@ describe('Table View', () => {
       })
     );
 
-    rerender(
-      getComponent({
-        options: {
-          groups: [
-            {
-              name: 'group2',
-              items: [
-                {
-                  name: 'group2Field',
-                },
-              ],
-            },
-          ],
-        } as any,
-      })
+    await act(async () =>
+      rerender(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group2',
+                items: [
+                  {
+                    name: 'group2Field',
+                  },
+                ],
+              },
+            ],
+          } as any,
+        })
+      )
     );
 
     expect(useTable).toHaveBeenCalledWith(
@@ -186,36 +224,38 @@ describe('Table View', () => {
     );
   });
 
-  it('Should switch groups', () => {
+  it('Should switch groups', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
       tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
     }));
 
-    render(
-      getComponent({
-        options: {
-          groups: [
-            {
-              name: 'group1',
-              items: [
-                {
-                  name: 'group1Field',
-                },
-              ],
-            },
-            {
-              name: 'group2',
-              items: [
-                {
-                  name: 'group2Field',
-                },
-              ],
-            },
-          ],
-        } as any,
-      })
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'group1Field',
+                  },
+                ],
+              },
+              {
+                name: 'group2',
+                items: [
+                  {
+                    name: 'group2Field',
+                  },
+                ],
+              },
+            ],
+          } as any,
+        })
+      )
     );
 
     /**
@@ -223,6 +263,9 @@ describe('Table View', () => {
      */
     fireEvent.click(selectors.tab(false, 'group2'));
 
+    /**
+     * Check if group selected
+     */
     expect(useTable).toHaveBeenCalledWith(
       expect.objectContaining({
         levels: [
@@ -272,37 +315,9 @@ describe('Table View', () => {
     });
 
     it('Should scroll to selected element on initial load', async () => {
-      render(
-        getComponent({
-          options: {
-            groups: [
-              {
-                name: 'Group 1',
-                items: [
-                  {
-                    name: 'value',
-                  },
-                ],
-              },
-            ] as any,
-            autoScroll: true,
-          } as any,
-        })
-      );
-
-      /**
-       * Rows should be rendered
-       */
-      expect(tableSelectors.row(false, '0')).toBeInTheDocument();
-      expect(tableSelectors.row(false, '1')).toBeInTheDocument();
-
-      expect(scrollTo).toHaveBeenCalledWith({ top: 40 });
-    });
-
-    it('Should scroll to selected element if panel is not focused', () => {
-      const { rerender } = render(
-        <OutsideWrapper>
-          {getComponent({
+      await act(async () =>
+        render(
+          getComponent({
             options: {
               groups: [
                 {
@@ -316,8 +331,40 @@ describe('Table View', () => {
               ] as any,
               autoScroll: true,
             } as any,
-          })}
-        </OutsideWrapper>
+          })
+        )
+      );
+
+      /**
+       * Rows should be rendered
+       */
+      expect(tableSelectors.row(false, '0')).toBeInTheDocument();
+      expect(tableSelectors.row(false, '1')).toBeInTheDocument();
+
+      expect(scrollTo).toHaveBeenCalledWith({ top: 40 });
+    });
+
+    it('Should scroll to selected element if panel is not focused', async () => {
+      const { rerender } = await act(async () =>
+        render(
+          <OutsideWrapper>
+            {getComponent({
+              options: {
+                groups: [
+                  {
+                    name: 'Group 1',
+                    items: [
+                      {
+                        name: 'value',
+                      },
+                    ],
+                  },
+                ] as any,
+                autoScroll: true,
+              } as any,
+            })}
+          </OutsideWrapper>
+        )
       );
 
       /**
@@ -334,24 +381,26 @@ describe('Table View', () => {
 
       jest.mocked(scrollElement.scrollTo).mockClear();
 
-      rerender(
-        <OutsideWrapper>
-          {getComponent({
-            options: {
-              groups: [
-                {
-                  name: 'Group 1',
-                  items: [
-                    {
-                      name: 'value',
-                    },
-                  ],
-                },
-              ] as any,
-              autoScroll: true,
-            } as any,
-          })}
-        </OutsideWrapper>
+      await act(async () =>
+        rerender(
+          <OutsideWrapper>
+            {getComponent({
+              options: {
+                groups: [
+                  {
+                    name: 'Group 1',
+                    items: [
+                      {
+                        name: 'value',
+                      },
+                    ],
+                  },
+                ] as any,
+                autoScroll: true,
+              } as any,
+            })}
+          </OutsideWrapper>
+        )
       );
 
       /**
@@ -361,25 +410,27 @@ describe('Table View', () => {
       expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
     });
 
-    it('Should not scroll to selected element if panel is focused', () => {
-      const { rerender } = render(
-        <OutsideWrapper>
-          {getComponent({
-            options: {
-              groups: [
-                {
-                  name: 'Group 1',
-                  items: [
-                    {
-                      name: 'value',
-                    },
-                  ],
-                },
-              ] as any,
-              autoScroll: true,
-            } as any,
-          })}
-        </OutsideWrapper>
+    it('Should not scroll to selected element if panel is focused', async () => {
+      const { rerender } = await act(async () =>
+        render(
+          <OutsideWrapper>
+            {getComponent({
+              options: {
+                groups: [
+                  {
+                    name: 'Group 1',
+                    items: [
+                      {
+                        name: 'value',
+                      },
+                    ],
+                  },
+                ] as any,
+                autoScroll: true,
+              } as any,
+            })}
+          </OutsideWrapper>
+        )
       );
 
       /**
@@ -400,24 +451,26 @@ describe('Table View', () => {
 
       expect(scrollElement.scrollTo).not.toHaveBeenCalled();
 
-      rerender(
-        <OutsideWrapper>
-          {getComponent({
-            options: {
-              groups: [
-                {
-                  name: 'Group 1',
-                  items: [
-                    {
-                      name: 'value',
-                    },
-                  ],
-                },
-              ] as any,
-              autoScroll: true,
-            } as any,
-          })}
-        </OutsideWrapper>
+      await act(async () =>
+        rerender(
+          <OutsideWrapper>
+            {getComponent({
+              options: {
+                groups: [
+                  {
+                    name: 'Group 1',
+                    items: [
+                      {
+                        name: 'value',
+                      },
+                    ],
+                  },
+                ] as any,
+                autoScroll: true,
+              } as any,
+            })}
+          </OutsideWrapper>
+        )
       );
 
       /**
