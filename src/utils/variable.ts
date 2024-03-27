@@ -15,8 +15,19 @@ import {
  * @param name
  * @param value
  */
-export const setVariableValue = (name: string, value: unknown) => {
-  locationService.partial({ [`var-${name}`]: value }, true);
+export const setVariableValue = (name: string, value: unknown, resetVariable?: string) => {
+  let variablesObject = {
+    [`var-${name}`]: value,
+  };
+
+  if (resetVariable) {
+    variablesObject = {
+      ...variablesObject,
+      [`var-${resetVariable}`]: null,
+    };
+  }
+
+  locationService.partial(variablesObject, true);
 };
 
 /**
@@ -24,7 +35,7 @@ export const setVariableValue = (name: string, value: unknown) => {
  * @param values
  * @param runtimeVariable
  */
-export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable) => {
+export const selectVariableValues = (values: string[], runtimeVariable?: RuntimeVariable, resetVariable?: string) => {
   if (!runtimeVariable) {
     return;
   }
@@ -39,12 +50,12 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
        */
       if (multi) {
         if (values.some((value) => value === ALL_VALUE_PARAMETER)) {
-          setVariableValue(name, ALL_VALUE);
+          setVariableValue(name, ALL_VALUE, resetVariable);
           return;
         }
 
         if (values.some((value) => value === NO_VALUE_PARAMETER)) {
-          setVariableValue(name, '');
+          setVariableValue(name, '', resetVariable);
           return;
         }
 
@@ -77,14 +88,15 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
         if (alreadySelectedValues.length === values.length) {
           setVariableValue(
             name,
-            selectedValues.filter((value) => !alreadySelectedValues.includes(value))
+            selectedValues.filter((value) => !alreadySelectedValues.includes(value)),
+            resetVariable
           );
           return;
         }
 
         const uniqueValues = [...new Set(values.concat(selectedValues)).values()];
 
-        setVariableValue(name, uniqueValues);
+        setVariableValue(name, uniqueValues, resetVariable);
         return;
       }
 
@@ -99,12 +111,12 @@ export const selectVariableValues = (values: string[], runtimeVariable?: Runtime
         value = '';
       }
 
-      setVariableValue(name, value);
+      setVariableValue(name, value, resetVariable);
       return;
     }
     case VariableType.TEXTBOX: {
       const value = values[0];
-      setVariableValue(runtimeVariable.name, value);
+      setVariableValue(runtimeVariable.name, value, resetVariable);
       return;
     }
     default: {

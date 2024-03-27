@@ -11,11 +11,13 @@ export const updateVariableOptions = ({
   value,
   emptyValueEnabled,
   variable,
+  resetVariable,
 }: {
   previousValues: string[];
   value: string | string[];
   emptyValueEnabled: boolean;
   variable: RuntimeVariableWithOptions;
+  resetVariable?: string;
 }) => {
   const updatedValues = Array.isArray(value) ? value : [value];
 
@@ -27,7 +29,7 @@ export const updateVariableOptions = ({
      * Clear Value
      */
     if (updatedValues.length === 0 && emptyValueEnabled) {
-      selectVariableValues([NO_VALUE_PARAMETER], variable);
+      selectVariableValues([NO_VALUE_PARAMETER], variable, resetVariable);
       return;
     }
 
@@ -35,12 +37,12 @@ export const updateVariableOptions = ({
      * Select all
      */
     if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
-      selectVariableValues([ALL_VALUE_PARAMETER], variable);
+      selectVariableValues([ALL_VALUE_PARAMETER], variable, resetVariable);
       return;
     }
 
     const removedValues = previousValues.filter((value) => !updatedValues.includes(value));
-    selectVariableValues(removedValues, variable);
+    selectVariableValues(removedValues, variable, resetVariable);
     return;
   }
 
@@ -54,7 +56,8 @@ export const updateVariableOptions = ({
   ) {
     selectVariableValues(
       updatedValues.filter((value) => value !== ALL_VALUE_PARAMETER),
-      variable
+      variable,
+      resetVariable
     );
     return;
   }
@@ -67,12 +70,12 @@ export const updateVariableOptions = ({
     !previousValues.includes(ALL_VALUE_PARAMETER) &&
     updatedValues.includes(ALL_VALUE_PARAMETER)
   ) {
-    selectVariableValues([ALL_VALUE_PARAMETER], variable);
+    selectVariableValues([ALL_VALUE_PARAMETER], variable, resetVariable);
     return;
   }
 
   /**
    * Select Values
    */
-  selectVariableValues(updatedValues, variable);
+  selectVariableValues(updatedValues, variable, resetVariable);
 };
