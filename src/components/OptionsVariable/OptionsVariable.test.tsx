@@ -1,3 +1,4 @@
+import { Select } from '@grafana/ui';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
@@ -56,6 +57,8 @@ describe('Options Variable', () => {
 
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
+
+    jest.mocked(Select).mockClear();
   });
 
   describe('Single variable', () => {
@@ -70,6 +73,9 @@ describe('Options Variable', () => {
       selected: false,
     };
     const singleVariable = {
+      current: {
+        value: '',
+      },
       multi: false,
       options: [option1, option2],
     };
@@ -85,6 +91,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...singleVariable,
+            current: {
+              value: option1.value,
+            },
             options: [
               {
                 ...option1,
@@ -160,6 +169,9 @@ describe('Options Variable', () => {
       selected: false,
     };
     const multiVariable = {
+      current: {
+        value: [],
+      },
       multi: true,
       includeAll: true,
       options: [allOption, option1, option2],
@@ -176,6 +188,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               {
                 ...option1,
@@ -216,6 +231,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [ALL_VALUE_PARAMETER],
+            },
             options: [
               {
                 ...allOption,
@@ -260,6 +278,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               allOption,
               {
@@ -282,6 +303,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value],
+            },
             options: [
               allOption,
               {
@@ -305,6 +329,9 @@ describe('Options Variable', () => {
         getComponent({
           variable: {
             ...multiVariable,
+            current: {
+              value: [option1.value, option2.value],
+            },
             options: [
               allOption,
               {
@@ -324,5 +351,35 @@ describe('Options Variable', () => {
 
       expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object));
     });
+  });
+
+  it('Should add custom options', () => {
+    render(
+      getComponent({
+        variable: {
+          multi: true,
+          current: {
+            value: ['hello', 'world'],
+          },
+          options: [],
+        } as any,
+        customValue: true,
+      })
+    );
+
+    /**
+     * Check if select has custom options based on values
+     */
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        allowCustomValue: true,
+        value: ['hello', 'world'],
+        options: [
+          { label: 'hello', value: 'hello' },
+          { label: 'world', value: 'world' },
+        ],
+      }),
+      expect.anything()
+    );
   });
 });

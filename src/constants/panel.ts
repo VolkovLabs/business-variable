@@ -112,3 +112,11 @@ export const SHOW_LABEL_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show labels enabled.' },
   { value: false, label: 'Disabled', description: 'Show labels disabled.' },
 ];
+
+/**
+ * Allow Custom Value Options
+ */
+export const ALLOW_CUSTOM_VALUE_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Custom values enabled.' },
+  { value: false, label: 'Disabled', description: 'Custom values disabled.' },
+];

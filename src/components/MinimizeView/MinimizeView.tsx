@@ -34,7 +34,7 @@ interface Props {
  * Minimize View
  */
 export const MinimizeView: React.FC<Props> = ({
-  options: { variable: variableName, padding = 0, emptyValue = false, persistent = false } = {},
+  options: { variable: variableName, padding = 0, emptyValue = false, persistent = false, customValue = false } = {},
   eventBus,
   width,
 }) => {
@@ -77,7 +77,12 @@ export const MinimizeView: React.FC<Props> = ({
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
             <div style={{ maxWidth }}>
-              <OptionsVariable variable={variable} emptyValue={emptyValue} persistent={persistent} />
+              <OptionsVariable
+                variable={variable}
+                emptyValue={emptyValue}
+                persistent={persistent}
+                customValue={customValue}
+              />
             </div>
           )}
           {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} />}

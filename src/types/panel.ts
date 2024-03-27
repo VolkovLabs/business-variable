@@ -167,6 +167,13 @@ export interface PanelOptions extends TableViewOptions {
   emptyValue: boolean;
 
   /**
+   * Custom Value
+   *
+   * @type {boolean}
+   */
+  customValue: boolean;
+
+  /**
    * Group Selection
    *
    * @type {boolean}
@@ -193,4 +200,22 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   showLabel: boolean;
+
+  /**
+   * Save Selected Group Key
+   *
+   * @type {string}
+   */
+  saveSelectedGroupKey: string;
 }
+
+/**
+ * Recursive Partial
+ */
+export type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object | undefined
+      ? RecursivePartial<T[P]>
+      : T[P];
+};

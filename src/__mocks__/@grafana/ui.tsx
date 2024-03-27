@@ -5,7 +5,7 @@ const actual = jest.requireActual('@grafana/ui');
 /**
  * Mock Select component
  */
-const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => (
+const Select = jest.fn(({ options, onChange, value, isMulti, allowCustomValue, ...restProps }) => (
   <select
     onChange={(event: any) => {
       if (onChange) {
