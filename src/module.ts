@@ -232,15 +232,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
-      })
+      });
+
+    builder
       .addRadio({
         path: 'groupSelection',
-        name: 'Allow group selection.',
+        name: 'Allow group selection',
         settings: {
           options: GROUP_SELECTION_OPTIONS,
         },
         defaultValue: false,
-        category: ['Layout'],
+        category: ['Groups'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
       })
       .addRadio({
@@ -251,8 +253,19 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: SELECTED_GROUP_OPTIONS,
         },
         defaultValue: false,
-        category: ['Layout'],
+        category: ['Groups'],
         showIf: (config) => showForTableView(config) && config.groups?.length > 1,
+      })
+      .addTextInput({
+        path: 'saveSelectedGroupKey',
+        name: 'Selected group Id',
+        description: 'Key to preserve selected group in the browser storage.',
+        defaultValue: '',
+        settings: {
+          placeholder: 'Will be unique per panel if empty',
+        },
+        showIf: (config) => showForTableView(config) && config.saveSelectedGroup,
+        category: ['Groups'],
       });
 
     builder.addSelect({

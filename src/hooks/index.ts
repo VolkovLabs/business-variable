@@ -5,6 +5,7 @@ export * from './useLocalStorage';
 export * from './usePersistentStorage';
 export * from './usePersistentValues';
 export * from './useRuntimeVariables';
+export * from './useSavedState';
 export * from './useScrollTo';
 export * from './useStatus';
 export * from './useTable';
