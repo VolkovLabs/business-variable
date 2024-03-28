@@ -18,9 +18,9 @@ export const useResetVariable = ({
   variableName?: string;
 }) => {
   /**
-   * Runtime Variables
+   * Variable to reset
    */
-  const { getVariable } = useRuntimeVariables(eventBus, '');
+  const { variable: variableToReset } = useRuntimeVariables(eventBus, variableName || '');
 
   /**
    * Should reset
@@ -40,12 +40,7 @@ export const useResetVariable = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, [getVariable, panelEventBus, variableName]);
-
-  /**
-   * Get variable
-   */
-  const variableToReset = getVariable(variableName || '');
+  }, [panelEventBus, variableName]);
 
   /**
    * Reset variable after options loaded
@@ -53,9 +48,12 @@ export const useResetVariable = ({
   useEffect(() => {
     if (shouldReset.current) {
       shouldReset.current = false;
-      locationService.partial({
-        [`var-${variableToReset?.name}`]: variableToReset?.options?.[0]?.value,
-      });
+      locationService.partial(
+        {
+          [`var-${variableToReset?.name}`]: variableToReset?.options?.[0]?.value,
+        },
+        true
+      );
     }
   }, [variableToReset]);
 };

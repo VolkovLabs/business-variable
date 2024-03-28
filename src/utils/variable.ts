@@ -29,7 +29,7 @@ export const setVariableValue = (name: string, value: unknown, eventBus: EventBu
   );
 
   /**
-   * Emmit value changed event for reset
+   * Emit variable changed event for reset
    */
   eventBus.publish(new VariableChangedEvent());
 };

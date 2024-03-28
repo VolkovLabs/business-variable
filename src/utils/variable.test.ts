@@ -1,7 +1,7 @@
 import { locationService } from '@grafana/runtime';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
-import { VariableType } from '../types';
+import { VariableChangedEvent, VariableType } from '../types';
 import { selectVariableValues } from './variable';
 
 /**
@@ -17,11 +17,24 @@ jest.mock('@grafana/runtime', () => ({
 
 describe('Variable Utils', () => {
   /**
-   * Event BUs
+   * Event Bus
    */
   const eventBus: any = {
     publish: jest.fn(),
   };
+
+  beforeEach(() => {
+    eventBus.publish.mockClear();
+  });
+
+  it('Should emit variable changed event', () => {
+    const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
+    selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+
+    expect(eventBus.publish).toHaveBeenCalledWith({
+      type: VariableChangedEvent.type,
+    });
+  });
 
   describe('selectVariableValues', () => {
     beforeEach(() => {
