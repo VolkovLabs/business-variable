@@ -27,6 +27,11 @@ interface Props {
    * Data
    */
   data: PanelData;
+
+  /**
+   * Panel Event Bus
+   */
+  panelEventBus: EventBus;
 }
 
 /**
@@ -42,9 +47,9 @@ export const ButtonView: React.FC<Props> = ({
     emptyValue = false,
     persistent = false,
     showLabel = false,
-    resetVariable = '',
   } = {},
   eventBus,
+  panelEventBus,
 }) => {
   /**
    * Styles and Theme
@@ -56,7 +61,6 @@ export const ButtonView: React.FC<Props> = ({
    * Runtime Variables
    */
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
-  const { variable: resetValueVariable } = useRuntimeVariables(eventBus, resetVariable || '');
 
   /**
    * Persistent storage
@@ -158,7 +162,7 @@ export const ButtonView: React.FC<Props> = ({
                 variable,
                 emptyValueEnabled: emptyValue,
                 value,
-                resetVariable,
+                panelEventBus,
               });
             }}
             data-testid={TEST_IDS.buttonView.item(value)}
