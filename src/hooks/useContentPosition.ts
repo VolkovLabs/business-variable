@@ -1,5 +1,5 @@
 import { throttle } from 'lodash';
-import { CSSProperties, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, RefObject, useLayoutEffect, useRef, useState } from 'react';
 
 /**
  * Content Position
@@ -35,18 +35,13 @@ export const useContentPosition = ({
   });
 
   /**
-   * Update state timer
+   * Update state throttle to performance optimization
    */
   const updateStateThrottle = useRef(
     throttle((style: CSSProperties) => {
       setStyle(style);
     }, 100)
   );
-
-  /**
-   * Set dashboard refs
-   */
-  useEffect(() => {}, []);
 
   /**
    * Get dashboard submenu sticky rect
@@ -72,6 +67,7 @@ export const useContentPosition = ({
 
   useLayoutEffect(() => {
     /**
+     * Set scrollbar view element
      * Several scrollbar view elements exist
      * We have to specify particular element
      */
@@ -79,6 +75,9 @@ export const useContentPosition = ({
       dashboardScrollViewRef.current = document.querySelector('.main-view .scrollbar-view');
     }
 
+    /**
+     * Set dashboard sub menu
+     */
     if (!dashboardSubmenuRef.current) {
       dashboardSubmenuRef.current = document.querySelector('[aria-label="Dashboard submenu"]');
     }
@@ -114,6 +113,9 @@ export const useContentPosition = ({
             scrollableContainerRef.current.style.height = `${calculateHeight}px`;
           }
 
+          /**
+           * Set styles
+           */
           updateStateThrottle.current({
             height: calculateHeight,
             transform: `translateY(${transformY}px)`,
