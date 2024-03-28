@@ -85,7 +85,7 @@ describe('Use Content Position', () => {
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
   });
 
-  it('Should follow on scroll with grafana variables section', () => {
+  it('Should add a spacing if grafana variable section with fixed position', () => {
     render(
       <ScrollableContainer style={{ height: 1000 }}>
         <>
@@ -103,6 +103,15 @@ describe('Use Content Position', () => {
     const content = screen.getByTestId(InTestIds.content);
     const grafanaVariablesSection = screen.getByTestId(InTestIds.grafanaVariablesSection);
 
+    /**
+     * Set client height to variables section
+     */
+    Object.defineProperty(grafanaVariablesSection, 'clientHeight', {
+      get() {
+        return 80;
+      },
+    });
+
     expect(content).toHaveStyle({ transform: 'translateY(0px)' });
 
     content.getBoundingClientRect = jest.fn(
@@ -119,15 +128,9 @@ describe('Use Content Position', () => {
           height: 1000,
         }) as any
     );
-    grafanaVariablesSection.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          bottom: 40,
-          height: 200,
-        }) as any
-    );
+
     fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
 
-    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(300px)' });
+    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(180px)' });
   });
 });

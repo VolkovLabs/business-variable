@@ -1,4 +1,5 @@
-import { CSSProperties, RefObject, useLayoutEffect, useRef, useState } from 'react';
+import { throttle } from 'lodash';
+import { CSSProperties, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 /**
  * Content Position
@@ -17,39 +18,55 @@ export const useContentPosition = ({
   /**
    * Element ref
    */
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Dashboard refs
+   */
+  const dashboardScrollViewRef = useRef<HTMLDivElement | null>(null);
+  const dashboardSubmenuRef = useRef<HTMLDivElement | null>(null);
 
   /**
    * Content Element Styles
    */
   const [style, setStyle] = useState<CSSProperties>({
-    position: 'absolute',
-    overflow: 'auto',
     width,
     height,
   });
 
   /**
-   * Grafana variable section
+   * Update state timer
    */
-  const grafanaVariablesSection = () => {
-    const grafanaSection = document.querySelector('[aria-label="Dashboard submenu"]');
+  const updateStateThrottle = useRef(
+    throttle((style: CSSProperties) => {
+      setStyle(style);
+    }, 100)
+  );
 
-    let bottomPosition = 0;
-    let sectionHeight = 0;
+  /**
+   * Set dashboard refs
+   */
+  useEffect(() => {}, []);
 
-    if (grafanaSection) {
-      bottomPosition = grafanaSection.getBoundingClientRect().bottom;
-      sectionHeight = grafanaSection.getBoundingClientRect().height;
+  /**
+   * Get dashboard submenu sticky rect
+   */
+  const getDashboardSubmenuStickyRect = () => {
+    if (dashboardSubmenuRef.current) {
+      const styles = getComputedStyle(dashboardSubmenuRef.current);
+      const isSticky = styles.position === 'fixed' && styles.visibility !== 'hidden';
+
+      if (isSticky) {
+        return {
+          enabled: true,
+          height: dashboardSubmenuRef.current.clientHeight,
+        };
+      }
     }
 
     return {
-      isUseSection:
-        !!grafanaSection &&
-        getComputedStyle(grafanaSection).position === 'fixed' &&
-        getComputedStyle(grafanaSection).visibility !== 'hidden',
-      bottomPosition,
-      sectionHeight,
+      enabled: false,
+      height: 0,
     };
   };
 
@@ -58,43 +75,46 @@ export const useContentPosition = ({
      * Several scrollbar view elements exist
      * We have to specify particular element
      */
-    const scrollableElement = document.querySelector('.main-view .scrollbar-view');
+    if (!dashboardScrollViewRef.current) {
+      dashboardScrollViewRef.current = document.querySelector('.main-view .scrollbar-view');
+    }
+
+    if (!dashboardSubmenuRef.current) {
+      dashboardSubmenuRef.current = document.querySelector('[aria-label="Dashboard submenu"]');
+    }
 
     /**
      * Calculate Position
      */
     const calcPosition = () => {
-      if (containerRef.current && scrollableElement) {
+      if (containerRef.current && dashboardScrollViewRef.current) {
         if (sticky) {
           /**
-           * Use Grafana Section with variables
+           * Get dashboard submenu sticky rect
            */
-          const { isUseSection, bottomPosition, sectionHeight } = grafanaVariablesSection();
+          const dashboardSubmenuStickyRect = getDashboardSubmenuStickyRect();
 
-          const { y: startY, height, top } = containerRef.current.getBoundingClientRect();
+          const { y: startY, height } = containerRef.current.getBoundingClientRect();
 
-          const scrollableElementRect = scrollableElement.getBoundingClientRect();
-          let transformY = Math.abs(Math.min(startY - scrollableElementRect.top, 0));
-          const visibleHeight = scrollableElementRect.height - startY + scrollableElementRect.top;
-          let calculateHeight = Math.min(
+          const dashboardScrollViewRect = dashboardScrollViewRef.current.getBoundingClientRect();
+          const dashboardContentOffsetY = dashboardScrollViewRect.top + dashboardSubmenuStickyRect.height;
+          const relativeStartY = startY - dashboardContentOffsetY;
+          const transformY = Math.abs(Math.min(relativeStartY, 0));
+          const visibleHeight = dashboardScrollViewRect.height - startY + dashboardContentOffsetY;
+          const calculateHeight = Math.min(
             Math.max(height - transformY, 0),
-            startY < 0 ? scrollableElementRect.height : visibleHeight
+            relativeStartY < 0 ? dashboardScrollViewRect.height : visibleHeight
           );
 
           /**
-           * Calculate transformY with grafana variables section
+           * Set styles directly to element to prevent flashing on scroll
            */
-          if (isUseSection && top <= bottomPosition) {
-            transformY = Math.abs(transformY + sectionHeight);
-            calculateHeight = Math.min(Math.abs(calculateHeight - sectionHeight), calculateHeight);
-          }
-
           if (scrollableContainerRef.current) {
             scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
             scrollableContainerRef.current.style.height = `${calculateHeight}px`;
           }
 
-          setStyle({
+          updateStateThrottle.current({
             height: calculateHeight,
             transform: `translateY(${transformY}px)`,
             width,
@@ -115,11 +135,11 @@ export const useContentPosition = ({
     /**
      * Listen for Scroll events
      */
-    if (scrollableElement && sticky) {
-      scrollableElement.addEventListener('scroll', calcPosition);
+    if (dashboardScrollViewRef.current && sticky) {
+      dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
 
       return () => {
-        scrollableElement.removeEventListener('scroll', calcPosition);
+        dashboardScrollViewRef.current?.removeEventListener('scroll', calcPosition);
       };
     }
 
