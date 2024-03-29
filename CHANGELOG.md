@@ -9,6 +9,7 @@
 - Add Responsive tabs (#130)
 - Add support new items in Variable (minimize mode) (#134)
 - Add Preserve selection of the group between dashboards (#135)
+- Improve Tree view display and scroll (#136)
 
 ## 2.4.0 (2024-03-17)
 
