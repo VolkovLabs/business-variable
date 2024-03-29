@@ -210,7 +210,7 @@ export const useTable = ({
       const itemsToUpdate = convertTreeToPlain(filteredTree);
 
       /**
-       * Update All Related Selectable Variables
+       * Enable All Related Selectable Variables
        */
       itemsToUpdate
         .filter((item) => item.variable !== runtimeVariable && item.selectable)
