@@ -1798,7 +1798,6 @@ describe('Use Table Hook', () => {
         /**
          * Check if all items unselected
          */
-
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
         expect(selectVariableValues).toHaveBeenCalledTimes(1);
       });
