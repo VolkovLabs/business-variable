@@ -203,11 +203,12 @@ export const useTable = ({
    * Value Cell Select
    */
   const onChange = useCallback(
-    (item: TableItem, groupSelection: boolean) => {
+    (item: TableItem) => {
       const values = item.childValues || [item.value];
 
       const filteredTree = getFilteredTree(tableData, values);
       const itemsToUpdate = convertTreeToPlain(filteredTree);
+
       /**
        * Update All Related Selectable Variables
        */
@@ -218,22 +219,20 @@ export const useTable = ({
             variable: item.variable,
             values: item.values.filter((value) => {
               return isVariableWithOptions(item.variable)
-                ? item.variable?.options.filter((option) => option.text !== 'All').length === item.values.length
-                  ? item.variable?.options.some((option) => option.text === value && option.selected)
-                  : item.variable?.options.some((option) => option.text === value && !option.selected)
+                ? item.variable.options[item.variable.optionIndexByName.get(value) || -1]?.selected === false
                 : value;
             }),
           };
         })
         .filter((item) => item.values.length > 0)
         .forEach(({ variable, values }) => {
-          selectVariableValues(values, variable, groupSelection);
+          selectVariableValues(values, variable);
         });
 
       /**
        * Update Variable Values
        */
-      selectVariableValues(values, runtimeVariable, groupSelection);
+      selectVariableValues(values, runtimeVariable);
     },
     [runtimeVariable, tableData]
   );
@@ -249,10 +248,10 @@ export const useTable = ({
         !item.variable?.multi &&
         item.variable === runtimeVariable
       ) {
-        onChange(item, options.groupSelection);
+        onChange(item);
       }
     },
-    [onChange, options.groupSelection, runtimeVariable]
+    [onChange, runtimeVariable]
   );
 
   /**
@@ -287,7 +286,7 @@ export const useTable = ({
                       showStatus: false,
                       label: '',
                     };
-                    onChange(rootRow, options.groupSelection);
+                    onChange(rootRow);
                   }}
                   checked={isSelectedAll}
                   className={styles.selectControl}
@@ -329,7 +328,7 @@ export const useTable = ({
                   type={
                     isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
                   }
-                  onChange={() => onChange(row.original, options.groupSelection)}
+                  onChange={() => onChange(row.original)}
                   onClick={() => onClick(row.original)}
                   checked={row.original.selected}
                   className={styles.selectControl}
@@ -367,7 +366,7 @@ export const useTable = ({
                      * So we have to call onChange manually
                      */
                     if (row.original.selectable) {
-                      onChange(row.original, options.groupSelection);
+                      onChange(row.original);
                       return;
                     }
 
@@ -456,15 +455,15 @@ export const useTable = ({
     options.favorites,
     options.groupSelection,
     options.showName,
-    tableData,
     styles.selectControl,
     styles.expandButton,
     styles.rowContent,
     styles.label,
     styles.status,
+    tableData,
     onChange,
-    onClick,
     theme,
+    onClick,
     favorites,
   ]);
 
