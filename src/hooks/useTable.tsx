@@ -219,7 +219,7 @@ export const useTable = ({
             variable: item.variable,
             values: item.values.filter((value) => {
               return isVariableWithOptions(item.variable)
-                ? item.variable.options[item.variable.optionIndexByName.get(value) || -1]?.selected === false
+                ? item.variable.helpers.getOption(value)?.selected === false
                 : value;
             }),
           };

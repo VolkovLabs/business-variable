@@ -1681,7 +1681,7 @@ describe('Use Table Hook', () => {
          * Should select country
          */
         expect(selectVariableValues).toHaveBeenCalledTimes(2);
-        expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable);
+        expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable);
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable);
       });
 
