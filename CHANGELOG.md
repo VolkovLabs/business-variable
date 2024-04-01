@@ -10,6 +10,7 @@
 - Add support new items in Variable (minimize mode) (#134)
 - Add Preserve selection of the group between dashboards (#135)
 - Improve Tree view display and scroll (#136)
+- Add Reset dependent variables when selecting the value (#138)
 
 ## 2.4.0 (2024-03-17)
 

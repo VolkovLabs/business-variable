@@ -57,6 +57,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     const showForMinimizeView = (config: PanelOptions) => config.displayMode === DisplayMode.MINIMIZE;
     const showForButtonView = (config: PanelOptions) => config.displayMode === DisplayMode.BUTTON;
     const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
+    const isVariableSelected = (config: PanelOptions) => !!config.variable;
 
     /**
      * Common Options
@@ -268,16 +269,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Groups'],
       });
 
-    builder.addSelect({
-      path: 'dashboardVariable',
-      name: 'Select variable with dashboard UID',
-      description: 'Allows to redirect to different dashboards',
-      settings: {
-        options: variableOptions,
-      },
-      category: ['Dashboard'],
-    });
-
     /**
      * Status
      */
@@ -301,6 +292,33 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Status'],
         showIf: (config) => showForTableView(config) || showForButtonView(config),
+      });
+
+    /**
+     * Advanced
+     */
+    builder
+      .addSelect({
+        path: 'dashboardVariable',
+        name: 'Select variable with dashboard UID',
+        description: 'Allows to redirect to different dashboards',
+        settings: {
+          options: variableOptions,
+        },
+        category: ['Advanced'],
+      })
+      .addSelect({
+        path: 'resetVariable',
+        name: 'Select dependent variable to reset',
+        settings: {
+          options: [],
+          getOptions: async (context) => {
+            return variableOptions.filter((option) => option.label !== context.options.variable);
+          },
+          isClearable: true,
+        },
+        category: ['Advanced'],
+        showIf: (config) => isVariableSelected(config),
       });
 
     return builder;
