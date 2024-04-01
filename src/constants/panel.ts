@@ -85,8 +85,8 @@ export const AUTO_SCROLL_OPTIONS = [
  * Group Selection Options
  */
 export const GROUP_SELECTION_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Enable to allow group selection.' },
-  { value: false, label: 'Disabled', description: 'Disable group selection.' },
+  { value: true, label: 'Enabled', description: 'Enable to allow multi-level selection.' },
+  { value: false, label: 'Disabled', description: 'Disable multi-level selection.' },
 ];
 
 /**
