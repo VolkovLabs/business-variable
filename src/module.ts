@@ -238,7 +238,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     builder
       .addRadio({
         path: 'groupSelection',
-        name: 'Allow group selection',
+        name: 'Allow multi-level selection',
         settings: {
           options: GROUP_SELECTION_OPTIONS,
         },

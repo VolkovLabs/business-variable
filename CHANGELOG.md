@@ -1,6 +1,6 @@
 # Change Log
 
-## 2.5.0 (IN PROGRESS)
+## 2.5.0 (2023-04-01)
 
 ### Features / Enhancements
 
