@@ -451,7 +451,26 @@ export const useTable = ({
     }
 
     return columns;
-  }, [runtimeVariable, variable, options.filter, options.statusSort, options.favorites, options.groupSelection, options.showName, styles.selectControl, styles.expandButton, styles.rowContent, styles.label, styles.status, tableData, onChange, theme, onClick, eventBus, favorites]);
+  }, [
+    runtimeVariable,
+    variable,
+    options.filter,
+    options.statusSort,
+    options.favorites,
+    options.groupSelection,
+    options.showName,
+    styles.selectControl,
+    styles.expandButton,
+    styles.rowContent,
+    styles.label,
+    styles.status,
+    tableData,
+    onChange,
+    theme,
+    onClick,
+    eventBus,
+    favorites,
+  ]);
 
   /**
    * Get Sub Rows
