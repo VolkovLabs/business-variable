@@ -216,6 +216,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   resetVariable: string;
+
+  /**
+   * Label width
+   *
+   * @type {number}
+   */
+  labelWidth: number;
 }
 
 /**

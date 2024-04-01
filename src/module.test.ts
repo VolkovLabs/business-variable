@@ -32,6 +32,7 @@ describe('plugin', () => {
     addSelect: jest.fn().mockImplementation(() => builder),
     addSliderInput: jest.fn().mockImplementation(() => builder),
     addTextInput: jest.fn().mockImplementation(() => builder),
+    addNumberInput: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -53,6 +54,7 @@ describe('plugin', () => {
     expect(builder.addSelect).toHaveBeenCalled();
     expect(builder.addSliderInput).toHaveBeenCalled();
     expect(builder.addTextInput).toHaveBeenCalled();
+    expect(builder.addNumberInput).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {
@@ -154,6 +156,17 @@ describe('plugin', () => {
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining([]));
+    });
+
+    it('Should show Unique Cross Key Input if table view', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addNumberInput.mockImplementation(
+        addInputImplementation({ showLabel: true, displayMode: DisplayMode.MINIMIZE }, shownOptionsPaths)
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['labelWidth']));
     });
   });
 

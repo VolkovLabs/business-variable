@@ -39,7 +39,15 @@ interface Props {
  * Minimize View
  */
 export const MinimizeView: React.FC<Props> = ({
-  options: { variable: variableName, padding = 0, emptyValue = false, persistent = false, customValue = false } = {},
+  options: {
+    variable: variableName,
+    padding = 0,
+    emptyValue = false,
+    persistent = false,
+    customValue = false,
+    showLabel = false,
+    labelWidth,
+  } = {},
   eventBus,
   width,
   panelEventBus,
@@ -68,8 +76,7 @@ export const MinimizeView: React.FC<Props> = ({
   /**
    * Label and Select Width
    */
-  const labelWidth = 10;
-  const labelWidthPx = labelWidth * 8;
+  const labelWidthPx = labelWidth ? labelWidth * 8 : 0;
   const maxWidth = width - labelWidthPx - padding * 2;
 
   return (
@@ -79,7 +86,12 @@ export const MinimizeView: React.FC<Props> = ({
       `}
       data-testid={TEST_IDS.minimizeView.root}
     >
-      <InlineField className={styles.field} grow={true} label={variable.label || variable.name} labelWidth={labelWidth}>
+      <InlineField
+        className={styles.field}
+        grow={true}
+        label={showLabel && (variable.label || variable.name)}
+        labelWidth={labelWidth}
+      >
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
             <div style={{ maxWidth }}>

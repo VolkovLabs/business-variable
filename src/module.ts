@@ -113,7 +113,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: SHOW_LABEL_OPTIONS,
         },
-        showIf: (config) => showForButtonView(config),
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addNumberInput({
+        path: 'labelWidth',
+        name: 'Label Width',
+        settings: {
+          placeholder: 'auto',
+        },
+        showIf: (config) => showForMinimizeView(config) && config.showLabel,
       })
       .addRadio({
         path: 'customValue',
