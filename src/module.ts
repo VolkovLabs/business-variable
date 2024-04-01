@@ -216,19 +216,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Layout'],
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
       })
-      .addSelect({
-        path: 'resetVariable',
-        name: 'Select variable to reset',
-        settings: {
-          options: [],
-          getOptions: async (context) => {
-            return variableOptions.filter((option) => option.label !== context.options.variable);
-          },
-          isClearable: true,
-        },
-        category: ['Layout'],
-        showIf: (config) => isVariableSelected(config),
-      })
       .addCustomEditor({
         id: 'groups',
         path: 'groups',
@@ -282,16 +269,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Groups'],
       });
 
-    builder.addSelect({
-      path: 'dashboardVariable',
-      name: 'Select variable with dashboard UID',
-      description: 'Allows to redirect to different dashboards',
-      settings: {
-        options: variableOptions,
-      },
-      category: ['Dashboard'],
-    });
-
     /**
      * Status
      */
@@ -315,6 +292,33 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Status'],
         showIf: (config) => showForTableView(config) || showForButtonView(config),
+      });
+
+    /**
+     * Advanced
+     */
+    builder
+      .addSelect({
+        path: 'dashboardVariable',
+        name: 'Select variable with dashboard UID',
+        description: 'Allows to redirect to different dashboards',
+        settings: {
+          options: variableOptions,
+        },
+        category: ['Advanced'],
+      })
+      .addSelect({
+        path: 'resetVariable',
+        name: 'Select dependent variable to reset',
+        settings: {
+          options: [],
+          getOptions: async (context) => {
+            return variableOptions.filter((option) => option.label !== context.options.variable);
+          },
+          isClearable: true,
+        },
+        category: ['Advanced'],
+        showIf: (config) => isVariableSelected(config),
       });
 
     return builder;
