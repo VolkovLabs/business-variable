@@ -57,7 +57,7 @@ describe('Minimize View', () => {
    * Get Tested Component
    */
   const getComponent = ({ options, ...restProps }: Partial<Props>) => {
-    return <MinimizeView options={options} showLabel={true} labelWidth={15} {...(restProps as any)} width={400} />;
+    return <MinimizeView options={options} {...(restProps as any)} width={400} />;
   };
 
   it('Should show no variable message', () => {
