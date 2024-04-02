@@ -186,9 +186,12 @@ export const getItemWithStatus = (
 ): TableItem => {
   const isAllChildrenSelected = children ? !children.some((child) => !child.selected) : false;
   let selectable = false;
-  if (isVariableWithOptions(item.variable) && (!children || (groupSelection && children.length))) {
+  if (!children && isVariableWithOptions(item.variable)) {
     selectable = !!item.variable.helpers.getOption(item.value);
+  } else if (groupSelection && children?.length) {
+    selectable = true;
   }
+
   const canBeFavorite = favoritesEnabled && !children && item.value !== ALL_VALUE_PARAMETER;
 
   return {

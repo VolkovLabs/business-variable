@@ -708,8 +708,9 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(countryControl);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledTimes(2);
       expect(selectVariableValues).toHaveBeenCalledWith(['device2'], deviceVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable, expect.anything());
     });
 
     it('Should use radio for single value', () => {
@@ -1699,6 +1700,7 @@ describe('Use Table Hook', () => {
         /**
          * Should select country
          */
+        expect(selectVariableValues).toHaveBeenCalledTimes(2);
         expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable, expect.anything());
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
       });
@@ -1818,6 +1820,7 @@ describe('Use Table Hook', () => {
          * Check if all items unselected
          */
         expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
+        expect(selectVariableValues).toHaveBeenCalledTimes(1);
       });
     });
   });
