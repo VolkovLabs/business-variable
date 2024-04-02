@@ -19,6 +19,7 @@ import {
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
 } from './constants';
+import { getMigratedOptions } from './migration';
 import { DisplayMode, PanelOptions } from './types';
 
 /**
@@ -26,6 +27,7 @@ import { DisplayMode, PanelOptions } from './types';
  */
 export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
   .setNoPadding()
+  .setMigrationHandler(getMigratedOptions)
   .useFieldConfig({
     disableStandardOptions: [
       FieldConfigProperty.Unit,
