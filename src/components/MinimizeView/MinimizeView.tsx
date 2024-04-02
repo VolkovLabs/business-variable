@@ -83,6 +83,11 @@ export const MinimizeView: React.FC<Props> = ({
     <div
       className={css`
         padding: ${padding}px;
+        ${!labelWidth &&
+        `
+            height: 100%;
+            overflow-y: auto;
+          `}
       `}
       data-testid={TEST_IDS.minimizeView.root}
     >
