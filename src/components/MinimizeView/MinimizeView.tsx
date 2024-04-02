@@ -49,7 +49,6 @@ export const MinimizeView: React.FC<Props> = ({
     labelWidth,
   } = {},
   eventBus,
-  width,
   panelEventBus,
 }) => {
   /**
@@ -73,41 +72,29 @@ export const MinimizeView: React.FC<Props> = ({
     );
   }
 
-  /**
-   * Label and Select Width
-   */
-  const labelWidthPx = labelWidth ? labelWidth * 8 : 0;
-  const maxWidth = width - labelWidthPx - padding * 2;
-
   return (
     <div
       className={css`
         padding: ${padding}px;
-        ${!labelWidth &&
-        `
-            height: 100%;
-            overflow-y: auto;
-          `}
       `}
       data-testid={TEST_IDS.minimizeView.root}
     >
       <InlineField
         className={styles.field}
         grow={true}
+        shrink={true}
         label={showLabel && (variable.label || variable.name)}
         labelWidth={labelWidth}
       >
         <>
           {(variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) && (
-            <div style={{ maxWidth }}>
-              <OptionsVariable
-                variable={variable}
-                emptyValue={emptyValue}
-                persistent={persistent}
-                customValue={customValue}
-                panelEventBus={panelEventBus}
-              />
-            </div>
+            <OptionsVariable
+              variable={variable}
+              emptyValue={emptyValue}
+              persistent={persistent}
+              customValue={customValue}
+              panelEventBus={panelEventBus}
+            />
           )}
           {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} panelEventBus={panelEventBus} />}
         </>
