@@ -1,6 +1,12 @@
 # Change Log
 
-## 2.5.0 (2023-04-01)
+## 3.0.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Update selecting and deselecting multi-levels (#139)
+
+## 2.5.0 (2024-04-01)
 
 ### Features / Enhancements
 

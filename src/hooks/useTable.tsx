@@ -212,18 +212,20 @@ export const useTable = ({
       const itemsToUpdate = convertTreeToPlain(filteredTree);
 
       /**
-       * Update All Related Selectable Variables
+       * Enable All Related Selectable Variables
        */
       itemsToUpdate
         .filter((item) => item.variable !== runtimeVariable && item.selectable)
-        .map((item) => ({
-          variable: item.variable,
-          values: item.values.filter((value) =>
-            isVariableWithOptions(item.variable)
-              ? item.variable?.options.some((option) => option.text === value && !option.selected)
-              : value
-          ),
-        }))
+        .map((item) => {
+          return {
+            variable: item.variable,
+            values: item.values.filter((value) => {
+              return isVariableWithOptions(item.variable)
+                ? item.variable.helpers.getOption(value)?.selected === false
+                : value;
+            }),
+          };
+        })
         .filter((item) => item.values.length > 0)
         .forEach(({ variable, values }) => {
           selectVariableValues(values, variable, panelEventBus);
@@ -465,8 +467,8 @@ export const useTable = ({
     tableData,
     onChange,
     theme,
-    eventBus,
     onClick,
+    eventBus,
     favorites,
   ]);
 
