@@ -76,17 +76,21 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     /**
      * Minimize Mode Options
      */
+    builder.addSliderInput({
+      path: 'padding',
+      name: 'Padding',
+      defaultValue: 10,
+      settings: {
+        min: 0,
+        max: 20,
+      },
+      showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+    });
+
+    /**
+     * Values
+     */
     builder
-      .addSliderInput({
-        path: 'padding',
-        name: 'Padding',
-        defaultValue: 10,
-        settings: {
-          min: 0,
-          max: 20,
-        },
-        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
-      })
       .addRadio({
         path: 'emptyValue',
         name: 'Allow empty value',
@@ -95,6 +99,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: ALLOW_EMPTY_VALUE_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       })
       .addRadio({
@@ -105,6 +110,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: PERSISTENT_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       })
       .addRadio({
@@ -115,6 +121,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: ALLOW_CUSTOM_VALUE_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config),
       });
 
