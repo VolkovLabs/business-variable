@@ -125,9 +125,41 @@ describe('Minimize View', () => {
         }) as any
     );
 
-    render(getComponent({}));
+    render(
+      getComponent({
+        options: {
+          showLabel: true,
+          labelWidth: 15,
+        } as any,
+      })
+    );
 
+    expect(selectors.root()).toBeInTheDocument();
     expect(screen.getByText('123')).toBeInTheDocument();
+  });
+
+  it('Should not show variable label', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.TEXTBOX,
+          },
+        }) as any
+    );
+
+    render(
+      getComponent({
+        options: {
+          showLabel: false,
+          labelWidth: undefined,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(screen.queryByText('123')).not.toBeInTheDocument();
   });
 
   it('Should show variable name', () => {
@@ -141,7 +173,14 @@ describe('Minimize View', () => {
         }) as any
     );
 
-    render(getComponent({}));
+    render(
+      getComponent({
+        options: {
+          showLabel: true,
+          labelWidth: 15,
+        } as any,
+      })
+    );
 
     expect(screen.getByText('123')).toBeInTheDocument();
   });

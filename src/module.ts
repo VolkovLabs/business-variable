@@ -19,6 +19,7 @@ import {
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
 } from './constants';
+import { getMigratedOptions } from './migration';
 import { DisplayMode, PanelOptions } from './types';
 
 /**
@@ -26,6 +27,7 @@ import { DisplayMode, PanelOptions } from './types';
  */
 export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
   .setNoPadding()
+  .setMigrationHandler(getMigratedOptions)
   .useFieldConfig({
     disableStandardOptions: [
       FieldConfigProperty.Unit,
@@ -74,17 +76,21 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     /**
      * Minimize Mode Options
      */
+    builder.addSliderInput({
+      path: 'padding',
+      name: 'Padding',
+      defaultValue: 10,
+      settings: {
+        min: 0,
+        max: 20,
+      },
+      showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+    });
+
+    /**
+     * Values
+     */
     builder
-      .addSliderInput({
-        path: 'padding',
-        name: 'Padding',
-        defaultValue: 10,
-        settings: {
-          min: 0,
-          max: 20,
-        },
-        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
-      })
       .addRadio({
         path: 'emptyValue',
         name: 'Allow empty value',
@@ -93,6 +99,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: ALLOW_EMPTY_VALUE_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       })
       .addRadio({
@@ -103,17 +110,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: PERSISTENT_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
-      })
-      .addRadio({
-        path: 'showLabel',
-        name: 'Show Label',
-        description: 'Display variable name',
-        defaultValue: false,
-        settings: {
-          options: SHOW_LABEL_OPTIONS,
-        },
-        showIf: (config) => showForButtonView(config),
       })
       .addRadio({
         path: 'customValue',
@@ -123,9 +121,38 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: ALLOW_CUSTOM_VALUE_OPTIONS,
         },
+        category: ['Values'],
         showIf: (config) => showForMinimizeView(config),
       });
 
+    /**
+     * Label
+     */
+    builder
+      .addRadio({
+        path: 'showLabel',
+        name: 'Show Label',
+        description: 'Display variable name',
+        defaultValue: false,
+        settings: {
+          options: SHOW_LABEL_OPTIONS,
+        },
+        category: ['Label'],
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addNumberInput({
+        path: 'labelWidth',
+        name: 'Label Width',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Label'],
+        showIf: (config) => showForMinimizeView(config) && config.showLabel,
+      });
+
+    /**
+     * Positioning
+     */
     builder
       .addRadio({
         path: 'sticky',
