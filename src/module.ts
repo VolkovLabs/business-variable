@@ -108,24 +108,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       })
       .addRadio({
-        path: 'showLabel',
-        name: 'Show Label',
-        description: 'Display variable name',
-        defaultValue: false,
-        settings: {
-          options: SHOW_LABEL_OPTIONS,
-        },
-        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
-      })
-      .addNumberInput({
-        path: 'labelWidth',
-        name: 'Label Width',
-        settings: {
-          placeholder: 'auto',
-        },
-        showIf: (config) => showForMinimizeView(config) && config.showLabel,
-      })
-      .addRadio({
         path: 'customValue',
         name: 'Allow custom values',
         description: 'Supports custom values for the variable.',
@@ -136,6 +118,34 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForMinimizeView(config),
       });
 
+    /**
+     * Label
+     */
+    builder
+      .addRadio({
+        path: 'showLabel',
+        name: 'Show Label',
+        description: 'Display variable name',
+        defaultValue: false,
+        settings: {
+          options: SHOW_LABEL_OPTIONS,
+        },
+        category: ['Label'],
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      })
+      .addNumberInput({
+        path: 'labelWidth',
+        name: 'Label Width',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Label'],
+        showIf: (config) => showForMinimizeView(config) && config.showLabel,
+      });
+
+    /**
+     * Positioning
+     */
     builder
       .addRadio({
         path: 'sticky',
