@@ -158,7 +158,7 @@ describe('plugin', () => {
       expect(shownOptionsPaths).toEqual(expect.arrayContaining([]));
     });
 
-    it('Should show Unique Cross Key Input if table view', () => {
+    it('Should show Display Mode Input if minimized view', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addNumberInput.mockImplementation(
