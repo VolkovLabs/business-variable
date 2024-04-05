@@ -13,6 +13,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
+  ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
   SHOW_LABEL_OPTIONS,
   SHOW_NAME_OPTIONS,
@@ -228,6 +229,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Header'],
         showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'headerRowCount',
+        name: 'Display count selected rows',
+        settings: {
+          options: ROW_COUNT_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header,
       });
 
     /**
@@ -294,6 +305,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         showIf: (config) => showForTableView(config) && config.saveSelectedGroup,
         category: ['Groups'],
+      })
+      .addRadio({
+        path: 'groupRowCount',
+        name: 'Display count selected rows',
+        settings: {
+          options: ROW_COUNT_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Groups'],
+        showIf: (config) => showForTableView(config) && config.groupSelection,
       });
 
     /**

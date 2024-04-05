@@ -223,6 +223,20 @@ export interface PanelOptions extends TableViewOptions {
    * @type {number}
    */
   labelWidth: number;
+
+  /**
+   * Group Row Count
+   *
+   * @type {boolean}
+   */
+  groupRowCount: boolean;
+
+  /**
+   * Header Row Count
+   *
+   * @type {boolean}
+   */
+  headerRowCount: boolean;
 }
 
 /**

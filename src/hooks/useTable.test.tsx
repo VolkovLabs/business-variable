@@ -1035,6 +1035,91 @@ describe('Use Table Hook', () => {
       expect(within(device1).getByText('device: device1')).toBeInTheDocument();
     });
 
+    it('Should show Group Count', () => {
+      const deviceVariable = createRuntimeVariableMock({
+        multi: true,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      } as any);
+      const countryVariable = createRuntimeVariableMock({
+        multi: true,
+        options: [
+          {
+            text: 'USA',
+            value: 'USA',
+            selected: false,
+          },
+        ],
+      } as any);
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn((name: string) => (name === 'country' ? countryVariable : deviceVariable)),
+          }) as any
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            showName: true,
+            favorites: true,
+            groupSelection: true,
+            groupRowCount: true,
+          } as any,
+          eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
+          panelEventBus: null as any,
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      expect(screen.getByTestId(TEST_IDS.table.groupCount('Japan'))).toBeInTheDocument();
+    });
+
     it('Should work for text variable', () => {
       const deviceVariable = createRuntimeVariableMock({
         type: VariableType.TEXTBOX,
@@ -1556,6 +1641,176 @@ describe('Use Table Hook', () => {
         fireEvent.click(buttonExpandAll);
 
         expect(toggleAllRows).toHaveBeenCalled();
+      });
+
+      it('Should render count text', () => {
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+              headerRowCount: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+            panelEventBus: null as any,
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        expect(screen.getByTestId(TEST_IDS.table.headerGroupCount)).toBeInTheDocument();
+      });
+
+      it('Should render correct count text with All', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: createRuntimeVariableMock({
+                type: VariableType.CUSTOM,
+                multi: true,
+                options: [
+                  {
+                    text: ALL_VALUE,
+                    value: ALL_VALUE_PARAMETER,
+                    selected: true,
+                  },
+                  {
+                    text: 'Option 1',
+                    value: 'option1',
+                    selected: true,
+                  },
+                  {
+                    text: 'Option 2',
+                    value: 'option2',
+                    selected: true,
+                  },
+                ],
+              } as any),
+            }) as any
+        );
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+              headerRowCount: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+            panelEventBus: null as any,
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const spanElement = screen.getByTestId(TEST_IDS.table.headerGroupCount);
+        expect(spanElement).toBeInTheDocument();
+        expect(spanElement).toHaveTextContent('(2/2 selected)');
+      });
+
+      it('Should render correct count text without All', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: createRuntimeVariableMock({
+                type: VariableType.CUSTOM,
+                multi: true,
+                options: [
+                  {
+                    text: 'Option 1',
+                    value: 'option1',
+                    selected: true,
+                  },
+                  {
+                    text: 'Option 2',
+                    value: 'option2',
+                    selected: false,
+                  },
+                ],
+              } as any),
+            }) as any
+        );
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: {
+              header: true,
+              headerRowCount: true,
+            } as any,
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+            panelEventBus: null as any,
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const spanElement = screen.getByTestId(TEST_IDS.table.headerGroupCount);
+        expect(spanElement).toBeInTheDocument();
+        expect(spanElement).toHaveTextContent('(1/2 selected)');
       });
 
       it('Should show current expand state', () => {

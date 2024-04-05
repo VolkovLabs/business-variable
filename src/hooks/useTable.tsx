@@ -272,6 +272,25 @@ export const useTable = ({
            */
           const isSelectedAll = runtimeVariable ? isVariableAllSelected(runtimeVariable) : false;
 
+          /**
+           * Show Header Counts
+           */
+          const isShowHeaderCounts =
+            isVariableWithOptions(runtimeVariable) && runtimeVariable?.multi && options.headerRowCount;
+          /**
+           * Selected Options include "all-option" variable
+           */
+          const selectedOptions = runtimeVariable?.options.some((option) => option.text === 'All' && option.selected)
+            ? runtimeVariable?.options.length - 1
+            : runtimeVariable?.options.filter((option) => option.selected).length;
+
+          /**
+           * All Options include "all-option" variable
+           */
+          const allOptions = runtimeVariable?.options.some((option) => option.text === 'All')
+            ? runtimeVariable?.options.length - 1
+            : runtimeVariable?.options.length;
+
           return (
             <>
               {options.groupSelection && (
@@ -309,6 +328,18 @@ export const useTable = ({
                 />
               )}
               {runtimeVariable?.label || variable}
+              {isShowHeaderCounts && (
+                <span
+                  data-testid={TEST_IDS.table.headerGroupCount}
+                  style={{
+                    marginLeft: theme.spacing(1),
+                    fontSize: theme.spacing(1.5),
+                    color: theme.colors.text.disabled,
+                  }}
+                >
+                  ({selectedOptions}/{allOptions} selected)
+                </span>
+              )}
             </>
           );
         },
@@ -318,6 +349,16 @@ export const useTable = ({
         sortingFn: statusSort,
         cell: ({ row, getValue }) => {
           const value = row.original.label || (getValue() as string);
+
+          /**
+           * Show Group Counts
+           */
+          const isShowGroupCount =
+            isVariableWithOptions(runtimeVariable) &&
+            runtimeVariable?.multi &&
+            options.groupSelection &&
+            options.groupRowCount &&
+            row.original.childValues;
 
           return (
             <div
@@ -400,6 +441,18 @@ export const useTable = ({
                     {options.showName && row.original.name ? `${row.original.name}: ` : ''}
                     {value}
                   </span>
+                  {isShowGroupCount && (
+                    <span
+                      data-testid={TEST_IDS.table.groupCount(value)}
+                      style={{
+                        marginLeft: theme.spacing(1),
+                        fontSize: theme.spacing(1.5),
+                        color: theme.colors.text.disabled,
+                      }}
+                    >
+                      ({row.original.childSelectedCount}/{row.original.childValues?.length} selected)
+                    </span>
+                  )}
                 </label>
               )}
 
@@ -457,18 +510,20 @@ export const useTable = ({
     options.filter,
     options.statusSort,
     options.favorites,
+    options.headerRowCount,
     options.groupSelection,
+    options.groupRowCount,
     options.showName,
     styles.selectControl,
     styles.expandButton,
     styles.rowContent,
     styles.label,
     styles.status,
+    theme,
     tableData,
     onChange,
-    theme,
-    onClick,
     eventBus,
+    onClick,
     favorites,
   ]);
 
