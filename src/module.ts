@@ -246,7 +246,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addNumberInput({
         path: 'maxVisibleValues',
         name: 'Maximum visible values',
-        description: 'Displayed for variables with the "Multi-value" option',
+        description: 'Supports for multi-choice variable.',
         settings: {
           placeholder: 'auto',
         },
