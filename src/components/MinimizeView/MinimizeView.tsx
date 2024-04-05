@@ -47,6 +47,7 @@ export const MinimizeView: React.FC<Props> = ({
     customValue = false,
     showLabel = false,
     labelWidth,
+    maxVisibleValues,
   } = {},
   eventBus,
   panelEventBus,
@@ -94,6 +95,7 @@ export const MinimizeView: React.FC<Props> = ({
               persistent={persistent}
               customValue={customValue}
               panelEventBus={panelEventBus}
+              maxVisibleValues={maxVisibleValues}
             />
           )}
           {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} panelEventBus={panelEventBus} />}

@@ -243,6 +243,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Layout'],
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
       })
+      .addNumberInput({
+        path: 'maxVisibleValues',
+        name: 'Maximum visible values',
+        description: 'Displayed for variables with the "Multi-value" option',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Layout'],
+        showIf: (config) => showForMinimizeView(config),
+      })
       .addCustomEditor({
         id: 'groups',
         path: 'groups',
