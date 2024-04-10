@@ -1099,7 +1099,7 @@ describe('Use Table Hook', () => {
             showName: true,
             favorites: true,
             groupSelection: true,
-            groupRowCount: true,
+            showGroupTotal: true,
           } as any,
           eventBus: null as any,
           levels: [
@@ -1652,7 +1652,7 @@ describe('Use Table Hook', () => {
             data: { series: [] } as any,
             options: {
               header: true,
-              headerRowCount: true,
+              showTotal: true,
             } as any,
             eventBus: null as any,
             levels: [
@@ -1718,7 +1718,7 @@ describe('Use Table Hook', () => {
             data: { series: [] } as any,
             options: {
               header: true,
-              headerRowCount: true,
+              showTotal: true,
             } as any,
             eventBus: null as any,
             levels: [
@@ -1781,7 +1781,7 @@ describe('Use Table Hook', () => {
             data: { series: [] } as any,
             options: {
               header: true,
-              headerRowCount: true,
+              showTotal: true,
             } as any,
             eventBus: null as any,
             levels: [

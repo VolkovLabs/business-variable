@@ -231,8 +231,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
-        path: 'headerRowCount',
-        name: 'Display count selected rows',
+        path: 'showTotal',
+        name: 'Display total selected values count',
         settings: {
           options: ROW_COUNT_OPTIONS,
         },
@@ -307,8 +307,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Groups'],
       })
       .addRadio({
-        path: 'groupRowCount',
-        name: 'Display count selected rows',
+        path: 'showGroupTotal',
+        name: 'Display selected values count per group',
         settings: {
           options: ROW_COUNT_OPTIONS,
         },

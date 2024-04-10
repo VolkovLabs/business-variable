@@ -276,7 +276,7 @@ export const useTable = ({
            * Show Header Counts
            */
           const isShowHeaderCounts =
-            isVariableWithOptions(runtimeVariable) && runtimeVariable?.multi && options.headerRowCount;
+            isVariableWithOptions(runtimeVariable) && runtimeVariable?.multi && options.showTotal;
           /**
            * Selected Options include "all-option" variable
            */
@@ -357,7 +357,7 @@ export const useTable = ({
             isVariableWithOptions(runtimeVariable) &&
             runtimeVariable?.multi &&
             options.groupSelection &&
-            options.groupRowCount &&
+            options.showGroupTotal &&
             row.original.childValues;
 
           return (
@@ -510,9 +510,9 @@ export const useTable = ({
     options.filter,
     options.statusSort,
     options.favorites,
-    options.headerRowCount,
+    options.showTotal,
     options.groupSelection,
-    options.groupRowCount,
+    options.showGroupTotal,
     options.showName,
     styles.selectControl,
     styles.expandButton,

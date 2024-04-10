@@ -225,18 +225,18 @@ export interface PanelOptions extends TableViewOptions {
   labelWidth: number;
 
   /**
-   * Group Row Count
+   * Show group total
    *
    * @type {boolean}
    */
-  groupRowCount: boolean;
+  showGroupTotal: boolean;
 
   /**
-   * Header Row Count
+   * Show total
    *
    * @type {boolean}
    */
-  headerRowCount: boolean;
+  showTotal: boolean;
 }
 
 /**
