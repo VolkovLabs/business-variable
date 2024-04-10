@@ -5,8 +5,14 @@ const actual = jest.requireActual('@grafana/ui');
 /**
  * Mock Select component
  */
-const Select = jest.fn(
-  ({ options, onChange, value, isMulti, allowCustomValue, maxVisibleValues, hideSelectedOptions, ...restProps }) => (
+const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => {
+  const selectProps: any = {};
+
+  if (restProps['aria-label']) {
+    selectProps['aria-label'] = restProps['aria-label'];
+  }
+
+  return (
     <select
       onChange={(event: any) => {
         if (onChange) {
@@ -23,7 +29,7 @@ const Select = jest.fn(
        */
       value={value === null ? '' : value}
       multiple={isMulti}
-      {...restProps}
+      {...selectProps}
     >
       {options.map(({ label, value }: any) => (
         <option key={value} value={value}>
@@ -31,8 +37,8 @@ const Select = jest.fn(
         </option>
       ))}
     </select>
-  )
-);
+  );
+});
 
 /**
  * Mock Button Row Toolbar
