@@ -123,6 +123,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Values'],
         showIf: (config) => showForMinimizeView(config),
+      })
+      .addNumberInput({
+        path: 'maxVisibleValues',
+        name: 'Maximum visible values',
+        description: 'Supports for multi-choice variable.',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Values'],
+        showIf: (config) => showForMinimizeView(config),
       });
 
     /**
@@ -242,16 +252,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Layout'],
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
-      })
-      .addNumberInput({
-        path: 'maxVisibleValues',
-        name: 'Maximum visible values',
-        description: 'Supports for multi-choice variable.',
-        settings: {
-          placeholder: 'auto',
-        },
-        category: ['Layout'],
-        showIf: (config) => showForMinimizeView(config),
       })
       .addCustomEditor({
         id: 'groups',

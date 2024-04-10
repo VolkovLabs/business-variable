@@ -144,6 +144,8 @@ export const OptionsVariable: React.FC<Props> = ({
       allowCustomValue={customValue}
       maxVisibleValues={maxVisibleValues}
       hideSelectedOptions={false}
+      closeMenuOnSelect={!variable.multi}
+      showAllSelectedWhenOpen={false}
     />
   );
 };
