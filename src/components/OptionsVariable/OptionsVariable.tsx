@@ -47,9 +47,9 @@ interface Props {
   panelEventBus: EventBus;
 
   /**
-   * Panel Event Bus
+   * Maximum visible values
    *
-   * @type {EventBus}
+   * @type {number | undefined}
    */
   maxVisibleValues: number | undefined;
 }
