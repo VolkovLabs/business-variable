@@ -223,6 +223,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {number}
    */
   labelWidth: number;
+
+  /**
+   * Maximum visible values
+   *
+   * @type {number}
+   */
+  maxVisibleValues: number;
 }
 
 /**
