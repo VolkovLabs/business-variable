@@ -7,6 +7,7 @@
 - Update selecting and deselecting multi-levels (#139)
 - Update Auto/Static Minimize label width (#144)
 - Add show and hide Minimize label (#144)
+- Added maxVisibleValues option in minimize view (#147)
 
 ## 2.5.0 (2024-04-01)
 
