@@ -14,3 +14,7 @@ timescale/
 
 # Tests
 __mocks__
+
+# Playwright tests
+playwright.config.ts
+test/panel.spec.ts
