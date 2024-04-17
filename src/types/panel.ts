@@ -237,6 +237,12 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   showTotal: boolean;
+
+  /** Maximum visible values
+   *
+   * @type {number}
+   */
+  maxVisibleValues: number;
 }
 
 /**

@@ -45,13 +45,27 @@ interface Props {
    * @type {EventBus}
    */
   panelEventBus: EventBus;
+
+  /**
+   * Maximum visible values
+   *
+   * @type {number | undefined}
+   */
+  maxVisibleValues: number | undefined;
 }
 
 /**
  * Options Variable
  * @param props
  */
-export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persistent, customValue, panelEventBus }) => {
+export const OptionsVariable: React.FC<Props> = ({
+  variable,
+  emptyValue,
+  persistent,
+  customValue,
+  panelEventBus,
+  maxVisibleValues,
+}) => {
   /**
    * Persistent storage
    */
@@ -128,6 +142,10 @@ export const OptionsVariable: React.FC<Props> = ({ variable, emptyValue, persist
       isMulti={variable.multi}
       value={variable.multi ? values : values[0] || null}
       allowCustomValue={customValue}
+      maxVisibleValues={maxVisibleValues}
+      hideSelectedOptions={false}
+      closeMenuOnSelect={!variable.multi}
+      showAllSelectedWhenOpen={false}
     />
   );
 };
