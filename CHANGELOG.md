@@ -8,6 +8,7 @@
 - Update Auto/Static Minimize label width (#144)
 - Add show and hide Minimize label (#144)
 - Added maxVisibleValues option in minimize view (#147)
+- Add plugin e2e tests and remove cypress (#149)
 
 ## 2.5.0 (2024-04-01)
 
