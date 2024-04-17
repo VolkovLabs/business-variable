@@ -1,7 +1,7 @@
 import { test, expect } from '@grafana/plugin-e2e';
 import { TEST_IDS } from '../src/constants/tests';
 
-test.describe('Data Variable Panel', () => {
+test.describe('Volkovlabs Variable Panel', () => {
   test('Should display Alert Info', async ({ gotoDashboardPage, dashboardPage, page }) => {
     /**
      * Go To Panels dashboard panels.json
