@@ -120,3 +120,11 @@ export const ALLOW_CUSTOM_VALUE_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Custom values enabled.' },
   { value: false, label: 'Disabled', description: 'Custom values disabled.' },
 ];
+
+/**
+ * Row Count Options
+ */
+export const ROW_COUNT_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Display selected rows' },
+  { value: false, label: 'Disabled', description: 'Hide selected rows.' },
+];

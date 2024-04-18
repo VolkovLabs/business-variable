@@ -13,6 +13,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   PERSISTENT_OPTIONS,
+  ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
   SHOW_LABEL_OPTIONS,
   SHOW_NAME_OPTIONS,
@@ -238,6 +239,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Header'],
         showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'showTotal',
+        name: 'Display total and selected values count for multi-select variables',
+        settings: {
+          options: ROW_COUNT_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header,
       });
 
     /**
@@ -304,6 +315,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         showIf: (config) => showForTableView(config) && config.saveSelectedGroup,
         category: ['Groups'],
+      })
+      .addRadio({
+        path: 'showGroupTotal',
+        name: 'Display selected values count per group',
+        settings: {
+          options: ROW_COUNT_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Groups'],
+        showIf: (config) => showForTableView(config) && config.groupSelection,
       });
 
     /**

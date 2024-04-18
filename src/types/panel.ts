@@ -225,7 +225,20 @@ export interface PanelOptions extends TableViewOptions {
   labelWidth: number;
 
   /**
-   * Maximum visible values
+   * Show group total
+   *
+   * @type {boolean}
+   */
+  showGroupTotal: boolean;
+
+  /**
+   * Show total
+   *
+   * @type {boolean}
+   */
+  showTotal: boolean;
+
+  /** Maximum visible values
    *
    * @type {number}
    */

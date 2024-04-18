@@ -22,6 +22,8 @@ export const TEST_IDS = {
     fieldFilterValue: 'data-testid table field-filter-value',
     buttonCleanFilterValue: 'data-testid table button-clean-filter-value',
     header: 'data-testid table header',
+    headerGroupCount: 'data-testid table header-group-count',
+    groupCount: (value: string) => `data-testid table group-count-${value}`,
     label: 'data-testid table label',
   },
   groupsEditor: {
