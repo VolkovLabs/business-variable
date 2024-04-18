@@ -242,7 +242,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'showTotal',
-        name: 'Display total selected values count',
+        name: 'Display total and selected values count for multi-select variables',
         settings: {
           options: ROW_COUNT_OPTIONS,
         },
