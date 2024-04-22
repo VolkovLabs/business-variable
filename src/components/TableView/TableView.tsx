@@ -84,11 +84,6 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   });
 
   /**
-   * First selected row ref
-   */
-  const firstSelectedRowRef = useRef(null);
-
-  /**
    * Is Panel Focused
    */
   const isFocused = useRef<boolean>(false);
@@ -187,7 +182,6 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             data={tableData}
             getSubRows={getSubRows}
             showHeader={options.header}
-            firstSelectedRowRef={firstSelectedRowRef}
             tableRef={tableRef}
             tableHeaderRef={tableHeaderRef}
             topOffset={tableTopOffset}

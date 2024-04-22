@@ -49,11 +49,6 @@ interface Props<TTableData extends object> {
   showHeader?: boolean;
 
   /**
-   * First Selected Row Ref
-   */
-  firstSelectedRowRef?: RefObject<HTMLTableRowElement>;
-
-  /**
    * Table Ref
    */
   tableRef?: RefObject<HTMLTableElement>;
@@ -104,7 +99,6 @@ export const Table = <TTableData extends object>({
   columns,
   getSubRows,
   showHeader = true,
-  firstSelectedRowRef,
   tableRef,
   topOffset = 0,
   tableHeaderRef,
@@ -180,8 +174,6 @@ export const Table = <TTableData extends object>({
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
-  let isSelectedRowFound = false;
-
   /**
    * Auto scroll
    * use virtualizer Instance
@@ -195,7 +187,7 @@ export const Table = <TTableData extends object>({
        */
       rowVirtualizer.scrollToIndex(selectedIndex, { align: 'start' });
     }
-  }, [firstSelectedRowRef, autoScroll, data, isFocused, rowVirtualizer, selectedIndex]);
+  }, [autoScroll, data, isFocused, rowVirtualizer, selectedIndex]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>
@@ -259,17 +251,10 @@ export const Table = <TTableData extends object>({
         )}
         {virtualRows.map((virtualRow) => {
           const row = rows[virtualRow.index];
-          const selected = 'selected' in row.original ? row.original.selected : false;
-          let ref = undefined;
-          if (selected && !isSelectedRowFound) {
-            isSelectedRowFound = true;
-            ref = firstSelectedRowRef;
-          }
           return (
             <tr
               key={row.id}
               className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)}
-              ref={ref}
               data-testid={TEST_IDS.table.row(row.id)}
             >
               {row.getVisibleCells().map((cell) => {
