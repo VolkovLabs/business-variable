@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React, { useRef } from 'react';
@@ -10,6 +11,30 @@ import { Table } from './Table';
  * Props
  */
 type Props = React.ComponentProps<typeof Table>;
+
+/**
+ * Mock the useVirtualizer hook partially
+ */
+jest.mock('@tanstack/react-virtual', () => {
+  const originalModule = jest.requireActual('@tanstack/react-virtual');
+
+  return {
+    ...originalModule,
+    useVirtualizer: jest.fn((options) => {
+      const originalVirtualizer = originalModule.useVirtualizer(options);
+
+      /**
+       * Partially mock the virtualizer functions
+       */
+      const mockVirtualizer = {
+        ...originalVirtualizer,
+        getScrollElement: jest.fn(),
+      };
+
+      return mockVirtualizer;
+    }),
+  };
+});
 
 /**
  * Test Ids only for tests
@@ -347,5 +372,54 @@ describe('Table', () => {
     );
 
     expect(selectors.buttonFilter(true)).not.toBeInTheDocument();
+  });
+
+  it('Should Call Scroll Function', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    render(
+      getComponent({
+        data,
+        columns: columns as any,
+        selectedIndex: 2,
+        autoScroll: true,
+        isFocused: false,
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(useVirtualizer).toHaveBeenCalled();
   });
 });
