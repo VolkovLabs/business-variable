@@ -4,7 +4,7 @@ import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useContentPosition, useContentSizes, useSavedState, useScrollTo, useTable } from '../../hooks';
+import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
 import { getStyles } from './TableView.styles';
@@ -54,7 +54,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   /**
    * Table config
    */
-  const { tableData, columns, getSubRows } = useTable({
+  const { tableData, columns, getSubRows, selectedIndex } = useTable({
     data,
     options,
     eventBus,
@@ -71,7 +71,6 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
     headerRef,
     tableTopOffset,
     tableHeaderRef,
-    tableContentTopOffset,
   } = useContentSizes({ height, options, tableData });
 
   /**
@@ -90,32 +89,9 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   const firstSelectedRowRef = useRef(null);
 
   /**
-   * Scroll To Element
-   */
-  const scrollTo = useScrollTo({ containerRef: scrollableContainerRef });
-
-  /**
    * Is Panel Focused
    */
   const isFocused = useRef<boolean>(false);
-
-  /**
-   * Auto scroll on group updates
-   */
-  useEffect(() => {
-    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll) {
-      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
-    }
-  }, [scrollTo, containerRef, currentGroup, firstSelectedRowRef, options.autoScroll, tableContentTopOffset]);
-
-  /**
-   * Auto scroll on external table data updates
-   */
-  useEffect(() => {
-    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll && tableData && !isFocused.current) {
-      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
-    }
-  }, [scrollTo, containerRef, firstSelectedRowRef, options.autoScroll, tableData, tableContentTopOffset]);
 
   /**
    * Styles and Theme
@@ -217,6 +193,9 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             topOffset={tableTopOffset}
             scrollableContainerRef={scrollableContainerRef}
             alwaysVisibleFilter={options.alwaysVisibleFilter}
+            isFocused={isFocused.current}
+            autoScroll={options.autoScroll}
+            selectedIndex={selectedIndex}
           />
         </div>
       </div>

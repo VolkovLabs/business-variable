@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useCallback, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { Filter } from './Filter';
@@ -77,6 +77,21 @@ interface Props<TTableData extends object> {
    * Always Visible Filter
    */
   alwaysVisibleFilter: boolean;
+
+  /**
+   * Is Panel Focused
+   */
+  isFocused: boolean;
+
+  /**
+   *  Auto scrol option
+   */
+  autoScroll: boolean;
+
+  /**
+   *  Index of the selected item
+   */
+  selectedIndex: number;
 }
 
 /**
@@ -95,6 +110,9 @@ export const Table = <TTableData extends object>({
   tableHeaderRef,
   scrollableContainerRef,
   alwaysVisibleFilter,
+  isFocused,
+  autoScroll,
+  selectedIndex,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -163,6 +181,21 @@ export const Table = <TTableData extends object>({
   const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
   let isSelectedRowFound = false;
+
+  /**
+   * Auto scroll
+   * use virtualizer Instance
+   * scrollToIndex function
+   */
+  useEffect(() => {
+    if (autoScroll && data && !isFocused && selectedIndex >= 0) {
+      /**
+       * align property start
+       * display a scroll element at the top of the visible container
+       */
+      rowVirtualizer.scrollToIndex(selectedIndex, { align: 'start' });
+    }
+  }, [firstSelectedRowRef, autoScroll, data, isFocused, rowVirtualizer, selectedIndex]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>

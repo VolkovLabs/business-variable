@@ -534,9 +534,18 @@ export const useTable = ({
     return row.children;
   }, []);
 
+  /**
+   * Selected Index
+   * index of selected Item, use for autoScroll function
+   */
+  const selectedIndex = useMemo(() => {
+    return tableData.findIndex((tableElement) => tableElement.selected);
+  }, [tableData]);
+
   return {
     tableData,
     columns,
     getSubRows,
+    selectedIndex,
   };
 };
