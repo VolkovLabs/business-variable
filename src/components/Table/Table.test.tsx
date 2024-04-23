@@ -399,12 +399,12 @@ describe('Table', () => {
 
     const scrollToIndex = jest.fn();
 
-    (useVirtualizer as jest.Mock).mockImplementation(() => {
+    jest.mocked(useVirtualizer).mockImplementation(() => {
       return {
         scrollToIndex,
         getVirtualItems: jest.fn(() => []),
         getTotalSize: jest.fn(() => 2),
-      };
+      } as any;
     });
 
     render(
@@ -459,12 +459,12 @@ describe('Table', () => {
 
     const scrollToIndex = jest.fn();
 
-    (useVirtualizer as jest.Mock).mockImplementation(() => {
+    jest.mocked(useVirtualizer).mockImplementation(() => {
       return {
         scrollToIndex,
         getVirtualItems: jest.fn(() => []),
         getTotalSize: jest.fn(() => 2),
-      };
+      } as any;
     });
 
     render(
@@ -518,12 +518,12 @@ describe('Table', () => {
 
     const scrollToIndex = jest.fn();
 
-    (useVirtualizer as jest.Mock).mockImplementation(() => {
+    jest.mocked(useVirtualizer).mockImplementation(() => {
       return {
         scrollToIndex,
         getVirtualItems: jest.fn(() => []),
         getTotalSize: jest.fn(() => 2),
-      };
+      } as any;
     });
 
     render(
