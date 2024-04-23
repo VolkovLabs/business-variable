@@ -14,27 +14,15 @@ type Props = React.ComponentProps<typeof Table>;
 
 /**
  * Mock the useVirtualizer hook partially
+ * Return useVirtualizer with "options"
+ * to reproduce the correct behavior in the tests
  */
-jest.mock('@tanstack/react-virtual', () => {
-  const originalModule = jest.requireActual('@tanstack/react-virtual');
-
-  return {
-    ...originalModule,
-    useVirtualizer: jest.fn((options) => {
-      const originalVirtualizer = originalModule.useVirtualizer(options);
-
-      /**
-       * Partially mock the virtualizer functions
-       */
-      const mockVirtualizer = {
-        ...originalVirtualizer,
-        getScrollElement: jest.fn(),
-      };
-
-      return mockVirtualizer;
-    }),
-  };
-});
+jest.mock('@tanstack/react-virtual', () => ({
+  ...jest.requireActual('@tanstack/react-virtual'),
+  useVirtualizer: jest.fn((options) => ({
+    ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
+  })),
+}));
 
 /**
  * Test Ids only for tests
@@ -409,6 +397,16 @@ describe('Table', () => {
       },
     ];
 
+    const scrollToIndex = jest.fn();
+
+    (useVirtualizer as jest.Mock).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      };
+    });
+
     render(
       getComponent({
         data,
@@ -420,6 +418,125 @@ describe('Table', () => {
       })
     );
 
-    expect(useVirtualizer).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalledWith(2, { align: 'start' });
+  });
+
+  it('Should not Scroll if autoScroll disabled ', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    (useVirtualizer as jest.Mock).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      };
+    });
+
+    render(
+      getComponent({
+        data,
+        columns: columns as any,
+        selectedIndex: 2,
+        autoScroll: false,
+        isFocused: false,
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).not.toHaveBeenCalled();
+  });
+
+  it('Should not Scroll if isFocused true ', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    (useVirtualizer as jest.Mock).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      };
+    });
+
+    render(
+      getComponent({
+        data,
+        columns: columns as any,
+        selectedIndex: 2,
+        autoScroll: true,
+        isFocused: true,
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).not.toHaveBeenCalled();
   });
 });
