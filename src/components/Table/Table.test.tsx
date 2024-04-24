@@ -419,7 +419,7 @@ describe('Table', () => {
     );
 
     expect(scrollToIndex).toHaveBeenCalled();
-    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start', behavior: 'smooth' });
   });
 
   it('Should Call Scroll Function if a variableValue is array', () => {
@@ -479,7 +479,7 @@ describe('Table', () => {
     );
 
     expect(scrollToIndex).toHaveBeenCalled();
-    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start', behavior: 'smooth' });
   });
 
   it('Should not Scroll if autoScroll disabled ', () => {
