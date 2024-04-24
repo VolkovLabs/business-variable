@@ -13,7 +13,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useCallback, useEffect, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { getScrollIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
 import { Filter } from './Filter';
@@ -84,9 +85,9 @@ interface Props<TTableData extends object> {
   autoScroll: boolean;
 
   /**
-   *  Index of the selected item
+   *  Current Variable value
    */
-  selectedIndex: number;
+  variableValue: string | string[];
 }
 
 /**
@@ -106,7 +107,7 @@ export const Table = <TTableData extends object>({
   alwaysVisibleFilter,
   isFocused,
   autoScroll,
-  selectedIndex,
+  variableValue,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -151,6 +152,12 @@ export const Table = <TTableData extends object>({
   const { rows } = tableInstance.getRowModel();
 
   /**
+   * Get correct scroll index
+   * Index depends on variableValue and rows
+   */
+  const currentScrollIndex = useMemo(() => getScrollIndex(variableValue, rows), [rows, variableValue]);
+
+  /**
    * Row Virtualizer
    * Options description - https://tanstack.com/virtual/v3/docs/api/virtualizer
    */
@@ -177,17 +184,13 @@ export const Table = <TTableData extends object>({
   /**
    * Auto scroll
    * use virtualizer Instance
-   * scrollToIndex function
+   * https://tanstack.com/virtual/v3/docs/api/virtualizer#scrolltoindex
    */
   useEffect(() => {
-    if (autoScroll && data && !isFocused && selectedIndex >= 0) {
-      /**
-       * align property start
-       * display a scroll element at the top of the visible container
-       */
-      rowVirtualizer.scrollToIndex(selectedIndex, { align: 'start' });
+    if (autoScroll && data && !isFocused && variableValue && currentScrollIndex !== -1) {
+      rowVirtualizer.scrollToIndex(currentScrollIndex, { align: 'start', behavior: 'smooth' });
     }
-  }, [autoScroll, data, isFocused, rowVirtualizer, selectedIndex]);
+  }, [autoScroll, currentScrollIndex, data, isFocused, rowVirtualizer, rows, variableValue]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>

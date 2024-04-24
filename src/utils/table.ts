@@ -1,5 +1,5 @@
 import { DataFrame, PanelData } from '@grafana/data';
-import { FilterFn, SortingFn } from '@tanstack/react-table';
+import { FilterFn, Row, SortingFn } from '@tanstack/react-table';
 
 import { ALL_VALUE_PARAMETER } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
@@ -314,4 +314,48 @@ export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
    * Filter last level row
    */
   return !!row.original.isFavorite;
+};
+
+/**
+ * Get Scroll Index
+ * @param variableValue
+ * @param rows
+ */
+export const getScrollIndex = <TTableData>(variableValue: string | string[], rows: Array<Row<TTableData>>) => {
+  /**
+   * Initial scrollIndex
+   * If a row is collapsed, we don't scroll to that row.
+   */
+  let scrollIndex = -1;
+
+  /**
+   * Get scrollIndex if variableValue is array
+   */
+  if (Array.isArray(variableValue) && variableValue.length > 0) {
+    /**
+     * Get row indexes
+     * If a row is collapsed, we get an index of -1.
+     * Sort all visible rows
+     */
+    const indexes = variableValue
+      .map((value) => {
+        const rowIndex = rows.findIndex((row) => (row.original as TableItem).value === value);
+        return rowIndex;
+      })
+      .filter((index) => index !== -1)
+      .sort((a, b) => a - b);
+
+    /**
+     * Set first visible row
+     */
+    if (!!indexes.length) {
+      scrollIndex = indexes[0];
+    }
+  } else {
+    /**
+     * Get scrollIndex if variableValue is string
+     */
+    scrollIndex = rows.findIndex((row) => (row.original as TableItem).value === variableValue);
+  }
+  return scrollIndex;
 };

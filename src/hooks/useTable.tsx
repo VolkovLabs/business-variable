@@ -535,17 +535,17 @@ export const useTable = ({
   }, []);
 
   /**
-   * Selected Index
-   * index of selected Item, use for autoScroll function
+   * Current variable value need for autoscroll function in table view
    */
-  const selectedIndex = useMemo(() => {
-    return tableData.findIndex((tableElement) => tableElement.selected);
-  }, [tableData]);
+  const variableValue = useMemo(
+    () => (runtimeVariable?.current.value ? runtimeVariable?.current.value : ''),
+    [runtimeVariable]
+  );
 
   return {
     tableData,
     columns,
     getSubRows,
-    selectedIndex,
+    variableValue,
   };
 };

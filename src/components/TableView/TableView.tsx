@@ -54,7 +54,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   /**
    * Table config
    */
-  const { tableData, columns, getSubRows, selectedIndex } = useTable({
+  const { tableData, columns, getSubRows, variableValue } = useTable({
     data,
     options,
     eventBus,
@@ -189,7 +189,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             alwaysVisibleFilter={options.alwaysVisibleFilter}
             isFocused={isFocused.current}
             autoScroll={options.autoScroll}
-            selectedIndex={selectedIndex}
+            variableValue={variableValue}
           />
         </div>
       </div>

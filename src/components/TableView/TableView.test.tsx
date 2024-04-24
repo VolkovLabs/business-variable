@@ -223,7 +223,7 @@ describe('Table View', () => {
       tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
-      selectedIndex: 1,
+      variableValue: '',
     }));
 
     await act(async () =>

@@ -411,7 +411,7 @@ describe('Table', () => {
       getComponent({
         data,
         columns: columns as any,
-        selectedIndex: 2,
+        variableValue: '2-1',
         autoScroll: true,
         isFocused: false,
         getSubRows: (row: any) => row.children,
@@ -419,7 +419,67 @@ describe('Table', () => {
     );
 
     expect(scrollToIndex).toHaveBeenCalled();
-    expect(scrollToIndex).toHaveBeenCalledWith(2, { align: 'start' });
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+  });
+
+  it('Should Call Scroll Function if a variableValue is array', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data,
+        columns: columns as any,
+        variableValue: ['2-1'],
+        autoScroll: true,
+        isFocused: false,
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
   });
 
   it('Should not Scroll if autoScroll disabled ', () => {
@@ -471,7 +531,7 @@ describe('Table', () => {
       getComponent({
         data,
         columns: columns as any,
-        selectedIndex: 2,
+        variableValue: '2-1',
         autoScroll: false,
         isFocused: false,
         getSubRows: (row: any) => row.children,
@@ -530,7 +590,7 @@ describe('Table', () => {
       getComponent({
         data,
         columns: columns as any,
-        selectedIndex: 2,
+        variableValue: '2-1',
         autoScroll: true,
         isFocused: true,
         getSubRows: (row: any) => row.children,
