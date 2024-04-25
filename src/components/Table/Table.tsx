@@ -89,9 +89,9 @@ interface Props<TTableData extends TableItem> {
   isFocused: RefObject<boolean>;
 
   /**
-   *  Auto scroll option
+   * Auto scroll option
    *
-   *  @type {boolean}
+   * @type {boolean}
    */
   autoScroll: boolean;
 }
@@ -157,7 +157,7 @@ export const Table = <TTableData extends TableItem>({
   const { rows } = tableInstance.getRowModel();
 
   /**
-   * Get first visible selected row index
+   * Get first visible selected row index from only visible rows
    */
   const firstSelectedRowIndex = useMemo(() => getFirstSelectedRowIndex(rows), [rows]);
 
@@ -187,7 +187,6 @@ export const Table = <TTableData extends TableItem>({
 
   /**
    * Auto scroll
-   * use virtualizer Instance
    * https://tanstack.com/virtual/v3/docs/api/virtualizer#scrolltoindex
    */
   useEffect(() => {
