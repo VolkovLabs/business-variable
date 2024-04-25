@@ -317,45 +317,28 @@ export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
 };
 
 /**
- * Get Scroll Index
- * @param variableValue
+ * Get First Selected Row Index
+ * Rows are only visible items
  * @param rows
  */
-export const getScrollIndex = <TTableData>(variableValue: string | string[], rows: Array<Row<TTableData>>) => {
-  /**
-   * Initial scrollIndex
-   * If a row is collapsed, we don't scroll to that row.
-   */
-  let scrollIndex = -1;
-
-  /**
-   * Get scrollIndex if variableValue is array
-   */
-  if (Array.isArray(variableValue) && variableValue.length > 0) {
-    /**
-     * Get row indexes
-     * If a row is collapsed, we get an index of -1.
-     * Sort all visible rows
-     */
-    const indexes = variableValue
-      .map((value) => {
-        const rowIndex = rows.findIndex((row) => (row.original as TableItem).value === value);
-        return rowIndex;
-      })
-      .filter((index) => index !== -1)
-      .sort((a, b) => a - b);
+export const getFirstSelectedRowIndex = <TTableData extends TableItem>(rows: Array<Row<TTableData>>): number => {
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+    const row = rows[rowIndex];
 
     /**
-     * Set first visible row
+     * Row is a group, so skip
      */
-    if (!!indexes.length) {
-      scrollIndex = indexes[0];
+    if (row.originalSubRows) {
+      continue;
     }
-  } else {
+
     /**
-     * Get scrollIndex if variableValue is string
+     * Selected row found
      */
-    scrollIndex = rows.findIndex((row) => (row.original as TableItem).value === variableValue);
+    if (row.original.selected) {
+      return rowIndex;
+    }
   }
-  return scrollIndex;
+
+  return -1;
 };

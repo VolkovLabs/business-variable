@@ -54,7 +54,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   /**
    * Table config
    */
-  const { tableData, columns, getSubRows, variableValue } = useTable({
+  const { tableData, columns, getSubRows } = useTable({
     data,
     options,
     eventBus,
@@ -187,9 +187,8 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             topOffset={tableTopOffset}
             scrollableContainerRef={scrollableContainerRef}
             alwaysVisibleFilter={options.alwaysVisibleFilter}
-            isFocused={isFocused.current}
+            isFocused={isFocused}
             autoScroll={options.autoScroll}
-            variableValue={variableValue}
           />
         </div>
       </div>

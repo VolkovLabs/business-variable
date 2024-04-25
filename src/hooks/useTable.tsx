@@ -534,18 +534,9 @@ export const useTable = ({
     return row.children;
   }, []);
 
-  /**
-   * Current variable value need for autoscroll function in table view
-   */
-  const variableValue = useMemo(
-    () => (runtimeVariable?.current.value ? runtimeVariable?.current.value : ''),
-    [runtimeVariable]
-  );
-
   return {
     tableData,
     columns,
     getSubRows,
-    variableValue,
   };
 };

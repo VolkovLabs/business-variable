@@ -63,7 +63,7 @@ describe('Table', () => {
   const selectors = getSelectors(screen);
 
   it('Should render all levels', () => {
-    const data = [
+    const data: any = [
       {
         value: '1',
         children: [
@@ -142,7 +142,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
       })
     );
 
@@ -187,7 +187,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
       })
     );
 
@@ -238,7 +238,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
         alwaysVisibleFilter: true,
       })
     );
@@ -269,7 +269,7 @@ describe('Table', () => {
         data: [
           { value: 'device1', status: 60 },
           { value: 'device2', status: 50 },
-        ],
+        ] as any,
       })
     );
 
@@ -332,7 +332,7 @@ describe('Table', () => {
         data: [
           { value: 'device1', isFavorite: true },
           { value: 'device2', isFavorite: false },
-        ],
+        ] as any,
       })
     );
 
@@ -362,16 +362,18 @@ describe('Table', () => {
     expect(selectors.buttonFilter(true)).not.toBeInTheDocument();
   });
 
-  it('Should Call Scroll Function', () => {
+  it('Should scroll if autoScroll enabled', () => {
     const data = [
       {
         value: '1',
         children: [
           {
             value: '1-1',
+            selected: false,
           },
           {
             value: '1-2',
+            selected: false,
           },
         ],
       },
@@ -380,9 +382,11 @@ describe('Table', () => {
         children: [
           {
             value: '2-1',
+            selected: true,
           },
           {
             value: '2-2',
+            selected: false,
           },
         ],
       },
@@ -409,20 +413,21 @@ describe('Table', () => {
 
     render(
       getComponent({
-        data,
+        data: data as any,
         columns: columns as any,
-        variableValue: '2-1',
         autoScroll: true,
-        isFocused: false,
+        isFocused: {
+          current: false,
+        },
         getSubRows: (row: any) => row.children,
       })
     );
 
     expect(scrollToIndex).toHaveBeenCalled();
-    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start', behavior: 'smooth' });
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
   });
 
-  it('Should Call Scroll Function if a variableValue is array', () => {
+  it('Should not scroll if autoScroll disabled ', () => {
     const data = [
       {
         value: '1',
@@ -469,71 +474,12 @@ describe('Table', () => {
 
     render(
       getComponent({
-        data,
+        data: data as any,
         columns: columns as any,
-        variableValue: ['2-1'],
-        autoScroll: true,
-        isFocused: false,
-        getSubRows: (row: any) => row.children,
-      })
-    );
-
-    expect(scrollToIndex).toHaveBeenCalled();
-    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start', behavior: 'smooth' });
-  });
-
-  it('Should not Scroll if autoScroll disabled ', () => {
-    const data = [
-      {
-        value: '1',
-        children: [
-          {
-            value: '1-1',
-          },
-          {
-            value: '1-2',
-          },
-        ],
-      },
-      {
-        value: '2',
-        children: [
-          {
-            value: '2-1',
-          },
-          {
-            value: '2-2',
-          },
-        ],
-      },
-    ];
-    const columns: Array<ColumnDef<typeof data>> = [
-      {
-        id: 'value',
-        accessorKey: 'value',
-        cell: ({ getValue, row }) => (
-          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
-        ),
-      },
-    ];
-
-    const scrollToIndex = jest.fn();
-
-    jest.mocked(useVirtualizer).mockImplementation(() => {
-      return {
-        scrollToIndex,
-        getVirtualItems: jest.fn(() => []),
-        getTotalSize: jest.fn(() => 2),
-      } as any;
-    });
-
-    render(
-      getComponent({
-        data,
-        columns: columns as any,
-        variableValue: '2-1',
         autoScroll: false,
-        isFocused: false,
+        isFocused: {
+          current: false,
+        },
         getSubRows: (row: any) => row.children,
       })
     );
@@ -588,11 +534,12 @@ describe('Table', () => {
 
     render(
       getComponent({
-        data,
+        data: data as any,
         columns: columns as any,
-        variableValue: '2-1',
         autoScroll: true,
-        isFocused: true,
+        isFocused: {
+          current: true,
+        },
         getSubRows: (row: any) => row.children,
       })
     );

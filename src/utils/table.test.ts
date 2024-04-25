@@ -1,7 +1,14 @@
 import { addRow, DataFrame, FieldType, toDataFrame } from '@grafana/data';
 
 import { TableItem } from '../types';
-import { convertTreeToPlain, favoriteFilter, getRows, getScrollIndex, statusSort, valueFilter } from './table';
+import {
+  convertTreeToPlain,
+  favoriteFilter,
+  getFirstSelectedRowIndex,
+  getRows,
+  statusSort,
+  valueFilter,
+} from './table';
 
 describe('Table Utils', () => {
   /**
@@ -872,73 +879,71 @@ describe('Table Utils', () => {
     });
   });
 
-  /**
-   * getScrollIndex
-   */
-  describe('getScrollIndex', () => {
-    /**
-     * When variableValue is a string and matches a row
-     */
-    it('should return the index of the matched row', () => {
-      const rows = [
-        { original: { value: 'value1' } },
-        { original: { value: 'value2' } },
-        { original: { value: 'value3' } },
-      ];
-      const variableValue = 'value2';
-
-      const result = getScrollIndex(variableValue, rows as any);
-
-      expect(result).toBe(1);
+  describe('getFirstSelectedRowIndex', () => {
+    it('Should find selected row with depth 0', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: true,
+            },
+          },
+        ] as any)
+      ).toEqual(1);
     });
 
-    /**
-     * When variableValue is a string and does not match any row
-     */
-    it('should return -1', () => {
-      const rows = [
-        { original: { value: 'value1' } },
-        { original: { value: 'value2' } },
-        { original: { value: 'value3' } },
-      ];
-      const variableValue = 'value4';
-
-      const result = getScrollIndex(variableValue, rows as any);
-
-      expect(result).toBe(-1);
+    it('Should not find if no selected row ', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+        ] as any)
+      ).toEqual(-1);
     });
 
-    /**
-     * When variableValue is an array and matches multiple rows
-     */
-    it('should return the index of the first matched row', () => {
-      const rows = [
-        { original: { value: 'value1' } },
-        { original: { value: 'value2' } },
-        { original: { value: 'value3' } },
-        { original: { value: 'value2' } },
-      ];
-      const variableValue = ['value2', 'value3'];
-
-      const result = getScrollIndex(variableValue, rows as any);
-
-      expect(result).toBe(1);
-    });
-
-    /**
-     *  When variableValue is an array and does not match any row
-     */
-    it('should return -1', () => {
-      const rows = [
-        { original: { value: 'value1' } },
-        { original: { value: 'value2' } },
-        { original: { value: 'value3' } },
-      ];
-      const variableValue = ['value4', 'value5'];
-
-      const result = getScrollIndex(variableValue, rows as any);
-
-      expect(result).toBe(-1);
+    it('Should skip groups and find only childs', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: [],
+            original: {
+              value: 'group1',
+              selected: true,
+            },
+          },
+          {
+            originalSubRows: [],
+            original: {
+              value: 'group2',
+              selected: true,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              value: 'item1',
+              selected: true,
+            },
+          },
+        ] as any)
+      ).toEqual(2);
     });
   });
 });

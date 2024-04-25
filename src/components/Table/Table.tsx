@@ -14,16 +14,17 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { getScrollIndex } from 'utils';
+import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
+import { TableItem } from '../../types';
 import { Filter } from './Filter';
 import { getStyles } from './Table.styles';
 
 /**
  * Props
  */
-interface Props<TTableData extends object> {
+interface Props<TTableData extends TableItem> {
   /**
    * Table's columns definition. Must be memoized.
    */
@@ -36,6 +37,8 @@ interface Props<TTableData extends object> {
 
   /**
    * Class Name
+   *
+   * @type {string}
    */
   className?: string;
 
@@ -46,6 +49,8 @@ interface Props<TTableData extends object> {
 
   /**
    * Show Header Cells
+   *
+   * @type {boolean}
    */
   showHeader?: boolean;
 
@@ -61,6 +66,8 @@ interface Props<TTableData extends object> {
 
   /**
    * Top Offset
+   *
+   * @type {number}
    */
   topOffset?: number;
 
@@ -71,30 +78,29 @@ interface Props<TTableData extends object> {
 
   /**
    * Always Visible Filter
+   *
+   * @type {boolean}
    */
   alwaysVisibleFilter: boolean;
 
   /**
    * Is Panel Focused
    */
-  isFocused: boolean;
+  isFocused: RefObject<boolean>;
 
   /**
-   *  Auto scrol option
+   *  Auto scroll option
+   *
+   *  @type {boolean}
    */
   autoScroll: boolean;
-
-  /**
-   *  Current Variable value
-   */
-  variableValue: string | string[];
 }
 
 /**
  * Table Component
  * @param props
  */
-export const Table = <TTableData extends object>({
+export const Table = <TTableData extends TableItem>({
   data,
   className,
   columns,
@@ -107,7 +113,6 @@ export const Table = <TTableData extends object>({
   alwaysVisibleFilter,
   isFocused,
   autoScroll,
-  variableValue,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -152,10 +157,9 @@ export const Table = <TTableData extends object>({
   const { rows } = tableInstance.getRowModel();
 
   /**
-   * Get correct scroll index
-   * Index depends on variableValue and rows
+   * Get first visible selected row index
    */
-  const currentScrollIndex = useMemo(() => getScrollIndex(variableValue, rows), [rows, variableValue]);
+  const firstSelectedRowIndex = useMemo(() => getFirstSelectedRowIndex(rows), [rows]);
 
   /**
    * Row Virtualizer
@@ -187,10 +191,10 @@ export const Table = <TTableData extends object>({
    * https://tanstack.com/virtual/v3/docs/api/virtualizer#scrolltoindex
    */
   useEffect(() => {
-    if (autoScroll && data && !isFocused && variableValue && currentScrollIndex !== -1) {
-      rowVirtualizer.scrollToIndex(currentScrollIndex, { align: 'start', behavior: 'smooth' });
+    if (autoScroll && data && !isFocused.current && firstSelectedRowIndex >= 0) {
+      rowVirtualizer.scrollToIndex(firstSelectedRowIndex, { align: 'start' });
     }
-  }, [autoScroll, currentScrollIndex, data, isFocused, rowVirtualizer, rows, variableValue]);
+  }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>
