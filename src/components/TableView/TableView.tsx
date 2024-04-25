@@ -1,7 +1,7 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
@@ -89,6 +89,11 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   const isFocused = useRef<boolean>(false);
 
   /**
+   * Should scroll
+   */
+  const shouldScroll = useRef<boolean>(false);
+
+  /**
    * Styles and Theme
    */
   const theme = useTheme2();
@@ -115,6 +120,13 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
 
     return [activeGroup, ...withoutActive];
   }, [currentGroup, options.groups]);
+
+  /**
+   * On after scroll
+   */
+  const onAfterScroll = useCallback(() => {
+    shouldScroll.current = false;
+  }, []);
 
   /**
    * Return
@@ -163,6 +175,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
                     variant={currentGroup === group.name ? 'active' : 'default'}
                     onClick={() => {
                       setCurrentGroup(group.name);
+                      shouldScroll.current = true;
                     }}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
                     className={styles.toolbarButton}
@@ -189,6 +202,8 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             alwaysVisibleFilter={options.alwaysVisibleFilter}
             isFocused={isFocused}
             autoScroll={options.autoScroll}
+            shouldScroll={shouldScroll}
+            onAfterScroll={onAfterScroll}
           />
         </div>
       </div>

@@ -48,10 +48,17 @@ describe('Table', () => {
   };
 
   /**
+   * On After Scroll
+   */
+  const onAfterScroll = jest.fn();
+
+  /**
    * Get Tested Component
    * @param props
    */
-  const getComponent = (props: Partial<Props>) => <Wrapper {...props} />;
+  const getComponent = (props: Partial<Props>) => (
+    <Wrapper onAfterScroll={onAfterScroll} shouldScroll={{ current: false }} {...props} />
+  );
 
   /**
    * Selectors
@@ -362,7 +369,7 @@ describe('Table', () => {
     expect(selectors.buttonFilter(true)).not.toBeInTheDocument();
   });
 
-  it('Should scroll if autoScroll enabled', () => {
+  it('Should scroll if autoScroll enabled and not focused', () => {
     const data = [
       {
         value: '1',
@@ -425,6 +432,78 @@ describe('Table', () => {
 
     expect(scrollToIndex).toHaveBeenCalled();
     expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+  });
+
+  it('Should scroll if autoScroll enabled and shouldScroll enabled', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+            selected: false,
+          },
+          {
+            value: '1-2',
+            selected: false,
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+            selected: true,
+          },
+          {
+            value: '2-2',
+            selected: false,
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    const onAfterScroll = jest.fn();
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        autoScroll: true,
+        isFocused: {
+          current: true,
+        },
+        shouldScroll: {
+          current: true,
+        },
+        getSubRows: (row: any) => row.children,
+        onAfterScroll,
+      })
+    );
+
+    expect(scrollToIndex).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+    expect(onAfterScroll).toHaveBeenCalled();
   });
 
   it('Should not scroll if autoScroll disabled ', () => {

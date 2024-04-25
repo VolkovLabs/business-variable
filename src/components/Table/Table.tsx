@@ -89,11 +89,21 @@ interface Props<TTableData extends TableItem> {
   isFocused: RefObject<boolean>;
 
   /**
+   * Should scroll
+   */
+  shouldScroll: RefObject<boolean>;
+
+  /**
    * Auto scroll option
    *
    * @type {boolean}
    */
   autoScroll: boolean;
+
+  /**
+   * Function to call after auto scroll
+   */
+  onAfterScroll: () => void;
 }
 
 /**
@@ -113,6 +123,8 @@ export const Table = <TTableData extends TableItem>({
   alwaysVisibleFilter,
   isFocused,
   autoScroll,
+  shouldScroll,
+  onAfterScroll,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -190,10 +202,11 @@ export const Table = <TTableData extends TableItem>({
    * https://tanstack.com/virtual/v3/docs/api/virtualizer#scrolltoindex
    */
   useEffect(() => {
-    if (autoScroll && data && !isFocused.current && firstSelectedRowIndex >= 0) {
+    if (autoScroll && data && (!isFocused.current || shouldScroll.current) && firstSelectedRowIndex >= 0) {
       rowVirtualizer.scrollToIndex(firstSelectedRowIndex, { align: 'start' });
+      onAfterScroll();
     }
-  }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused]);
+  }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused, shouldScroll, onAfterScroll]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>

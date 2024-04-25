@@ -4,6 +4,7 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useSavedState, useTable } from '../../hooks';
+import { Table } from '../Table';
 import { TableView } from './TableView';
 
 /**
@@ -22,6 +23,13 @@ jest.mock('../../hooks', () => ({
     remove: jest.fn(),
   })),
   useSavedState: jest.fn(jest.requireActual('../../hooks/useSavedState').useSavedState),
+}));
+
+/**
+ * Mock table
+ */
+jest.mock('../Table', () => ({
+  Table: jest.fn((...params) => jest.requireActual('../Table').Table(...params)),
 }));
 
 /**
@@ -218,15 +226,24 @@ describe('Table View', () => {
     );
   });
 
-  it('Should switch groups', async () => {
+  it('Should switch groups and scroll to selected', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
       tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
-      variableValue: '',
     }));
 
-    await act(async () =>
+    /**
+     * Mock table
+     */
+    let onAfterScroll: any;
+    jest.mocked(Table).mockImplementationOnce((props) => {
+      onAfterScroll = props.onAfterScroll;
+
+      return jest.requireActual('../Table').Table(props);
+    });
+
+    const { rerender } = await act(async () =>
       render(
         getComponent({
           options: {
@@ -269,6 +286,65 @@ describe('Table View', () => {
           },
         ],
       })
+    );
+
+    /**
+     * Check if scroll enabled
+     */
+    expect(Table).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shouldScroll: {
+          current: true,
+        },
+      }),
+      expect.anything()
+    );
+
+    /**
+     * Simulate table scroll
+     */
+    onAfterScroll();
+
+    /**
+     * Re-render to check if scroll disabled
+     */
+    await act(async () =>
+      rerender(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'group1Field',
+                  },
+                ],
+              },
+              {
+                name: 'group2',
+                items: [
+                  {
+                    name: 'group2Field',
+                  },
+                ],
+              },
+            ],
+          } as any,
+        })
+      )
+    );
+
+    /**
+     * Check if scroll disabled
+     */
+    expect(Table).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shouldScroll: {
+          current: false,
+        },
+      }),
+      expect.anything()
     );
   });
 });
