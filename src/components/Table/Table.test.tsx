@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React, { useRef } from 'react';
@@ -10,6 +11,18 @@ import { Table } from './Table';
  * Props
  */
 type Props = React.ComponentProps<typeof Table>;
+
+/**
+ * Mock the useVirtualizer hook partially
+ * Return useVirtualizer with "options"
+ * to reproduce the correct behavior in the tests
+ */
+jest.mock('@tanstack/react-virtual', () => ({
+  ...jest.requireActual('@tanstack/react-virtual'),
+  useVirtualizer: jest.fn((options) => ({
+    ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
+  })),
+}));
 
 /**
  * Test Ids only for tests
@@ -35,10 +48,17 @@ describe('Table', () => {
   };
 
   /**
+   * On After Scroll
+   */
+  const onAfterScroll = jest.fn();
+
+  /**
    * Get Tested Component
    * @param props
    */
-  const getComponent = (props: Partial<Props>) => <Wrapper {...props} />;
+  const getComponent = (props: Partial<Props>) => (
+    <Wrapper onAfterScroll={onAfterScroll} shouldScroll={{ current: false }} {...props} />
+  );
 
   /**
    * Selectors
@@ -50,7 +70,7 @@ describe('Table', () => {
   const selectors = getSelectors(screen);
 
   it('Should render all levels', () => {
-    const data = [
+    const data: any = [
       {
         value: '1',
         children: [
@@ -129,7 +149,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
       })
     );
 
@@ -174,7 +194,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
       })
     );
 
@@ -225,7 +245,7 @@ describe('Table', () => {
             },
           },
         ],
-        data: [{ value: 'device1' }, { value: 'device2' }],
+        data: [{ value: 'device1' }, { value: 'device2' }] as any,
         alwaysVisibleFilter: true,
       })
     );
@@ -256,7 +276,7 @@ describe('Table', () => {
         data: [
           { value: 'device1', status: 60 },
           { value: 'device2', status: 50 },
-        ],
+        ] as any,
       })
     );
 
@@ -319,7 +339,7 @@ describe('Table', () => {
         data: [
           { value: 'device1', isFavorite: true },
           { value: 'device2', isFavorite: false },
-        ],
+        ] as any,
       })
     );
 
@@ -347,5 +367,262 @@ describe('Table', () => {
     );
 
     expect(selectors.buttonFilter(true)).not.toBeInTheDocument();
+  });
+
+  it('Should scroll if autoScroll enabled and not focused', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+            selected: false,
+          },
+          {
+            value: '1-2',
+            selected: false,
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+            selected: true,
+          },
+          {
+            value: '2-2',
+            selected: false,
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        autoScroll: true,
+        isFocused: {
+          current: false,
+        },
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+  });
+
+  it('Should scroll if autoScroll enabled and shouldScroll enabled', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+            selected: false,
+          },
+          {
+            value: '1-2',
+            selected: false,
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+            selected: true,
+          },
+          {
+            value: '2-2',
+            selected: false,
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    const onAfterScroll = jest.fn();
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        autoScroll: true,
+        isFocused: {
+          current: true,
+        },
+        shouldScroll: {
+          current: true,
+        },
+        getSubRows: (row: any) => row.children,
+        onAfterScroll,
+      })
+    );
+
+    expect(scrollToIndex).toHaveBeenCalled();
+    expect(scrollToIndex).toHaveBeenCalledWith(4, { align: 'start' });
+    expect(onAfterScroll).toHaveBeenCalled();
+  });
+
+  it('Should not scroll if autoScroll disabled ', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        autoScroll: false,
+        isFocused: {
+          current: false,
+        },
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).not.toHaveBeenCalled();
+  });
+
+  it('Should not Scroll if isFocused true ', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const scrollToIndex = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        scrollToIndex,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 2),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        autoScroll: true,
+        isFocused: {
+          current: true,
+        },
+        getSubRows: (row: any) => row.children,
+      })
+    );
+
+    expect(scrollToIndex).not.toHaveBeenCalled();
   });
 });

@@ -13,16 +13,18 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useCallback, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
+import { TableItem } from '../../types';
 import { Filter } from './Filter';
 import { getStyles } from './Table.styles';
 
 /**
  * Props
  */
-interface Props<TTableData extends object> {
+interface Props<TTableData extends TableItem> {
   /**
    * Table's columns definition. Must be memoized.
    */
@@ -35,6 +37,8 @@ interface Props<TTableData extends object> {
 
   /**
    * Class Name
+   *
+   * @type {string}
    */
   className?: string;
 
@@ -45,13 +49,10 @@ interface Props<TTableData extends object> {
 
   /**
    * Show Header Cells
+   *
+   * @type {boolean}
    */
   showHeader?: boolean;
-
-  /**
-   * First Selected Row Ref
-   */
-  firstSelectedRowRef?: RefObject<HTMLTableRowElement>;
 
   /**
    * Table Ref
@@ -65,6 +66,8 @@ interface Props<TTableData extends object> {
 
   /**
    * Top Offset
+   *
+   * @type {number}
    */
   topOffset?: number;
 
@@ -75,26 +78,53 @@ interface Props<TTableData extends object> {
 
   /**
    * Always Visible Filter
+   *
+   * @type {boolean}
    */
   alwaysVisibleFilter: boolean;
+
+  /**
+   * Is Panel Focused
+   */
+  isFocused: RefObject<boolean>;
+
+  /**
+   * Should scroll
+   */
+  shouldScroll: RefObject<boolean>;
+
+  /**
+   * Auto scroll option
+   *
+   * @type {boolean}
+   */
+  autoScroll: boolean;
+
+  /**
+   * Function to call after auto scroll
+   */
+  onAfterScroll: () => void;
 }
 
 /**
  * Table Component
  * @param props
  */
-export const Table = <TTableData extends object>({
+export const Table = <TTableData extends TableItem>({
   data,
   className,
   columns,
   getSubRows,
   showHeader = true,
-  firstSelectedRowRef,
   tableRef,
   topOffset = 0,
   tableHeaderRef,
   scrollableContainerRef,
   alwaysVisibleFilter,
+  isFocused,
+  autoScroll,
+  shouldScroll,
+  onAfterScroll,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -139,6 +169,11 @@ export const Table = <TTableData extends object>({
   const { rows } = tableInstance.getRowModel();
 
   /**
+   * Get first visible selected row index from only visible rows
+   */
+  const firstSelectedRowIndex = useMemo(() => getFirstSelectedRowIndex(rows), [rows]);
+
+  /**
    * Row Virtualizer
    * Options description - https://tanstack.com/virtual/v3/docs/api/virtualizer
    */
@@ -162,7 +197,16 @@ export const Table = <TTableData extends object>({
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom = virtualRows.length > 0 ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
-  let isSelectedRowFound = false;
+  /**
+   * Auto scroll
+   * https://tanstack.com/virtual/v3/docs/api/virtualizer#scrolltoindex
+   */
+  useEffect(() => {
+    if (autoScroll && data && (!isFocused.current || shouldScroll.current) && firstSelectedRowIndex >= 0) {
+      rowVirtualizer.scrollToIndex(firstSelectedRowIndex, { align: 'start' });
+      onAfterScroll();
+    }
+  }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused, shouldScroll, onAfterScroll]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>
@@ -226,17 +270,10 @@ export const Table = <TTableData extends object>({
         )}
         {virtualRows.map((virtualRow) => {
           const row = rows[virtualRow.index];
-          const selected = 'selected' in row.original ? row.original.selected : false;
-          let ref = undefined;
-          if (selected && !isSelectedRowFound) {
-            isSelectedRowFound = true;
-            ref = firstSelectedRowRef;
-          }
           return (
             <tr
               key={row.id}
               className={cx(styles.row, row.getIsExpanded() && styles.expandedRow)}
-              ref={ref}
               data-testid={TEST_IDS.table.row(row.id)}
             >
               {row.getVisibleCells().map((cell) => {
