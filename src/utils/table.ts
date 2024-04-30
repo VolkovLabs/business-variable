@@ -16,7 +16,7 @@ const convertToObjects = (dataFrame: DataFrame) => {
     const object = dataFrame.fields.reduce((acc, field) => {
       return {
         ...acc,
-        [field.name]: field.values.get(index),
+        [field.name]: field.values[index],
       };
     }, {});
 
