@@ -1,5 +1,5 @@
 import { DataFrame, PanelData } from '@grafana/data';
-import { FilterFn, SortingFn } from '@tanstack/react-table';
+import { FilterFn, Row, SortingFn } from '@tanstack/react-table';
 
 import { ALL_VALUE_PARAMETER } from '../constants';
 import { Level, RuntimeVariable, Status, TableItem } from '../types';
@@ -314,4 +314,31 @@ export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
    * Filter last level row
    */
   return !!row.original.isFavorite;
+};
+
+/**
+ * Get First Selected Row Index
+ * Rows are only visible items
+ * @param rows
+ */
+export const getFirstSelectedRowIndex = <TTableData extends TableItem>(rows: Array<Row<TTableData>>): number => {
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+    const row = rows[rowIndex];
+
+    /**
+     * Row is a group, so skip
+     */
+    if (row.originalSubRows) {
+      continue;
+    }
+
+    /**
+     * Selected row found
+     */
+    if (row.original.selected) {
+      return rowIndex;
+    }
+  }
+
+  return -1;
 };

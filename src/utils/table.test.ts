@@ -1,7 +1,14 @@
 import { addRow, DataFrame, FieldType, toDataFrame } from '@grafana/data';
 
 import { TableItem } from '../types';
-import { convertTreeToPlain, favoriteFilter, getRows, statusSort, valueFilter } from './table';
+import {
+  convertTreeToPlain,
+  favoriteFilter,
+  getFirstSelectedRowIndex,
+  getRows,
+  statusSort,
+  valueFilter,
+} from './table';
 
 describe('Table Utils', () => {
   /**
@@ -869,6 +876,74 @@ describe('Table Utils', () => {
       const rowB = { original: {} };
 
       expect(statusSort(rowA as any, rowB as any, 'value')).toEqual(0);
+    });
+  });
+
+  describe('getFirstSelectedRowIndex', () => {
+    it('Should find selected row with depth 0', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: true,
+            },
+          },
+        ] as any)
+      ).toEqual(1);
+    });
+
+    it('Should not find if no selected row ', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              selected: false,
+            },
+          },
+        ] as any)
+      ).toEqual(-1);
+    });
+
+    it('Should skip groups and find only childs', () => {
+      expect(
+        getFirstSelectedRowIndex([
+          {
+            originalSubRows: [],
+            original: {
+              value: 'group1',
+              selected: true,
+            },
+          },
+          {
+            originalSubRows: [],
+            original: {
+              value: 'group2',
+              selected: true,
+            },
+          },
+          {
+            originalSubRows: undefined,
+            original: {
+              value: 'item1',
+              selected: true,
+            },
+          },
+        ] as any)
+      ).toEqual(2);
     });
   });
 });

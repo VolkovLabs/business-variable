@@ -1,10 +1,10 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useContentPosition, useContentSizes, useSavedState, useScrollTo, useTable } from '../../hooks';
+import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
 import { getStyles } from './TableView.styles';
@@ -71,7 +71,6 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
     headerRef,
     tableTopOffset,
     tableHeaderRef,
-    tableContentTopOffset,
   } = useContentSizes({ height, options, tableData });
 
   /**
@@ -85,37 +84,14 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
   });
 
   /**
-   * First selected row ref
-   */
-  const firstSelectedRowRef = useRef(null);
-
-  /**
-   * Scroll To Element
-   */
-  const scrollTo = useScrollTo({ containerRef: scrollableContainerRef });
-
-  /**
    * Is Panel Focused
    */
   const isFocused = useRef<boolean>(false);
 
   /**
-   * Auto scroll on group updates
+   * Should scroll
    */
-  useEffect(() => {
-    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll) {
-      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
-    }
-  }, [scrollTo, containerRef, currentGroup, firstSelectedRowRef, options.autoScroll, tableContentTopOffset]);
-
-  /**
-   * Auto scroll on external table data updates
-   */
-  useEffect(() => {
-    if (containerRef.current && firstSelectedRowRef.current && options.autoScroll && tableData && !isFocused.current) {
-      scrollTo(firstSelectedRowRef.current, tableContentTopOffset);
-    }
-  }, [scrollTo, containerRef, firstSelectedRowRef, options.autoScroll, tableData, tableContentTopOffset]);
+  const shouldScroll = useRef<boolean>(false);
 
   /**
    * Styles and Theme
@@ -144,6 +120,13 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
 
     return [activeGroup, ...withoutActive];
   }, [currentGroup, options.groups]);
+
+  /**
+   * On after scroll
+   */
+  const onAfterScroll = useCallback(() => {
+    shouldScroll.current = false;
+  }, []);
 
   /**
    * Return
@@ -192,6 +175,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
                     variant={currentGroup === group.name ? 'active' : 'default'}
                     onClick={() => {
                       setCurrentGroup(group.name);
+                      shouldScroll.current = true;
                     }}
                     data-testid={TEST_IDS.tableView.tab(group.name)}
                     className={styles.toolbarButton}
@@ -211,12 +195,15 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             data={tableData}
             getSubRows={getSubRows}
             showHeader={options.header}
-            firstSelectedRowRef={firstSelectedRowRef}
             tableRef={tableRef}
             tableHeaderRef={tableHeaderRef}
             topOffset={tableTopOffset}
             scrollableContainerRef={scrollableContainerRef}
             alwaysVisibleFilter={options.alwaysVisibleFilter}
+            isFocused={isFocused}
+            autoScroll={options.autoScroll}
+            shouldScroll={shouldScroll}
+            onAfterScroll={onAfterScroll}
           />
         </div>
       </div>

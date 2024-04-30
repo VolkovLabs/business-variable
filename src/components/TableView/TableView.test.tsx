@@ -4,6 +4,7 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useSavedState, useTable } from '../../hooks';
+import { Table } from '../Table';
 import { TableView } from './TableView';
 
 /**
@@ -22,6 +23,13 @@ jest.mock('../../hooks', () => ({
     remove: jest.fn(),
   })),
   useSavedState: jest.fn(jest.requireActual('../../hooks/useSavedState').useSavedState),
+}));
+
+/**
+ * Mock table
+ */
+jest.mock('../Table', () => ({
+  Table: jest.fn((...params) => jest.requireActual('../Table').Table(...params)),
 }));
 
 /**
@@ -53,12 +61,6 @@ describe('Table View', () => {
    */
   const getSelectors = getJestSelectors({ ...TEST_IDS.tableView, ...InTestIds });
   const selectors = getSelectors(screen);
-
-  /**
-   * Table Selectors
-   */
-  const getTableSelectors = getJestSelectors(TEST_IDS.table);
-  const tableSelectors = getTableSelectors(screen);
 
   /**
    * Get Tested Component
@@ -224,14 +226,24 @@ describe('Table View', () => {
     );
   });
 
-  it('Should switch groups', async () => {
+  it('Should switch groups and scroll to selected', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
       tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
     }));
 
-    await act(async () =>
+    /**
+     * Mock table
+     */
+    let onAfterScroll: any;
+    jest.mocked(Table).mockImplementationOnce((props) => {
+      onAfterScroll = props.onAfterScroll;
+
+      return jest.requireActual('../Table').Table(props);
+    });
+
+    const { rerender } = await act(async () =>
       render(
         getComponent({
           options: {
@@ -275,209 +287,64 @@ describe('Table View', () => {
         ],
       })
     );
-  });
 
-  describe('Auto Scroll', () => {
-    const scrollTo = jest.fn();
-
-    const OutsideWrapper = ({ children }: any) => (
-      <div>
-        <div data-testid={InTestIds.outsideElement} />
-        {children}
-      </div>
+    /**
+     * Check if scroll enabled
+     */
+    expect(Table).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shouldScroll: {
+          current: true,
+        },
+      }),
+      expect.anything()
     );
 
-    beforeAll(() => {
-      Object.defineProperty(Element.prototype, 'scrollTo', { value: scrollTo });
+    /**
+     * Simulate table scroll
+     */
+    onAfterScroll();
 
-      const getBoundingClientRect = function (this: HTMLElement) {
-        return {
-          top: this.tagName === 'TR' ? 40 : 0,
-          height: this.tagName === 'TR' ? 38 : 100,
-        };
-      };
-      Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
-        value: getBoundingClientRect,
-      });
-
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'device1', selected: false, showStatus: false, label: 'Device 1' },
-          { value: 'device2', selected: true, showStatus: false, label: 'Device 2' },
-        ],
-        columns: [{ id: 'value', accessorKey: 'value' }],
-        getSubRows: () => undefined,
-      }));
-    });
-
-    beforeEach(() => {
-      scrollTo.mockClear();
-    });
-
-    it('Should scroll to selected element on initial load', async () => {
-      await act(async () =>
-        render(
-          getComponent({
-            options: {
-              groups: [
-                {
-                  name: 'Group 1',
-                  items: [
-                    {
-                      name: 'value',
-                    },
-                  ],
-                },
-              ] as any,
-              autoScroll: true,
-            } as any,
-          })
-        )
-      );
-
-      /**
-       * Rows should be rendered
-       */
-      expect(tableSelectors.row(false, '0')).toBeInTheDocument();
-      expect(tableSelectors.row(false, '1')).toBeInTheDocument();
-
-      expect(scrollTo).toHaveBeenCalledWith({ top: 40 });
-    });
-
-    it('Should scroll to selected element if panel is not focused', async () => {
-      const { rerender } = await act(async () =>
-        render(
-          <OutsideWrapper>
-            {getComponent({
-              options: {
-                groups: [
+    /**
+     * Re-render to check if scroll disabled
+     */
+    await act(async () =>
+      rerender(
+        getComponent({
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
                   {
-                    name: 'Group 1',
-                    items: [
-                      {
-                        name: 'value',
-                      },
-                    ],
+                    name: 'group1Field',
                   },
-                ] as any,
-                autoScroll: true,
-              } as any,
-            })}
-          </OutsideWrapper>
-        )
-      );
-
-      /**
-       * Get Scroll Element
-       */
-      const scrollElement = selectors.content();
-      expect(scrollElement).toBeInTheDocument();
-
-      /**
-       * Make panel is not focused
-       */
-      fireEvent.mouseDown(selectors.root());
-      fireEvent.click(selectors.outsideElement());
-
-      jest.mocked(scrollElement.scrollTo).mockClear();
-
-      await act(async () =>
-        rerender(
-          <OutsideWrapper>
-            {getComponent({
-              options: {
-                groups: [
+                ],
+              },
+              {
+                name: 'group2',
+                items: [
                   {
-                    name: 'Group 1',
-                    items: [
-                      {
-                        name: 'value',
-                      },
-                    ],
+                    name: 'group2Field',
                   },
-                ] as any,
-                autoScroll: true,
-              } as any,
-            })}
-          </OutsideWrapper>
-        )
-      );
+                ],
+              },
+            ],
+          } as any,
+        })
+      )
+    );
 
-      /**
-       * Virtualizer calls scrollTo once so just check if component called additional
-       * Virtualizer doesn`t call scrollTo once with dynamically measured elements.
-       */
-      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(1);
-    });
-
-    it('Should not scroll to selected element if panel is focused', async () => {
-      const { rerender } = await act(async () =>
-        render(
-          <OutsideWrapper>
-            {getComponent({
-              options: {
-                groups: [
-                  {
-                    name: 'Group 1',
-                    items: [
-                      {
-                        name: 'value',
-                      },
-                    ],
-                  },
-                ] as any,
-                autoScroll: true,
-              } as any,
-            })}
-          </OutsideWrapper>
-        )
-      );
-
-      /**
-       * Get Scroll Element
-       */
-      const scrollElement = selectors.content();
-      expect(scrollElement).toBeInTheDocument();
-
-      /**
-       * Clear mock
-       */
-      jest.mocked(scrollElement.scrollTo).mockClear();
-
-      /**
-       * Make panel is focused
-       */
-      fireEvent.mouseDown(selectors.root());
-
-      expect(scrollElement.scrollTo).not.toHaveBeenCalled();
-
-      await act(async () =>
-        rerender(
-          <OutsideWrapper>
-            {getComponent({
-              options: {
-                groups: [
-                  {
-                    name: 'Group 1',
-                    items: [
-                      {
-                        name: 'value',
-                      },
-                    ],
-                  },
-                ] as any,
-                autoScroll: true,
-              } as any,
-            })}
-          </OutsideWrapper>
-        )
-      );
-
-      /**
-       * Virtualizer calls scrollTo once so just check if only called by it
-       * Virtualizer doesn`t call scrollTo once with dynamically measured elements.
-       */
-      expect(scrollElement.scrollTo).toHaveBeenCalledTimes(0);
-    });
+    /**
+     * Check if scroll disabled
+     */
+    expect(Table).toHaveBeenCalledWith(
+      expect.objectContaining({
+        shouldScroll: {
+          current: false,
+        },
+      }),
+      expect.anything()
+    );
   });
 });
