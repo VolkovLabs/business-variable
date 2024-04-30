@@ -5,6 +5,7 @@ import { useDashboardRedirect, usePersistentValues, useResetVariable } from '../
 import { DisplayMode, PanelOptions } from '../../types';
 import { ButtonView } from '../ButtonView';
 import { MinimizeView } from '../MinimizeView';
+import { SliderView } from '../SliderView';
 import { TableView } from '../TableView';
 
 /**
@@ -53,6 +54,13 @@ export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps
    */
   if (options.displayMode === DisplayMode.BUTTON) {
     return <ButtonView options={options} eventBus={eventBus} panelEventBus={panelEventBus.current} {...restProps} />;
+  }
+
+  /**
+   * Slider View
+   */
+  if (options.displayMode === DisplayMode.SLIDER) {
+    return <SliderView options={options} eventBus={eventBus} panelEventBus={panelEventBus.current} {...restProps} />;
   }
 
   /**

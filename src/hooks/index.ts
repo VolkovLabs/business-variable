@@ -8,5 +8,6 @@ export * from './useResetVariable';
 export * from './useRuntimeVariables';
 export * from './useSavedState';
 export * from './useScrollTo';
+export * from './useSlider';
 export * from './useStatus';
 export * from './useTable';
