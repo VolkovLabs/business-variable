@@ -9,6 +9,7 @@ import { usePersistentStorage, useRuntimeVariables, useSlider } from '../../hook
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
 import { getStyles } from './SliderView.styles';
+
 /**
  * Properties
  */

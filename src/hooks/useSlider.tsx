@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { RuntimeVariable, VariableType } from '../types';
+
 /**
  * Use Slider
  */
 export const useSlider = (variable?: RuntimeVariable) => {
   /**
-   * min Index
-   * min value for Slider range
+   * Get Min index. Use for minimum range value in slider
    */
   const getMinIndex = useMemo(() => {
     if (variable?.type === VariableType.QUERY || variable?.type === VariableType.CUSTOM) {
@@ -17,8 +17,7 @@ export const useSlider = (variable?: RuntimeVariable) => {
   }, [variable]);
 
   /**
-   * Get Value Index
-   * Current value index
+   * Get index for the currently selected variable option
    */
   const getValueIndex = (variable?: RuntimeVariable, getMinIndex?: number) => {
     if (!variable) {
@@ -29,8 +28,7 @@ export const useSlider = (variable?: RuntimeVariable) => {
   };
 
   /**
-   * Current text value
-   * use for tooltip
+   *  Get text value for the currently selected variable option
    */
   const variableValue = useMemo(() => {
     if (variable?.type === VariableType.QUERY || variable?.type === VariableType.CUSTOM) {
@@ -61,7 +59,8 @@ export const useSlider = (variable?: RuntimeVariable) => {
   }, [variable]);
 
   /**
-   * Compare currentIndex with sliderValue
+   * Update the sliderValue that is used to the position on the slider
+   * Is used to prevent incorrect flicker behavior on the slider
    */
   useEffect(() => {
     if (currentIndex !== sliderValue) {
@@ -70,8 +69,9 @@ export const useSlider = (variable?: RuntimeVariable) => {
   }, [currentIndex, sliderValue]);
 
   /**
-   * Compare currentIndex with currentOptionIndex
-   * Changing a variable through the dashboard
+   * Update the currentIndex through the dashboard
+   * then updated currentIndex compare with sliderValue
+   * Is used to prevent incorrect flicker behavior on the slider and update slider position
    */
   useEffect(() => {
     const currentOptionIndex = getValueIndex(variable, getMinIndex);
