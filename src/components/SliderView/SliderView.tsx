@@ -30,7 +30,7 @@ interface Props {
 }
 
 /**
- * Button View
+ * Slider View
  */
 export const SliderView: React.FC<Props> = ({
   options: { variable: variableName, padding = 0, persistent = false, showLabel = false, labelWidth },
