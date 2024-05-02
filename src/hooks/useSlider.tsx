@@ -7,9 +7,9 @@ import { RuntimeVariable, VariableType } from '../types';
  */
 export const useSlider = (variable?: RuntimeVariable) => {
   /**
-   * Get Min index. Use for minimum range value in slider
+   * Min value
    */
-  const getMinIndex = useMemo(() => {
+  const min = useMemo(() => {
     if (variable?.type === VariableType.QUERY || variable?.type === VariableType.CUSTOM) {
       return variable?.includeAll ? 1 : 0;
     }
@@ -19,16 +19,20 @@ export const useSlider = (variable?: RuntimeVariable) => {
   /**
    * Get index for the currently selected variable option
    */
-  const getValueIndex = (variable?: RuntimeVariable, getMinIndex?: number) => {
+  const getIndexForValue = (variable: RuntimeVariable | undefined, value: string) => {
     if (!variable) {
-      return 1;
+      return 0;
     }
-    const rangeIndex = variable.options.findIndex((option) => option.selected && option.text !== 'All');
-    return rangeIndex !== -1 ? rangeIndex : getMinIndex;
+
+    if (variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) {
+      return variable.optionIndexByName.get(value) ?? 0;
+    }
+
+    return 0;
   };
 
   /**
-   *  Get text value for the currently selected variable option
+   * Get index of current selected option
    */
   const variableValue = useMemo(() => {
     if (variable?.type === VariableType.QUERY || variable?.type === VariableType.CUSTOM) {
@@ -40,33 +44,20 @@ export const useSlider = (variable?: RuntimeVariable) => {
   /**
    * State
    */
-  const [sliderValue, setSliderValue] = useState(getValueIndex(variable, getMinIndex));
-  const [currentIndex, setCurrentIndex] = useState(getValueIndex(variable, getMinIndex));
+  const [value, setValue] = useState(getIndexForValue(variable, variableValue));
 
   /**
    * Marks for slider
    */
   const marks = useMemo(() => {
     if (variable?.type === VariableType.QUERY || variable?.type === VariableType.CUSTOM) {
-      if (variable.includeAll) {
-        return {
-          0: variable.options[1].text,
-          100: variable.options[variable.options.length - 1].text,
-        };
-      }
+      return {
+        0: variable.options[variable.includeAll ? 1 : 0].text,
+        100: variable.options[variable.options.length - 1].text,
+      };
     }
     return '';
   }, [variable]);
-
-  /**
-   * Update the sliderValue that is used to the position on the slider
-   * Is used to prevent incorrect flicker behavior on the slider
-   */
-  useEffect(() => {
-    if (currentIndex !== sliderValue) {
-      setSliderValue(currentIndex);
-    }
-  }, [currentIndex, sliderValue]);
 
   /**
    * Update the currentIndex through the dashboard
@@ -74,18 +65,22 @@ export const useSlider = (variable?: RuntimeVariable) => {
    * Is used to prevent incorrect flicker behavior on the slider and update slider position
    */
   useEffect(() => {
-    const currentOptionIndex = getValueIndex(variable, getMinIndex);
-    if (currentIndex !== currentOptionIndex) {
-      setCurrentIndex(currentOptionIndex);
-    }
-  }, [currentIndex, getMinIndex, variable]);
+    setValue(getIndexForValue(variable, variableValue));
+  }, [variable, variableValue]);
+
+  /**
+   * Get current option text
+   */
+  const text = useMemo(() => {
+    const optionText = variable?.options[value]?.text ?? '';
+    return Array.isArray(optionText) ? optionText[0] : optionText;
+  }, [value, variable?.options]);
 
   return {
-    sliderValue,
-    minIndex: getMinIndex,
-    variableValue,
+    min,
+    value,
     marks,
-    setSliderValue,
-    setCurrentIndex,
+    setValue,
+    text,
   };
 };

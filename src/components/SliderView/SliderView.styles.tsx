@@ -4,7 +4,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 /**
  * Styles
  */
-export const getStyles = (theme: GrafanaTheme2, text: string) => {
+export const getStyles = (theme: GrafanaTheme2, text: string, panelWidth: number) => {
   return {
     root: css`
       display: flex;
@@ -56,6 +56,10 @@ export const getStyles = (theme: GrafanaTheme2, text: string) => {
         background: ${theme.colors.background.primary};
         color: ${theme.colors.secondary.text};
         padding: ${theme.spacing(0.5)};
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: ${panelWidth - 80}px;
       }
     `,
   };

@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import { EventBus } from '@grafana/data';
+import { EventBus, PanelProps } from '@grafana/data';
 import { Alert, InlineField, useStyles2 } from '@grafana/ui';
 import { Slider } from '@volkovlabs/components';
 import React, { useMemo } from 'react';
@@ -13,7 +13,7 @@ import { getStyles } from './SliderView.styles';
 /**
  * Properties
  */
-interface Props {
+interface Props extends PanelProps {
   /**
    * Options
    */
@@ -34,6 +34,7 @@ interface Props {
  * Slider View
  */
 export const SliderView: React.FC<Props> = ({
+  width,
   options: { variable: variableName, padding = 0, persistent = false, showLabel = false, labelWidth },
   eventBus,
   panelEventBus,
@@ -46,7 +47,7 @@ export const SliderView: React.FC<Props> = ({
   /**
    * Use Slider hook
    */
-  const { minIndex, variableValue, marks, sliderValue, setSliderValue, setCurrentIndex } = useSlider(variable);
+  const slider = useSlider(variable);
 
   /**
    * Persistent storage
@@ -56,7 +57,7 @@ export const SliderView: React.FC<Props> = ({
   /**
    * Styles and Theme
    */
-  const styles = useStyles2(getStyles, variableValue);
+  const styles = useStyles2(getStyles, slider.text, width);
 
   /**
    * Current values
@@ -113,33 +114,39 @@ export const SliderView: React.FC<Props> = ({
             data-testid={TEST_IDS.sliderView.slider}
             included={true}
             max={variable.options.length - 1}
-            min={minIndex}
+            min={slider.min}
             orientation="horizontal"
-            onChange={(value: number) => {
-              if (value >= minIndex) {
-                const currentSelectedValue = variable.options[value].value;
-
-                /**
-                 * Clear saved values on override by user
-                 */
-                if (persistent) {
-                  persistentStorage.remove();
-                }
-
-                updateVariableOptions({
-                  previousValues: values,
-                  value: currentSelectedValue,
-                  variable,
-                  emptyValueEnabled: false,
-                  panelEventBus,
-                });
-
-                setCurrentIndex(value);
-                setSliderValue(value);
+            onChange={(value) => {
+              if (value === undefined) {
+                return;
               }
+
+              slider.setValue(value);
             }}
-            marks={marks}
-            value={sliderValue}
+            onAfterChange={(value) => {
+              if (!value) {
+                return;
+              }
+
+              const currentSelectedValue = variable.options[value].value;
+
+              /**
+               * Clear saved values on override by user
+               */
+              if (persistent) {
+                persistentStorage.remove();
+              }
+
+              updateVariableOptions({
+                previousValues: values,
+                value: currentSelectedValue,
+                variable,
+                emptyValueEnabled: false,
+                panelEventBus,
+              });
+            }}
+            marks={slider.marks}
+            value={slider.value}
             inputWidth={0}
           />
         </div>
