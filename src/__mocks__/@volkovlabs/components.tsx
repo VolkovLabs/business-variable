@@ -6,13 +6,18 @@ const actual = jest.requireActual('@volkovlabs/components');
 /**
  * Mock Slider
  */
-const Slider: React.FC<any> = ({ onChange, value }) => {
+const Slider: React.FC<any> = ({ onChange, value, onAfterChange }) => {
   return (
     <input
       type="range"
       onChange={(event) => {
         if (onChange) {
           onChange(Number(event.target.value));
+        }
+      }}
+      onBlur={(event) => {
+        if (onAfterChange) {
+          onAfterChange(Number(event.target.value));
         }
       }}
       data-testid={TEST_IDS.sliderView.slider}

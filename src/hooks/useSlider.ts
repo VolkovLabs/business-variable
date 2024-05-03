@@ -44,7 +44,7 @@ export const useSlider = (variable?: RuntimeVariableWithOptions) => {
    */
   const variableValue = useMemo(() => {
     if (variable) {
-      return Array.isArray(variable?.current.text) ? variable?.current.text[0] : variable?.current.text;
+      return Array.isArray(variable?.current.value) ? variable?.current.value[0] : variable?.current.value;
     }
 
     return '';
@@ -61,12 +61,12 @@ export const useSlider = (variable?: RuntimeVariableWithOptions) => {
   const marks = useMemo(() => {
     if (variable) {
       return {
-        0: variable.options[variable.includeAll ? 1 : 0].text,
-        100: variable.options[variable.options.length - 1].text,
+        [min]: variable.options[min].text,
+        [max]: variable.options[max].text,
       };
     }
     return '';
-  }, [variable]);
+  }, [max, min, variable]);
 
   /**
    * Variable value was updated somewhere so update slider value
@@ -79,9 +79,7 @@ export const useSlider = (variable?: RuntimeVariableWithOptions) => {
    * Get option text for current value
    */
   const text = useMemo(() => {
-    const optionText = variable?.options[value]?.text ?? '';
-
-    return Array.isArray(optionText) ? optionText[0] : optionText;
+    return variable?.options[value]?.text ?? '';
   }, [value, variable?.options]);
 
   return {

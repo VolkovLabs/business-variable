@@ -106,17 +106,9 @@ export const SliderView: React.FC<Props> = ({
             min={slider.min}
             orientation="horizontal"
             onChange={(value) => {
-              if (value === undefined) {
-                return;
-              }
-
               slider.setValue(value);
             }}
-            onAfterChange={(value) => {
-              if (value === undefined) {
-                return;
-              }
-
+            onAfterChange={(value = slider.value) => {
               const currentSelectedValue = variable.options[value].value;
 
               /**

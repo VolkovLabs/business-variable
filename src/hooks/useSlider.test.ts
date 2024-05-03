@@ -1,23 +1,20 @@
-import { renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { VariableType } from 'types';
 
+import { ALL_VALUE, ALL_VALUE_PARAMETER } from '../constants';
+import { getRuntimeVariable } from '../utils';
 import { useSlider } from './useSlider';
 
 describe('Use Slider', () => {
-  it('Should initialize with default values', () => {
+  it('Should work if no variable', () => {
     const { result } = renderHook(() => useSlider());
-    const { sliderValue, minIndex, variableValue, setSliderValue, setCurrentIndex } = result.current;
 
-    expect(sliderValue).toBe(1);
-    expect(minIndex).toBe(0);
-    expect(variableValue).toBe('');
-    expect(typeof setSliderValue).toBe('function');
-    expect(typeof setCurrentIndex).toBe('function');
+    expect(result.current).toEqual(expect.any(Object));
   });
 
-  describe('minIndex', () => {
-    it('Should return minIndex should be 1 for includeAll', () => {
-      const variable = {
+  describe('min', () => {
+    it('Should start from 1 if includeAll enabled', () => {
+      const variable = getRuntimeVariable({
         options: [
           { selected: false, text: 'All' },
           { selected: false, text: 'Option 1' },
@@ -29,17 +26,15 @@ describe('Use Slider', () => {
         current: {
           text: 'Option 2',
         },
-      };
+      } as any);
 
-      const { result } = renderHook((props: any) => useSlider(props), {
-        initialProps: variable,
-      });
+      const { result } = renderHook(() => useSlider(variable as any));
 
-      expect(result.current.minIndex).toBe(1);
+      expect(result.current.min).toEqual(1);
     });
 
-    it('Should return minIndex should be 0 for none includeAll', () => {
-      const variable = {
+    it('Should start from 0 if includeAll disabled', () => {
+      const variable = getRuntimeVariable({
         options: [
           { selected: false, text: 'Option 1' },
           { selected: true, text: 'Option 2' },
@@ -50,130 +45,130 @@ describe('Use Slider', () => {
         current: {
           text: 'Option 2',
         },
-      };
+      } as any);
 
-      const { result } = renderHook((props: any) => useSlider(props), {
-        initialProps: variable,
-      });
+      const { result } = renderHook(() => useSlider(variable as any));
 
-      expect(result.current.minIndex).toBe(0);
+      expect(result.current.min).toEqual(0);
     });
   });
 
   it('Should update slider value when variable changes', () => {
-    const variable = {
+    const variable = getRuntimeVariable({
       options: [
-        { selected: false, text: 'Option 1' },
-        { selected: true, text: 'Option 2' },
-        { selected: false, text: 'Option 3' },
+        { selected: false, text: 'Option 1', value: 'option1' },
+        { selected: true, text: 'Option 2', value: 'option2' },
+        { selected: false, text: 'Option 3', value: 'option3' },
       ],
-      type: 'QUERY',
+      type: VariableType.QUERY,
       includeAll: true,
       current: {
-        text: 'Current Value',
+        value: 'option2',
       },
-    };
+    } as any);
 
     const { result, rerender } = renderHook((props: any) => useSlider(props), {
       initialProps: variable,
     });
 
-    expect(result.current.sliderValue).toBe(1);
+    expect(result.current.value).toEqual(1);
 
-    const updatedVariable = {
-      ...variable,
-      options: [
-        { selected: true, text: 'Option 1' },
-        { selected: false, text: 'Option 2' },
-        { selected: false, text: 'Option 3' },
-      ],
-    };
+    /**
+     * Re-render with updated variable value
+     */
+    rerender(
+      getRuntimeVariable({
+        ...variable,
+        current: {
+          value: 'option1',
+        },
+        options: [
+          { selected: true, text: 'Option 1' },
+          { selected: false, text: 'Option 2' },
+          { selected: false, text: 'Option 3' },
+        ],
+      } as any)
+    );
 
-    rerender(updatedVariable);
-
-    expect(result.current.sliderValue).toBe(0);
+    expect(result.current.value).toEqual(0);
   });
 
-  it('Should return valueIndex if it is not -1', () => {
-    const variable = {
+  it('Should return value if variable value is array', () => {
+    const variable = getRuntimeVariable({
       options: [
-        { selected: false, text: 'Option 1' },
-        { selected: true, text: 'Option 2' },
-        { selected: false, text: 'Option 3' },
+        { selected: false, text: 'Option 1', value: 'option1' },
+        { selected: true, text: 'Option 2', value: 'option2' },
+        { selected: false, text: 'Option 3', value: 'option3' },
       ],
-    };
-
-    const { result } = renderHook(() => useSlider(variable as any));
-
-    expect(result.current.sliderValue).toBe(1);
-  });
-
-  it('Should return valueIndex if rangeIndex is -1', () => {
-    const variable = {
-      options: [
-        { selected: false, text: 'Option 1' },
-        { selected: false, text: 'Option 2' },
-        { selected: false, text: 'Option 3' },
-      ],
-    };
-
-    const { result } = renderHook(() => useSlider(variable as any));
-
-    expect(result.current.sliderValue).toBe(0);
-  });
-
-  it('Should return the first element of current.text if it is an array', () => {
-    const variable = {
       type: VariableType.QUERY,
+      includeAll: true,
       current: {
-        text: ['Option 3'],
+        value: ['option2'],
       },
-      options: [
-        { selected: false, text: 'Option 1' },
-        { selected: false, text: 'Option 2' },
-        { selected: true, text: 'Option 3' },
-      ],
-    };
+    } as any);
 
     const { result } = renderHook(() => useSlider(variable as any));
 
-    expect(result.current.variableValue).toBe('Option 3');
+    expect(result.current.value).toEqual(1);
   });
 
-  it('Should return current.text if it is not an array', () => {
-    const variable = {
-      type: VariableType.QUERY,
-      current: {
-        text: 'Option 3',
-      },
+  it('Should return text for value', async () => {
+    const variable = getRuntimeVariable({
       options: [
-        { selected: false, text: 'Option 1' },
-        { selected: false, text: 'Option 2' },
-        { selected: false, text: 'Option 3' },
+        { selected: false, text: 'Option 1', value: 'option1' },
+        { selected: true, text: 'Option 2', value: 'option2' },
+        { selected: false, text: 'Option 3', value: 'option3' },
       ],
-    };
+      type: VariableType.QUERY,
+      includeAll: true,
+      current: {
+        value: ['option2'],
+      },
+    } as any);
 
-    const { result } = renderHook(() => useSlider(variable as any));
+    const { result, rerender } = renderHook(() => useSlider(variable as any));
 
-    expect(result.current.variableValue).toBe('Option 3');
+    expect(result.current.value).toEqual(1);
+    expect(result.current.text).toEqual('Option 2');
+
+    /**
+     * Change value
+     */
+    await act(async () => result.current.setValue(2));
+
+    /**
+     * Re-render hook
+     */
+    rerender(variable);
+
+    /**
+     * Check updated result
+     */
+    expect(result.current.value).toEqual(2);
+    expect(result.current.text).toEqual('Option 3');
   });
 
   describe('marks', () => {
-    it('Should return marks for slider without All', () => {
-      const variable = {
+    it('Should return marks with text', () => {
+      const variable = getRuntimeVariable({
         type: VariableType.QUERY,
         includeAll: true,
         current: {
-          text: 'Option 2',
+          value: '',
         },
-        options: [{ text: 'All' }, { text: 'Option 0' }, { text: 'Option 1' }, { text: 'Option 2' }],
-      };
+        options: [
+          { text: ALL_VALUE, value: ALL_VALUE_PARAMETER },
+          { text: 'Option 0', value: 'option0' },
+          { text: 'Option 1', value: 'option1' },
+          { text: 'Option 2', value: 'option2' },
+        ],
+      } as any);
 
       const { result } = renderHook(() => useSlider(variable as any));
 
       expect(result.current.marks).toEqual({
-        0: 'Option 0',
-        100: 'Option 2',
+        1: 'Option 0',
+        3: 'Option 2',
       });
     });
   });

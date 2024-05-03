@@ -5,6 +5,7 @@ import React from 'react';
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
 import { usePersistentStorage, useRuntimeVariables, useSlider } from '../../hooks';
 import { VariableType } from '../../types';
+import { updateVariableOptions } from '../../utils';
 import { SliderView } from './SliderView';
 
 /**
@@ -28,11 +29,12 @@ jest.mock('../../hooks', () => ({
     variable: null,
   })),
   useSlider: jest.fn(() => ({
-    sliderValue: '',
-    minIndex: '',
-    currentValue: '',
-    setSliderValue: jest.fn(),
-    setCurrentIndex: jest.fn(),
+    value: 0,
+    min: 1,
+    max: 10,
+    text: 'Device 1',
+    variableValue: 'device1',
+    setValue: jest.fn(),
   })),
   usePersistentStorage: jest.fn(() => persistentStorageMock),
 }));
@@ -40,9 +42,9 @@ jest.mock('../../hooks', () => ({
 /**
  * Mock utils
  */
-jest.mock('../../utils/variable', () => ({
-  ...jest.requireActual('../../utils/variable'),
-  selectVariableValues: jest.fn(),
+jest.mock('../../utils/options-variable', () => ({
+  ...jest.requireActual('../../utils/options-variable'),
+  updateVariableOptions: jest.fn(),
 }));
 
 describe('SliderView', () => {
@@ -90,6 +92,7 @@ describe('SliderView', () => {
 
   beforeEach(() => {
     jest.mocked(useSlider).mockClear();
+    jest.mocked(updateVariableOptions).mockClear();
   });
 
   it('Should show no variable message', () => {
@@ -351,19 +354,18 @@ describe('SliderView', () => {
       );
     });
 
-    it('Should update variable value', async () => {
-      const setCurrentIndex = jest.fn();
+    it('Should update slider value without updating variable', async () => {
+      const setValue = jest.fn();
 
-      jest.mocked(useSlider).mockImplementationOnce(
-        () =>
-          ({
-            sliderValue: 1,
-            minIndex: '1',
-            currentValue: 'device1',
-            setCurrentIndex: setCurrentIndex,
-            setSliderValue: jest.fn(),
-          }) as any
-      );
+      jest.mocked(useSlider).mockReturnValueOnce({
+        value: 1,
+        min: 0,
+        max: 10,
+        variableValue: 'device1',
+        setValue,
+        text: 'Device 1',
+        marks: {},
+      });
 
       render(
         getComponent({
@@ -379,25 +381,24 @@ describe('SliderView', () => {
 
       await act(() => fireEvent.change(selectors.slider(), { target: { value: 3 } }));
 
-      expect(persistentStorageMock.remove).toHaveBeenCalled();
+      expect(setValue).toHaveBeenCalled();
+      expect(setValue).toHaveBeenCalledWith(3);
 
-      expect(setCurrentIndex).toHaveBeenCalled();
-      expect(setCurrentIndex).toHaveBeenCalledWith(3);
+      expect(updateVariableOptions).not.toHaveBeenCalled();
     });
 
-    it('Should not update variable value if value less then minIndex', async () => {
-      const setCurrentIndex = jest.fn();
+    it('Should update variable value on blur', async () => {
+      const setValue = jest.fn();
 
-      jest.mocked(useSlider).mockImplementationOnce(
-        () =>
-          ({
-            sliderValue: 1,
-            minIndex: '1',
-            currentValue: 'device1',
-            setCurrentIndex: setCurrentIndex,
-            setSliderValue: jest.fn(),
-          }) as any
-      );
+      jest.mocked(useSlider).mockReturnValueOnce({
+        value: 1,
+        min: 0,
+        max: 10,
+        variableValue: 'device1',
+        setValue,
+        text: 'Device 1',
+        marks: {},
+      });
 
       render(
         getComponent({
@@ -411,9 +412,57 @@ describe('SliderView', () => {
       expect(selectors.field()).toBeInTheDocument();
       expect(selectors.slider()).toBeInTheDocument();
 
-      await act(() => fireEvent.change(selectors.slider(), { target: { value: 0 } }));
+      await act(() => fireEvent.change(selectors.slider(), { target: { value: 3 } }));
+      await act(() => fireEvent.blur(selectors.slider(), { target: { value: 3 } }));
 
-      expect(setCurrentIndex).not.toHaveBeenCalled();
+      expect(setValue).toHaveBeenCalled();
+      expect(setValue).toHaveBeenCalledWith(3);
+
+      /**
+       * Check if persistent value removed
+       */
+      expect(persistentStorageMock.remove).toHaveBeenCalled();
+
+      /**
+       * Check if variable value updated
+       */
+      expect(updateVariableOptions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          value: options[3].value,
+          previousValues: ['device1'],
+          variable: deviceVariable,
+        })
+      );
+    });
+
+    it('Should not update variable value if value not changed', async () => {
+      const setValue = jest.fn();
+
+      jest.mocked(useSlider).mockReturnValueOnce({
+        value: 1,
+        min: 0,
+        max: 10,
+        variableValue: 'device1',
+        setValue,
+        text: 'Device 1',
+        marks: {},
+      });
+
+      render(
+        getComponent({
+          options: {
+            variable: 'device',
+            persistent: true,
+          } as any,
+        })
+      );
+
+      expect(selectors.field()).toBeInTheDocument();
+      expect(selectors.slider()).toBeInTheDocument();
+
+      await act(() => fireEvent.change(selectors.slider(), { target: { value: 1 } }));
+
+      expect(setValue).not.toHaveBeenCalled();
     });
   });
 });
