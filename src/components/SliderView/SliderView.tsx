@@ -2,7 +2,7 @@ import { css, cx } from '@emotion/css';
 import { EventBus, PanelProps } from '@grafana/data';
 import { Alert, InlineField, useStyles2 } from '@grafana/ui';
 import { Slider } from '@volkovlabs/components';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { usePersistentStorage, useRuntimeVariables, useSlider } from '../../hooks';
@@ -47,7 +47,7 @@ export const SliderView: React.FC<Props> = ({
   /**
    * Use Slider hook
    */
-  const slider = useSlider(variable);
+  const slider = useSlider(isVariableWithOptions(variable) ? variable : undefined);
 
   /**
    * Persistent storage
@@ -58,16 +58,6 @@ export const SliderView: React.FC<Props> = ({
    * Styles and Theme
    */
   const styles = useStyles2(getStyles, slider.text, width);
-
-  /**
-   * Current values
-   */
-  const values = useMemo(() => {
-    if (isVariableWithOptions(variable)) {
-      return variable?.options.filter((option) => option.selected).map((option) => option.value);
-    }
-    return [];
-  }, [variable]);
 
   /**
    * No variable selected
@@ -81,13 +71,12 @@ export const SliderView: React.FC<Props> = ({
   }
 
   /**
-   * Check options
+   * Check if variable can be used with slider view
    */
-  const options = isVariableWithOptions(variable) && variable.options.length && !variable.multi;
-  if (!options) {
+  if ((isVariableWithOptions(variable) && variable.multi) || !isVariableWithOptions(variable)) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noOptionsMessage}>
-        Options are not available.
+        View is not supported for the selected variable.
       </Alert>
     );
   }
@@ -113,7 +102,7 @@ export const SliderView: React.FC<Props> = ({
           <Slider
             data-testid={TEST_IDS.sliderView.slider}
             included={true}
-            max={variable.options.length - 1}
+            max={slider.max}
             min={slider.min}
             orientation="horizontal"
             onChange={(value) => {
@@ -124,7 +113,7 @@ export const SliderView: React.FC<Props> = ({
               slider.setValue(value);
             }}
             onAfterChange={(value) => {
-              if (!value) {
+              if (value === undefined) {
                 return;
               }
 
@@ -138,7 +127,7 @@ export const SliderView: React.FC<Props> = ({
               }
 
               updateVariableOptions({
-                previousValues: values,
+                previousValues: [slider.variableValue],
                 value: currentSelectedValue,
                 variable,
                 emptyValueEnabled: false,
