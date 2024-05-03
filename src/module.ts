@@ -113,7 +113,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: PERSISTENT_OPTIONS,
         },
         category: ['Values'],
-        showIf: (config) => showForMinimizeView(config) || showForButtonView(config) || showForSliderView(config),
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
       })
       .addRadio({
         path: 'customValue',

@@ -3,7 +3,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
-import { usePersistentStorage, useRuntimeVariables, useSlider } from '../../hooks';
+import { useRuntimeVariables, useSlider } from '../../hooks';
 import { VariableType } from '../../types';
 import { updateVariableOptions } from '../../utils';
 import { SliderView } from './SliderView';
@@ -12,13 +12,6 @@ import { SliderView } from './SliderView';
  * Properties
  */
 type Props = React.ComponentProps<typeof SliderView>;
-
-/**
- * Persistent Storage Mock
- */
-const persistentStorageMock = {
-  remove: jest.fn(),
-};
 
 /**
  * Mock hooks
@@ -36,7 +29,6 @@ jest.mock('../../hooks', () => ({
     variableValue: 'device1',
     setValue: jest.fn(),
   })),
-  usePersistentStorage: jest.fn(() => persistentStorageMock),
 }));
 
 /**
@@ -255,7 +247,6 @@ describe('SliderView', () => {
         getComponent({
           options: {
             variable: 'device',
-            persistent: true,
             showLabel: false,
           } as any,
         })
@@ -264,50 +255,6 @@ describe('SliderView', () => {
       expect(selectors.field()).toBeInTheDocument();
       expect(selectors.field()).toHaveTextContent('');
       expect(selectors.slider()).toBeInTheDocument();
-    });
-  });
-
-  describe('Persisten Storage', () => {
-    const options = [
-      {
-        text: 'device1',
-        value: 'device1',
-        selected: true,
-      },
-    ];
-    const deviceVariable = {
-      multi: false,
-      includeAll: false,
-      type: VariableType.CUSTOM,
-      label: 'Device',
-      name: 'Device',
-      current: {
-        text: 'device1',
-      },
-      options: options,
-    };
-
-    it('Should call usePersistentStorage with variable name', async () => {
-      jest.mocked(useRuntimeVariables).mockImplementationOnce(
-        () =>
-          ({
-            variable: deviceVariable,
-          }) as any
-      );
-
-      render(
-        getComponent({
-          options: {
-            variable: 'device',
-            persistent: true,
-            showLabel: true,
-          } as any,
-        })
-      );
-
-      expect(usePersistentStorage).toHaveBeenCalledWith('');
-      expect(usePersistentStorage).toHaveBeenCalledWith('device');
-      expect(usePersistentStorage).toHaveBeenCalledWith('device');
     });
   });
 
@@ -419,11 +366,6 @@ describe('SliderView', () => {
       expect(setValue).toHaveBeenCalledWith(3);
 
       /**
-       * Check if persistent value removed
-       */
-      expect(persistentStorageMock.remove).toHaveBeenCalled();
-
-      /**
        * Check if variable value updated
        */
       expect(updateVariableOptions).toHaveBeenCalledWith(
@@ -452,7 +394,6 @@ describe('SliderView', () => {
         getComponent({
           options: {
             variable: 'device',
-            persistent: true,
           } as any,
         })
       );

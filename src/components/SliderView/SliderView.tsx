@@ -5,7 +5,7 @@ import { Slider } from '@volkovlabs/components';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { usePersistentStorage, useRuntimeVariables, useSlider } from '../../hooks';
+import { useRuntimeVariables, useSlider } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
 import { getStyles } from './SliderView.styles';
@@ -35,7 +35,7 @@ interface Props extends PanelProps {
  */
 export const SliderView: React.FC<Props> = ({
   width,
-  options: { variable: variableName, padding = 0, persistent = false, showLabel = false, labelWidth },
+  options: { variable: variableName, padding = 0, showLabel = false, labelWidth },
   eventBus,
   panelEventBus,
 }) => {
@@ -48,11 +48,6 @@ export const SliderView: React.FC<Props> = ({
    * Use Slider hook
    */
   const slider = useSlider(isVariableWithOptions(variable) ? variable : undefined);
-
-  /**
-   * Persistent storage
-   */
-  const persistentStorage = usePersistentStorage(variableName || '');
 
   /**
    * Styles and Theme
@@ -110,13 +105,6 @@ export const SliderView: React.FC<Props> = ({
             }}
             onAfterChange={(value = slider.value) => {
               const currentSelectedValue = variable.options[value].value;
-
-              /**
-               * Clear saved values on override by user
-               */
-              if (persistent) {
-                persistentStorage.remove();
-              }
 
               updateVariableOptions({
                 previousValues: [slider.variableValue],
