@@ -7,6 +7,7 @@ export enum DisplayMode {
   MINIMIZE = 'minimize',
   TABLE = 'table',
   BUTTON = 'button',
+  SLIDER = 'slider',
 }
 
 /**

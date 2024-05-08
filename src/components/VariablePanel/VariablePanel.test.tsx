@@ -19,6 +19,7 @@ const InTestIds = {
   tableView: 'data-testid table-view',
   minimizeView: 'data-testid minimize-view',
   buttonView: 'data-testid button-view',
+  sliderView: 'data-testid slider-view',
 };
 
 /**
@@ -66,6 +67,13 @@ jest.mock('../ButtonView', () => ({
 }));
 
 /**
+ * Mock SliderView
+ */
+jest.mock('../SliderView', () => ({
+  SliderView: jest.fn(() => <div data-testid={InTestIds.sliderView} />),
+}));
+
+/**
  * Panel
  */
 describe('Panel', () => {
@@ -95,6 +103,11 @@ describe('Panel', () => {
   it('Should render button view', async () => {
     render(getComponent({ options: { displayMode: DisplayMode.BUTTON } as any }));
     expect(selectors.buttonView()).toBeInTheDocument();
+  });
+
+  it('Should render Slider view', async () => {
+    render(getComponent({ options: { displayMode: DisplayMode.SLIDER } as any }));
+    expect(selectors.sliderView()).toBeInTheDocument();
   });
 
   it('Should render table view by default', async () => {
