@@ -16,8 +16,7 @@ export const useStatus = ({ data, name, status }: { data: PanelData; name?: stri
         .map((series) =>
           series.fields.find((field) => field.type === FieldType.string && (!name || field.name === name))
         )
-        .find((field) => field?.values)
-        ?.values?.toArray(),
+        .find((field) => field?.values)?.values,
     [data.series, name]
   );
 
@@ -41,7 +40,7 @@ export const useStatus = ({ data, name, status }: { data: PanelData; name?: stri
       const exist = index !== undefined && index >= 0;
 
       if (exist) {
-        const lastValue = statusArray?.values.get(index);
+        const lastValue = statusArray?.values[index];
         const displayValue = statusArray?.display?.(lastValue);
 
         if (lastValue === undefined || displayValue === undefined) {
