@@ -7,5 +7,6 @@ export * from './usePersistentValues';
 export * from './useResetVariable';
 export * from './useRuntimeVariables';
 export * from './useSavedState';
+export * from './useSlider';
 export * from './useStatus';
 export * from './useTable';

@@ -60,6 +60,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     const showForMinimizeView = (config: PanelOptions) => config.displayMode === DisplayMode.MINIMIZE;
     const showForButtonView = (config: PanelOptions) => config.displayMode === DisplayMode.BUTTON;
     const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
+    const showForSliderView = (config: PanelOptions) => config.displayMode === DisplayMode.SLIDER;
     const isVariableSelected = (config: PanelOptions) => !!config.variable;
 
     /**
@@ -85,7 +86,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         min: 0,
         max: 20,
       },
-      showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+      showIf: (config) => showForMinimizeView(config) || showForButtonView(config) || showForSliderView(config),
     });
 
     /**
@@ -149,7 +150,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: SHOW_LABEL_OPTIONS,
         },
         category: ['Label'],
-        showIf: (config) => showForMinimizeView(config) || showForButtonView(config),
+        showIf: (config) => showForMinimizeView(config) || showForButtonView(config) || showForSliderView(config),
       })
       .addNumberInput({
         path: 'labelWidth',
@@ -158,7 +159,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           placeholder: 'auto',
         },
         category: ['Label'],
-        showIf: (config) => showForMinimizeView(config) && config.showLabel,
+        showIf: (config) => config.showLabel && (showForMinimizeView(config) || showForSliderView(config)),
       });
 
     /**

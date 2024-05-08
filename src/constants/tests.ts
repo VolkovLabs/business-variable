@@ -62,4 +62,11 @@ export const TEST_IDS = {
     noOptionsMessage: 'data-testid button-view no-options-message',
     item: (value: string) => `data-testid button-view item-${value}`,
   },
+  sliderView: {
+    noVariableMessage: 'data-testid slider-view no-variable-message',
+    noOptionsMessage: 'data-testid slider-view no-options-message',
+    field: 'data-testid slider-view field',
+    slider: 'data-testid slider-view slider',
+    root: 'data-testid slider-view',
+  },
 };
