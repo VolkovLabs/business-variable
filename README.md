@@ -1,4 +1,4 @@
-# Variable Panel for Grafana
+# Business Variable Panel for Grafana
 
 ![Dashboard](https://github.com/VolkovLabs/volkovlabs-variable-panel/raw/main/src/img/dashboard.png)
 
@@ -10,19 +10,20 @@
 
 ## Introduction
 
-The Variable panel builds on top of the regular dashboard variables. It allows you to have dashboard filters in a separate panel which you can place anywhere on the dashboard.
+The Business Variable panel builds on top of the regular dashboard variables. It allows you to have dashboard filters in a separate panel which you can place anywhere on the dashboard.
 
 The variable panel offers you single- and multi-variable layouts along with an advanced Tree View.
 
-[![Demonstrates the Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/overview.png)](https://youtu.be/1ogv2jstrlI)
+[![Demonstrates the Business Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/overview.png)](https://youtu.be/1ogv2jstrlI)
 
 ## Requirements
 
-- Variable Panel 1.X, 2.X requires **Grafana 9.2** or **Grafana 10**.
+- Business Variable Panel 3.X requires **Grafana 10** or **Grafana 11**.
+- Business Variable Panel 1.X, 2.X requires **Grafana 9.2** or **Grafana 10**.
 
 ## Getting Started
 
-The Variable panel can be installed from the [Grafana Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or utilizing the Grafana command line tool.
+The Business Variable panel can be installed from the [Grafana Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or utilizing the Grafana command line tool.
 
 For the latter, please use the following command.
 
@@ -32,7 +33,7 @@ grafana-cli plugins install volkovlabs-variable-panel
 
 ## Highlights
 
-- Allows working with dashboard variables in Table, Tree View, Minimized and Button layouts.
+- Allows working with dashboard variables in Table, Tree View, Minimized, Button, and Slider layouts.
 - Displays statuses based on thresholds from data sources.
 - Supports single and multi-value variables with the All option.
 - Allows filtering values by pattern and selected favorites.
