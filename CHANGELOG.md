@@ -2,6 +2,10 @@
 
 ## 3.0.0 (IN PROGRESS)
 
+### Breaking changes
+
+- Requires Grafana 10 and Grafana 11
+
 ### Features / Enhancements
 
 - Update selecting and deselecting multi-levels (#139)
@@ -12,6 +16,7 @@
 - Add Row count in Table view (#148)
 - Update AutoScroll Behavior (#152)
 - Add Slider View (#154)
+- Prepare for Grafana 11 (#155)
 
 ## 2.5.0 (2024-04-01)
 
