@@ -11,6 +11,7 @@
 - Add plugin e2e tests and remove cypress (#149)
 - Add Row count in Table view (#148)
 - Update AutoScroll Behavior (#152)
+- Add Slider View (#154)
 
 ## 2.5.0 (2024-04-01)
 
