@@ -7,6 +7,7 @@ import {
   ALLOW_EMPTY_VALUE_OPTIONS,
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
+  COLLAPSE_EXPAND_OPTIONS,
   DISPLAY_MODE_OPTIONS,
   FAVORITES_OPTIONS,
   FILTER_OPTIONS,
@@ -282,6 +283,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
+      })
+      .addRadio({
+        path: 'collapseRows',
+        name: 'Collapse/Expand rows on dashboard load',
+        settings: {
+          options: COLLAPSE_EXPAND_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForTableView(config),
       });
 
     builder

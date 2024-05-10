@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
@@ -104,6 +104,13 @@ interface Props<TTableData extends TableItem> {
    * Function to call after auto scroll
    */
   onAfterScroll: () => void;
+
+  /**
+   * Collapse Rows
+   *
+   * @type {boolean}
+   */
+  collapseRows: boolean;
 }
 
 /**
@@ -125,6 +132,7 @@ export const Table = <TTableData extends TableItem>({
   autoScroll,
   shouldScroll,
   onAfterScroll,
+  collapseRows,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -136,6 +144,11 @@ export const Table = <TTableData extends TableItem>({
    */
   const [expanded, setExpanded] = useState<ExpandedState>(true);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  /**
+   * Is Panel Focused
+   */
+  const isCollapsedByDefault = useRef<boolean>(false);
 
   /**
    * Instance
@@ -208,6 +221,13 @@ export const Table = <TTableData extends TableItem>({
     }
   }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused, shouldScroll, onAfterScroll]);
 
+  useEffect(() => {
+    if (collapseRows && !isCollapsedByDefault.current) {
+      tableInstance.toggleAllRowsExpanded(false);
+    }
+    isCollapsedByDefault.current = true;
+  }, [collapseRows, tableInstance]);
+
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>
       {showHeader && (
@@ -262,7 +282,7 @@ export const Table = <TTableData extends TableItem>({
         </thead>
       )}
 
-      <tbody>
+      <tbody data-testid={TEST_IDS.table.body}>
         {paddingTop > 0 && (
           <tr>
             <td style={{ height: `${paddingTop}px` }} />

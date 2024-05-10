@@ -134,6 +134,13 @@ export interface TableViewOptions {
    * @type {boolean}
    */
   statusSort: boolean;
+
+  /**
+   * Collapse Rows
+   *
+   * @type {boolean}
+   */
+  collapseRows: boolean;
 }
 
 /**

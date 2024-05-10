@@ -121,6 +121,68 @@ describe('Table', () => {
     expect(selectors.cell(false, '2-2', 1)).toBeInTheDocument();
   });
 
+  it('Should collapse levels', () => {
+    const data: any = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    render(getComponent({ data, collapseRows: true, columns: columns as any, getSubRows: (row: any) => row.children }));
+
+    expect(selectors.body()).toBeInTheDocument();
+
+    /**
+     * Check first row with sub rows
+     */
+    expect(selectors.cell(false, '1', 0)).toBeInTheDocument();
+
+    /**
+     * Collapsed sub rows
+     */
+    expect(selectors.cell(true, '1-1', 1)).not.toBeInTheDocument();
+    expect(selectors.cell(true, '1-2', 1)).not.toBeInTheDocument();
+
+    /**
+     * Check second row with sub rows
+     */
+    expect(selectors.cell(false, '2', 0)).toBeInTheDocument();
+
+    /**
+     * Collapsed sub rows
+     */
+    expect(selectors.cell(true, '2-1', 1)).not.toBeInTheDocument();
+    expect(selectors.cell(true, '2-2', 1)).not.toBeInTheDocument();
+  });
+
   it('Should render header', () => {
     render(getComponent({ showHeader: true, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
 

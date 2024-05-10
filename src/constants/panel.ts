@@ -75,6 +75,14 @@ export const SHOW_NAME_OPTIONS = [
 ];
 
 /**
+ * Collapse Expand Options
+ */
+export const COLLAPSE_EXPAND_OPTIONS = [
+  { value: true, label: 'Collapse', description: 'Collapse rows by default' },
+  { value: false, label: 'Expand', description: 'Expand rows by default' },
+];
+
+/**
  * Auto Scroll Options
  */
 export const AUTO_SCROLL_OPTIONS = [
