@@ -342,6 +342,50 @@ describe('Variable Utils', () => {
           true
         );
       });
+
+      it('Should deselect value if All selected as string', () => {
+        jest.mocked(locationService.getSearch).mockImplementation(
+          () =>
+            ({
+              getAll: jest.fn(() => []),
+            }) as any
+        );
+        jest.mocked(locationService.getSearchObject).mockImplementation(() => ({}));
+        const variable = {
+          name: 'variable',
+          type: VariableType.CUSTOM,
+          current: {
+            value: ALL_VALUE_PARAMETER,
+          },
+          options: [
+            {
+              text: 'All',
+              value: '$__all',
+              selected: true,
+            },
+            {
+              text: 'value1',
+              value: 'value1',
+              selected: false,
+            },
+            {
+              text: 'value2',
+              value: 'value2',
+              selected: false,
+            },
+          ],
+          includeAll: true,
+          multi: true,
+        };
+        selectVariableValues(['value1'], variable as any, eventBus);
+
+        expect(locationService.partial).toHaveBeenCalledWith(
+          {
+            [`var-${variable.name}`]: ['value2'],
+          },
+          true
+        );
+      });
     });
 
     describe('Text Box', () => {
