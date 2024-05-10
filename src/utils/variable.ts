@@ -52,8 +52,39 @@ export const selectVariableValues = (
   switch (runtimeVariable.type) {
     case VariableType.CUSTOM:
     case VariableType.QUERY: {
-      const { name, multi } = runtimeVariable;
+      const { name, multi, includeAll, options } = runtimeVariable;
 
+      if (includeAll) {
+        const selectedValue = runtimeVariable.current.value;
+        /**
+         * Click on cell if all option selected
+         */
+        const isAllSelected = Array.isArray(selectedValue)
+          ? selectedValue.some((value) => value === ALL_VALUE_PARAMETER)
+          : selectedValue === ALL_VALUE_PARAMETER;
+
+        if (isAllSelected) {
+          /**
+           * Get Unique Values
+           */
+          const valuesSet = new Set(values);
+          const uniqueValues = [];
+
+          for (const option of options) {
+            if (option.value === ALL_VALUE_PARAMETER) {
+              continue;
+            }
+            if (valuesSet.has(option.value)) {
+              continue;
+            }
+
+            uniqueValues.push(option.value);
+          }
+
+          setVariableValue(name, uniqueValues, panelEventBus);
+          return;
+        }
+      }
       /**
        * Multi update
        */
