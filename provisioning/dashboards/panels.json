@@ -24,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -51,72 +52,39 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 7,
+        "h": 17,
+        "w": 3,
         "x": 0,
         "y": 0
       },
-      "id": 8,
+      "id": 6,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "customValue": false,
         "displayMode": "table",
-        "favorites": false,
-        "filter": false,
-        "header": true,
-        "padding": 10,
-        "showName": false,
-        "statusSort": false,
-        "sticky": false,
-        "variables": []
-      },
-      "title": "Empty",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 17,
-        "w": 7,
-        "x": 7,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "autoScroll": false,
-        "displayMode": "table",
+        "emptyValue": false,
         "favorites": true,
         "filter": true,
+        "groupSelection": false,
         "header": true,
         "heading": "Devices",
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
         "selectedVariables": ["device"],
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": true,
         "sticky": false,
-        "variable": "single",
-        "variables": ["single"]
+        "variable": "device",
+        "variables": ["device"]
       },
+      "pluginVersion": "3.0.0",
       "targets": [
         {
           "frame": {
@@ -161,26 +129,637 @@
       },
       "gridPos": {
         "h": 17,
-        "w": 7,
-        "x": 14,
+        "w": 3,
+        "x": 3,
         "y": 0
       },
-      "id": 6,
+      "id": 11,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "customValue": false,
+        "displayMode": "button",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
+        "showName": false,
+        "showResetButton": true,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "device"
+      },
+      "pluginVersion": "3.0.0",
+      "title": "Device 1 Multi + All",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 6,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
         "displayMode": "table",
+        "emptyValue": false,
         "favorites": true,
         "filter": true,
+        "groupSelection": false,
         "header": true,
         "heading": "Devices",
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
         "selectedVariables": ["device"],
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": true,
         "sticky": false,
-        "variable": "device",
+        "variable": "device2",
         "variables": ["device"]
       },
+      "pluginVersion": "3.0.0",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": ["Hello World!"]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 9,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "button",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
+        "showName": false,
+        "showResetButton": true,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "device2"
+      },
+      "pluginVersion": "3.0.0",
+      "title": "Device 2 Multi Only ",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 12,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": true,
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": ["device"],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "device3",
+        "variables": ["device"]
+      },
+      "pluginVersion": "3.0.0",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": ["Hello World!"]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 15,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "button",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
+        "showName": false,
+        "showResetButton": true,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "device3"
+      },
+      "pluginVersion": "3.0.0",
+      "title": "Dev.3 Without Multi and All ",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 18,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": true,
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": ["device"],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "device4",
+        "variables": ["device"]
+      },
+      "pluginVersion": "3.0.0",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": ["Hello World!"]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 3,
+        "x": 21,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "button",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
+        "showName": false,
+        "showResetButton": true,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "variable": "device4"
+      },
+      "pluginVersion": "3.0.0",
+      "title": "Device 3 All (without Multi)",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 7,
+        "x": 0,
+        "y": 17
+      },
+      "id": 8,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "variables": []
+      },
+      "pluginVersion": "3.0.0",
+      "title": "Empty",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 7,
+        "y": 17
+      },
+      "id": 10,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": false,
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "name": "value",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "status": "status",
+        "statusSort": false,
+        "sticky": false,
+        "variable": "test"
+      },
+      "pluginVersion": "3.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "P1D2C73DC01F2359B"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "value",
+                "type": "string",
+                "values": ["myvalue", "anothervalue"]
+              },
+              {
+                "config": {},
+                "name": "status",
+                "type": "number",
+                "values": [10, 399]
+              }
+            ],
+            "meta": {},
+            "name": "Test"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Title",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 14,
+        "y": 17
+      },
+      "id": 7,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": true,
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": ["device"],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "single",
+        "variables": ["single"]
+      },
+      "pluginVersion": "3.0.0",
       "targets": [
         {
           "frame": {
@@ -227,102 +806,39 @@
         "h": 3,
         "w": 7,
         "x": 0,
-        "y": 5
+        "y": 22
       },
       "id": 9,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "customValue": false,
         "displayMode": "minimize",
+        "emptyValue": false,
         "favorites": false,
         "filter": false,
+        "groupSelection": false,
         "header": true,
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "test"
       },
-      "title": "Panel Title",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 7,
-        "x": 0,
-        "y": 8
-      },
-      "id": 10,
-      "options": {
-        "autoScroll": false,
-        "displayMode": "table",
-        "favorites": false,
-        "filter": false,
-        "header": true,
-        "name": "value",
-        "padding": 10,
-        "showName": false,
-        "status": "status",
-        "statusSort": false,
-        "sticky": false,
-        "variable": "test"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "P1D2C73DC01F2359B"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "value",
-                "type": "string",
-                "values": ["myvalue", "anothervalue"]
-              },
-              {
-                "config": {},
-                "name": "status",
-                "type": "number",
-                "values": [10, 399]
-              }
-            ],
-            "meta": {},
-            "name": "Test"
-          },
-          "refId": "A"
-        }
-      ],
+      "pluginVersion": "3.0.0",
       "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -366,8 +882,8 @@
       {
         "current": {
           "selected": false,
-          "text": ["Device1", "Device7", "Device8"],
-          "value": ["Device1", "Device7", "Device8"]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "hide": 0,
         "includeAll": true,
@@ -376,10 +892,108 @@
         "name": "device",
         "options": [
           {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Device1",
+            "value": "Device1"
+          },
+          {
+            "selected": false,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": false,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
+          }
+        ],
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["mykey", "anotherkey"],
+          "value": ["myvalue", "anothervalue"]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "test",
+        "options": [
+          {
             "selected": false,
             "text": "All",
             "value": "$__all"
           },
+          {
+            "selected": true,
+            "text": "mykey",
+            "value": "myvalue"
+          },
+          {
+            "selected": true,
+            "text": "anotherkey",
+            "value": "anothervalue"
+          }
+        ],
+        "query": "mykey : myvalue, anotherkey : anothervalue",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": ["Device1"],
+          "value": ["Device1"]
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Device 2",
+        "multi": true,
+        "name": "device2",
+        "options": [
           {
             "selected": true,
             "text": "Device1",
@@ -411,12 +1025,12 @@
             "value": "Device6"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "Device7",
             "value": "Device7"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "Device8",
             "value": "Device8"
           },
@@ -438,31 +1052,139 @@
       {
         "current": {
           "selected": false,
-          "text": ["mykey", "anotherkey"],
-          "value": ["myvalue", "anothervalue"]
+          "text": "Device1",
+          "value": "Device1"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Device 3",
+        "multi": false,
+        "name": "device3",
+        "options": [
+          {
+            "selected": true,
+            "text": "Device1",
+            "value": "Device1"
+          },
+          {
+            "selected": false,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": false,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
+          }
+        ],
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "hide": 0,
         "includeAll": true,
-        "multi": true,
-        "name": "test",
+        "label": "Device 4",
+        "multi": false,
+        "name": "device4",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "All",
             "value": "$__all"
           },
           {
-            "selected": true,
-            "text": "mykey",
-            "value": "myvalue"
+            "selected": false,
+            "text": "Device1",
+            "value": "Device1"
           },
           {
-            "selected": true,
-            "text": "anotherkey",
-            "value": "anothervalue"
+            "selected": false,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": false,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
           }
         ],
-        "query": "mykey : myvalue, anotherkey : anothervalue",
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
         "skipUrlSync": false,
         "type": "custom"
       }
@@ -476,6 +1198,6 @@
   "timezone": "",
   "title": "Panels",
   "uid": "O4tc_E6Gz",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }
