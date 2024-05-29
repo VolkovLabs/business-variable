@@ -29,7 +29,11 @@ describe('Variable Utils', () => {
 
   it('Should emit variable changed event', () => {
     const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-    selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+    selectVariableValues({
+      values: ['value1', 'value2'],
+      runtimeVariable: variable as any,
+      panelEventBus: eventBus,
+    });
 
     expect(eventBus.publish).toHaveBeenCalledWith({
       type: VariableChangedEvent.type,
@@ -51,7 +55,11 @@ describe('Variable Utils', () => {
 
       it('Should apply only first value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -63,7 +71,11 @@ describe('Variable Utils', () => {
 
       it('Should apply all value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues([ALL_VALUE_PARAMETER], variable as any, eventBus);
+        selectVariableValues({
+          values: [ALL_VALUE_PARAMETER],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -75,7 +87,11 @@ describe('Variable Utils', () => {
 
       it('Should apply no value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [] };
-        selectVariableValues([NO_VALUE_PARAMETER], variable as any, eventBus);
+        selectVariableValues({
+          values: [NO_VALUE_PARAMETER],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -96,7 +112,11 @@ describe('Variable Utils', () => {
 
       it('Should apply all values', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, current: { value: [] }, multi: true };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -108,7 +128,11 @@ describe('Variable Utils', () => {
 
       it('Should apply no value', () => {
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues([NO_VALUE_PARAMETER], variable as any, eventBus);
+        selectVariableValues({
+          values: [NO_VALUE_PARAMETER],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -126,7 +150,11 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -144,7 +172,11 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -162,7 +194,11 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', ALL_VALUE_PARAMETER], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', ALL_VALUE_PARAMETER],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -175,7 +211,11 @@ describe('Variable Utils', () => {
          * Check case-insensitive of all value
          */
         jest.mocked(locationService.partial).mockClear();
-        selectVariableValues(['value1', ALL_VALUE_PARAMETER], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', ALL_VALUE_PARAMETER],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -193,7 +233,12 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, options: [], multi: true };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+          isKeepSelection: false,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -211,7 +256,11 @@ describe('Variable Utils', () => {
             }) as any
         );
         const variable = { name: 'variable', type: VariableType.CUSTOM, current: { value: [] }, multi: true };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -237,7 +286,11 @@ describe('Variable Utils', () => {
           },
           multi: true,
         };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -263,7 +316,11 @@ describe('Variable Utils', () => {
           },
           multi: true,
         };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -289,7 +346,11 @@ describe('Variable Utils', () => {
           },
           multi: true,
         };
-        selectVariableValues(['value1', 'value2'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1', 'value2'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -299,7 +360,7 @@ describe('Variable Utils', () => {
         );
       });
 
-      it('Should deselect value if All selected', () => {
+      it('Should deselect value if All selected and keep selection enabled', () => {
         jest.mocked(locationService.getSearch).mockImplementation(
           () =>
             ({
@@ -333,7 +394,12 @@ describe('Variable Utils', () => {
           includeAll: true,
           multi: true,
         };
-        selectVariableValues(['value1'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+          isKeepSelection: true,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -343,7 +409,7 @@ describe('Variable Utils', () => {
         );
       });
 
-      it('Should deselect value if All selected as string', () => {
+      it('Should deselect value if All selected as string and keep selection enabled', () => {
         jest.mocked(locationService.getSearch).mockImplementation(
           () =>
             ({
@@ -377,7 +443,12 @@ describe('Variable Utils', () => {
           includeAll: true,
           multi: true,
         };
-        selectVariableValues(['value1'], variable as any, eventBus);
+        selectVariableValues({
+          values: ['value1'],
+          runtimeVariable: variable as any,
+          panelEventBus: eventBus,
+          isKeepSelection: true,
+        });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -391,7 +462,7 @@ describe('Variable Utils', () => {
     describe('Text Box', () => {
       it('Should apply only first value', () => {
         const variable = { name: 'variable', type: VariableType.TEXTBOX };
-        selectVariableValues(['value1'], variable as any, eventBus);
+        selectVariableValues({ values: ['value1'], runtimeVariable: variable as any, panelEventBus: eventBus });
 
         expect(locationService.partial).toHaveBeenCalledWith(
           {
@@ -403,14 +474,14 @@ describe('Variable Utils', () => {
     });
 
     it('Should not apply value if no variable passed', () => {
-      selectVariableValues(['value1'], undefined, eventBus);
+      selectVariableValues({ values: ['value1'], panelEventBus: eventBus });
 
       expect(locationService.partial).not.toHaveBeenCalled();
     });
 
     it('Should not apply value for unsupported variable type', () => {
       const variable = { name: 'variable', type: VariableType.ADHOC };
-      selectVariableValues(['value1'], variable as any, eventBus);
+      selectVariableValues({ values: ['value1'], runtimeVariable: variable as any, panelEventBus: eventBus });
 
       expect(locationService.partial).not.toHaveBeenCalled();
     });

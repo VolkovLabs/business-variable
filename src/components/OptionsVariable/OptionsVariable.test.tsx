@@ -134,7 +134,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { value: option2.value } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [option2.value],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should remove persistent values on selection', () => {
@@ -231,7 +235,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [option2.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [option2.value],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should deselect all value if was selected before', () => {
@@ -256,7 +264,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [ALL_VALUE_PARAMETER, option1.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([option1.value], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [option1.value],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should select only all value while all selection', () => {
@@ -278,7 +290,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [ALL_VALUE_PARAMETER, option2.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [ALL_VALUE_PARAMETER],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should select all value if no selected values', () => {
@@ -303,7 +319,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [ALL_VALUE_PARAMETER],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should clear value if no selected values and emptyValue enabled', () => {
@@ -329,7 +349,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([NO_VALUE_PARAMETER], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [NO_VALUE_PARAMETER],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
 
     it('Should deselect values', () => {
@@ -357,7 +381,11 @@ describe('Options Variable', () => {
 
       fireEvent.change(selectors.root(), { target: { values: [option1.value] } });
 
-      expect(selectVariableValues).toHaveBeenCalledWith([option2.value], expect.any(Object), expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: [option2.value],
+        runtimeVariable: expect.any(Object),
+        panelEventBus: expect.anything(),
+      });
     });
   });
 

@@ -205,7 +205,7 @@ export const useTable = ({
    * Value Cell Select
    */
   const onChange = useCallback(
-    (item: TableItem) => {
+    (item: TableItem, isKeepSelection = false) => {
       const values = item.childValues || [item.value];
 
       const filteredTree = getFilteredTree(tableData, values);
@@ -228,13 +228,23 @@ export const useTable = ({
         })
         .filter((item) => item.values.length > 0)
         .forEach(({ variable, values }) => {
-          selectVariableValues(values, variable, panelEventBus);
+          selectVariableValues({
+            values,
+            runtimeVariable: variable,
+            panelEventBus,
+            isKeepSelection,
+          });
         });
 
       /**
        * Update Variable Values
        */
-      selectVariableValues(values, runtimeVariable, panelEventBus);
+      selectVariableValues({
+        values,
+        runtimeVariable,
+        panelEventBus,
+        isKeepSelection,
+      });
     },
     [panelEventBus, runtimeVariable, tableData]
   );
@@ -243,14 +253,14 @@ export const useTable = ({
    * Value Cell Click for Single variables with All selected
    */
   const onClick = useCallback(
-    (item: TableItem) => {
+    (item: TableItem, event: React.MouseEvent) => {
       if (
         item.selected &&
         isVariableWithOptions(item.variable) &&
         !item.variable?.multi &&
         item.variable === runtimeVariable
       ) {
-        onChange(item);
+        onChange(item, event.metaKey);
       }
     },
     [onChange, runtimeVariable]
@@ -307,7 +317,7 @@ export const useTable = ({
                       showStatus: false,
                       label: '',
                     };
-                    onChange(rootRow);
+                    onChange(rootRow, false);
                   }}
                   checked={isSelectedAll}
                   className={styles.selectControl}
@@ -371,8 +381,10 @@ export const useTable = ({
                   type={
                     isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
                   }
-                  onChange={() => onChange(row.original)}
-                  onClick={() => onClick(row.original)}
+                  onChange={(event) =>
+                    onChange(row.original, 'metaKey' in event.nativeEvent ? !!event.nativeEvent.metaKey : false)
+                  }
+                  onClick={(event) => onClick(row.original, event)}
                   checked={row.original.selected}
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
@@ -403,13 +415,13 @@ export const useTable = ({
 
               {isVariableWithOptions(runtimeVariable) && (
                 <label
-                  onClick={() => {
+                  onClick={(event) => {
                     /**
                      * Html For causes loosing panel focus
                      * So we have to call onChange manually
                      */
                     if (row.original.selectable) {
-                      onChange(row.original);
+                      onChange(row.original, event.metaKey);
                       return;
                     }
 

@@ -53,7 +53,7 @@ export const TextVariable: React.FC<Props> = ({ variable, panelEventBus }) => {
    * On Save
    */
   const onSave = useCallback(() => {
-    selectVariableValues([value], variable, panelEventBus);
+    selectVariableValues({ values: [value], runtimeVariable: variable, panelEventBus });
   }, [panelEventBus, value, variable]);
 
   /**

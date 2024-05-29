@@ -36,15 +36,18 @@ export const setVariableValue = (name: string, value: unknown, eventBus: EventBu
 
 /**
  * Select Variable Values
- * @param values
- * @param runtimeVariable
- * @param panelEventBus
  */
-export const selectVariableValues = (
-  values: string[],
-  runtimeVariable: RuntimeVariable | undefined,
-  panelEventBus: EventBus
-) => {
+export const selectVariableValues = ({
+  values,
+  runtimeVariable,
+  panelEventBus,
+  isKeepSelection = false,
+}: {
+  values: string[];
+  runtimeVariable?: RuntimeVariable;
+  panelEventBus: EventBus;
+  isKeepSelection?: boolean;
+}) => {
   if (!runtimeVariable) {
     return;
   }
@@ -54,46 +57,72 @@ export const selectVariableValues = (
     case VariableType.QUERY: {
       const { name, multi, includeAll, options } = runtimeVariable;
 
-      if (includeAll) {
-        const selectedValue = runtimeVariable.current.value;
-        /**
-         * Click on cell if all option selected
-         */
-        const isAllSelected = Array.isArray(selectedValue)
-          ? selectedValue.some((value) => value === ALL_VALUE_PARAMETER)
-          : selectedValue === ALL_VALUE_PARAMETER;
-
-        if (isAllSelected) {
-          /**
-           * Get Unique Values
-           */
-          const valuesSet = new Set(values);
-          const uniqueValues = [];
-
-          for (const option of options) {
-            if (option.value === ALL_VALUE_PARAMETER) {
-              continue;
-            }
-            if (valuesSet.has(option.value)) {
-              continue;
-            }
-
-            uniqueValues.push(option.value);
-          }
-
-          setVariableValue(name, uniqueValues, panelEventBus);
-          return;
-        }
-      }
       /**
        * Multi update
        */
       if (multi) {
+        /**
+         * Check if all option already selected
+         */
+        if (includeAll) {
+          const selectedValue = runtimeVariable.current.value;
+
+          const isAllSelected = Array.isArray(selectedValue)
+            ? selectedValue.some((value) => value === ALL_VALUE_PARAMETER)
+            : selectedValue === ALL_VALUE_PARAMETER;
+
+          /**
+           * Deselect values while all option was active and should keep selection
+           */
+          if (isAllSelected && isKeepSelection) {
+            /**
+             * Create values map to exclude
+             */
+            const excludeValuesMap = new Map<string, boolean>();
+
+            values.forEach((value) => {
+              excludeValuesMap.set(value, true);
+            });
+
+            /**
+             * Filter all and excluded values
+             */
+            const valuesToSelect = [];
+
+            for (const option of options) {
+              /**
+               * Skip all value
+               */
+              if (option.value === ALL_VALUE_PARAMETER) {
+                continue;
+              }
+              /**
+               * Value should be deselected, so skip
+               */
+              if (excludeValuesMap.has(option.value)) {
+                continue;
+              }
+
+              valuesToSelect.push(option.value);
+            }
+
+            setVariableValue(name, valuesToSelect, panelEventBus);
+
+            return;
+          }
+        }
+
+        /**
+         * All value selected
+         */
         if (values.some((value) => value === ALL_VALUE_PARAMETER)) {
           setVariableValue(name, ALL_VALUE, panelEventBus);
           return;
         }
 
+        /**
+         * No value selected
+         */
         if (values.some((value) => value === NO_VALUE_PARAMETER)) {
           setVariableValue(name, '', panelEventBus);
           return;

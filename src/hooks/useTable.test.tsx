@@ -591,7 +591,12 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(device1Control);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
 
       jest.mocked(selectVariableValues).mockClear();
 
@@ -600,7 +605,12 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(within(device1).getByTestId(TEST_IDS.table.label));
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
     });
 
     it('Should select unselected parent values', () => {
@@ -709,8 +719,18 @@ describe('Use Table Hook', () => {
       fireEvent.click(countryControl);
 
       expect(selectVariableValues).toHaveBeenCalledTimes(2);
-      expect(selectVariableValues).toHaveBeenCalledWith(['device2'], deviceVariable, expect.anything());
-      expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device2'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['Japan'],
+        runtimeVariable: countryVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
     });
 
     it('Should use radio for single value', () => {
@@ -842,7 +862,12 @@ describe('Use Table Hook', () => {
 
       fireEvent.click(device1Control);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: variable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
     });
 
     it('Row with subRows should not be selectable and expandable', () => {
@@ -1956,8 +1981,18 @@ describe('Use Table Hook', () => {
          * Should select country
          */
         expect(selectVariableValues).toHaveBeenCalledTimes(2);
-        expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable, expect.anything());
-        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['USA', 'Japan'],
+          runtimeVariable: countryVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['device1', 'device2'],
+          runtimeVariable: deviceVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
       });
 
       it('Should render calculated all state by selected child items and unselect them', () => {
@@ -2074,7 +2109,13 @@ describe('Use Table Hook', () => {
         /**
          * Check if all items unselected
          */
-        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
+
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['device1', 'device2'],
+          runtimeVariable: deviceVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
         expect(selectVariableValues).toHaveBeenCalledTimes(1);
       });
     });

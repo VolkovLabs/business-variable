@@ -103,7 +103,11 @@ describe('Text Variable', () => {
 
     fireEvent.blur(selectors.root());
 
-    expect(selectVariableValues).toHaveBeenCalledWith(['hello'], defaultVariable, expect.anything());
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      values: ['hello'],
+      runtimeVariable: defaultVariable,
+      panelEventBus: expect.anything(),
+    });
   });
 
   it('Should update variable value on enter', () => {
@@ -117,7 +121,11 @@ describe('Text Variable', () => {
 
     fireEvent.keyDown(selectors.root(), { key: 'Enter' });
 
-    expect(selectVariableValues).toHaveBeenCalledWith(['hello'], defaultVariable, expect.anything());
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      values: ['hello'],
+      runtimeVariable: defaultVariable,
+      panelEventBus: expect.anything(),
+    });
   });
 
   it('Should blur field on escape', () => {
