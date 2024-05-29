@@ -17,6 +17,7 @@ import {
   SELECTED_GROUP_OPTIONS,
   SHOW_LABEL_OPTIONS,
   SHOW_NAME_OPTIONS,
+  SHOW_RESET_BUTTON_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
 } from './constants';
@@ -282,6 +283,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
+      })
+      .addRadio({
+        path: 'showResetButton',
+        name: 'Display reset button',
+        settings: {
+          options: SHOW_RESET_BUTTON_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForButtonView(config),
       });
 
     builder

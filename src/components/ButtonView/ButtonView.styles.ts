@@ -17,5 +17,8 @@ export const getStyles = (theme: GrafanaTheme2) => {
       border: 1px solid ${theme.colors.border.weak};
       margin: ${theme.spacing(0.25, 0)};
     `,
+    resetButton: css`
+      margin-left: ${theme.spacing(1)};
+    `,
   };
 };
