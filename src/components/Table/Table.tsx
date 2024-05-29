@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
@@ -106,11 +106,11 @@ interface Props<TTableData extends TableItem> {
   onAfterScroll: () => void;
 
   /**
-   * Collapse Rows
+   * Collapsed by default
    *
    * @type {boolean}
    */
-  collapseRows: boolean;
+  collapsedByDefault: boolean;
 }
 
 /**
@@ -132,7 +132,7 @@ export const Table = <TTableData extends TableItem>({
   autoScroll,
   shouldScroll,
   onAfterScroll,
-  collapseRows,
+  collapsedByDefault,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -142,13 +142,8 @@ export const Table = <TTableData extends TableItem>({
   /**
    * States
    */
-  const [expanded, setExpanded] = useState<ExpandedState>(true);
+  const [expanded, setExpanded] = useState<ExpandedState>(collapsedByDefault ? {} : true);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  /**
-   * Is Panel Focused
-   */
-  const isCollapsedByDefault = useRef<boolean>(false);
 
   /**
    * Instance
@@ -167,9 +162,6 @@ export const Table = <TTableData extends TableItem>({
     onColumnFiltersChange: setColumnFilters,
     enableExpanding: true,
     onExpandedChange: setExpanded,
-    initialState: {
-      expanded: true,
-    },
     state: {
       expanded,
       columnFilters,
@@ -220,13 +212,6 @@ export const Table = <TTableData extends TableItem>({
       onAfterScroll();
     }
   }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused, shouldScroll, onAfterScroll]);
-
-  useEffect(() => {
-    if (collapseRows && !isCollapsedByDefault.current) {
-      tableInstance.toggleAllRowsExpanded(false);
-    }
-    isCollapsedByDefault.current = true;
-  }, [collapseRows, tableInstance]);
 
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>

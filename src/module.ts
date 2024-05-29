@@ -283,16 +283,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && !!config.groups?.length,
-      })
-      .addRadio({
-        path: 'collapseRows',
-        name: 'Collapse/Expand rows on dashboard load',
-        settings: {
-          options: COLLAPSE_EXPAND_OPTIONS,
-        },
-        defaultValue: false,
-        category: ['Layout'],
-        showIf: (config) => showForTableView(config),
       });
 
     builder
@@ -337,6 +327,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Groups'],
         showIf: (config) => showForTableView(config) && config.groupSelection,
+      })
+      .addRadio({
+        path: 'collapsedByDefault',
+        name: 'All groups by default',
+        settings: {
+          options: COLLAPSE_EXPAND_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Groups'],
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
     /**

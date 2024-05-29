@@ -78,8 +78,8 @@ export const SHOW_NAME_OPTIONS = [
  * Collapse Expand Options
  */
 export const COLLAPSE_EXPAND_OPTIONS = [
-  { value: true, label: 'Collapse', description: 'Collapse rows by default' },
-  { value: false, label: 'Expand', description: 'Expand rows by default' },
+  { value: true, label: 'Collapsed', description: 'Collapsed by default' },
+  { value: false, label: 'Expanded', description: 'Expanded by default' },
 ];
 
 /**
