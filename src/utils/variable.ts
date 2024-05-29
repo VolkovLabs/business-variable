@@ -1,5 +1,6 @@
 import { EventBus, TypedVariableModel } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+import { ChangeEvent, MouseEvent, PointerEvent } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import {
@@ -10,6 +11,7 @@ import {
   VariableChangedEvent,
   VariableType,
 } from '../types';
+import { isMac } from './browser';
 
 /**
  * Set Variable Value
@@ -291,4 +293,13 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
   }
 
   return false;
+};
+
+/**
+ * Should keep selection
+ */
+export const shouldKeepSelection = (event: ChangeEvent | MouseEvent): boolean => {
+  const nativeEvent = event.nativeEvent as Pick<PointerEvent, 'ctrlKey' | 'metaKey'>;
+
+  return isMac() ? nativeEvent.metaKey : nativeEvent.ctrlKey;
 };

@@ -16,6 +16,7 @@ import {
   isVariableAllSelected,
   isVariableWithOptions,
   selectVariableValues,
+  shouldKeepSelection,
   statusSort,
   toPlainArray,
   valueFilter,
@@ -260,7 +261,7 @@ export const useTable = ({
         !item.variable?.multi &&
         item.variable === runtimeVariable
       ) {
-        onChange(item, event.metaKey);
+        onChange(item, shouldKeepSelection(event));
       }
     },
     [onChange, runtimeVariable]
@@ -381,9 +382,7 @@ export const useTable = ({
                   type={
                     isVariableWithOptions(runtimeVariable) ? (runtimeVariable?.multi ? 'checkbox' : 'radio') : 'text'
                   }
-                  onChange={(event) =>
-                    onChange(row.original, 'metaKey' in event.nativeEvent ? !!event.nativeEvent.metaKey : false)
-                  }
+                  onChange={(event) => onChange(row.original, shouldKeepSelection(event))}
                   onClick={(event) => onClick(row.original, event)}
                   checked={row.original.selected}
                   className={styles.selectControl}
@@ -421,7 +420,7 @@ export const useTable = ({
                      * So we have to call onChange manually
                      */
                     if (row.original.selectable) {
-                      onChange(row.original, event.metaKey);
+                      onChange(row.original, shouldKeepSelection(event));
                       return;
                     }
 
