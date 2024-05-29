@@ -7,7 +7,7 @@ import {
   ALLOW_EMPTY_VALUE_OPTIONS,
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
-  COLLAPSE_EXPAND_OPTIONS,
+  COLLAPSED_BY_DEFAULT_OPTIONS,
   DISPLAY_MODE_OPTIONS,
   FAVORITES_OPTIONS,
   FILTER_OPTIONS,
@@ -332,7 +332,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'collapsedByDefault',
         name: 'All groups by default',
         settings: {
-          options: COLLAPSE_EXPAND_OPTIONS,
+          options: COLLAPSED_BY_DEFAULT_OPTIONS,
         },
         defaultValue: false,
         category: ['Groups'],

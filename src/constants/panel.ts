@@ -75,9 +75,9 @@ export const SHOW_NAME_OPTIONS = [
 ];
 
 /**
- * Collapse Expand Options
+ * Collapse By Default Options
  */
-export const COLLAPSE_EXPAND_OPTIONS = [
+export const COLLAPSED_BY_DEFAULT_OPTIONS = [
   { value: true, label: 'Collapsed', description: 'Collapsed by default' },
   { value: false, label: 'Expanded', description: 'Expanded by default' },
 ];
