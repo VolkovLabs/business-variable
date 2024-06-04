@@ -275,7 +275,11 @@ describe('ButtonView', () => {
     /**
      * All should be selected
      */
-    expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], variable, {});
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      panelEventBus: expect.anything(),
+      runtimeVariable: variable,
+      values: [ALL_VALUE_PARAMETER],
+    });
   });
 
   it('Should reset variable options for multi variable without All option', () => {
@@ -336,7 +340,11 @@ describe('ButtonView', () => {
     /**
      * device1 should be selected
      */
-    expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable, {});
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      panelEventBus: expect.anything(),
+      runtimeVariable: variable,
+      values: ['device1'],
+    });
   });
 
   it('Should reset variable options for none multi variable', () => {
@@ -398,7 +406,11 @@ describe('ButtonView', () => {
     /**
      * device1 should be selected
      */
-    expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable, {});
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      panelEventBus: expect.anything(),
+      runtimeVariable: variable,
+      values: ['device1'],
+    });
   });
 
   /**
