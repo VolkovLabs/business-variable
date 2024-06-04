@@ -7,6 +7,7 @@ import {
   ALLOW_EMPTY_VALUE_OPTIONS,
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
+  COLLAPSED_BY_DEFAULT_OPTIONS,
   DISPLAY_MODE_OPTIONS,
   FAVORITES_OPTIONS,
   FILTER_OPTIONS,
@@ -326,6 +327,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         category: ['Groups'],
         showIf: (config) => showForTableView(config) && config.groupSelection,
+      })
+      .addRadio({
+        path: 'collapsedByDefault',
+        name: 'Initial state',
+        settings: {
+          options: COLLAPSED_BY_DEFAULT_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Groups'],
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       });
 
     /**
