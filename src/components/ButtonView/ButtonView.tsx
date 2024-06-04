@@ -106,6 +106,9 @@ export const ButtonView: React.FC<Props> = ({
     );
   }
 
+  /**
+   * Reset Variable
+   */
   const resetVariable = (value: string | string[]) => {
     updateVariableOptions({
       previousValues: values,
