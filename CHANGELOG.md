@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Add collapse/expand rows option on initial load (#159)
+
 ## 3.0.0 (2024-05-09)
 
 ### Breaking changes

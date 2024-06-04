@@ -204,6 +204,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
             autoScroll={options.autoScroll}
             shouldScroll={shouldScroll}
             onAfterScroll={onAfterScroll}
+            collapsedByDefault={options.collapsedByDefault}
           />
         </div>
       </div>
