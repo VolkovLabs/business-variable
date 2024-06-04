@@ -31,7 +31,7 @@ export const updateVariableOptions = ({
      * Clear Value
      */
     if (updatedValues.length === 0 && emptyValueEnabled) {
-      selectVariableValues([NO_VALUE_PARAMETER], variable, panelEventBus);
+      selectVariableValues({ values: [NO_VALUE_PARAMETER], runtimeVariable: variable, panelEventBus });
       return;
     }
 
@@ -39,12 +39,12 @@ export const updateVariableOptions = ({
      * Select all
      */
     if (updatedValues.length === 0 && variable?.multi && variable.includeAll) {
-      selectVariableValues([ALL_VALUE_PARAMETER], variable, panelEventBus);
+      selectVariableValues({ values: [ALL_VALUE_PARAMETER], runtimeVariable: variable, panelEventBus });
       return;
     }
 
     const removedValues = previousValues.filter((value) => !updatedValues.includes(value));
-    selectVariableValues(removedValues, variable, panelEventBus);
+    selectVariableValues({ values: removedValues, runtimeVariable: variable, panelEventBus });
     return;
   }
 
@@ -56,11 +56,11 @@ export const updateVariableOptions = ({
     previousValues.includes(ALL_VALUE_PARAMETER) &&
     updatedValues.includes(ALL_VALUE_PARAMETER)
   ) {
-    selectVariableValues(
-      updatedValues.filter((value) => value !== ALL_VALUE_PARAMETER),
-      variable,
-      panelEventBus
-    );
+    selectVariableValues({
+      values: updatedValues.filter((value) => value !== ALL_VALUE_PARAMETER),
+      runtimeVariable: variable,
+      panelEventBus,
+    });
     return;
   }
 
@@ -72,12 +72,12 @@ export const updateVariableOptions = ({
     !previousValues.includes(ALL_VALUE_PARAMETER) &&
     updatedValues.includes(ALL_VALUE_PARAMETER)
   ) {
-    selectVariableValues([ALL_VALUE_PARAMETER], variable, panelEventBus);
+    selectVariableValues({ values: [ALL_VALUE_PARAMETER], runtimeVariable: variable, panelEventBus });
     return;
   }
 
   /**
    * Select Values
    */
-  selectVariableValues(updatedValues, variable, panelEventBus);
+  selectVariableValues({ values: updatedValues, runtimeVariable: variable, panelEventBus });
 };

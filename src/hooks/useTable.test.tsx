@@ -1,5 +1,6 @@
 import { toDataFrame, TypedVariableModel } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import React from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
@@ -591,7 +592,12 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(device1Control);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
 
       jest.mocked(selectVariableValues).mockClear();
 
@@ -600,7 +606,12 @@ describe('Use Table Hook', () => {
        */
       fireEvent.click(within(device1).getByTestId(TEST_IDS.table.label));
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], deviceVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
     });
 
     it('Should select unselected parent values', () => {
@@ -709,8 +720,18 @@ describe('Use Table Hook', () => {
       fireEvent.click(countryControl);
 
       expect(selectVariableValues).toHaveBeenCalledTimes(2);
-      expect(selectVariableValues).toHaveBeenCalledWith(['device2'], deviceVariable, expect.anything());
-      expect(selectVariableValues).toHaveBeenCalledWith(['Japan'], countryVariable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device2'],
+        runtimeVariable: deviceVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['Japan'],
+        runtimeVariable: countryVariable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
     });
 
     it('Should use radio for single value', () => {
@@ -842,7 +863,105 @@ describe('Use Table Hook', () => {
 
       fireEvent.click(device1Control);
 
-      expect(selectVariableValues).toHaveBeenCalledWith(['device1'], variable, expect.anything());
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: variable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: false,
+      });
+    });
+
+    it('Should select other values except selected with ctrl button pressed if all is active', async () => {
+      const variable = createRuntimeVariableMock({
+        multi: false,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
+            selected: true,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: true,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+          {
+            text: 'device3',
+            value: 'device3',
+            selected: true,
+          },
+        ],
+      } as any);
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable,
+            getVariable: jest.fn(() => variable),
+          }) as any
+      );
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [] } as any,
+          options: {
+            favorites: true,
+          } as any,
+          eventBus: null as any,
+          levels: [],
+          panelEventBus: {} as any,
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 0));
+
+      /**
+       * Check row presence
+       */
+      expect(device1).toBeInTheDocument();
+
+      /**
+       * Select device 1
+       */
+      const device1Control = within(device1).getByTestId(TEST_IDS.table.control);
+
+      const user = userEvent.setup();
+
+      /**
+       * Press ctrl
+       */
+      await user.keyboard('[ControlLeft>]');
+
+      /**
+       * Click with ctrl pressed
+       */
+      await user.click(device1Control);
+
+      /**
+       * Check if value should be selected with keep selection active
+       */
+      expect(selectVariableValues).toHaveBeenCalledWith({
+        values: ['device1'],
+        runtimeVariable: variable,
+        panelEventBus: expect.anything(),
+        isKeepSelection: true,
+      });
     });
 
     it('Row with subRows should not be selectable and expandable', () => {
@@ -1956,8 +2075,18 @@ describe('Use Table Hook', () => {
          * Should select country
          */
         expect(selectVariableValues).toHaveBeenCalledTimes(2);
-        expect(selectVariableValues).toHaveBeenCalledWith(['USA', 'Japan'], countryVariable, expect.anything());
-        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['USA', 'Japan'],
+          runtimeVariable: countryVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['device1', 'device2'],
+          runtimeVariable: deviceVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
       });
 
       it('Should render calculated all state by selected child items and unselect them', () => {
@@ -2074,7 +2203,13 @@ describe('Use Table Hook', () => {
         /**
          * Check if all items unselected
          */
-        expect(selectVariableValues).toHaveBeenCalledWith(['device1', 'device2'], deviceVariable, expect.anything());
+
+        expect(selectVariableValues).toHaveBeenCalledWith({
+          values: ['device1', 'device2'],
+          runtimeVariable: deviceVariable,
+          panelEventBus: expect.anything(),
+          isKeepSelection: false,
+        });
         expect(selectVariableValues).toHaveBeenCalledTimes(1);
       });
     });
