@@ -216,7 +216,11 @@ describe('ButtonView', () => {
     /**
      * All should be selected
      */
-    expect(selectVariableValues).toHaveBeenCalledWith([ALL_VALUE_PARAMETER], variable, expect.anything());
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      values: [ALL_VALUE_PARAMETER],
+      runtimeVariable: variable,
+      panelEventBus: expect.anything(),
+    });
 
     /**
      * Should clear persistent values

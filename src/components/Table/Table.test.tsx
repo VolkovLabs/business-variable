@@ -121,6 +121,118 @@ describe('Table', () => {
     expect(selectors.cell(false, '2-2', 1)).toBeInTheDocument();
   });
 
+  it('Should render all groups collapsed by default', () => {
+    const data: any = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    render(
+      getComponent({ data, collapsedByDefault: true, columns: columns as any, getSubRows: (row: any) => row.children })
+    );
+
+    expect(selectors.body()).toBeInTheDocument();
+
+    /**
+     * Check groups are rendered
+     */
+    expect(selectors.cell(false, '1', 0)).toBeInTheDocument();
+    expect(selectors.cell(false, '2', 0)).toBeInTheDocument();
+
+    /**
+     * Check if groups collapsed by default
+     */
+    expect(selectors.cell(true, '1-1', 1)).not.toBeInTheDocument();
+    expect(selectors.cell(true, '1-2', 1)).not.toBeInTheDocument();
+    expect(selectors.cell(true, '2-1', 1)).not.toBeInTheDocument();
+    expect(selectors.cell(true, '2-2', 1)).not.toBeInTheDocument();
+  });
+
+  it('Should render all groups expanded by default', () => {
+    const data: any = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+          {
+            value: '1-2',
+          },
+        ],
+      },
+      {
+        value: '2',
+        children: [
+          {
+            value: '2-1',
+          },
+          {
+            value: '2-2',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    render(
+      getComponent({ data, collapsedByDefault: false, columns: columns as any, getSubRows: (row: any) => row.children })
+    );
+
+    expect(selectors.body()).toBeInTheDocument();
+
+    /**
+     * Check groups are rendered
+     */
+    expect(selectors.cell(false, '1', 0)).toBeInTheDocument();
+    expect(selectors.cell(false, '2', 0)).toBeInTheDocument();
+
+    /**
+     * Check if groups expanded by default
+     */
+    expect(selectors.cell(false, '1-1', 1)).toBeInTheDocument();
+    expect(selectors.cell(false, '1-2', 1)).toBeInTheDocument();
+    expect(selectors.cell(false, '2-1', 1)).toBeInTheDocument();
+    expect(selectors.cell(false, '2-2', 1)).toBeInTheDocument();
+  });
+
   it('Should render header', () => {
     render(getComponent({ showHeader: true, columns: [{ id: 'value', header: 'cell header' }], data: [] }));
 

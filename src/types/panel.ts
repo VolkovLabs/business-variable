@@ -134,6 +134,13 @@ export interface TableViewOptions {
    * @type {boolean}
    */
   statusSort: boolean;
+
+  /**
+   * Collapsed by default
+   *
+   * @type {boolean}
+   */
+  collapsedByDefault: boolean;
 }
 
 /**
@@ -239,7 +246,8 @@ export interface PanelOptions extends TableViewOptions {
    */
   showTotal: boolean;
 
-  /** Maximum visible values
+  /**
+   * Maximum visible values
    *
    * @type {number}
    */

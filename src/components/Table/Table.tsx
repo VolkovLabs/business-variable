@@ -104,6 +104,13 @@ interface Props<TTableData extends TableItem> {
    * Function to call after auto scroll
    */
   onAfterScroll: () => void;
+
+  /**
+   * Collapsed by default
+   *
+   * @type {boolean}
+   */
+  collapsedByDefault: boolean;
 }
 
 /**
@@ -125,6 +132,7 @@ export const Table = <TTableData extends TableItem>({
   autoScroll,
   shouldScroll,
   onAfterScroll,
+  collapsedByDefault,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -134,7 +142,7 @@ export const Table = <TTableData extends TableItem>({
   /**
    * States
    */
-  const [expanded, setExpanded] = useState<ExpandedState>(true);
+  const [expanded, setExpanded] = useState<ExpandedState>(collapsedByDefault ? {} : true);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   /**
@@ -154,9 +162,6 @@ export const Table = <TTableData extends TableItem>({
     onColumnFiltersChange: setColumnFilters,
     enableExpanding: true,
     onExpandedChange: setExpanded,
-    initialState: {
-      expanded: true,
-    },
     state: {
       expanded,
       columnFilters,
@@ -262,7 +267,7 @@ export const Table = <TTableData extends TableItem>({
         </thead>
       )}
 
-      <tbody>
+      <tbody data-testid={TEST_IDS.table.body}>
         {paddingTop > 0 && (
           <tr>
             <td style={{ height: `${paddingTop}px` }} />

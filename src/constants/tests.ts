@@ -9,6 +9,8 @@ export const TEST_IDS = {
     tab: (name: string) => `data-testid panel tab-${name}`,
   },
   table: {
+    allControl: 'data-testid table all-control',
+    body: 'data-testid table body',
     buttonExpand: 'data-testid table button-expand',
     buttonExpandAll: 'data-testid table button-expand-all',
     buttonFilter: 'data-testid table button-filter',
@@ -16,7 +18,6 @@ export const TEST_IDS = {
     row: (id: string) => `data-testid table row-${id}`,
     cell: (value: string, depth: number) => `data-testid table cell-${depth}-${value}`,
     control: 'data-testid table value-control',
-    allControl: 'data-testid table all-control',
     favoritesControl: 'data-testid table favorites-control',
     favoritesFilter: 'data-testid table favorites-filter',
     fieldFilterValue: 'data-testid table field-filter-value',
