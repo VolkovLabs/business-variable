@@ -138,8 +138,6 @@ export const ButtonView: React.FC<Props> = ({
 
             const isAllSelected = selectedValue === ALL_VALUE_PARAMETER;
 
-            const isOnlyFirstSelected = variable.current.value.length === 1 && variable.options[0].selected;
-
             /**
              * Variable with All option
              * Check if "All" option already selected
@@ -157,19 +155,23 @@ export const ButtonView: React.FC<Props> = ({
              * Variable with Multi Select option without All
              */
             if (variable.multi) {
+              const isOnlyFirstSelected = variable.current.value.length === 1 && variable.options[0].selected;
+
               /**
                * Reset to Initial first value
                * Check if only first option already selected
                */
-              !isOnlyFirstSelected && resetVariable(variable.options[0].value);
+              if (!isOnlyFirstSelected) {
+                resetVariable(variable.options[0].value);
+              }
 
               return;
-            } else {
-              /**
-               * Reset to Initial first value for default cases
-               */
-              resetVariable(variable.options[0].value);
             }
+
+            /**
+             * Reset to Initial first value for default cases
+             */
+            resetVariable(variable.options[0].value);
           }}
           aria-label="Reset Variable"
           data-testid={TEST_IDS.buttonView.resetVariable}
