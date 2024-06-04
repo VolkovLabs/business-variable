@@ -30,7 +30,7 @@ export const STICKY_OPTIONS = [
  * Filter Options
  */
 export const FILTER_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Display Table Filter.' },
+  { value: true, label: 'Enabled', description: 'Display Table Filter.', icon: 'filter' },
   { value: false, label: 'Disabled', description: 'Hide Table Filter.' },
 ];
 
@@ -46,7 +46,7 @@ export const ALWAYS_VISIBLE_FILTER_OPTIONS = [
  * Favorites Options
  */
 export const FAVORITES_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.' },
+  { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.', icon: 'favorite' },
   { value: false, label: 'Disabled', description: 'Hide favorites.' },
 ];
 
@@ -54,8 +54,8 @@ export const FAVORITES_OPTIONS = [
  * Selected Group Options
  */
 export const SELECTED_GROUP_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Allows saving selected group' },
-  { value: false, label: 'Disabled', description: 'Disables saving selected group' },
+  { value: true, label: 'Enabled', description: 'Allows saving selected group.', icon: 'save' },
+  { value: false, label: 'Disabled', description: 'Disables saving selected group.' },
 ];
 
 /**
@@ -78,8 +78,8 @@ export const SHOW_NAME_OPTIONS = [
  * Collapse By Default Options
  */
 export const COLLAPSED_BY_DEFAULT_OPTIONS = [
-  { value: true, label: 'Collapsed', description: 'Collapsed by default' },
-  { value: false, label: 'Expanded', description: 'Expanded by default' },
+  { value: true, label: 'Collapsed', description: 'All levels are collapsed.', icon: 'folder' },
+  { value: false, label: 'Expanded', description: 'All levels are expanded.', icon: 'folder-open' },
 ];
 
 /**
@@ -94,8 +94,8 @@ export const AUTO_SCROLL_OPTIONS = [
  * Group Selection Options
  */
 export const GROUP_SELECTION_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Enable to allow multi-level selection.' },
-  { value: false, label: 'Disabled', description: 'Disable multi-level selection.' },
+  { value: true, label: 'Enabled', description: 'Enable to allow multi-level selection.', icon: 'toggle-on' },
+  { value: false, label: 'Disabled', description: 'Disable multi-level selection.', icon: 'toggle-off' },
 ];
 
 /**

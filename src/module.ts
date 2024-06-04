@@ -330,7 +330,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'collapsedByDefault',
-        name: 'All groups by default',
+        name: 'Initial state',
         settings: {
           options: COLLAPSED_BY_DEFAULT_OPTIONS,
         },
