@@ -1,17 +1,23 @@
 # Change Log
 
-## 3.0.0 (IN PROGRESS)
+## 3.0.0 (2024-05-09)
+
+### Breaking changes
+
+- Requires Grafana 10 and Grafana 11
 
 ### Features / Enhancements
 
-- Update selecting and deselecting multi-levels (#139)
-- Update Auto/Static Minimize label width (#144)
-- Add show and hide Minimize label (#144)
+- Updated selecting and deselecting multi-levels (#139)
+- Updated Auto/Static Minimize label width (#144)
+- Added show and hide Minimize label (#144)
 - Added maximum visible values option in minimize view (#147)
-- Add plugin e2e tests and remove cypress (#149)
-- Add Row count in Table view (#148)
-- Update AutoScroll Behavior (#152)
-- Add Slider View (#154)
+- Added plugin e2e tests and remove cypress (#149)
+- Added Row count in Table view (#148)
+- Updated AutoScroll Behavior (#152)
+- Added Slider View (#154)
+- Prepared for Grafana 11 (#155)
+- Updated Grafana 10.4.2 and dependencies (#158)
 
 ## 2.5.0 (2024-04-01)
 
@@ -19,11 +25,11 @@
 
 - Added the indeterminate state to the checkboxes (#127)
 - Updated Tree View scrolling (#128)
-- Add Responsive tabs (#130)
-- Add support new items in Variable (minimize mode) (#134)
-- Add Preserve selection of the group between dashboards (#135)
-- Improve Tree view display and scroll (#136)
-- Add Reset dependent variables when selecting the value (#138)
+- Added Responsive tabs (#130)
+- Added support new items in Variable (minimize mode) (#134)
+- Added Preserve selection of the group between dashboards (#135)
+- Improved Tree view display and scroll (#136)
+- Added Reset dependent variables when selecting the value (#138)
 
 ## 2.4.0 (2024-03-17)
 
