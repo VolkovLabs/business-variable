@@ -4,8 +4,9 @@
 
 ### Features / Enhancements
 
-- Add collapse/expand rows option on initial load (#159)
-- Update Selection Behavior using Ctrl key (#160)
+- Added collapse/expand rows option on initial load (#159)
+- Updated Selection Behavior using Ctrl key (#160)
+- Updated Grafana 11.0.0 and dependencies (#161)
 
 ## 3.0.0 (2024-05-09)
 
