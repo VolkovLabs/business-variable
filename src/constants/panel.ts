@@ -137,3 +137,11 @@ export const ROW_COUNT_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Display selected rows' },
   { value: false, label: 'Disabled', description: 'Hide selected rows.' },
 ];
+
+/**
+ * Show reset button on button view
+ */
+export const SHOW_RESET_BUTTON_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Show reset button.' },
+  { value: false, label: 'Disabled', description: 'Do not show reset button.' },
+];

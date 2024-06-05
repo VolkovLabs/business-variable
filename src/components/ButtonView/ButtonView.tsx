@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelData } from '@grafana/data';
-import { Alert, Button, InlineLabel, useStyles2, useTheme2 } from '@grafana/ui';
+import { Alert, Button, IconButton, InlineLabel, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
@@ -47,6 +47,7 @@ export const ButtonView: React.FC<Props> = ({
     emptyValue = false,
     persistent = false,
     showLabel = false,
+    showResetButton = false,
   } = {},
   eventBus,
   panelEventBus,
@@ -105,6 +106,19 @@ export const ButtonView: React.FC<Props> = ({
     );
   }
 
+  /**
+   * Reset Variable
+   */
+  const resetVariable = (value: string | string[]) => {
+    updateVariableOptions({
+      previousValues: values,
+      variable,
+      emptyValueEnabled: emptyValue,
+      value,
+      panelEventBus,
+    });
+  };
+
   return (
     <div
       className={cx(
@@ -115,8 +129,59 @@ export const ButtonView: React.FC<Props> = ({
       )}
       data-testid={TEST_IDS.buttonView.root}
     >
+      {showResetButton && (
+        <IconButton
+          name="times"
+          tooltip="Reset Variable"
+          className={styles.resetButton}
+          onClick={() => {
+            const selectedValue = Array.isArray(variable.current.value)
+              ? variable.current.value[0]
+              : variable.current.value;
+
+            const isAllSelected = selectedValue === ALL_VALUE_PARAMETER;
+
+            /**
+             * Variable with All option
+             * Check if "All" option already selected
+             */
+            if (variable.includeAll && !isAllSelected) {
+              /**
+               * Reset to Initial first value (All)
+               */
+              resetVariable([...values, variable.options[0].value]);
+
+              return;
+            }
+
+            /**
+             * Variable with Multi Select option without All
+             */
+            if (variable.multi) {
+              const isOnlyFirstSelected = variable.current.value.length === 1 && variable.options[0].selected;
+
+              /**
+               * Reset to Initial first value
+               * Check if only first option already selected
+               */
+              if (!isOnlyFirstSelected) {
+                resetVariable(variable.options[0].value);
+              }
+
+              return;
+            }
+
+            /**
+             * Reset to Initial first value for default cases
+             */
+            resetVariable(variable.options[0].value);
+          }}
+          aria-label="Reset Variable"
+          data-testid={TEST_IDS.buttonView.resetVariable}
+        />
+      )}
       {showLabel && (
-        <InlineLabel className={styles.label} width="auto" transparent={true}>
+        <InlineLabel data-testid={TEST_IDS.buttonView.label} className={styles.label} width="auto" transparent={true}>
           {variable.label || variable.name}
         </InlineLabel>
       )}
