@@ -288,6 +288,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'showResetButton',
         name: 'Display reset button',
+        description: 'Allows to clear selected values.',
         settings: {
           options: SHOW_RESET_BUTTON_OPTIONS,
         },
