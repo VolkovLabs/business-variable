@@ -142,6 +142,6 @@ export const ROW_COUNT_OPTIONS = [
  * Show reset button on button view
  */
 export const SHOW_RESET_BUTTON_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Show reset button' },
-  { value: false, label: 'Disabled', description: 'Do not show reset button' },
+  { value: true, label: 'Enabled', description: 'Show reset button.' },
+  { value: false, label: 'Disabled', description: 'Do not show reset button.' },
 ];
