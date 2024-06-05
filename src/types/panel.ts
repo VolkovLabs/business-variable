@@ -252,6 +252,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {number}
    */
   maxVisibleValues: number;
+
+  /**
+   * Show reset button
+   *
+   * @type {boolean}
+   */
+  showResetButton: boolean;
 }
 
 /**
