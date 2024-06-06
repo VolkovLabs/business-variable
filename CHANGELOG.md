@@ -1,6 +1,6 @@
 # Change Log
 
-## 3.1.0 (IN PROGRESS)
+## 3.1.0 (2024-06-06)
 
 ### Features / Enhancements
 
@@ -8,6 +8,7 @@
 - Updated Selection Behavior using Ctrl key (#160)
 - Updated Grafana 11.0.0 and dependencies (#161)
 - Added Reset button for button view (#162)
+- Update selection for variables with key/value pair (#165)
 
 ## 3.0.0 (2024-05-09)
 

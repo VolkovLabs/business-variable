@@ -2214,4 +2214,66 @@ describe('Use Table Hook', () => {
       });
     });
   });
+
+  it('Should return array of values in childValues instead label', () => {
+    const deviceVariable = createRuntimeVariableMock({
+      multi: true,
+      includeAll: true,
+      type: VariableType.CUSTOM,
+      options: [
+        {
+          text: ALL_VALUE,
+          value: ALL_VALUE_PARAMETER,
+          selected: false,
+        },
+        {
+          text: 'Device Text 10',
+          value: 'device10',
+          selected: true,
+        },
+        {
+          text: 'Device Text 20',
+          value: 'device20',
+          selected: true,
+        },
+      ],
+    } as any);
+
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: deviceVariable,
+          getVariable: jest.fn(() => deviceVariable),
+        }) as any
+    );
+    const dataFrame = toDataFrame({
+      fields: [
+        {
+          name: 'device',
+          values: ['device10', 'device20'],
+        },
+      ],
+      refId: 'A',
+    });
+
+    /**
+     * Use Table
+     */
+    const { result } = renderHook(() =>
+      useTable({
+        data: { series: [dataFrame] } as any,
+        eventBus: null as any,
+        options: {} as any,
+        levels: [
+          { name: 'Top Level', source: 'A' },
+          { name: 'device', source: 'A' },
+        ],
+        panelEventBus: null as any,
+      })
+    );
+    const { childValues } = result.current.tableData[0];
+
+    expect(childValues).toEqual(['device10', 'device20']);
+    expect(childValues).not.toEqual(['Device Text 10', 'Device Text 20']);
+  });
 });
