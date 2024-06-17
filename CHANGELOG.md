@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.2.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Update video tutorial (#166)
+
 ## 3.1.0 (2024-06-06)
 
 ### Features / Enhancements
