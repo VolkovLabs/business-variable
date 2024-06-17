@@ -14,7 +14,7 @@ The Business Variable panel builds on top of the regular dashboard variables. It
 
 The variable panel offers you single- and multi-variable layouts along with an advanced Tree View.
 
-[![Demonstrates the Business Variable panel functionality](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/overview.png)](https://youtu.be/1ogv2jstrlI)
+[![Business Variable Panel for Grafana. New features and updates 3.0.0](https://raw.githubusercontent.com/volkovlabs/volkovlabs-variable-panel/main/img/business-variable.png)](https://youtu.be/vcdcLDVQYek)
 
 ## Requirements
 
