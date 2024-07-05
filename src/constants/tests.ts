@@ -26,6 +26,8 @@ export const TEST_IDS = {
     headerGroupCount: 'data-testid table header-group-count',
     groupCount: (value: string) => `data-testid table group-count-${value}`,
     label: 'data-testid table label',
+    statusColor: 'data-testid table status-color',
+    statusImage: 'data-testid table status-image',
   },
   groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',

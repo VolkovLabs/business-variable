@@ -1,10 +1,10 @@
-import { toDataFrame, TypedVariableModel } from '@grafana/data';
+import { FieldType, ThresholdsMode, toDataFrame, TypedVariableModel } from '@grafana/data';
 import { fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import React from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
-import { TableItem, VariableType } from '../types';
+import { StatusStyleMode, TableItem, VariableType } from '../types';
 import { getRuntimeVariable, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
@@ -394,11 +394,13 @@ describe('Use Table Hook', () => {
           value: 'device1',
           showStatus: true,
           statusColor: 'green',
+          statusMode: StatusStyleMode.COLOR,
         }),
         expect.objectContaining({
           value: 'device2',
           showStatus: true,
           statusColor: 'red',
+          statusMode: StatusStyleMode.COLOR,
         }),
       ])
     );
@@ -486,6 +488,202 @@ describe('Use Table Hook', () => {
         })}
       </>
     );
+
+    it('Should show status color', () => {
+      const deviceVariable = createRuntimeVariableMock({
+        multi: true,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      } as any);
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn(() => deviceVariable),
+          }) as any
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+          {
+            name: 'temp',
+            type: FieldType.number,
+            values: [10, 60],
+            display: (value: never) => value,
+            config: {
+              thresholds: {
+                mode: ThresholdsMode.Absolute,
+                steps: [
+                  {
+                    value: 60,
+                    color: 'red',
+                  },
+                  {
+                    value: Infinity,
+                    color: 'green',
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            favorites: true,
+            status: 'temp',
+            variable: 'device',
+            name: 'device',
+          } as any,
+          eventBus: null as any,
+          levels: [],
+          panelEventBus: {} as any,
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 0));
+
+      /**
+       * Check status presence
+       */
+      expect(device1).toBeInTheDocument();
+      expect(within(device1).getByTestId(TEST_IDS.table.statusColor)).toBeInTheDocument();
+    });
+
+    it('Should show status image', () => {
+      const deviceVariable = createRuntimeVariableMock({
+        multi: true,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: false,
+          },
+          {
+            text: 'device2',
+            value: 'device2',
+            selected: true,
+          },
+        ],
+      } as any);
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: deviceVariable,
+            getVariable: jest.fn(() => deviceVariable),
+          }) as any
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+          {
+            name: 'temp',
+            type: FieldType.number,
+            values: [90, 60],
+            display: (value: never) => value,
+            config: {
+              thresholds: {
+                mode: ThresholdsMode.Absolute,
+                steps: [
+                  {
+                    value: 60,
+                    color: 'red',
+                  },
+                  {
+                    value: Infinity,
+                    color: 'green',
+                  },
+                ],
+              },
+              custom: {
+                thresholdsStyle: {
+                  mode: StatusStyleMode.IMAGE,
+                  thresholds: [
+                    {
+                      value: 60,
+                      image: '60.png',
+                    },
+                    {
+                      value: 0,
+                      image: '0.png',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: {
+            favorites: true,
+            status: 'temp',
+            variable: 'device',
+            name: 'device',
+          } as any,
+          eventBus: null as any,
+          levels: [],
+          panelEventBus: {} as any,
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      const device1 = screen.getByTestId(TEST_IDS.table.cell('device1', 0));
+
+      /**
+       * Check status presence
+       */
+      expect(device1).toBeInTheDocument();
+      expect(within(device1).getByTestId(TEST_IDS.table.statusImage)).toBeInTheDocument();
+      expect(within(device1).getByTestId(TEST_IDS.table.statusImage)).toHaveProperty('src', 'http://localhost/60.png');
+    });
 
     it('Should select unselected values', () => {
       const deviceVariable = createRuntimeVariableMock({

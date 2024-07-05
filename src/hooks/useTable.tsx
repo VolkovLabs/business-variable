@@ -443,10 +443,16 @@ export const useTable = ({
                           style={{
                             backgroundColor: row.original.statusColor,
                           }}
+                          data-testid={TEST_IDS.table.statusColor}
                         />
                       )}
                       {row.original.statusMode === StatusStyleMode.IMAGE && row.original.statusImage && (
-                        <img className={styles.statusImage} src={row.original.statusImage} alt="" />
+                        <img
+                          className={styles.statusImage}
+                          src={row.original.statusImage}
+                          alt=""
+                          data-testid={TEST_IDS.table.statusImage}
+                        />
                       )}
                     </>
                   )}
