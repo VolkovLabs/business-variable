@@ -72,4 +72,12 @@ export const TEST_IDS = {
     slider: 'data-testid slider-view slider',
     root: 'data-testid slider-view',
   },
+  statusStyleEditor: {
+    fieldMode: 'status-style-editor',
+    buttonAddItem: 'data-testid status-style-editor button-add-item',
+    item: (value: unknown) => `data-testid status-style-editor item-${value}`,
+    fieldValue: 'data-testid status-style-editor item field-value',
+    fieldUrl: 'data-testid status-style-editor item field-url',
+    buttonRemoveItem: 'data-testid status-style-editor item button-remove-item',
+  },
 };

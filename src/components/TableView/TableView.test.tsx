@@ -4,6 +4,7 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useSavedState, useTable } from '../../hooks';
+import { StatusStyleMode } from '../../types';
 import { Table } from '../Table';
 import { TableView } from './TableView';
 
@@ -228,7 +229,9 @@ describe('Table View', () => {
 
   it('Should switch groups and scroll to selected', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [{ value: 'device1', selected: false, showStatus: false, label: 'Device 1' }],
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
     }));

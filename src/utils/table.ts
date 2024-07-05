@@ -2,7 +2,7 @@ import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, Row, SortingFn } from '@tanstack/react-table';
 
 import { ALL_VALUE_PARAMETER } from '../constants';
-import { Level, RuntimeVariable, Status, TableItem } from '../types';
+import { Level, RuntimeVariable, Status, StatusStyleMode, TableItem } from '../types';
 import { isVariableWithOptions } from './variable';
 
 /**
@@ -143,6 +143,7 @@ export const getRows = (
     selected: false,
     showStatus: false,
     selectable: true,
+    statusMode: StatusStyleMode.COLOR,
   });
 
   return getGroupArray(
@@ -206,6 +207,8 @@ export const getItemWithStatus = (
     name: item.name,
     status: status.exist ? status.value : undefined,
     label: item.label,
+    statusMode: status.exist ? status.mode : StatusStyleMode.IMAGE,
+    statusImage: status.exist ? status.image : undefined,
   };
 };
 

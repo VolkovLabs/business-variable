@@ -1,7 +1,7 @@
-import { Field, FieldConfigProperty, FieldType, PanelPlugin } from '@grafana/data';
+import { Field, FieldConfigProperty, FieldType, identityOverrideProcessor, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 
-import { GroupsEditor, VariablePanel } from './components';
+import { GroupsEditor, StatusStyleEditor, VariablePanel } from './components';
 import {
   ALLOW_CUSTOM_VALUE_OPTIONS,
   ALLOW_EMPTY_VALUE_OPTIONS,
@@ -23,7 +23,7 @@ import {
   STICKY_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
-import { DisplayMode, PanelOptions } from './types';
+import { DisplayMode, PanelOptions, StatusStyleMode } from './types';
 
 /**
  * Panel Plugin
@@ -45,6 +45,23 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       'unitScale' as never,
       'fieldMinMax' as never,
     ],
+    useCustomConfig: (builder) => {
+      builder.addCustomEditor({
+        id: 'thresholdsStyle',
+        path: 'thresholdsStyle',
+        name: 'Status Style',
+        description: 'Show Status in Table view',
+        category: ['Thresholds'],
+        defaultValue: {
+          mode: StatusStyleMode.COLOR,
+          thresholds: [],
+        },
+        editor: StatusStyleEditor,
+        override: StatusStyleEditor,
+        process: identityOverrideProcessor,
+        shouldApply: () => true,
+      });
+    },
   })
   .setPanelOptions((builder) => {
     /**

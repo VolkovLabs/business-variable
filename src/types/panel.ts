@@ -278,3 +278,49 @@ export type RecursivePartial<T> = {
 export class VariableChangedEvent extends BusEventBase {
   static type = 'variable-changed';
 }
+
+/**
+ * Status Style Mode
+ */
+export enum StatusStyleMode {
+  COLOR = 'color',
+  IMAGE = 'image',
+}
+
+/**
+ * Status Style Threshold
+ */
+export interface StatusStyleThreshold {
+  /**
+   * Value
+   *
+   * @type {number}
+   */
+  value: number;
+
+  /**
+   * Image
+   *
+   * @type {string}
+   */
+  image: string;
+}
+
+/**
+ * Status Style Options
+ */
+export interface StatusStyleOptions {
+  /**
+   * Mode
+   *
+   * @type {StatusStyleMode}
+   */
+  mode: StatusStyleMode;
+
+  /**
+   * Thresholds
+   *
+   * @type {StatusStyleThreshold}
+   */
+  thresholds: StatusStyleThreshold[];
+}

@@ -1,3 +1,4 @@
+import { StatusStyleMode } from './panel';
 import { RuntimeVariable } from './variable';
 
 /**
@@ -31,6 +32,20 @@ export interface TableItem {
    * @type {boolean}
    */
   showStatus: boolean;
+
+  /**
+   * Status Mode
+   *
+   * @type {StatusStyleMode}
+   */
+  statusMode: StatusStyleMode;
+
+  /**
+   * Status Image
+   *
+   * @type {string}
+   */
+  statusImage?: string;
 
   /**
    * Status Color

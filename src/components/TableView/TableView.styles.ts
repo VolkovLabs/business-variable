@@ -47,6 +47,13 @@ export const getStyles = (theme: GrafanaTheme2) => {
       margin-right: ${theme.spacing(1)};
       flex: none;
     `,
+    statusImage: css`
+      display: block;
+      width: ${theme.spacing(2)};
+      height: auto;
+      margin-right: ${theme.spacing(1)};
+      flex: none;
+    `,
     toolbar: css`
       div > div {
         flex-direction: column;
