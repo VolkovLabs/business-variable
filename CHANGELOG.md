@@ -1,11 +1,12 @@
 # Change Log
 
-## 3.2.0 (IN PROGRESS)
+## 3.2.0 (2024-07-09)
 
 ### Features / Enhancements
 
 - Updated video tutorial (#166)
 - Updated E2E workflow using Docker (#173)
+- Added image threshold style for showing status in Table view (#170)
 
 ## 3.1.0 (2024-06-06)
 
