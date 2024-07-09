@@ -24,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -62,17 +63,30 @@
       },
       "id": 3,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "table",
+        "emptyValue": false,
         "favorites": true,
         "filter": true,
+        "groupSelection": false,
         "header": true,
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "country"
       },
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -140,17 +154,30 @@
       },
       "id": 4,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "minimize",
+        "emptyValue": false,
         "favorites": false,
         "filter": false,
+        "groupSelection": false,
         "header": true,
         "padding": 20,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "state"
       },
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -218,17 +245,30 @@
       },
       "id": 5,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "table",
+        "emptyValue": false,
         "favorites": false,
         "filter": false,
+        "groupSelection": false,
         "header": true,
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "city"
       },
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -296,10 +336,15 @@
       },
       "id": 6,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "table",
+        "emptyValue": false,
         "favorites": false,
         "filter": false,
+        "groupSelection": false,
         "groups": [
           {
             "items": [
@@ -325,11 +370,19 @@
         ],
         "header": false,
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "device"
       },
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -422,17 +475,30 @@
       },
       "id": 10,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "minimize",
+        "emptyValue": false,
         "favorites": false,
         "filter": false,
+        "groupSelection": false,
         "header": true,
         "padding": 20,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "text"
       },
+      "pluginVersion": "3.2.0",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -470,10 +536,15 @@
       },
       "id": 7,
       "options": {
+        "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
         "displayMode": "table",
+        "emptyValue": false,
         "favorites": true,
         "filter": true,
+        "groupSelection": false,
         "groups": [
           {
             "items": [
@@ -512,11 +583,19 @@
         ],
         "header": true,
         "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": true,
         "sticky": true,
         "variable": "device"
       },
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -618,6 +697,7 @@
             "mode": "continuous-GrYlRd"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -631,6 +711,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -753,6 +834,7 @@
             "mode": "continuous-GrYlRd"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -766,6 +848,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1014,8 +1097,7 @@
   ],
   "refresh": "",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -1045,7 +1127,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": ["Singapore", "Stockholm", "Tokyo", "Moscow", "NY"],
           "value": ["Singapore", "Stockholm", "Tokyo", "Moscow", "NY"]
         },
@@ -1095,8 +1177,8 @@
         "allValue": "",
         "current": {
           "selected": true,
-          "text": ["device9", "device10"],
-          "value": ["device9", "device10"]
+          "text": ["All"],
+          "value": ["$__all"]
         },
         "datasource": {
           "type": "postgres",
@@ -1128,7 +1210,7 @@
         "name": "text",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "test",
             "value": "test"
           }

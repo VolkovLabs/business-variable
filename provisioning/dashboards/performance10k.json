@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -56,6 +56,7 @@
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "collapseRows": false,
+        "collapsedByDefault": false,
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -71,12 +72,13 @@
         "showGroupTotal": false,
         "showLabel": false,
         "showName": true,
+        "showResetButton": false,
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "device"
       },
-      "pluginVersion": "3.0.0",
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -139,6 +141,7 @@
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "collapseRows": false,
+        "collapsedByDefault": false,
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -169,12 +172,13 @@
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
+        "showResetButton": false,
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "Device"
       },
-      "pluginVersion": "3.0.0",
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -243,6 +247,7 @@
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "collapseRows": true,
+        "collapsedByDefault": false,
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -273,12 +278,13 @@
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
+        "showResetButton": false,
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "Device"
       },
-      "pluginVersion": "3.0.0",
+      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -4871,6 +4877,6 @@
   "timezone": "",
   "title": "Performance 10k",
   "uid": "f466c7e1-e1cb-422d-8ab0-9f34fb87688d",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

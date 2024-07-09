@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -54,6 +55,7 @@
       "options": {
         "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
@@ -67,12 +69,16 @@
         "ressetVariable": "bench",
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "device"
       },
+      "pluginVersion": "3.2.0",
       "title": "Reset value",
       "type": "volkovlabs-variable-panel"
     },
@@ -109,6 +115,7 @@
       "options": {
         "alwaysVisibleFilter": false,
         "autoScroll": false,
+        "collapsedByDefault": false,
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
@@ -121,12 +128,16 @@
         "resetVariable": "staticValue",
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
         "statusSort": false,
         "sticky": false,
         "variable": "device"
       },
+      "pluginVersion": "3.2.0",
       "title": "Reset static value",
       "type": "volkovlabs-variable-panel"
     }
@@ -223,6 +234,6 @@
   "timezone": "",
   "title": "Reset Values",
   "uid": "c96df41b-81a6-439a-8775-0bfe0f62eb14",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }
