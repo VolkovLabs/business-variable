@@ -4,7 +4,8 @@
 
 ### Features / Enhancements
 
-- Update video tutorial (#166)
+- Updated video tutorial (#166)
+- Updated E2E workflow using Docker (#173)
 
 ## 3.1.0 (2024-06-06)
 
@@ -14,7 +15,7 @@
 - Updated Selection Behavior using Ctrl key (#160)
 - Updated Grafana 11.0.0 and dependencies (#161)
 - Added Reset button for button view (#162)
-- Update selection for variables with key/value pair (#165)
+- Updated selection for variables with key/value pair (#165)
 
 ## 3.0.0 (2024-05-09)
 
