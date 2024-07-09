@@ -1,7 +1,8 @@
 import { FieldType, PanelData } from '@grafana/data';
 import { useCallback, useMemo } from 'react';
 
-import { Status } from '../types';
+import { Status, StatusStyleMode, StatusStyleOptions } from '../types';
+import { getActiveThresholdStyle } from '../utils';
 
 /**
  * Use Status
@@ -49,10 +50,31 @@ export const useStatus = ({ data, name, status }: { data: PanelData; name?: stri
           };
         }
 
+        let image;
+
+        /**
+         * Find image for value
+         */
+        if (statusArray?.config.custom?.thresholdsStyle?.mode === StatusStyleMode.IMAGE) {
+          const { thresholds } = statusArray?.config.custom?.thresholdsStyle as StatusStyleOptions;
+
+          /**
+           * Find active threshold
+           */
+          const activeThreshold = getActiveThresholdStyle(lastValue, thresholds);
+
+          /**
+           * Set image url
+           */
+          image = activeThreshold?.image;
+        }
+
         return {
           exist,
           value: lastValue,
           color: displayValue.color || '',
+          mode: statusArray?.config.custom?.thresholdsStyle?.mode || StatusStyleMode.COLOR,
+          image,
         };
       }
 

@@ -6,7 +6,7 @@ import React, { useCallback, useMemo } from 'react';
 import { getStyles } from '../components/TableView/TableView.styles';
 import { TextVariable } from '../components/TextVariable';
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
-import { Level, PanelOptions, RuntimeVariable, TableItem, VariableType } from '../types';
+import { Level, PanelOptions, RuntimeVariable, StatusStyleMode, TableItem, VariableType } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -317,6 +317,7 @@ export const useTable = ({
                       value: '',
                       showStatus: false,
                       label: '',
+                      statusMode: StatusStyleMode.COLOR,
                     };
                     onChange(rootRow, false);
                   }}
@@ -435,12 +436,25 @@ export const useTable = ({
                   className={styles.label}
                 >
                   {row.original.showStatus && (
-                    <span
-                      className={styles.status}
-                      style={{
-                        backgroundColor: row.original.statusColor,
-                      }}
-                    />
+                    <>
+                      {row.original.statusMode === StatusStyleMode.COLOR && (
+                        <span
+                          className={styles.status}
+                          style={{
+                            backgroundColor: row.original.statusColor,
+                          }}
+                          data-testid={TEST_IDS.table.statusColor}
+                        />
+                      )}
+                      {row.original.statusMode === StatusStyleMode.IMAGE && row.original.statusImage && (
+                        <img
+                          className={styles.statusImage}
+                          src={row.original.statusImage}
+                          alt=""
+                          data-testid={TEST_IDS.table.statusImage}
+                        />
+                      )}
+                    </>
                   )}
                   <span
                     style={{
@@ -530,6 +544,7 @@ export const useTable = ({
     styles.rowContent,
     styles.label,
     styles.status,
+    styles.statusImage,
     theme,
     tableData,
     onChange,

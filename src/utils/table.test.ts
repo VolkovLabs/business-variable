@@ -1,6 +1,6 @@
 import { addRow, DataFrame, FieldType, toDataFrame } from '@grafana/data';
 
-import { TableItem } from '../types';
+import { StatusStyleMode, TableItem } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -38,6 +38,7 @@ describe('Table Utils', () => {
       selected: false,
       showStatus: false,
       selectable: true,
+      statusMode: StatusStyleMode.COLOR,
     };
 
     /**
@@ -54,6 +55,7 @@ describe('Table Utils', () => {
         showStatus: false,
         selectable: true,
         label: value,
+        statusMode: StatusStyleMode.COLOR,
       };
     };
 
@@ -331,6 +333,7 @@ describe('Table Utils', () => {
           showStatus: false,
           selectable: value === 'device1' || value === 'device11',
           label: value,
+          statusMode: StatusStyleMode.COLOR,
         };
       };
 
@@ -444,6 +447,7 @@ describe('Table Utils', () => {
           selectable: value === 'device1' || value === 'device11' || value === 'device12',
           isFavorite: value === 'device1' || value === 'device12',
           label: value,
+          statusMode: StatusStyleMode.COLOR,
         };
       };
 
@@ -614,6 +618,7 @@ describe('Table Utils', () => {
           selectable: true,
           isFavorite: false,
           label: value,
+          statusMode: StatusStyleMode.COLOR,
         };
       };
 
@@ -731,6 +736,7 @@ describe('Table Utils', () => {
           selected: false,
           showStatus: false,
           selectable: true,
+          statusMode: StatusStyleMode.COLOR,
         },
         {
           value: 'Japan',
@@ -738,6 +744,7 @@ describe('Table Utils', () => {
           selected: false,
           showStatus: false,
           selectable: true,
+          statusMode: StatusStyleMode.COLOR,
         },
       ]);
     });

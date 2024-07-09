@@ -26,6 +26,8 @@ export const TEST_IDS = {
     headerGroupCount: 'data-testid table header-group-count',
     groupCount: (value: string) => `data-testid table group-count-${value}`,
     label: 'data-testid table label',
+    statusColor: 'data-testid table status-color',
+    statusImage: 'data-testid table status-image',
   },
   groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',
@@ -71,5 +73,13 @@ export const TEST_IDS = {
     field: 'data-testid slider-view field',
     slider: 'data-testid slider-view slider',
     root: 'data-testid slider-view',
+  },
+  statusStyleEditor: {
+    fieldMode: 'status-style-editor',
+    buttonAddItem: 'data-testid status-style-editor button-add-item',
+    item: (value: unknown) => `data-testid status-style-editor item-${value}`,
+    fieldValue: 'data-testid status-style-editor item field-value',
+    fieldUrl: 'data-testid status-style-editor item field-url',
+    buttonRemoveItem: 'data-testid status-style-editor item button-remove-item',
   },
 };
