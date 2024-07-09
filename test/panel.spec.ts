@@ -2,6 +2,11 @@ import { test, expect } from '@grafana/plugin-e2e';
 import { TEST_IDS } from '../src/constants/tests';
 
 test.describe('Volkovlabs Variable Panel', () => {
+  test('Check grafana version', async ({ grafanaVersion }) => {
+    console.log('Grafana version: ', grafanaVersion);
+    expect(grafanaVersion).toEqual(grafanaVersion);
+  });
+
   test('Should display Alert Info', async ({ gotoDashboardPage, dashboardPage, page }) => {
     /**
      * Go To Panels dashboard panels.json

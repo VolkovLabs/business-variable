@@ -13,6 +13,8 @@ services:
     volumes:
       - ./dist:/var/lib/grafana/plugins/volkovlabs-variable-panel
       - ./provisioning:/etc/grafana/provisioning
+    profiles:
+      - dev
 
   timescale:
     container_name: timescale
@@ -24,6 +26,9 @@ services:
       - 5432:5432
     volumes:
       - ./timescale:/docker-entrypoint-initdb.d
+    profiles:
+      - dev
+      - main
 
   server:
     container_name: server
@@ -38,3 +43,35 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: timescale
+    profiles:
+      - dev
+      - main
+
+  grafana-main:
+    container_name: grafana-main
+    image: grafana/grafana:main
+    ports:
+      - 3000:3000/tcp
+    environment:
+      - GF_DEFAULT_APP_MODE=development
+      - GF_USERS_DEFAULT_THEME=light
+      - GF_INSTALL_PLUGINS=marcusolsson-static-datasource
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/volkovlabs-variable-panel
+      - ./provisioning:/etc/grafana/provisioning
+    profiles:
+      - main
+
+  test:
+    container_name: test-e2e
+    build:
+      context: .
+      dockerfile: test/Dockerfile
+    environment:
+      - GRAFANA_URL=http://127.0.0.1:3000
+    volumes:
+      - ./test:/app/test
+      - ./playwright-report:/app/playwright-report
+    network_mode: host
+    profiles:
+      - e2e
