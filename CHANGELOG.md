@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.3.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Added data source use for favorites (#184)
+
 ## 3.2.0 (2024-07-09)
 
 ### Features / Enhancements
