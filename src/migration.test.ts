@@ -1,5 +1,6 @@
 import { getMigratedOptions } from './migration';
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
+import { createFavoritesConfig } from './utils';
 
 describe('Migration', () => {
   it('Should return panel options', () => {
@@ -59,10 +60,10 @@ describe('Migration', () => {
         } as any)
       ).toEqual(
         expect.objectContaining({
-          favorites: {
+          favorites: createFavoritesConfig({
             enabled: true,
             storage: FavoritesStorage.BROWSER,
-          },
+          }),
         })
       );
       expect(
@@ -73,10 +74,10 @@ describe('Migration', () => {
         } as any)
       ).toEqual(
         expect.objectContaining({
-          favorites: {
+          favorites: createFavoritesConfig({
             enabled: false,
             storage: FavoritesStorage.BROWSER,
-          },
+          }),
         })
       );
     });
@@ -85,18 +86,18 @@ describe('Migration', () => {
       expect(
         getMigratedOptions({
           options: {
-            favorites: {
+            favorites: createFavoritesConfig({
               enabled: false,
               storage: FavoritesStorage.DATASOURCE,
-            },
+            }),
           },
         } as any)
       ).toEqual(
         expect.objectContaining({
-          favorites: {
+          favorites: createFavoritesConfig({
             enabled: false,
             storage: FavoritesStorage.DATASOURCE,
-          },
+          }),
         })
       );
     });

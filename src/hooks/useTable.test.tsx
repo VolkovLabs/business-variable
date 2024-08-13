@@ -5,7 +5,7 @@ import React from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
 import { StatusStyleMode, TableItem, VariableType } from '../types';
-import { getRuntimeVariable, selectVariableValues } from '../utils';
+import { createFavoritesConfig, createPanelOptions, getRuntimeVariable, selectVariableValues } from '../utils';
 import { useFavorites } from './useFavorites';
 import { useRuntimeVariables } from './useRuntimeVariables';
 import { useTable } from './useTable';
@@ -108,7 +108,13 @@ describe('Use Table Hook', () => {
      * Use Table
      */
     const { result } = renderHook(() =>
-      useTable({ data: { series: [] } as any, options: {} as any, eventBus: null as any, panelEventBus: null as any })
+      useTable({
+        data: { series: [] } as any,
+        options: createPanelOptions(),
+        eventBus: null as any,
+        panelEventBus: null as any,
+        replaceVariables: jest.fn(),
+      })
     );
 
     expect(result.current.tableData).toEqual([
@@ -180,10 +186,11 @@ describe('Use Table Hook', () => {
     const { result } = renderHook(() =>
       useTable({
         data: { series: [dataFrame] } as any,
-        options: {} as any,
+        options: createPanelOptions(),
         eventBus: null as any,
         levels: [{ name: 'device', source: 'A' }],
         panelEventBus: null as any,
+        replaceVariables: jest.fn(),
       })
     );
 
@@ -275,12 +282,13 @@ describe('Use Table Hook', () => {
       useTable({
         data: { series: [dataFrame] } as any,
         eventBus: null as any,
-        options: {} as any,
+        options: createPanelOptions(),
         levels: [
           { name: 'country', source: 'A' },
           { name: 'device', source: 'A' },
         ],
         panelEventBus: null as any,
+        replaceVariables: jest.fn(),
       })
     );
 
@@ -378,13 +386,14 @@ describe('Use Table Hook', () => {
     const { result } = renderHook(() =>
       useTable({
         data: { series: [dataFrame, statusDataFrame] } as any,
-        options: {
+        options: createPanelOptions({
           name: 'name',
           status: 'last',
-        } as any,
+        }),
         eventBus: null as any,
         levels: [{ name: 'device', source: 'A' }],
         panelEventBus: null as any,
+        replaceVariables: jest.fn(),
       })
     );
 
@@ -419,7 +428,13 @@ describe('Use Table Hook', () => {
      * Use Table
      */
     const { result } = renderHook(() =>
-      useTable({ data: { series: [] } as any, options: {} as any, eventBus: null as any, panelEventBus: null as any })
+      useTable({
+        data: { series: [] } as any,
+        options: createPanelOptions(),
+        eventBus: null as any,
+        panelEventBus: null as any,
+        replaceVariables: jest.fn(),
+      })
     );
 
     expect(result.current.tableData).toEqual([]);
@@ -551,15 +566,18 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
-            favorites: true,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
             status: 'temp',
             variable: 'device',
             name: 'device',
-          } as any,
+          }),
           eventBus: null as any,
           levels: [],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -656,15 +674,18 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
-            favorites: true,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
             status: 'temp',
             variable: 'device',
             name: 'device',
-          } as any,
+          }),
           eventBus: null as any,
           levels: [],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -745,15 +766,18 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
-            favorites: true,
-          } as any,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [
             { name: 'country', source: 'A' },
             { name: 'device', source: 'A' },
           ],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -879,16 +903,19 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
-            favorites: true,
+          options: createPanelOptions({
             groupSelection: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [
             { name: 'country', source: 'A' },
             { name: 'device', source: 'A' },
           ],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -964,12 +991,15 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [] } as any,
-          options: {
-            favorites: true,
-          } as any,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1031,12 +1061,15 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [] } as any,
-          options: {
-            favorites: true,
-          } as any,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1111,12 +1144,15 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [] } as any,
-          options: {
-            favorites: true,
-          } as any,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [],
           panelEventBus: {} as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1207,15 +1243,18 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
-            favorites: true,
-          } as any,
+          options: createPanelOptions({
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [
             { name: 'country', source: 'A' },
             { name: 'device', source: 'A' },
           ],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1319,16 +1358,19 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
+          options: createPanelOptions({
             showName: true,
-            favorites: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [
             { name: 'country', source: 'A' },
             { name: 'device', source: 'A' },
           ],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1412,18 +1454,21 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
+          options: createPanelOptions({
             showName: true,
-            favorites: true,
             groupSelection: true,
             showGroupTotal: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [
             { name: 'country', source: 'A' },
             { name: 'device', source: 'A' },
           ],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1467,13 +1512,16 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
+          options: createPanelOptions({
             showName: true,
-            favorites: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [{ name: 'device', source: 'A' }],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1520,13 +1568,16 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
+          options: createPanelOptions({
             showName: true,
-            favorites: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [{ name: 'device', source: 'A' }],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1575,13 +1626,16 @@ describe('Use Table Hook', () => {
       const { result } = renderHook(() =>
         useTable({
           data: { series: [dataFrame] } as any,
-          options: {
+          options: createPanelOptions({
             showName: true,
-            favorites: true,
-          } as any,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
           eventBus: null as any,
           levels: [{ name: 'device', source: 'A' }],
           panelEventBus: null as any,
+          replaceVariables: jest.fn(),
         })
       );
 
@@ -1677,12 +1731,15 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
-              favorites: true,
-            } as any,
+            options: createPanelOptions({
+              favorites: createFavoritesConfig({
+                enabled: true,
+              }),
+            }),
             eventBus: null as any,
             levels: [{ name: 'device', source: 'A' }],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -1721,12 +1778,15 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
-              favorites: true,
-            } as any,
+            options: createPanelOptions({
+              favorites: createFavoritesConfig({
+                enabled: true,
+              }),
+            }),
             eventBus: null as any,
             levels: [{ name: 'device', source: 'A' }],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -1774,12 +1834,15 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
-              favorites: true,
-            } as any,
+            options: createPanelOptions({
+              favorites: createFavoritesConfig({
+                enabled: true,
+              }),
+            }),
             eventBus: null as any,
             levels: [{ name: 'device', source: 'A' }],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -1827,15 +1890,19 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
-              favorites: true,
-            } as any,
+            options: createPanelOptions({
+              showName: true,
+              favorites: createFavoritesConfig({
+                enabled: true,
+              }),
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -1920,15 +1987,16 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -1967,16 +2035,17 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
               showTotal: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2033,16 +2102,17 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
               showTotal: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2096,16 +2166,17 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
               showTotal: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2137,15 +2208,16 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2180,15 +2252,16 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: null as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2233,16 +2306,17 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
               groupSelection: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: {} as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2355,16 +2429,17 @@ describe('Use Table Hook', () => {
         const { result } = renderHook(() =>
           useTable({
             data: { series: [dataFrame] } as any,
-            options: {
+            options: createPanelOptions({
               header: true,
               groupSelection: true,
-            } as any,
+            }),
             eventBus: null as any,
             levels: [
               { name: 'country', source: 'A' },
               { name: 'device', source: 'A' },
             ],
             panelEventBus: {} as any,
+            replaceVariables: jest.fn(),
           })
         );
 
@@ -2461,12 +2536,13 @@ describe('Use Table Hook', () => {
       useTable({
         data: { series: [dataFrame] } as any,
         eventBus: null as any,
-        options: {} as any,
+        options: createPanelOptions(),
         levels: [
           { name: 'Top Level', source: 'A' },
           { name: 'device', source: 'A' },
         ],
         panelEventBus: null as any,
+        replaceVariables: jest.fn(),
       })
     );
     const { childValues } = result.current.tableData[0];
