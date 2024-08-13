@@ -22,7 +22,16 @@ interface Props extends PanelProps<PanelOptions> {
 /**
  * Table View
  */
-export const TableView: React.FC<Props> = ({ data, id, options, width, height, eventBus, panelEventBus }) => {
+export const TableView: React.FC<Props> = ({
+  data,
+  id,
+  options,
+  width,
+  height,
+  eventBus,
+  panelEventBus,
+  replaceVariables,
+}) => {
   /**
    * Current group
    */
@@ -60,6 +69,7 @@ export const TableView: React.FC<Props> = ({ data, id, options, width, height, e
     eventBus,
     levels: currentLevels,
     panelEventBus,
+    replaceVariables,
   });
 
   /**

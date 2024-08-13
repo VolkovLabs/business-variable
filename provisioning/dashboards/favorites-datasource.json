@@ -1,0 +1,624 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 7,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "INSERT INTO favorites(variable, value, user_id)\nVALUES ('${payload.variable}', '${payload.value}', ${__user.id})",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "datasource": "Timescale",
+          "deleteQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "DELETE FROM favorites WHERE id=${payload.id}",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "enabled": true,
+          "getQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "select * from favorites where user_id=${__user.id};",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "storage": "datasource"
+        },
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": [
+          "device"
+        ],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "device",
+        "variables": [
+          "device"
+        ]
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": [
+                  "Hello World!"
+                ]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 5,
+        "x": 6,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": [
+          "device"
+        ],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "device",
+        "variables": [
+          "device"
+        ]
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": [
+                  "Hello World!"
+                ]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Browser Storage",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 5,
+        "x": 11,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "INSERT INTO favorites(variable, value, user_id)\nVALUES ('${payload.variable}', '${payload.value}', ${__user.id})",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "datasource": "Timescale",
+          "deleteQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "DELETE FROM favorites WHERE id=${payload.id}",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "enabled": true,
+          "getQuery": {
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "select * from favorites where user_id=${__user.id};",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          "storage": "datasource"
+        },
+        "filter": true,
+        "groupSelection": false,
+        "header": true,
+        "heading": "Devices",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "selectedVariables": [
+          "device"
+        ],
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": true,
+        "sticky": false,
+        "variable": "device2",
+        "variables": [
+          "device"
+        ]
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "data",
+                "type": "string",
+                "values": [
+                  "Hello World!"
+                ]
+              }
+            ],
+            "meta": {},
+            "name": "data"
+          },
+          "refId": "A"
+        }
+      ],
+      "type": "volkovlabs-variable-panel"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Device",
+        "multi": true,
+        "name": "device",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Device1",
+            "value": "Device1"
+          },
+          {
+            "selected": false,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": false,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
+          }
+        ],
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "Device1"
+          ],
+          "value": [
+            "Device1"
+          ]
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Device 2",
+        "multi": true,
+        "name": "device2",
+        "options": [
+          {
+            "selected": true,
+            "text": "Device1",
+            "value": "Device1"
+          },
+          {
+            "selected": false,
+            "text": "Device2",
+            "value": "Device2"
+          },
+          {
+            "selected": false,
+            "text": "Device3",
+            "value": "Device3"
+          },
+          {
+            "selected": false,
+            "text": "Device4",
+            "value": "Device4"
+          },
+          {
+            "selected": false,
+            "text": "Device5",
+            "value": "Device5"
+          },
+          {
+            "selected": false,
+            "text": "Device6",
+            "value": "Device6"
+          },
+          {
+            "selected": false,
+            "text": "Device7",
+            "value": "Device7"
+          },
+          {
+            "selected": false,
+            "text": "Device8",
+            "value": "Device8"
+          },
+          {
+            "selected": false,
+            "text": "Device9",
+            "value": "Device9"
+          },
+          {
+            "selected": false,
+            "text": "Device10",
+            "value": "Device10"
+          }
+        ],
+        "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Favorites with Data Source",
+  "uid": "aduonar5okwzkd",
+  "version": 10,
+  "weekStart": ""
+}

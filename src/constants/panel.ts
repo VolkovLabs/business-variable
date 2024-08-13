@@ -1,4 +1,4 @@
-import { DisplayMode } from '../types';
+import { DisplayMode, FavoritesStorage } from '../types';
 
 /**
  * Display Mode Options
@@ -43,11 +43,29 @@ export const ALWAYS_VISIBLE_FILTER_OPTIONS = [
 ];
 
 /**
- * Favorites Options
+ * Favorites Enabled Options
  */
-export const FAVORITES_OPTIONS = [
+export const FAVORITES_ENABLED_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Allows selecting and filtering favorites.', icon: 'favorite' },
   { value: false, label: 'Disabled', description: 'Hide favorites.' },
+];
+
+/**
+ * Favorites Storage Options
+ */
+export const FAVORITES_STORAGE_OPTIONS = [
+  {
+    value: FavoritesStorage.BROWSER,
+    label: 'Browser',
+    description: 'Saved in the browser storage for each user.',
+    icon: 'monitor',
+  },
+  {
+    value: FavoritesStorage.DATASOURCE,
+    label: 'Data Source',
+    description: 'Saved data with the selected data source.',
+    icon: 'database',
+  },
 ];
 
 /**
@@ -145,3 +163,8 @@ export const SHOW_RESET_BUTTON_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show reset button.' },
   { value: false, label: 'Disabled', description: 'Do not show reset button.' },
 ];
+
+/**
+ * Auto Save timeout ms
+ */
+export const AUTO_SAVE_TIMEOUT = 1000;

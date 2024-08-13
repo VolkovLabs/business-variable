@@ -2,6 +2,7 @@ import { Field, FieldType, PanelPlugin } from '@grafana/data';
 
 import { plugin } from './module';
 import { DisplayMode, PanelOptions } from './types';
+import { createPanelOptions } from './utils';
 
 /**
  * Test Field
@@ -85,7 +86,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addSelect.mockImplementation(
-        addInputImplementation({ groups: [], displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ groups: [], displayMode: DisplayMode.TABLE }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -96,7 +97,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addRadio.mockImplementation(
-        addInputImplementation({ header: true, displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ header: true, displayMode: DisplayMode.TABLE }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -107,7 +108,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addFieldNamePicker.mockImplementation(
-        addInputImplementation({ displayMode: DisplayMode.TABLE }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ displayMode: DisplayMode.TABLE }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -118,7 +119,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addFieldNamePicker.mockImplementation(
-        addInputImplementation({ displayMode: DisplayMode.BUTTON }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ displayMode: DisplayMode.BUTTON }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -129,7 +130,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addSliderInput.mockImplementation(
-        addInputImplementation({ displayMode: DisplayMode.MINIMIZE }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ displayMode: DisplayMode.MINIMIZE }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -140,7 +141,7 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addSliderInput.mockImplementation(
-        addInputImplementation({ displayMode: DisplayMode.BUTTON }, shownOptionsPaths)
+        addInputImplementation(createPanelOptions({ displayMode: DisplayMode.BUTTON }), shownOptionsPaths)
       );
       plugin['optionsSupplier'](builder);
 
@@ -151,7 +152,10 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addTextInput.mockImplementation(
-        addInputImplementation({ displayMode: DisplayMode.TABLE, saveSelectedGroup: true }, shownOptionsPaths)
+        addInputImplementation(
+          createPanelOptions({ displayMode: DisplayMode.TABLE, saveSelectedGroup: true }),
+          shownOptionsPaths
+        )
       );
       plugin['optionsSupplier'](builder);
 
@@ -162,7 +166,10 @@ describe('plugin', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addNumberInput.mockImplementation(
-        addInputImplementation({ showLabel: true, displayMode: DisplayMode.MINIMIZE }, shownOptionsPaths)
+        addInputImplementation(
+          createPanelOptions({ showLabel: true, displayMode: DisplayMode.MINIMIZE }),
+          shownOptionsPaths
+        )
       );
       plugin['optionsSupplier'](builder);
 

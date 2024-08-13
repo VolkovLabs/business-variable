@@ -1,4 +1,4 @@
-import { EventBus, PanelData } from '@grafana/data';
+import { EventBus, InterpolateFunction, PanelData } from '@grafana/data';
 import { Button, Icon, useTheme2 } from '@grafana/ui';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useCallback, useMemo } from 'react';
@@ -34,12 +34,14 @@ export const useTable = ({
   eventBus,
   panelEventBus,
   levels,
+  replaceVariables,
 }: {
   data: PanelData;
   options: PanelOptions;
   eventBus: EventBus;
   panelEventBus: EventBus;
   levels?: Level[];
+  replaceVariables: InterpolateFunction;
 }) => {
   /**
    * Styles and Theme
@@ -56,7 +58,7 @@ export const useTable = ({
   /**
    * Favorites
    */
-  const favorites = useFavorites();
+  const favorites = useFavorites({ config: options.favorites, replaceVariables });
 
   /**
    * Status
@@ -108,7 +110,7 @@ export const useTable = ({
             children,
             status: getStatus(value),
             isSelectedAll,
-            favoritesEnabled: options.favorites,
+            favoritesEnabled: options.favorites.enabled,
             groupSelection: options.groupSelection,
           }
         );
@@ -132,7 +134,7 @@ export const useTable = ({
               {
                 status: getStatus(ALL_VALUE),
                 isSelectedAll,
-                favoritesEnabled: options.favorites,
+                favoritesEnabled: options.favorites.enabled,
                 groupSelection: options.groupSelection,
               }
             ),
@@ -159,7 +161,7 @@ export const useTable = ({
           {
             status: getStatus(option.value === ALL_VALUE_PARAMETER ? ALL_VALUE : option.value),
             isSelectedAll,
-            favoritesEnabled: options.favorites,
+            favoritesEnabled: options.favorites.enabled,
             groupSelection: options.groupSelection,
           }
         );
@@ -183,7 +185,7 @@ export const useTable = ({
           {
             status: getStatus(''),
             isSelectedAll,
-            favoritesEnabled: options.favorites,
+            favoritesEnabled: options.favorites.enabled,
             groupSelection: options.groupSelection,
           }
         ),

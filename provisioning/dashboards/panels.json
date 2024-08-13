@@ -82,7 +82,6 @@
         "sticky": false,
         "variables": []
       },
-      "pluginVersion": "3.2.0",
       "title": "Empty",
       "type": "volkovlabs-variable-panel"
     },
@@ -143,7 +142,6 @@
         "variable": "device",
         "variables": ["device"]
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "frame": {
@@ -217,7 +215,6 @@
         "sticky": false,
         "variable": "device"
       },
-      "pluginVersion": "3.2.0",
       "title": "Device 1 Multi + All",
       "type": "volkovlabs-variable-panel"
     },
@@ -278,7 +275,6 @@
         "variable": "device2",
         "variables": ["device"]
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "frame": {
@@ -352,7 +348,6 @@
         "sticky": false,
         "variable": "device2"
       },
-      "pluginVersion": "3.2.0",
       "title": "Device 2 Multi Only ",
       "type": "volkovlabs-variable-panel"
     },
@@ -410,7 +405,6 @@
         "sticky": false,
         "variable": "test"
       },
-      "pluginVersion": "3.2.0",
       "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     },
@@ -470,7 +464,6 @@
         "sticky": false,
         "variable": "test"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -558,7 +551,6 @@
         "variable": "single",
         "variables": ["single"]
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "frame": {
@@ -635,7 +627,6 @@
         "variable": "device3",
         "variables": ["device"]
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "frame": {
@@ -709,7 +700,6 @@
         "sticky": false,
         "variable": "device3"
       },
-      "pluginVersion": "3.2.0",
       "title": "Dev.3 Without Multi and All ",
       "type": "volkovlabs-variable-panel"
     },
@@ -770,7 +760,6 @@
         "variable": "device4",
         "variables": ["device"]
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "frame": {
@@ -844,7 +833,6 @@
         "sticky": false,
         "variable": "device4"
       },
-      "pluginVersion": "3.2.0",
       "title": "Device 4 All (without Multi)",
       "type": "volkovlabs-variable-panel"
     }

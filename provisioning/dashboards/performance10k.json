@@ -78,7 +78,6 @@
         "sticky": false,
         "variable": "device"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -178,7 +177,6 @@
         "sticky": false,
         "variable": "Device"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -284,7 +282,6 @@
         "sticky": false,
         "variable": "Device"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
