@@ -15,11 +15,11 @@
     "links": [
       {
         "name": "Documentation",
-        "url": "https://volkovlabs.io/plugins/volkovlabs-variable-panel"
+        "url": "https://volkovlabs.io/plugins/business-variable/"
       },
       {
         "name": "GitHub",
-        "url": "https://github.com/volkovlabs/volkovlabs-variable-panel"
+        "url": "https://github.com/volkovlabs/business-variable"
       }
     ],
     "logos": {
