@@ -82,7 +82,6 @@
         "sticky": false,
         "variables": []
       },
-
       "title": "Empty",
       "type": "volkovlabs-variable-panel"
     },
@@ -216,7 +215,6 @@
         "sticky": false,
         "variable": "device"
       },
-
       "title": "Device 1 Multi + All",
       "type": "volkovlabs-variable-panel"
     },
@@ -277,7 +275,6 @@
         "variable": "device2",
         "variables": ["device"]
       },
-
       "targets": [
         {
           "frame": {
@@ -351,7 +348,6 @@
         "sticky": false,
         "variable": "device2"
       },
-
       "title": "Device 2 Multi Only ",
       "type": "volkovlabs-variable-panel"
     },
@@ -409,7 +405,6 @@
         "sticky": false,
         "variable": "test"
       },
-
       "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     },
@@ -469,7 +464,6 @@
         "sticky": false,
         "variable": "test"
       },
-
       "targets": [
         {
           "datasource": {
@@ -557,7 +551,6 @@
         "variable": "single",
         "variables": ["single"]
       },
-
       "targets": [
         {
           "frame": {
@@ -634,7 +627,6 @@
         "variable": "device3",
         "variables": ["device"]
       },
-
       "targets": [
         {
           "frame": {
@@ -769,7 +761,6 @@
         "variable": "device4",
         "variables": ["device"]
       },
-
       "targets": [
         {
           "frame": {
@@ -843,7 +834,6 @@
         "sticky": false,
         "variable": "device4"
       },
-
       "title": "Device 4 All (without Multi)",
       "type": "volkovlabs-variable-panel"
     }

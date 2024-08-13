@@ -86,7 +86,6 @@
         "sticky": false,
         "variable": "country"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -177,7 +176,6 @@
         "sticky": false,
         "variable": "state"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -268,7 +266,6 @@
         "sticky": false,
         "variable": "city"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -382,7 +379,6 @@
         "sticky": false,
         "variable": "device"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -498,7 +494,6 @@
         "sticky": false,
         "variable": "text"
       },
-      "pluginVersion": "3.2.0",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -595,7 +590,6 @@
         "sticky": true,
         "variable": "device"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {

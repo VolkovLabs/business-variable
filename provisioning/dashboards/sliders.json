@@ -76,7 +76,6 @@
         "sticky": false,
         "variable": "year"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
@@ -143,7 +142,6 @@
         "sticky": false,
         "variable": "month"
       },
-      "pluginVersion": "3.2.0",
       "targets": [
         {
           "datasource": {
