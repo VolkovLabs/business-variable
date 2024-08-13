@@ -700,7 +700,6 @@
         "sticky": false,
         "variable": "device3"
       },
-
       "title": "Dev.3 Without Multi and All ",
       "type": "volkovlabs-variable-panel"
     },

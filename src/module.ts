@@ -262,16 +262,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.header,
       })
       .addRadio({
-        path: 'favorites.storage',
-        name: 'Select storage for keeping favorites data',
-        defaultValue: FavoritesStorage.BROWSER,
-        settings: {
-          options: FAVORITES_STORAGE_OPTIONS,
-        },
-        category: ['Header'],
-        showIf: (config) => showForTableView(config) && config.header && config.favorites.enabled,
-      })
-      .addRadio({
         path: 'statusSort',
         name: 'Sort by status',
         settings: {
@@ -415,25 +405,35 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       });
 
     /**
-     * Data Source For Favorites
+     * Favorites
      */
     builder
+      .addRadio({
+        path: 'favorites.storage',
+        name: 'Select storage for keeping favorites data',
+        defaultValue: FavoritesStorage.BROWSER,
+        settings: {
+          options: FAVORITES_STORAGE_OPTIONS,
+        },
+        category: ['Favorites'],
+        showIf: (config) => showForTableView(config) && config.header && config.favorites.enabled,
+      })
       .addCustomEditor({
         id: 'favorites.datasource',
         path: 'favorites.datasource',
         name: 'Select Data Source',
         showIf: isFavoritesDatasourceShown,
         editor: DatasourceEditor,
-        category: ['Favorites Data Source'],
+        category: ['Favorites'],
       })
       .addCustomEditor({
         id: 'favorites.getQuery',
         path: 'favorites.getQuery',
-        name: 'Get Items Query',
-        description: 'Item should contain `id: unknown`, `variable: string` and `value: unknown` fields.',
+        name: 'Get items query',
+        description: 'Item should contain unique `id`, `variable` and `value` fields.',
         showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
         editor: DatasourcePayloadEditor,
-        category: ['Favorites Data Source'],
+        category: ['Favorites'],
         settings: {
           datasourceKey: 'favorites.datasource',
         },
@@ -441,11 +441,11 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addCustomEditor({
         id: 'favorites.addQuery',
         path: 'favorites.addQuery',
-        name: 'Add Item Query',
+        name: 'Add item query',
         description: 'Item to add is placed in variable `${payload}` with `variable` and `value` properties.',
         showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
         editor: DatasourcePayloadEditor,
-        category: ['Favorites Data Source'],
+        category: ['Favorites'],
         settings: {
           datasourceKey: 'favorites.datasource',
         },
@@ -453,11 +453,11 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addCustomEditor({
         id: 'favorites.deleteQuery',
         path: 'favorites.deleteQuery',
-        name: 'Delete Item Query',
+        name: 'Delete item query',
         description: 'Item to delete is placed in variable `${payload}` with `id`, `variable` and `value` properties.',
         showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
         editor: DatasourcePayloadEditor,
-        category: ['Favorites Data Source'],
+        category: ['Favorites'],
         settings: {
           datasourceKey: 'favorites.datasource',
         },
