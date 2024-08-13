@@ -15,6 +15,13 @@ CREATE TABLE devices (
     country text NOT NULL
 );
 
+CREATE TABLE favorites (
+    id serial primary key,
+    variable text NOT NULL,
+    value text NOT NULL,
+    user_id integer NOT NULL
+);
+
 CREATE TABLE dashboards (
     device_id text NOT NULL,
     dashboard_id text NOT NULL

@@ -1,25 +1,46 @@
 import { PanelModel } from '@grafana/data';
 
-import { DisplayMode, PanelOptions } from './types';
+import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 
 /**
  * Outdated Panel Options
  */
-interface OutdatedPanelOptions extends PanelOptions {}
+interface OutdatedPanelOptions extends Omit<PanelOptions, 'favorites'> {
+  /**
+   * Favorites
+   *
+   * Changed since v3.3.0
+   */
+  favorites: boolean;
+}
 
 /**
  * Get Migrated Options
  * @param panel
  */
-export const getMigratedOptions = (panel: PanelModel<OutdatedPanelOptions>): PanelOptions => {
-  const { ...options } = panel.options;
+export const getMigratedOptions = ({ options }: PanelModel<OutdatedPanelOptions>): PanelOptions => {
+  const normalizedOptions = { ...options } as never as PanelOptions;
 
   /**
    * Enable label for minimize view
    */
   if (options.displayMode === DisplayMode.MINIMIZE && options.showLabel === undefined) {
-    options.showLabel = true;
+    normalizedOptions.showLabel = true;
   }
 
-  return options as PanelOptions;
+  /**
+   * Normalize Favorites
+   */
+  if (typeof options.favorites !== 'object') {
+    normalizedOptions.favorites = {
+      enabled: options.favorites,
+      storage: FavoritesStorage.BROWSER,
+      datasource: '',
+      getQuery: {},
+      addQuery: {},
+      deleteQuery: {},
+    };
+  }
+
+  return normalizedOptions;
 };

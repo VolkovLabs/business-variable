@@ -1,7 +1,13 @@
 import { Field, FieldConfigProperty, FieldType, identityOverrideProcessor, PanelPlugin } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 
-import { GroupsEditor, StatusStyleEditor, VariablePanel } from './components';
+import {
+  DatasourceEditor,
+  DatasourcePayloadEditor,
+  GroupsEditor,
+  StatusStyleEditor,
+  VariablePanel,
+} from './components';
 import {
   ALLOW_CUSTOM_VALUE_OPTIONS,
   ALLOW_EMPTY_VALUE_OPTIONS,
@@ -9,7 +15,8 @@ import {
   AUTO_SCROLL_OPTIONS,
   COLLAPSED_BY_DEFAULT_OPTIONS,
   DISPLAY_MODE_OPTIONS,
-  FAVORITES_OPTIONS,
+  FAVORITES_ENABLED_OPTIONS,
+  FAVORITES_STORAGE_OPTIONS,
   FILTER_OPTIONS,
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
@@ -23,14 +30,14 @@ import {
   STICKY_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
-import { DisplayMode, PanelOptions, StatusStyleMode } from './types';
+import { DisplayMode, FavoritesStorage, PanelOptions, StatusStyleMode } from './types';
 
 /**
  * Panel Plugin
  */
 export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
   .setNoPadding()
-  .setMigrationHandler(getMigratedOptions)
+  .setMigrationHandler(getMigratedOptions as never)
   .useFieldConfig({
     disableStandardOptions: [
       FieldConfigProperty.Unit,
@@ -81,6 +88,11 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
     const showForSliderView = (config: PanelOptions) => config.displayMode === DisplayMode.SLIDER;
     const isVariableSelected = (config: PanelOptions) => !!config.variable;
+    const isFavoritesDatasourceShown = (config: PanelOptions) =>
+      showForTableView(config) &&
+      config.header &&
+      config.favorites.enabled &&
+      config.favorites.storage === FavoritesStorage.DATASOURCE;
 
     /**
      * Common Options
@@ -240,15 +252,24 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForTableView(config) && config.header && config.filter,
       })
       .addRadio({
-        path: 'favorites',
+        path: 'favorites.enabled',
         name: 'Allow selecting favorites',
-        description: 'Saved in the browser storage for each user.',
         settings: {
-          options: FAVORITES_OPTIONS,
+          options: FAVORITES_ENABLED_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],
         showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'favorites.storage',
+        name: 'Select storage for keeping favorites data',
+        defaultValue: FavoritesStorage.BROWSER,
+        settings: {
+          options: FAVORITES_STORAGE_OPTIONS,
+        },
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header && config.favorites.enabled,
       })
       .addRadio({
         path: 'statusSort',
@@ -391,6 +412,55 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Status'],
         showIf: (config) => showForTableView(config) || showForButtonView(config),
+      });
+
+    /**
+     * Data Source For Favorites
+     */
+    builder
+      .addCustomEditor({
+        id: 'favorites.datasource',
+        path: 'favorites.datasource',
+        name: 'Select Data Source',
+        showIf: isFavoritesDatasourceShown,
+        editor: DatasourceEditor,
+        category: ['Favorites Data Source'],
+      })
+      .addCustomEditor({
+        id: 'favorites.getQuery',
+        path: 'favorites.getQuery',
+        name: 'Get Items Query',
+        description: 'Item should contain `id: unknown`, `variable: string` and `value: unknown` fields.',
+        showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
+        editor: DatasourcePayloadEditor,
+        category: ['Favorites Data Source'],
+        settings: {
+          datasourceKey: 'favorites.datasource',
+        },
+      })
+      .addCustomEditor({
+        id: 'favorites.addQuery',
+        path: 'favorites.addQuery',
+        name: 'Add Item Query',
+        description: 'Item to add is placed in variable `${payload}` with `variable` and `value` properties.',
+        showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
+        editor: DatasourcePayloadEditor,
+        category: ['Favorites Data Source'],
+        settings: {
+          datasourceKey: 'favorites.datasource',
+        },
+      })
+      .addCustomEditor({
+        id: 'favorites.deleteQuery',
+        path: 'favorites.deleteQuery',
+        name: 'Delete Item Query',
+        description: 'Item to delete is placed in variable `${payload}` with `id`, `variable` and `value` properties.',
+        showIf: (config) => isFavoritesDatasourceShown(config) && !!config.favorites.datasource,
+        editor: DatasourcePayloadEditor,
+        category: ['Favorites Data Source'],
+        settings: {
+          datasourceKey: 'favorites.datasource',
+        },
       });
 
     /**

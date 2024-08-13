@@ -11,6 +11,85 @@ export enum DisplayMode {
 }
 
 /**
+ * Data Source Config
+ */
+export interface DatasourceConfig {
+  /**
+   * Data Source
+   *
+   * @type {string}
+   */
+  datasource: string;
+
+  /**
+   * Query
+   *
+   * @type {unknown}
+   */
+  query: unknown;
+}
+
+/**
+ * Favorites Storage
+ */
+export enum FavoritesStorage {
+  BROWSER = 'browser',
+  DATASOURCE = 'datasource',
+}
+
+/**
+ * Data Source Query
+ */
+type DatasourceQuery = Record<string, unknown>;
+
+/**
+ * Favorites Config
+ */
+export interface FavoritesConfig {
+  /**
+   * Enabled
+   *
+   * @type {boolean}
+   */
+  enabled: boolean;
+
+  /**
+   * Storage
+   *
+   * @type {FavoritesStorage}
+   */
+  storage: FavoritesStorage;
+
+  /**
+   * Data Source
+   *
+   * @type {string}
+   */
+  datasource: string;
+
+  /**
+   * Get Query
+   *
+   * @type {DatasourceQuery}
+   */
+  getQuery: DatasourceQuery;
+
+  /**
+   * Add Query
+   *
+   * @type {DatasourceQuery}
+   */
+  addQuery: DatasourceQuery;
+
+  /**
+   * Delete Query
+   *
+   * @type {DatasourceQuery}
+   */
+  deleteQuery: DatasourceQuery;
+}
+
+/**
  * Level
  */
 export interface Level {
@@ -101,11 +180,11 @@ export interface TableViewOptions {
   alwaysVisibleFilter: boolean;
 
   /**
-   * Select Favorites
+   * Favorites
    *
    * @type {boolean}
    */
-  favorites: boolean;
+  favorites: FavoritesConfig;
 
   /**
    * Save Selected Group

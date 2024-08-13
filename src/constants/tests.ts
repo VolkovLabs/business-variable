@@ -82,4 +82,11 @@ export const TEST_IDS = {
     fieldUrl: 'data-testid status-style-editor item field-url',
     buttonRemoveItem: 'data-testid status-style-editor item button-remove-item',
   },
+  datasourceEditor: {
+    fieldSelect: 'select-datasource-editor field-select',
+  },
+  payloadEditor: {
+    loadingMessage: 'data-testid payload-editor loading-message',
+    errorMessage: 'data-testid payload-editor error-message',
+  },
 };
