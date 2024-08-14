@@ -32,6 +32,11 @@ interface Props {
    * Panel Event Bus
    */
   panelEventBus: EventBus;
+
+  /**
+   * Current height of the panel in pixels
+   */
+  height: number;
 }
 
 /**
@@ -51,6 +56,7 @@ export const ButtonView: React.FC<Props> = ({
   } = {},
   eventBus,
   panelEventBus,
+  height,
 }) => {
   /**
    * Styles and Theme
@@ -125,6 +131,8 @@ export const ButtonView: React.FC<Props> = ({
         styles.root,
         css`
           padding: ${padding}px;
+          height: ${height}px;
+          overflow-y: auto;
         `
       )}
       data-testid={TEST_IDS.buttonView.root}
