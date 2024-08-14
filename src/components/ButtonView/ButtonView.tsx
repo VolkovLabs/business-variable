@@ -132,7 +132,7 @@ export const ButtonView: React.FC<Props> = ({
         css`
           padding: ${padding}px;
           height: ${height}px;
-          overflow-x: auto;
+          overflow-y: auto;
         `
       )}
       data-testid={TEST_IDS.buttonView.root}
