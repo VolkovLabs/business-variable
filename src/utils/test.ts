@@ -48,5 +48,6 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   autoScroll: false,
   statusSort: false,
   collapsedByDefault: false,
+  tabsInOrder: false,
   ...options,
 });

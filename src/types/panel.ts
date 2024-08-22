@@ -338,6 +338,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   showResetButton: boolean;
+
+  /**
+   * Tabs in order
+   *
+   * @type {boolean}
+   */
+  tabsInOrder: boolean;
 }
 
 /**
