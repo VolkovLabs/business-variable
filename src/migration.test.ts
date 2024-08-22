@@ -119,6 +119,7 @@ describe('Migration', () => {
 
     beforeEach(() => {
       jest.mocked(window.localStorage.getItem).mockClear();
+      jest.mocked(window.localStorage.setItem).mockClear();
     });
 
     it('Should migrate old favorites from localStorage', () => {
