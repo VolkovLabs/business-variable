@@ -117,19 +117,25 @@ export const TableView: React.FC<Props> = ({
       return [];
     }
 
+    /**
+     * Find active selected group
+     */
     const activeGroup = options.groups.find((group) => group.name === currentGroup);
 
     /**
      * Selected group is not found
      */
-    if (!activeGroup) {
+    if (!activeGroup || options.tabsInOrder) {
       return options.groups;
     }
 
+    /**
+     * Filter groups, exclude active group
+     */
     const withoutActive = options.groups.filter((group) => group.name !== currentGroup);
 
     return [activeGroup, ...withoutActive];
-  }, [currentGroup, options.groups]);
+  }, [currentGroup, options.groups, options.tabsInOrder]);
 
   /**
    * On after scroll

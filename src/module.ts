@@ -28,6 +28,7 @@ import {
   SHOW_RESET_BUTTON_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
+  TABS_ORDER_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
 import { DisplayMode, FavoritesStorage, PanelOptions, StatusStyleMode } from './types';
@@ -302,6 +303,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         editor: GroupsEditor,
         category: ['Layout'],
         showIf: showForTableView,
+      })
+      .addRadio({
+        path: 'tabsInOrder',
+        name: 'Group Tabs order',
+        settings: {
+          options: TABS_ORDER_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => showForTableView(config) && !!config.groups?.length,
       })
       .addRadio({
         path: 'showName',
