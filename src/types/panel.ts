@@ -182,7 +182,7 @@ export interface TableViewOptions {
   /**
    * Favorites
    *
-   * @type {boolean}
+   * @type {FavoritesConfig}
    */
   favorites: FavoritesConfig;
 

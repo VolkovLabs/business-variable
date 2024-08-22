@@ -41,7 +41,7 @@ type FavoritesStorageModel = (params: { config: FavoritesConfig; replaceVariable
  * Favorites Browser Storage Model
  */
 const useFavoritesBrowserStorageModel: FavoritesStorageModel = () => {
-  const storageKey = 'favorites';
+  const storageKey = 'volkovlabs.variable.panel.favorites';
 
   const get = useCallback(async () => {
     const json = window.localStorage.getItem(storageKey);

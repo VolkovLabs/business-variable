@@ -1,4 +1,5 @@
 import { PanelModel } from '@grafana/data';
+import semver from 'semver';
 
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 
@@ -18,28 +19,39 @@ interface OutdatedPanelOptions extends Omit<PanelOptions, 'favorites'> {
  * Get Migrated Options
  * @param panel
  */
-export const getMigratedOptions = ({ options }: PanelModel<OutdatedPanelOptions>): PanelOptions => {
-  const normalizedOptions = { ...options } as never as PanelOptions;
+export const getMigratedOptions = (panel: PanelModel<OutdatedPanelOptions & PanelOptions>): PanelOptions => {
+  const { ...normalizedOptions } = panel.options as never as PanelOptions;
 
   /**
    * Enable label for minimize view
    */
-  if (options.displayMode === DisplayMode.MINIMIZE && options.showLabel === undefined) {
+  if (panel.options.displayMode === DisplayMode.MINIMIZE && panel.options.showLabel === undefined) {
     normalizedOptions.showLabel = true;
   }
 
   /**
    * Normalize Favorites
    */
-  if (typeof options.favorites !== 'object') {
+  if (typeof panel.options.favorites !== 'object') {
     normalizedOptions.favorites = {
-      enabled: options.favorites,
+      enabled: panel.options.favorites,
       storage: FavoritesStorage.BROWSER,
       datasource: '',
       getQuery: {},
       addQuery: {},
       deleteQuery: {},
     };
+  }
+
+  /**
+   * Normalize favorites before 3.4.0
+   */
+
+  if (panel.pluginVersion && semver.lt(panel.pluginVersion, '3.4.0')) {
+    const json = window.localStorage.getItem('favorites');
+    if (json) {
+      window.localStorage.setItem('volkovlabs.variable.panel.favorites', json);
+    }
   }
 
   return normalizedOptions;
