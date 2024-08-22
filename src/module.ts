@@ -306,13 +306,13 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'tabsInOrder',
-        name: 'Group Tabs order',
+        name: 'Tabs order',
         settings: {
           options: TABS_ORDER_OPTIONS,
         },
         defaultValue: false,
         category: ['Layout'],
-        showIf: (config) => showForTableView(config) && !!config.groups?.length,
+        showIf: (config) => showForTableView(config) && config.groups?.length > 1,
       })
       .addRadio({
         path: 'showName',
