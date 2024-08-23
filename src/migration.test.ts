@@ -1,6 +1,15 @@
+import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 import { createFavoritesConfig } from './utils';
+
+/**
+ * Local Storage
+ */
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+};
 
 describe('Migration', () => {
   it('Should return panel options', () => {
@@ -100,6 +109,58 @@ describe('Migration', () => {
           }),
         })
       );
+    });
+  });
+
+  describe('v3.4.0', () => {
+    /**
+     * Set Mock
+     */
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+    beforeEach(() => {
+      jest.mocked(window.localStorage.getItem).mockClear();
+      jest.mocked(window.localStorage.setItem).mockClear();
+    });
+
+    it('Should migrate old favorites from localStorage', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() =>
+        JSON.stringify({
+          device: ['device1', 'device2'],
+        })
+      );
+
+      getMigratedOptions({
+        pluginVersion: '3.3.0',
+        options: {},
+      } as any);
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
+    });
+
+    it('Should migrate old favorites from localStorage when no version specified', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() =>
+        JSON.stringify({
+          device: ['device1', 'device2'],
+        })
+      );
+
+      getMigratedOptions({
+        options: {},
+      } as any);
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
+    });
+
+    it('Should not call setItem if no values in favorites key', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() => null);
+
+      getMigratedOptions({
+        pluginVersion: '3.3.0',
+        options: {},
+      } as any);
+
+      expect(window.localStorage.setItem).not.toHaveBeenCalled();
     });
   });
 });

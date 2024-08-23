@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Added panel options for changing tabs order (#193)
+- Updated the local storage key for favorites (#194)
 
 ## 3.3.0 (2024-08-14)
 

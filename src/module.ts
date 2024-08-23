@@ -310,7 +310,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: TABS_ORDER_OPTIONS,
         },
-        defaultValue: false,
+        defaultValue: true,
         category: ['Layout'],
         showIf: (config) => showForTableView(config) && config.groups?.length > 1,
       })

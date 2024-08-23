@@ -1,6 +1,7 @@
 import { InterpolateFunction, isDataFrame, LoadingState } from '@grafana/data';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { FAVORITES_KEY } from '../constants';
 import { FavoritesConfig, FavoritesStorage } from '../types';
 import { useDatasourceRequest } from './useDatasourceRequest';
 
@@ -41,10 +42,8 @@ type FavoritesStorageModel = (params: { config: FavoritesConfig; replaceVariable
  * Favorites Browser Storage Model
  */
 const useFavoritesBrowserStorageModel: FavoritesStorageModel = () => {
-  const storageKey = 'favorites';
-
   const get = useCallback(async () => {
-    const json = window.localStorage.getItem(storageKey);
+    const json = window.localStorage.getItem(FAVORITES_KEY);
 
     return {
       itemsMap: JSON.parse(json || '{}'),
@@ -60,7 +59,7 @@ const useFavoritesBrowserStorageModel: FavoritesStorageModel = () => {
       ...data.itemsMap,
       [item.name]: data.itemsMap[item.name] ? data.itemsMap[item.name].concat([item.value]) : [item.value],
     };
-    window.localStorage.setItem(storageKey, JSON.stringify(updatedData));
+    window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedData));
 
     return {
       ...data,
@@ -76,7 +75,7 @@ const useFavoritesBrowserStorageModel: FavoritesStorageModel = () => {
       ...data.itemsMap,
       [item.name]: data.itemsMap[item.name] ? data.itemsMap[item.name].filter((value) => value !== item.value) : [],
     };
-    window.localStorage.setItem(storageKey, JSON.stringify(updatedData));
+    window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedData));
 
     return {
       ...data,

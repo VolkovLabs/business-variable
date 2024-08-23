@@ -176,3 +176,8 @@ export const SHOW_RESET_BUTTON_OPTIONS = [
  * Auto Save timeout ms
  */
 export const AUTO_SAVE_TIMEOUT = 1000;
+
+/**
+ * Favorites Key
+ */
+export const FAVORITES_KEY = 'volkovlabs.variable.panel.favorites';
