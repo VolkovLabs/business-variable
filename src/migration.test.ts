@@ -138,6 +138,20 @@ describe('Migration', () => {
       expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
     });
 
+    it('Should migrate old favorites from localStorage when no version specified', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() =>
+        JSON.stringify({
+          device: ['device1', 'device2'],
+        })
+      );
+
+      getMigratedOptions({
+        options: {},
+      } as any);
+
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
+    });
+
     it('Should not call setItem if no values in favorites key', () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() => null);
 
