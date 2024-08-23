@@ -276,7 +276,7 @@ describe('GroupsEditor', () => {
       /**
        * Save Name
        */
-      expect(item2Selectors.buttonSaveRename()).not.toBeDisabled();
+      expect(item2Selectors.buttonSaveRename()).toHaveAttribute('aria-disabled', 'false');
       fireEvent.click(item2Selectors.buttonSaveRename());
 
       /**
@@ -402,7 +402,7 @@ describe('GroupsEditor', () => {
       /**
        * Check if unable to save
        */
-      expect(itemSelectors.buttonSaveRename()).toBeDisabled();
+      expect(itemSelectors.buttonSaveRename()).toHaveAttribute('aria-disabled', 'true');
 
       /**
        * Change name
@@ -412,7 +412,7 @@ describe('GroupsEditor', () => {
       /**
        * Check if unable to save
        */
-      expect(itemSelectors.buttonSaveRename()).toBeDisabled();
+      expect(itemSelectors.buttonSaveRename()).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('Should save name by enter', async () => {
@@ -605,7 +605,7 @@ describe('GroupsEditor', () => {
       /**
        * Save Name
        */
-      expect(itemSelectors.buttonSaveRename()).not.toBeDisabled();
+      expect(itemSelectors.buttonSaveRename()).toHaveAttribute('aria-disabled', 'false');
       fireEvent.click(itemSelectors.buttonSaveRename());
 
       /**
