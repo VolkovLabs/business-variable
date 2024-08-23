@@ -93,6 +93,14 @@ export const SHOW_NAME_OPTIONS = [
 ];
 
 /**
+ * Tabs order Options
+ */
+export const TABS_ORDER_OPTIONS = [
+  { value: true, label: 'In order', description: 'Display tabs in order' },
+  { value: false, label: 'Selected first', description: 'Keep selected tab first' },
+];
+
+/**
  * Collapse By Default Options
  */
 export const COLLAPSED_BY_DEFAULT_OPTIONS = [

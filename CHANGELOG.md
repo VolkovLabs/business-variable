@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.4.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Added panel options for changing tabs order (#193)
+
 ## 3.3.0 (2024-08-14)
 
 ### Features / Enhancements
