@@ -1,6 +1,7 @@
 import { PanelModel } from '@grafana/data';
 import semver from 'semver';
 
+import { FAVORITES_KEY } from './constants';
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 
 /**
@@ -46,11 +47,10 @@ export const getMigratedOptions = (panel: PanelModel<OutdatedPanelOptions & Pane
   /**
    * Normalize favorites before 3.4.0
    */
-
   if (panel.pluginVersion && semver.lt(panel.pluginVersion, '3.4.0')) {
     const json = window.localStorage.getItem('favorites');
     if (json) {
-      window.localStorage.setItem('volkovlabs.variable.panel.favorites', json);
+      window.localStorage.setItem(FAVORITES_KEY, json);
     }
   }
 

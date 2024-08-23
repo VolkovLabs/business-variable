@@ -1,3 +1,4 @@
+import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 import { createFavoritesConfig } from './utils';
@@ -134,10 +135,7 @@ describe('Migration', () => {
         options: {},
       } as any);
 
-      expect(window.localStorage.setItem).toHaveBeenCalledWith(
-        'volkovlabs.variable.panel.favorites',
-        '{"device":["device1","device2"]}'
-      );
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
     });
 
     it('Should not call setItem if no values in favorites key', () => {
