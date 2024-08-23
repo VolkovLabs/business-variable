@@ -6,6 +6,7 @@
 
 - Added panel options for changing tabs order (#193)
 - Updated the local storage key for favorites (#194)
+- Update to Grafana 11.1.4 (#195)
 
 ## 3.3.0 (2024-08-14)
 
