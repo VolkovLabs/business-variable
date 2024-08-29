@@ -418,4 +418,31 @@ describe('Options Variable', () => {
       expect.anything()
     );
   });
+
+  it('Should not allow add custom options if customValue disabled', () => {
+    render(
+      getComponent({
+        variable: {
+          multi: true,
+          current: {
+            value: ['hello', 'world'],
+          },
+          options: [],
+        } as any,
+        customValue: false,
+      })
+    );
+
+    /**
+     * Check if select has custom options based on values
+     */
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        allowCustomValue: false,
+        value: ['hello', 'world'],
+        options: [],
+      }),
+      expect.anything()
+    );
+  });
 });

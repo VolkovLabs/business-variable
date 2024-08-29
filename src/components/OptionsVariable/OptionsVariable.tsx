@@ -75,10 +75,13 @@ export const OptionsVariable: React.FC<Props> = ({
    * Current values
    */
   const values = useMemo(() => {
-    const value = variable.current.value;
+    if (customValue) {
+      const value = variable.current.value;
 
-    return Array.isArray(value) ? value : [value];
-  }, [variable]);
+      return Array.isArray(value) ? value : [value];
+    }
+    return variable.options.filter((option) => option.selected).map((option) => option.value);
+  }, [customValue, variable]);
 
   /**
    * On Change
@@ -117,22 +120,24 @@ export const OptionsVariable: React.FC<Props> = ({
     /**
      * Add options for custom entered values
      */
-    values.forEach((value) => {
-      /**
-       * Skip for already exist option
-       */
-      if (options.some((option) => option.value === value)) {
-        return;
-      }
+    if (customValue) {
+      values.forEach((value) => {
+        /**
+         * Skip for already exist option
+         */
+        if (options.some((option) => option.value === value)) {
+          return;
+        }
 
-      options.push({
-        label: value,
-        value,
+        options.push({
+          label: value,
+          value,
+        });
       });
-    });
+    }
 
     return options;
-  }, [values, variable.options]);
+  }, [customValue, values, variable.options]);
 
   return (
     <Select
