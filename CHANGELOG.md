@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.5.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Updated select variable on Minimize view (#197)
+
 ## 3.4.0 (2024-08-23)
 
 ### Features / Enhancements
