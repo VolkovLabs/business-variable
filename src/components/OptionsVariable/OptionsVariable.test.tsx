@@ -418,4 +418,66 @@ describe('Options Variable', () => {
       expect.anything()
     );
   });
+
+  it('Should add custom options and not repeat available options ', () => {
+    render(
+      getComponent({
+        variable: {
+          multi: true,
+          current: {
+            value: ['hello', 'world', 'test'],
+          },
+          options: [
+            { text: 'test', value: 'test' },
+            { text: 'test-2', value: 'test-2' },
+          ],
+        } as any,
+        customValue: true,
+      })
+    );
+
+    /**
+     * Check if select has custom options based on values
+     */
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        allowCustomValue: true,
+        value: ['hello', 'world', 'test'],
+        options: [
+          { label: 'test', value: 'test' },
+          { label: 'test-2', value: 'test-2' },
+          { label: 'hello', value: 'hello' },
+          { label: 'world', value: 'world' },
+        ],
+      }),
+      expect.anything()
+    );
+  });
+
+  it('Should not allow add custom options if customValue disabled', () => {
+    render(
+      getComponent({
+        variable: {
+          multi: true,
+          current: {
+            value: ['hello', 'world'],
+          },
+          options: [],
+        } as any,
+        customValue: false,
+      })
+    );
+
+    /**
+     * Check if select has custom options based on values
+     */
+    expect(Select).toHaveBeenCalledWith(
+      expect.objectContaining({
+        allowCustomValue: false,
+        value: [],
+        options: [],
+      }),
+      expect.anything()
+    );
+  });
 });
