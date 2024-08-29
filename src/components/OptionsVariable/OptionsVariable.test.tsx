@@ -439,7 +439,7 @@ describe('Options Variable', () => {
     expect(Select).toHaveBeenCalledWith(
       expect.objectContaining({
         allowCustomValue: false,
-        value: ['hello', 'world'],
+        value: [],
         options: [],
       }),
       expect.anything()
