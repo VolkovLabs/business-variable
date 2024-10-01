@@ -17,12 +17,35 @@ type Props = React.ComponentProps<typeof Table>;
  * Return useVirtualizer with "options"
  * to reproduce the correct behavior in the tests
  */
-jest.mock('@tanstack/react-virtual', () => ({
-  ...jest.requireActual('@tanstack/react-virtual'),
-  useVirtualizer: jest.fn((options) => ({
-    ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
-  })),
-}));
+const virtualItems = (options: any) => {
+  const size = 38;
+  return Array.from({ length: options.count }, (v, index) => {
+    const start = index * size;
+    return {
+      index: index,
+      start: start,
+      size: size,
+      end: start + size,
+      key: index,
+      lane: 0,
+    };
+  });
+};
+
+jest.mock('@tanstack/react-virtual', () => {
+  const originalModule = jest.requireActual('@tanstack/react-virtual');
+
+  return {
+    ...originalModule,
+    useVirtualizer: jest.fn((options) => {
+      const originalVirtualizer = originalModule.useVirtualizer(options);
+      return {
+        ...originalVirtualizer,
+        getVirtualItems: jest.fn(() => virtualItems(options)),
+      };
+    }),
+  };
+});
 
 /**
  * Test Ids only for tests
