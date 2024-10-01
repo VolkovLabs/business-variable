@@ -69,7 +69,25 @@ describe('Table', () => {
   });
   const selectors = getSelectors(screen);
 
-  it('Should render all levels', () => {
+  beforeAll(() => {
+    /**
+     * mock getBoundingClientRect
+     */
+    const mockGetBoundingClientRect = jest.fn(() => ({
+      width: 120,
+      height: 120,
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+    }));
+
+    Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
+      value: mockGetBoundingClientRect,
+    });
+  });
+
+  it('Should render all levels', async () => {
     const data: any = [
       {
         value: '1',
