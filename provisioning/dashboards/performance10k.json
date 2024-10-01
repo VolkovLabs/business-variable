@@ -18,10 +18,271 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "datasource": {
+        "default": true,
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapseRows": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": true,
+        "groups": [
+          {
+            "items": [
+              {
+                "name": "category",
+                "source": "A"
+              },
+              {
+                "name": "state",
+                "source": "A"
+              },
+              {
+                "name": "city",
+                "source": "A"
+              },
+              {
+                "name": "device",
+                "source": "A"
+              }
+            ],
+            "name": "Tree"
+          }
+        ],
+        "header": true,
+        "name": "value",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "Device"
+      },
+      "pluginVersion": "3.5.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "P1D2C73DC01F2359B"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "category",
+                "type": "string",
+                "values": []
+              },
+              {
+                "config": {},
+                "name": "device",
+                "type": "string",
+                "values": []
+              },
+              {
+                "config": {},
+                "name": "city",
+                "type": "string",
+                "values": []
+              },
+              {
+                "config": {},
+                "name": "state",
+                "type": "string",
+                "values": []
+              }
+            ],
+            "meta": {
+              "custom": {
+                "customCode": "const array = Array.from({ length: 10000 }, (v, i) => `${i + 1}`);\n\nconst result = {\n  ...frame,\n  fields: frame.fields.map((field) => ({\n    ...field,\n    values: array.map((item) => {\n      if (field.name === 'category') {\n        return `Category ${item[0]}`\n      }\n\n      if (field.name === 'city') {\n        return `city ${item[0]}`\n      }\n\n      if (field.name === 'state') {\n        return `state ${item}`\n      }\n\n      return item;\n    })\n  }))\n}\n\nreturn Promise.resolve(result);",
+                "valuesEditor": "custom"
+              }
+            }
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Tree View Updated",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapseRows": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": true,
+        "groups": [
+          {
+            "items": [
+              {
+                "name": "category",
+                "source": "A"
+              },
+              {
+                "name": "device",
+                "source": "A"
+              }
+            ],
+            "name": "Tree"
+          }
+        ],
+        "header": true,
+        "name": "value",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "Device"
+      },
+      "pluginVersion": "3.5.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "P1D2C73DC01F2359B"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "category",
+                "type": "string",
+                "values": []
+              },
+              {
+                "config": {},
+                "name": "device",
+                "type": "string",
+                "values": []
+              }
+            ],
+            "meta": {
+              "custom": {
+                "customCode": "const array = Array.from({ length: 10000 }, (v, i) => `${i + 1}`);\n\nconst result = {\n  ...frame,\n  fields: frame.fields.map((field) => ({\n    ...field,\n    values: array.map((item) => {\n      if (field.name === 'category') {\n        return `Category ${item[0]}`\n      }\n\n      if (field.name === 'city') {\n        return `city ${item[0]}`\n      }\n\n      if (field.name === 'state') {\n        return `state ${item}`\n      }\n\n      return item;\n    })\n  }))\n}\n\nreturn Promise.resolve(result);",
+                "valuesEditor": "custom"
+              }
+            }
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Tree View",
+      "type": "volkovlabs-variable-panel"
+    },
     {
       "datasource": {
         "type": "marcusolsson-static-datasource",
@@ -29,6 +290,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -49,7 +316,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 11
       },
       "id": 1,
       "options": {
@@ -60,7 +327,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "groups": [],
@@ -76,8 +350,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device"
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "datasource": {
@@ -113,111 +389,12 @@
       },
       "fieldConfig": {
         "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 18,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "alwaysVisibleFilter": false,
-        "autoScroll": false,
-        "collapseRows": false,
-        "collapsedByDefault": false,
-        "customValue": false,
-        "displayMode": "table",
-        "emptyValue": false,
-        "favorites": false,
-        "filter": false,
-        "groupSelection": true,
-        "groups": [
-          {
-            "items": [
-              {
-                "name": "category",
-                "source": "A"
-              },
-              {
-                "name": "device",
-                "source": "A"
-              }
-            ],
-            "name": "Tree"
-          }
-        ],
-        "header": true,
-        "name": "value",
-        "padding": 10,
-        "persistent": false,
-        "saveSelectedGroup": false,
-        "saveSelectedGroupKey": "",
-        "showGroupTotal": false,
-        "showLabel": false,
-        "showName": false,
-        "showResetButton": false,
-        "showTotal": false,
-        "statusSort": false,
-        "sticky": false,
-        "variable": "Device"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "P1D2C73DC01F2359B"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "category",
-                "type": "string",
-                "values": []
-              },
-              {
-                "config": {},
-                "name": "device",
-                "type": "string",
-                "values": []
-              }
-            ],
-            "meta": {
-              "custom": {
-                "customCode": "const array = Array.from({ length: 10000 }, (v, i) => `${i + 1}`);\n\nconst result = {\n  ...frame,\n  fields: frame.fields.map((field) => ({\n    ...field,\n    values: array.map((item) => {\n      if (field.name === 'category') {\n        return `Category ${item[0]}`\n      }\n\n      return item;\n    })\n  }))\n}\n\nreturn Promise.resolve(result);",
-                "valuesEditor": "custom"
-              }
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
             }
           },
-          "refId": "A"
-        }
-      ],
-      "title": "Tree View",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -235,10 +412,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 8
+        "x": 12,
+        "y": 11
       },
       "id": 3,
       "options": {
@@ -249,7 +426,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": true,
         "groups": [
@@ -280,8 +464,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "Device"
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "datasource": {
@@ -4863,6 +5049,84 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "1",
+          "value": "1"
+        },
+        "datasource": {
+          "type": "marcusolsson-static-datasource",
+          "uid": "P1D2C73DC01F2359B"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "State",
+        "multi": false,
+        "name": "state",
+        "options": [],
+        "query": {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "value",
+                "type": "string",
+                "values": [""]
+              }
+            ],
+            "meta": {
+              "custom": {
+                "customCode": "const array = Array.from({ length: 10000 }, (v, i) => `${i + 1}`)\n\nconst result = {\n  ...frame,\n  fields: frame.fields.map((field) => ({\n    ...field,\n    values: array\n  }))\n}\n\nreturn Promise.resolve(result);",
+                "valuesEditor": "custom"
+              }
+            }
+          }
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "1",
+          "value": "1"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "City",
+        "multi": false,
+        "name": "city",
+        "options": [],
+        "query": {
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "value",
+                "type": "string",
+                "values": []
+              }
+            ],
+            "meta": {
+              "custom": {
+                "customCode": "const array = Array.from({ length: 10000 }, (v, i) => `${i + 1}`)\n\nconst result = {\n  ...frame,\n  fields: frame.fields.map((field) => ({\n    ...field,\n    values: array\n  }))\n}\n\nreturn Promise.resolve(result);",
+                "valuesEditor": "custom"
+              }
+            }
+          }
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -4874,6 +5138,6 @@
   "timezone": "",
   "title": "Performance 10k",
   "uid": "f466c7e1-e1cb-422d-8ab0-9f34fb87688d",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }
