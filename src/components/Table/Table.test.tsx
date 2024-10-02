@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { Table } from './Table';
@@ -12,11 +12,6 @@ import { Table } from './Table';
  */
 type Props = React.ComponentProps<typeof Table>;
 
-/**
- * Mock the useVirtualizer hook partially
- * Return useVirtualizer with "options"
- * to reproduce the correct behavior in the tests
- */
 jest.mock('@tanstack/react-virtual', () => ({
   ...jest.requireActual('@tanstack/react-virtual'),
   useVirtualizer: jest.fn((options) => ({
@@ -39,7 +34,17 @@ describe('Table', () => {
    * @constructor
    */
   const Wrapper = (props: any) => {
+    const [, setCounter] = useState(0);
     const ref = useRef<HTMLDivElement>(null);
+
+    /**
+     * Scroll Element is null on the first render so trigger re-render
+     * https://github.com/TanStack/virtual/issues/641#issuecomment-1952265017
+     */
+    useEffect(() => {
+      setCounter(1);
+    }, []);
+
     return (
       <div ref={ref}>
         <Table scrollableContainerRef={ref} {...props} />
@@ -69,7 +74,25 @@ describe('Table', () => {
   });
   const selectors = getSelectors(screen);
 
-  it('Should render all levels', () => {
+  /**
+   * Mock element size to make virtual items are visible
+   */
+  beforeAll(() => {
+    const mockGetBoundingClientRect = jest.fn(() => ({
+      width: 120,
+      height: 120,
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+    }));
+
+    Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
+      value: mockGetBoundingClientRect,
+    });
+  });
+
+  it('Should render all levels', async () => {
     const data: any = [
       {
         value: '1',

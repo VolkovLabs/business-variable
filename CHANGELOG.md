@@ -1,10 +1,12 @@
 # Change Log
 
-## 3.5.0 (IN PROGRESS)
+## 3.5.0 (2024-10-02)
 
 ### Features / Enhancements
 
 - Updated select variable on Minimize view (#197)
+- Updated @tanstack/virtual to the latest version (#207)
+- Updated to Grafana 11.2.2 and dependencies (#207)
 
 ## 3.4.0 (2024-08-23)
 
