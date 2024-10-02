@@ -46,7 +46,7 @@ describe('Table', () => {
     }, []);
 
     return (
-      <div ref={ref} style={{ height: 200 }}>
+      <div ref={ref}>
         <Table scrollableContainerRef={ref} {...props} />
       </div>
     );
