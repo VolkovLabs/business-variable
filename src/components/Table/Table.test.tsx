@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { Table } from './Table';
@@ -12,40 +12,12 @@ import { Table } from './Table';
  */
 type Props = React.ComponentProps<typeof Table>;
 
-/**
- * Mock the useVirtualizer hook partially
- * Return useVirtualizer with "options"
- * to reproduce the correct behavior in the tests
- */
-const virtualItems = (options: any) => {
-  const size = 38;
-  return Array.from({ length: options.count }, (v, index) => {
-    const start = index * size;
-    return {
-      index: index,
-      start: start,
-      size: size,
-      end: start + size,
-      key: index,
-      lane: 0,
-    };
-  });
-};
-
-jest.mock('@tanstack/react-virtual', () => {
-  const originalModule = jest.requireActual('@tanstack/react-virtual');
-
-  return {
-    ...originalModule,
-    useVirtualizer: jest.fn((options) => {
-      const originalVirtualizer = originalModule.useVirtualizer(options);
-      return {
-        ...originalVirtualizer,
-        getVirtualItems: jest.fn(() => virtualItems(options)),
-      };
-    }),
-  };
-});
+jest.mock('@tanstack/react-virtual', () => ({
+  ...jest.requireActual('@tanstack/react-virtual'),
+  useVirtualizer: jest.fn((options) => ({
+    ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
+  })),
+}));
 
 /**
  * Test Ids only for tests
@@ -62,9 +34,19 @@ describe('Table', () => {
    * @constructor
    */
   const Wrapper = (props: any) => {
+    const [, setCounter] = useState(0);
     const ref = useRef<HTMLDivElement>(null);
+
+    /**
+     * Scroll Element is null on the first render so trigger re-render
+     * https://github.com/TanStack/virtual/issues/641#issuecomment-1952265017
+     */
+    useEffect(() => {
+      setCounter(1);
+    }, []);
+
     return (
-      <div ref={ref}>
+      <div ref={ref} style={{ height: 200 }}>
         <Table scrollableContainerRef={ref} {...props} />
       </div>
     );
@@ -92,10 +74,10 @@ describe('Table', () => {
   });
   const selectors = getSelectors(screen);
 
+  /**
+   * Mock element size to make virtual items are visible
+   */
   beforeAll(() => {
-    /**
-     * mock getBoundingClientRect
-     */
     const mockGetBoundingClientRect = jest.fn(() => ({
       width: 120,
       height: 120,
