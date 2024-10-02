@@ -1,8 +1,8 @@
-# Business Variable Panel for Grafana
+# Business Variable for Grafana
 
 ![Dashboard](https://github.com/VolkovLabs/business-variable/raw/main/src/img/dashboard.png)
 
-![Grafana](https://img.shields.io/badge/Grafana-11.0-orange)
+![Grafana](https://img.shields.io/badge/Grafana-11.2-orange)
 ![CI](https://github.com/volkovlabs/business-variable/workflows/CI/badge.svg)
 ![E2E](https://github.com/volkovlabs/business-variable/workflows/E2E/badge.svg)
 [![codecov](https://codecov.io/gh/VolkovLabs/business-variable/branch/main/graph/badge.svg)](https://codecov.io/gh/VolkovLabs/business-variable)
@@ -49,6 +49,7 @@ grafana-cli plugins install volkovlabs-variable-panel
 | [Data Flow](https://volkovlabs.io/plugins/business-variable/data-flow/)   | Explains the Business Variable data flow |
 | [Display Modes](https://volkovlabs.io/plugins/business-variable/layout/)  | Explains different display modes         |
 | [Features](https://volkovlabs.io/plugins/business-variable/features/)     | Explains panel features                  |
+| [Tutorials](https://volkovlabs.io/plugins/business-variable/tutorials/)   | Easy to follow tutorials                 |
 | [Release Notes](https://volkovlabs.io/plugins/business-variable/release/) | The latest features and updates          |
 
 ## Business Suite for Grafana
