@@ -560,7 +560,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: [],
           getOptions: async (context) => {
-            console.log('context', context);
             return variableOptions.filter((option) => option.label !== context.options.variable);
           },
           isClearable: true,
