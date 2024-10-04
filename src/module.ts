@@ -1,4 +1,11 @@
-import { Field, FieldConfigProperty, FieldType, identityOverrideProcessor, PanelPlugin } from '@grafana/data';
+import {
+  Field,
+  FieldConfigProperty,
+  FieldType,
+  identityOverrideProcessor,
+  PanelPlugin,
+  TypedVariableModel,
+} from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 
 import {
@@ -14,12 +21,14 @@ import {
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
   COLLAPSED_BY_DEFAULT_OPTIONS,
+  DATE_TIME_FORMAT_OPTIONS,
   DISPLAY_MODE_OPTIONS,
   FAVORITES_ENABLED_OPTIONS,
   FAVORITES_STORAGE_OPTIONS,
   FILTER_OPTIONS,
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
+  MINIMIZE_DISPLAY_MODE_OPTIONS,
   PERSISTENT_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
@@ -29,9 +38,18 @@ import {
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
   TABS_ORDER_OPTIONS,
+  TIME_TRANSFORMATION_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
-import { DisplayMode, FavoritesStorage, PanelOptions, StatusStyleMode } from './types';
+import {
+  DateTimeFormat,
+  DisplayMode,
+  FavoritesStorage,
+  MinimizeDisplayMode,
+  PanelOptions,
+  StatusStyleMode,
+  VariableType,
+} from './types';
 
 /**
  * Panel Plugin
@@ -80,6 +98,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       label: vr.name,
       value: vr.name,
     }));
+    const getCurrentVariable = (config: PanelOptions) =>
+      variables.find((variable) => variable.name === config.variable);
 
     /**
      * Visibility
@@ -94,6 +114,11 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       config.header &&
       config.favorites.enabled &&
       config.favorites.storage === FavoritesStorage.DATASOURCE;
+    const isDateTimePickerMode = (config: PanelOptions, variable?: TypedVariableModel) =>
+      variable &&
+      variable.type === VariableType.TEXTBOX &&
+      config.displayMode === DisplayMode.MINIMIZE &&
+      config.minimizeDisplayMode === MinimizeDisplayMode.DATE_TIME_PICKER;
 
     /**
      * Common Options
@@ -296,6 +321,48 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         category: ['Layout'],
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
       })
+      .addRadio({
+        path: 'minimizeDisplayMode',
+        name: 'Minimize display mode',
+        description: 'Set the display mode for the variable of the “Text box" type',
+        settings: {
+          options: MINIMIZE_DISPLAY_MODE_OPTIONS,
+        },
+        defaultValue: MinimizeDisplayMode.TEXT,
+        category: ['Layout'],
+        showIf: (config) => {
+          const variable = getCurrentVariable(config);
+          return variable && variable.type === VariableType.TEXTBOX && config.displayMode === DisplayMode.MINIMIZE;
+        },
+      })
+      .addRadio({
+        path: 'isUseLocalTime',
+        name: 'Time Zone',
+        description: 'Transform to UTC or use local',
+        settings: {
+          options: TIME_TRANSFORMATION_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => {
+          const variable = getCurrentVariable(config);
+          return isDateTimePickerMode(config, variable);
+        },
+      })
+      .addRadio({
+        path: 'dateTimeFormat',
+        name: 'Value format',
+        description: 'Value result format',
+        settings: {
+          options: DATE_TIME_FORMAT_OPTIONS,
+        },
+        defaultValue: DateTimeFormat.ISO_STRING,
+        category: ['Layout'],
+        showIf: (config) => {
+          const variable = getCurrentVariable(config);
+          return isDateTimePickerMode(config, variable);
+        },
+      })
       .addCustomEditor({
         id: 'groups',
         path: 'groups',
@@ -493,6 +560,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: [],
           getOptions: async (context) => {
+            console.log('context', context);
             return variableOptions.filter((option) => option.label !== context.options.variable);
           },
           isClearable: true,

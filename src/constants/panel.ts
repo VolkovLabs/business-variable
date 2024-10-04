@@ -1,4 +1,6 @@
-import { DisplayMode, FavoritesStorage } from '../types';
+import { SelectableValue } from '@grafana/data';
+
+import { DateTimeFormat, DisplayMode, FavoritesStorage, MinimizeDisplayMode } from '../types';
 
 /**
  * Display Mode Options
@@ -8,6 +10,14 @@ export const DISPLAY_MODE_OPTIONS = [
   { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Minimized select view.' },
   { value: DisplayMode.BUTTON, label: 'Button', description: 'Button select view.' },
   { value: DisplayMode.SLIDER, label: 'Slider', description: 'Slider select view.' },
+];
+
+/**
+ * Minimize Display Mode Options
+ */
+export const MINIMIZE_DISPLAY_MODE_OPTIONS = [
+  { value: MinimizeDisplayMode.TEXT, label: 'Text Input' },
+  { value: MinimizeDisplayMode.DATE_TIME_PICKER, label: 'Date Time Picker' },
 ];
 
 /**
@@ -172,6 +182,29 @@ export const SHOW_RESET_BUTTON_OPTIONS = [
   { value: false, label: 'Disabled', description: 'Do not show reset button.' },
 ];
 
+/**
+ * Time Transformation Options
+ */
+export const TIME_TRANSFORMATION_OPTIONS: SelectableValue[] = [
+  {
+    description: 'UTC',
+    label: 'UTC',
+    value: false,
+  },
+  {
+    description: 'Local',
+    label: 'Local',
+    value: true,
+  },
+];
+
+/**
+ * Date Time format Options
+ */
+export const DATE_TIME_FORMAT_OPTIONS = [
+  { value: DateTimeFormat.ISO_STRING, label: 'ISO String' },
+  { value: DateTimeFormat.TIMESTAMP, label: 'Timestamp' },
+];
 /**
  * Auto Save timeout ms
  */

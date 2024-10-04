@@ -59,6 +59,9 @@ export const TEST_IDS = {
   textVariable: {
     root: 'data-testid text-variable',
   },
+  dateTimePicker: {
+    root: 'data-testid date-time-picker',
+  },
   buttonView: {
     root: 'data-testid button-view',
     noVariableMessage: 'data-testid button-view no-variable-message',

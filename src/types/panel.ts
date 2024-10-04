@@ -11,6 +11,22 @@ export enum DisplayMode {
 }
 
 /**
+ * Minimize Display Mode
+ */
+export enum MinimizeDisplayMode {
+  TEXT = 'text',
+  DATE_TIME_PICKER = 'dateTimePicker',
+}
+
+/**
+ * Date Time Picker selected result
+ */
+export enum DateTimeFormat {
+  ISO_STRING = 'isoString',
+  TIMESTAMP = 'timestamp',
+}
+
+/**
  * Data Source Config
  */
 export interface DatasourceConfig {
@@ -345,6 +361,27 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   tabsInOrder: boolean;
+
+  /**
+   * Text box Variable display mode
+   *
+   * @type {MinimizeDisplayMode}
+   */
+  minimizeDisplayMode: MinimizeDisplayMode;
+
+  /**
+   * Is Transform to UTC or use local
+   *
+   * @type {boolean}
+   */
+  isUseLocalTime: boolean;
+
+  /**
+   * Save the result of date time picker
+   *
+   * @type {DateTimeFormat}
+   */
+  dateTimeFormat: DateTimeFormat;
 }
 
 /**

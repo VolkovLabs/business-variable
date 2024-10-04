@@ -1,11 +1,31 @@
+import { DateTime, dateTime } from '@grafana/data';
 import React from 'react';
 
 const actual = jest.requireActual('@grafana/ui');
 
 /**
+ * Mock DatetimePicker component
+ */
+const DateTimePickerMock = ({ onChange, date, ...restProps }: any) => {
+  return (
+    <input
+      data-testid={restProps['data-testid']}
+      value={(date as DateTime).toString()}
+      onChange={(event) => {
+        if (onChange) {
+          onChange(dateTime(event.target.value));
+        }
+      }}
+    />
+  );
+};
+
+const DateTimePicker = jest.fn(DateTimePickerMock);
+
+/**
  * Mock Select component
  */
-const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => {
+const SelectMock = ({ options, onChange, value, isMulti, ...restProps }: any) => {
   const selectProps: any = {};
 
   if (restProps['aria-label']) {
@@ -38,22 +58,36 @@ const Select = jest.fn(({ options, onChange, value, isMulti, ...restProps }) => 
       ))}
     </select>
   );
-});
+};
+
+const Select = jest.fn(SelectMock);
 
 /**
  * Mock Button Row Toolbar
  */
-const ToolbarButtonRow = jest.fn(({ leftItems, children }) => {
+const ToolbarButtonRowMock = ({ leftItems, children }: any) => {
   return (
     <>
       {leftItems}
       {children}
     </>
   );
+};
+
+const ToolbarButtonRow = jest.fn(ToolbarButtonRowMock);
+
+/**
+ * Set mocks
+ */
+beforeEach(() => {
+  Select.mockImplementation(SelectMock);
+  DateTimePicker.mockImplementation(DateTimePickerMock);
+  ToolbarButtonRow.mockImplementation(ToolbarButtonRowMock);
 });
 
 module.exports = {
   ...actual,
   ToolbarButtonRow,
   Select,
+  DateTimePicker,
 };

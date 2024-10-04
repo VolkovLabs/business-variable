@@ -5,7 +5,8 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
-import { PanelOptions, VariableType } from '../../types';
+import { DateTimeFormat, MinimizeDisplayMode, PanelOptions, VariableType } from '../../types';
+import { DateTimeSelector } from '../DateTimeSelector';
 import { OptionsVariable } from '../OptionsVariable';
 import { TextVariable } from '../TextVariable';
 import { getStyles } from './MinimizeView.styles';
@@ -33,6 +34,11 @@ interface Props {
    * Panel Event Bus
    */
   panelEventBus: EventBus;
+
+  /**
+   * Time zone of the current dashboard
+   */
+  timeZone: string;
 }
 
 /**
@@ -48,7 +54,11 @@ export const MinimizeView: React.FC<Props> = ({
     showLabel = false,
     labelWidth,
     maxVisibleValues,
+    minimizeDisplayMode = MinimizeDisplayMode.TEXT,
+    isUseLocalTime = false,
+    dateTimeFormat = DateTimeFormat.ISO_STRING,
   } = {},
+  timeZone,
   eventBus,
   panelEventBus,
 }) => {
@@ -98,7 +108,19 @@ export const MinimizeView: React.FC<Props> = ({
               maxVisibleValues={maxVisibleValues}
             />
           )}
-          {variable.type === VariableType.TEXTBOX && <TextVariable variable={variable} panelEventBus={panelEventBus} />}
+          {variable.type === VariableType.TEXTBOX && minimizeDisplayMode === MinimizeDisplayMode.TEXT && (
+            <TextVariable variable={variable} panelEventBus={panelEventBus} />
+          )}
+          {variable.type === VariableType.TEXTBOX && minimizeDisplayMode === MinimizeDisplayMode.DATE_TIME_PICKER && (
+            <DateTimeSelector
+              variable={variable}
+              persistent={persistent}
+              panelEventBus={panelEventBus}
+              timeZone={timeZone}
+              isUseLocalTime={isUseLocalTime}
+              dateTimeFormat={dateTimeFormat}
+            />
+          )}
         </>
       </InlineField>
     </div>
