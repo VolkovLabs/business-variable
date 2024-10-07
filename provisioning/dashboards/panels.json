@@ -24,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -844,8 +845,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -935,8 +935,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1026,8 +1025,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1098,8 +1096,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1189,8 +1186,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1289,7 +1285,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -1361,7 +1357,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["mykey", "anotherkey"],
           "value": ["myvalue", "anothervalue"]
         },
@@ -1392,7 +1388,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["Device1"],
           "value": ["Device1"]
         },
@@ -1599,8 +1595,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Sample swwasw",
-          "value": "Sample swwasw"
+          "text": "Sample",
+          "value": "Sample"
         },
         "hide": 0,
         "name": "text",
@@ -1611,7 +1607,7 @@
             "value": "Sample Text"
           }
         ],
-        "query": "Sample swwasw",
+        "query": "Sample",
         "skipUrlSync": false,
         "type": "textbox"
       }
@@ -1625,6 +1621,6 @@
   "timezone": "",
   "title": "Panels",
   "uid": "O4tc_E6Gz",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
