@@ -202,7 +202,7 @@ describe('Table', () => {
     expect(selectors.cell(true, '2-2', 1)).not.toBeInTheDocument();
   });
 
-  it('Should render favorites button for cell in favorites enable and variable with textbox type', async () => {
+  it('Should render favorites button for cell if favorites enable and input for variable with textbox type', async () => {
     render(
       getComponent({
         showHeader: true,
