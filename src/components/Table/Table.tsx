@@ -1,6 +1,9 @@
 import { cx } from '@emotion/css';
+import { EventBus } from '@grafana/data';
 import { Button, useStyles2 } from '@grafana/ui';
 import {
+  Cell,
+  CellContext,
   ColumnDef,
   ColumnFiltersState,
   ExpandedState,
@@ -17,7 +20,8 @@ import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'rea
 import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
-import { TableItem } from '../../types';
+import { TableItem, VariableType } from '../../types';
+import { TextVariable } from '../TextVariable';
 import { Filter } from './Filter';
 import { getStyles } from './Table.styles';
 
@@ -111,6 +115,11 @@ interface Props<TTableData extends TableItem> {
    * @type {boolean}
    */
   collapsedByDefault: boolean;
+
+  /**
+   * Panel Event Bus
+   */
+  eventBus: EventBus;
 }
 
 /**
@@ -133,6 +142,7 @@ export const Table = <TTableData extends TableItem>({
   shouldScroll,
   onAfterScroll,
   collapsedByDefault,
+  eventBus,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -213,6 +223,19 @@ export const Table = <TTableData extends TableItem>({
     }
   }, [autoScroll, firstSelectedRowIndex, data, rowVirtualizer, rows, isFocused, shouldScroll, onAfterScroll]);
 
+  /**
+   * Render Cell
+   */
+  const renderCell = (cell: Cell<TTableData, unknown>, context: CellContext<TTableData, unknown>) => {
+    if (cell.row.original.variable?.type === VariableType.TEXTBOX) {
+      if (cell.id.includes('isFavorite')) {
+        return flexRender(cell.column.columnDef.cell, context);
+      }
+      return <TextVariable variable={cell.row.original.variable} panelEventBus={eventBus} />;
+    }
+    return flexRender(cell.column.columnDef.cell, context);
+  };
+
   return (
     <table className={cx(styles.table, className)} ref={tableRef}>
       {showHeader && (
@@ -284,7 +307,7 @@ export const Table = <TTableData extends TableItem>({
               {row.getVisibleCells().map((cell) => {
                 return (
                   <td data-index={virtualRow.index} ref={rowVirtualizer.measureElement} key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {renderCell(cell, cell.getContext())}
                   </td>
                 );
               })}
