@@ -5,6 +5,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
+import { VariableType } from '../../types';
 import { Table } from './Table';
 
 /**
@@ -70,6 +71,7 @@ describe('Table', () => {
    */
   const getSelectors = getJestSelectors({
     ...TEST_IDS.table,
+    ...TEST_IDS.textVariable,
     ...InTestIds,
   });
   const selectors = getSelectors(screen);
@@ -198,6 +200,58 @@ describe('Table', () => {
     expect(selectors.cell(true, '1-2', 1)).not.toBeInTheDocument();
     expect(selectors.cell(true, '2-1', 1)).not.toBeInTheDocument();
     expect(selectors.cell(true, '2-2', 1)).not.toBeInTheDocument();
+  });
+
+  it('Should render favorites button for cell if favorites enable and input for variable with textbox type', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+          {
+            id: 'isFavorite',
+            header: '',
+            accessorKey: 'isFavorite',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as boolean;
+              return <span data-testid={InTestIds.favoriteCell(row.original.value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [
+          {
+            value: 'device1',
+            isFavorite: true,
+            variable: {
+              type: VariableType.TEXTBOX,
+              id: 'test',
+              current: { selected: false, current: 'test value', value: 'test value' },
+            },
+          },
+        ] as any,
+      })
+    );
+
+    /**
+     * Check Filter presence
+     */
+    expect(selectors.favoritesFilter()).toBeInTheDocument();
+
+    /**
+     * Show textbox input instead table cell
+     */
+    expect(selectors.cell(true, 'device1', 0)).not.toBeInTheDocument();
+    expect(selectors.root()).toBeInTheDocument();
   });
 
   it('Should render all groups expanded by default', () => {

@@ -4,7 +4,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import React, { useCallback, useMemo } from 'react';
 
 import { getStyles } from '../components/TableView/TableView.styles';
-import { TextVariable } from '../components/TextVariable';
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
 import { Level, PanelOptions, RuntimeVariable, StatusStyleMode, TableItem, VariableType } from '../types';
 import {
@@ -482,10 +481,6 @@ export const useTable = ({
                   )}
                 </label>
               )}
-
-              {runtimeVariable?.type === VariableType.TEXTBOX && (
-                <TextVariable variable={runtimeVariable} panelEventBus={eventBus} />
-              )}
             </div>
           );
         },
@@ -550,7 +545,6 @@ export const useTable = ({
     theme,
     tableData,
     onChange,
-    eventBus,
     onClick,
     favorites,
   ]);
