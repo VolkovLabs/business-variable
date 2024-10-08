@@ -323,7 +323,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'minimizeOutputFormat',
         name: 'Minimize output format',
-        description: 'Set the display mode for the variable of the “Text box" type or "Constant" type',
+        description: 'Set the display mode for the variable of the “Text box" or "Constant" type',
         settings: {
           options: MINIMIZE_OUTPUT_FORMAT_OPTIONS,
         },
@@ -341,7 +341,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'isUseLocalTime',
         name: 'Time Zone',
-        description: 'Transform to UTC or use local',
+        description: 'Transform to UTC or use local time zone',
         settings: {
           options: TIME_TRANSFORMATION_OPTIONS,
         },
