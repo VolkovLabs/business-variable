@@ -1,9 +1,9 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
-import { DateTimeFormat } from 'types';
 
 import { TEST_IDS } from '../../constants';
+import { MinimizeOutputFormat } from '../../types';
 import { selectVariableValues } from '../../utils';
 import { DateTimeSelector } from './DateTimeSelector';
 
@@ -115,7 +115,7 @@ describe('Date Time Selector', () => {
         timeZone: 'browser',
         persistent: true,
         isUseLocalTime: true,
-        dateTimeFormat: DateTimeFormat.TIMESTAMP,
+        minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
       })
     );
 
@@ -144,7 +144,7 @@ describe('Date Time Selector', () => {
         timeZone: 'browser',
         persistent: true,
         isUseLocalTime: true,
-        dateTimeFormat: DateTimeFormat.ISO_STRING,
+        minimizeOutputFormat: MinimizeOutputFormat.DATE,
       })
     );
 
