@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Updated behavior in table view for Textbox variable type (#211)
+- Added Date Time Selector (#209)
 
 ## 3.5.0 (2024-10-02)
 
