@@ -13,9 +13,9 @@ export const DISPLAY_MODE_OPTIONS = [
 ];
 
 /**
- * Minimize Display Mode Options
+ * Minimize Output Format Options
  */
-export const MINIMIZE_DISPLAY_MODE_OPTIONS = [
+export const MINIMIZE_OUTPUT_FORMAT_OPTIONS = [
   { value: MinimizeOutputFormat.TEXT, label: 'Text' },
   { value: MinimizeOutputFormat.DATE, label: 'ISO string' },
   { value: MinimizeOutputFormat.TIMESTAMP, label: 'Timestamp' },

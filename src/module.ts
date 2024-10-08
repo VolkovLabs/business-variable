@@ -27,7 +27,7 @@ import {
   FILTER_OPTIONS,
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
-  MINIMIZE_DISPLAY_MODE_OPTIONS,
+  MINIMIZE_OUTPUT_FORMAT_OPTIONS,
   PERSISTENT_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
@@ -325,7 +325,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Minimize output format',
         description: 'Set the display mode for the variable of the “Text box" type or "Constant" type',
         settings: {
-          options: MINIMIZE_DISPLAY_MODE_OPTIONS,
+          options: MINIMIZE_OUTPUT_FORMAT_OPTIONS,
         },
         defaultValue: MinimizeOutputFormat.TEXT,
         category: ['Layout'],
