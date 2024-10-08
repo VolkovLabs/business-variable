@@ -132,10 +132,22 @@ describe('Minimize View', () => {
           },
         }) as any
     );
-    render(
+
+    const { rerender } = render(
       getComponent({
         options: {
           minimizeOutputFormat: MinimizeOutputFormat.DATE,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
+
+    rerender(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
         } as any,
       })
     );
@@ -154,10 +166,22 @@ describe('Minimize View', () => {
           },
         }) as any
     );
-    render(
+
+    const { rerender } = render(
       getComponent({
         options: {
           minimizeOutputFormat: MinimizeOutputFormat.DATE,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
+
+    rerender(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
         } as any,
       })
     );
