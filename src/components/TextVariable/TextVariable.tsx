@@ -13,6 +13,7 @@ interface Props {
   /**
    * Variable
    *
+   * @type {TextBoxVariable | ConstantVariable}
    */
   variable: TextBoxVariable | ConstantVariable;
 
