@@ -4,7 +4,7 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
-import { VariableType } from '../../types';
+import { MinimizeOutputFormat, VariableType } from '../../types';
 import { MinimizeView } from './MinimizeView';
 
 /**
@@ -13,6 +13,7 @@ import { MinimizeView } from './MinimizeView';
 const InTestIds = {
   optionsVariable: 'data-testid options-variable',
   textVariable: 'data-testid text-variable',
+  dateTimeSelector: 'data-testid date-time-selector',
 };
 
 /**
@@ -27,6 +28,13 @@ jest.mock('../OptionsVariable', () => ({
  */
 jest.mock('../TextVariable', () => ({
   TextVariable: jest.fn(() => <div data-testid={InTestIds.textVariable} />),
+}));
+
+/**
+ * Mock Text Variable
+ */
+jest.mock('../DateTimeSelector', () => ({
+  DateTimeSelector: jest.fn(() => <div data-testid={InTestIds.dateTimeSelector} />),
 }));
 
 /**
@@ -112,6 +120,74 @@ describe('Minimize View', () => {
 
     expect(selectors.root()).toBeInTheDocument();
     expect(selectors.textVariable()).toBeInTheDocument();
+  });
+
+  it('Should show variable control for text box type and Date Time Picker view', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.TEXTBOX,
+          },
+        }) as any
+    );
+
+    const { rerender } = render(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.DATE,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
+
+    rerender(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
+  });
+
+  it('Should show variable control for constant type and Date Time Picker view', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            label: '123',
+            type: VariableType.CONSTANT,
+          },
+        }) as any
+    );
+
+    const { rerender } = render(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.DATE,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
+
+    rerender(
+      getComponent({
+        options: {
+          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.dateTimeSelector()).toBeInTheDocument();
   });
 
   it('Should show variable label', () => {

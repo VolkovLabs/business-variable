@@ -1,7 +1,7 @@
 import { Field, FieldType, PanelPlugin } from '@grafana/data';
 
 import { plugin } from './module';
-import { DisplayMode, PanelOptions } from './types';
+import { DisplayMode, FavoritesStorage, MinimizeOutputFormat, PanelOptions, VariableType } from './types';
 import { createPanelOptions } from './utils';
 
 /**
@@ -12,10 +12,21 @@ type TestField = Pick<Field, 'name' | 'type'>;
 /**
  * Mock @grafana/runtime
  */
+const variablesMock = [
+  {
+    name: 'textBox',
+    type: VariableType.TEXTBOX,
+  },
+  {
+    name: 'constant',
+    type: VariableType.CONSTANT,
+  },
+];
+
 jest.mock('@grafana/runtime', () => ({
   ...jest.requireActual('@grafana/runtime'),
   getTemplateSrv: jest.fn(() => ({
-    getVariables: jest.fn(() => []),
+    getVariables: jest.fn(() => variablesMock),
   })),
 }));
 
@@ -174,6 +185,102 @@ describe('plugin', () => {
       plugin['optionsSupplier'](builder);
 
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['labelWidth']));
+    });
+
+    it('Should show variants for TextBox variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({ variable: 'textBox', displayMode: DisplayMode.MINIMIZE }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
+    });
+
+    it('Should show variants for Constant variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({ variable: 'constant', displayMode: DisplayMode.MINIMIZE }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
+    });
+
+    it('Should show Time options for DateTime picker for TextBox variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            variable: 'textBox',
+            displayMode: DisplayMode.MINIMIZE,
+            minimizeOutputFormat: MinimizeOutputFormat.DATE,
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat', 'isUseLocalTime']));
+    });
+
+    it('Should show Time options for DateTime picker for Constant variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            variable: 'constant',
+            displayMode: DisplayMode.MINIMIZE,
+            minimizeOutputFormat: MinimizeOutputFormat.DATE,
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat', 'isUseLocalTime']));
+    });
+
+    it('Should show options for favorites', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addCustomEditor.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            header: true,
+            displayMode: DisplayMode.TABLE,
+            favorites: {
+              enabled: true,
+              storage: FavoritesStorage.DATASOURCE,
+              addQuery: {},
+              getQuery: {},
+              deleteQuery: {},
+              datasource: 'Static',
+            },
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(
+        expect.arrayContaining([
+          'favorites.datasource',
+          'favorites.getQuery',
+          'favorites.addQuery',
+          'favorites.deleteQuery',
+        ])
+      );
     });
   });
 

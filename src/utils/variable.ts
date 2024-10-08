@@ -190,6 +190,11 @@ export const selectVariableValues = ({
       setVariableValue(runtimeVariable.name, value, panelEventBus);
       return;
     }
+    case VariableType.CONSTANT: {
+      const value = values[0];
+      setVariableValue(runtimeVariable.name, value, panelEventBus);
+      return;
+    }
     default: {
       /**
        * Unsupported variable type
@@ -217,7 +222,7 @@ export const isVariableWithOptions = (
  * @param variable
  */
 export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariable | undefined => {
-  if (variable.type === VariableType.TEXTBOX) {
+  if (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) {
     return variable;
   }
   if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {

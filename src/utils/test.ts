@@ -1,4 +1,4 @@
-import { DisplayMode, FavoritesConfig, FavoritesStorage, PanelOptions } from '../types';
+import { DisplayMode, FavoritesConfig, FavoritesStorage, MinimizeOutputFormat, PanelOptions } from '../types';
 
 /**
  * Create Favorites Config
@@ -49,5 +49,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   statusSort: false,
   collapsedByDefault: false,
   tabsInOrder: false,
+  minimizeOutputFormat: MinimizeOutputFormat.TEXT,
+  isUseLocalTime: false,
   ...options,
 });

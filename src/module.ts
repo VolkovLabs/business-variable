@@ -1,4 +1,11 @@
-import { Field, FieldConfigProperty, FieldType, identityOverrideProcessor, PanelPlugin } from '@grafana/data';
+import {
+  Field,
+  FieldConfigProperty,
+  FieldType,
+  identityOverrideProcessor,
+  PanelPlugin,
+  TypedVariableModel,
+} from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 
 import {
@@ -20,6 +27,7 @@ import {
   FILTER_OPTIONS,
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
+  MINIMIZE_OUTPUT_FORMAT_OPTIONS,
   PERSISTENT_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
@@ -29,9 +37,17 @@ import {
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
   TABS_ORDER_OPTIONS,
+  TIME_TRANSFORMATION_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
-import { DisplayMode, FavoritesStorage, PanelOptions, StatusStyleMode } from './types';
+import {
+  DisplayMode,
+  FavoritesStorage,
+  MinimizeOutputFormat,
+  PanelOptions,
+  StatusStyleMode,
+  VariableType,
+} from './types';
 
 /**
  * Panel Plugin
@@ -80,6 +96,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       label: vr.name,
       value: vr.name,
     }));
+    const getCurrentVariable = (config: PanelOptions) =>
+      variables.find((variable) => variable.name === config.variable);
 
     /**
      * Visibility
@@ -94,6 +112,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       config.header &&
       config.favorites.enabled &&
       config.favorites.storage === FavoritesStorage.DATASOURCE;
+    const isDateTimePickerMode = (config: PanelOptions, variable?: TypedVariableModel) =>
+      (variable &&
+        (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+        config.displayMode === DisplayMode.MINIMIZE &&
+        config.minimizeOutputFormat === MinimizeOutputFormat.DATE) ||
+      config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP;
 
     /**
      * Common Options
@@ -295,6 +319,38 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Layout'],
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
+      })
+      .addRadio({
+        path: 'minimizeOutputFormat',
+        name: 'Minimize output format',
+        description: 'Set the display mode for the variable of the “Text box" or "Constant" type',
+        settings: {
+          options: MINIMIZE_OUTPUT_FORMAT_OPTIONS,
+        },
+        defaultValue: MinimizeOutputFormat.TEXT,
+        category: ['Layout'],
+        showIf: (config) => {
+          const variable = getCurrentVariable(config);
+          return (
+            variable &&
+            (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+            config.displayMode === DisplayMode.MINIMIZE
+          );
+        },
+      })
+      .addRadio({
+        path: 'isUseLocalTime',
+        name: 'Time Zone',
+        description: 'Transform to UTC or use local time zone',
+        settings: {
+          options: TIME_TRANSFORMATION_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Layout'],
+        showIf: (config) => {
+          const variable = getCurrentVariable(config);
+          return isDateTimePickerMode(config, variable);
+        },
       })
       .addCustomEditor({
         id: 'groups',

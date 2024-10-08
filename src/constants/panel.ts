@@ -1,4 +1,6 @@
-import { DisplayMode, FavoritesStorage } from '../types';
+import { SelectableValue } from '@grafana/data';
+
+import { DisplayMode, FavoritesStorage, MinimizeOutputFormat } from '../types';
 
 /**
  * Display Mode Options
@@ -8,6 +10,15 @@ export const DISPLAY_MODE_OPTIONS = [
   { value: DisplayMode.MINIMIZE, label: 'Minimize', description: 'Minimized select view.' },
   { value: DisplayMode.BUTTON, label: 'Button', description: 'Button select view.' },
   { value: DisplayMode.SLIDER, label: 'Slider', description: 'Slider select view.' },
+];
+
+/**
+ * Minimize Output Format Options
+ */
+export const MINIMIZE_OUTPUT_FORMAT_OPTIONS = [
+  { value: MinimizeOutputFormat.TEXT, label: 'Text' },
+  { value: MinimizeOutputFormat.DATE, label: 'ISO string' },
+  { value: MinimizeOutputFormat.TIMESTAMP, label: 'Timestamp' },
 ];
 
 /**
@@ -170,6 +181,22 @@ export const ROW_COUNT_OPTIONS = [
 export const SHOW_RESET_BUTTON_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show reset button.' },
   { value: false, label: 'Disabled', description: 'Do not show reset button.' },
+];
+
+/**
+ * Time Transformation Options
+ */
+export const TIME_TRANSFORMATION_OPTIONS: SelectableValue[] = [
+  {
+    description: 'UTC',
+    label: 'UTC',
+    value: false,
+  },
+  {
+    description: 'Local',
+    label: 'Local',
+    value: true,
+  },
 ];
 
 /**
