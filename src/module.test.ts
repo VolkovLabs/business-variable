@@ -1,7 +1,7 @@
 import { Field, FieldType, PanelPlugin } from '@grafana/data';
 
 import { plugin } from './module';
-import { DisplayMode, FavoritesStorage, MinimizeDisplayMode, PanelOptions, VariableType } from './types';
+import { DisplayMode, FavoritesStorage, MinimizeOutputFormat, PanelOptions, VariableType } from './types';
 import { createPanelOptions } from './utils';
 
 /**
@@ -16,6 +16,10 @@ const variablesMock = [
   {
     name: 'textBox',
     type: VariableType.TEXTBOX,
+  },
+  {
+    name: 'constant',
+    type: VariableType.CONSTANT,
   },
 ];
 
@@ -194,7 +198,21 @@ describe('plugin', () => {
       );
       plugin['optionsSupplier'](builder);
 
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeDisplayMode']));
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
+    });
+
+    it('Should show variants for Constant variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({ variable: 'constant', displayMode: DisplayMode.MINIMIZE }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
     });
 
     it('Should show Time options for DateTime picker for TextBox variable', () => {
@@ -205,16 +223,32 @@ describe('plugin', () => {
           createPanelOptions({
             variable: 'textBox',
             displayMode: DisplayMode.MINIMIZE,
-            minimizeDisplayMode: MinimizeDisplayMode.DATE_TIME_PICKER,
+            minimizeOutputFormat: MinimizeOutputFormat.DATE,
           }),
           shownOptionsPaths
         )
       );
       plugin['optionsSupplier'](builder);
 
-      expect(shownOptionsPaths).toEqual(
-        expect.arrayContaining(['minimizeDisplayMode', 'isUseLocalTime', 'dateTimeFormat'])
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat', 'isUseLocalTime']));
+    });
+
+    it('Should show Time options for DateTime picker for Constant variable', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addRadio.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            variable: 'constant',
+            displayMode: DisplayMode.MINIMIZE,
+            minimizeOutputFormat: MinimizeOutputFormat.DATE,
+          }),
+          shownOptionsPaths
+        )
       );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat', 'isUseLocalTime']));
     });
 
     it('Should show options for favorites', () => {
