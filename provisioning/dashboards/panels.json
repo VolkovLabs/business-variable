@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -35,6 +35,241 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "enabled": false,
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "text"
+      },
+      "pluginVersion": "3.5.0",
+      "title": "Table view text box",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Title",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 8
+      },
+      "id": 19,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "enabled": true,
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "text"
+      },
+      "pluginVersion": "3.5.0",
+      "title": "Table view text box with favorites",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -55,7 +290,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 0
+        "y": 16
       },
       "id": 8,
       "options": {
@@ -65,7 +300,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -80,8 +322,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variables": []
       },
+      "pluginVersion": "3.5.0",
       "title": "Empty",
       "type": "volkovlabs-variable-panel"
     },
@@ -92,6 +336,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -112,7 +362,7 @@
         "h": 15,
         "w": 3,
         "x": 4,
-        "y": 0
+        "y": 16
       },
       "id": 6,
       "options": {
@@ -122,7 +372,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
@@ -139,9 +396,11 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device",
         "variables": ["device"]
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "frame": {
@@ -168,6 +427,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -188,7 +453,7 @@
         "h": 15,
         "w": 3,
         "x": 7,
-        "y": 0
+        "y": 16
       },
       "id": 11,
       "options": {
@@ -198,7 +463,14 @@
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -213,8 +485,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device"
       },
+      "pluginVersion": "3.5.0",
       "title": "Device 1 Multi + All",
       "type": "volkovlabs-variable-panel"
     },
@@ -225,6 +499,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -245,7 +525,7 @@
         "h": 15,
         "w": 3,
         "x": 10,
-        "y": 0
+        "y": 16
       },
       "id": 12,
       "options": {
@@ -255,7 +535,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
@@ -272,9 +559,11 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device2",
         "variables": ["device"]
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "frame": {
@@ -301,6 +590,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -321,7 +616,7 @@
         "h": 15,
         "w": 3,
         "x": 13,
-        "y": 0
+        "y": 16
       },
       "id": 13,
       "options": {
@@ -331,7 +626,14 @@
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -346,8 +648,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device2"
       },
+      "pluginVersion": "3.5.0",
       "title": "Device 2 Multi Only ",
       "type": "volkovlabs-variable-panel"
     },
@@ -358,6 +662,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -378,7 +688,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 5
+        "y": 21
       },
       "id": 9,
       "options": {
@@ -388,7 +698,14 @@
         "customValue": false,
         "displayMode": "minimize",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -403,8 +720,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "test"
       },
+      "pluginVersion": "3.5.0",
       "title": "Panel Title",
       "type": "volkovlabs-variable-panel"
     },
@@ -415,6 +734,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -435,7 +760,7 @@
         "h": 7,
         "w": 4,
         "x": 0,
-        "y": 8
+        "y": 24
       },
       "id": 10,
       "options": {
@@ -445,7 +770,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -462,8 +794,10 @@
         "status": "status",
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "test"
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "datasource": {
@@ -501,12 +835,17 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -521,7 +860,7 @@
         "h": 6,
         "w": 4,
         "x": 0,
-        "y": 15
+        "y": 31
       },
       "id": 7,
       "options": {
@@ -531,7 +870,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
@@ -548,9 +894,11 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "single",
         "variables": ["single"]
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "frame": {
@@ -577,12 +925,17 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -597,7 +950,7 @@
         "h": 12,
         "w": 3,
         "x": 4,
-        "y": 15
+        "y": 31
       },
       "id": 14,
       "options": {
@@ -607,7 +960,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
@@ -624,9 +984,11 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device3",
         "variables": ["device"]
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "frame": {
@@ -653,12 +1015,17 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -673,7 +1040,7 @@
         "h": 12,
         "w": 3,
         "x": 7,
-        "y": 15
+        "y": 31
       },
       "id": 15,
       "options": {
@@ -683,7 +1050,14 @@
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -698,8 +1072,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device3"
       },
+      "pluginVersion": "3.5.0",
       "title": "Dev.3 Without Multi and All ",
       "type": "volkovlabs-variable-panel"
     },
@@ -710,12 +1086,17 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -730,7 +1111,7 @@
         "h": 12,
         "w": 3,
         "x": 10,
-        "y": 15
+        "y": 31
       },
       "id": 16,
       "options": {
@@ -740,7 +1121,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
@@ -757,9 +1145,11 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device4",
         "variables": ["device"]
       },
+      "pluginVersion": "3.5.0",
       "targets": [
         {
           "frame": {
@@ -786,12 +1176,17 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -806,7 +1201,7 @@
         "h": 12,
         "w": 3,
         "x": 13,
-        "y": 15
+        "y": 31
       },
       "id": 17,
       "options": {
@@ -816,7 +1211,14 @@
         "customValue": false,
         "displayMode": "button",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
@@ -831,13 +1233,15 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device4"
       },
+      "pluginVersion": "3.5.0",
       "title": "Device 4 All (without Multi)",
       "type": "volkovlabs-variable-panel"
     }
   ],
-  "refresh": "",
+  "refresh": "5s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -881,7 +1285,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -953,7 +1357,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["mykey", "anotherkey"],
           "value": ["myvalue", "anothervalue"]
         },
@@ -984,7 +1388,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": ["Device1"],
           "value": ["Device1"]
         },
@@ -1187,6 +1591,25 @@
         "query": "Device1, Device2, Device3, Device4, Device5, Device6, Device7, Device8, Device9, Device10",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Sample",
+          "value": "Sample"
+        },
+        "hide": 0,
+        "name": "text",
+        "options": [
+          {
+            "selected": false,
+            "text": "Sample Text",
+            "value": "Sample Text"
+          }
+        ],
+        "query": "Sample",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
@@ -1198,6 +1621,6 @@
   "timezone": "",
   "title": "Panels",
   "uid": "O4tc_E6Gz",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

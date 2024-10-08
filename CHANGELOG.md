@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.6.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Updated behavior in table view for Textbox variable type (#211)
+
 ## 3.5.0 (2024-10-02)
 
 ### Features / Enhancements

@@ -221,6 +221,7 @@ export const TableView: React.FC<Props> = ({
             shouldScroll={shouldScroll}
             onAfterScroll={onAfterScroll}
             collapsedByDefault={options.collapsedByDefault}
+            eventBus={panelEventBus}
           />
         </div>
       </div>
