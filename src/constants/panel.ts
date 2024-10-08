@@ -1,6 +1,6 @@
 import { SelectableValue } from '@grafana/data';
 
-import { DateTimeFormat, DisplayMode, FavoritesStorage, MinimizeDisplayMode } from '../types';
+import { DisplayMode, FavoritesStorage, MinimizeOutputFormat } from '../types';
 
 /**
  * Display Mode Options
@@ -16,8 +16,9 @@ export const DISPLAY_MODE_OPTIONS = [
  * Minimize Display Mode Options
  */
 export const MINIMIZE_DISPLAY_MODE_OPTIONS = [
-  { value: MinimizeDisplayMode.TEXT, label: 'Text Input' },
-  { value: MinimizeDisplayMode.DATE_TIME_PICKER, label: 'Date Time Picker' },
+  { value: MinimizeOutputFormat.TEXT, label: 'Text' },
+  { value: MinimizeOutputFormat.DATE, label: 'ISO string' },
+  { value: MinimizeOutputFormat.TIMESTAMP, label: 'Timestamp' },
 ];
 
 /**
@@ -198,13 +199,6 @@ export const TIME_TRANSFORMATION_OPTIONS: SelectableValue[] = [
   },
 ];
 
-/**
- * Date Time format Options
- */
-export const DATE_TIME_FORMAT_OPTIONS = [
-  { value: DateTimeFormat.ISO_STRING, label: 'ISO String' },
-  { value: DateTimeFormat.TIMESTAMP, label: 'Timestamp' },
-];
 /**
  * Auto Save timeout ms
  */

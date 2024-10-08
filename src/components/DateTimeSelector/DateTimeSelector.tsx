@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { usePersistentStorage } from '../../hooks';
-import { DateTimeFormat, TextBoxVariable } from '../../types';
+import { ConstantVariable, MinimizeOutputFormat, TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -14,9 +14,8 @@ interface Props {
   /**
    * Variable
    *
-   * @type {TextBoxVariable}
    */
-  variable: TextBoxVariable;
+  variable: TextBoxVariable | ConstantVariable;
 
   /**
    * Persistent
@@ -47,11 +46,11 @@ interface Props {
   isUseLocalTime: boolean;
 
   /**
-   * Save the result of date time picker
+   * Text box Variable display mode
    *
-   * @type {DateTimeFormat}
+   * @type {MinimizeOutputFormat}
    */
-  dateTimeFormat: DateTimeFormat;
+  minimizeOutputFormat: MinimizeOutputFormat;
 }
 
 /**
@@ -63,8 +62,8 @@ export const DateTimeSelector: React.FC<Props> = ({
   persistent,
   panelEventBus,
   isUseLocalTime,
-  dateTimeFormat,
   timeZone,
+  minimizeOutputFormat,
 }) => {
   /**
    * Persistent storage
@@ -95,8 +94,7 @@ export const DateTimeSelector: React.FC<Props> = ({
         }
 
         let value = '';
-
-        if (dateTimeFormat === DateTimeFormat.ISO_STRING) {
+        if (minimizeOutputFormat === MinimizeOutputFormat.DATE) {
           value = dateTime.toISOString(isUseLocalTime);
         } else {
           value = dateTime.valueOf().toString();
@@ -104,7 +102,7 @@ export const DateTimeSelector: React.FC<Props> = ({
         selectVariableValues({ values: [value], runtimeVariable: variable, panelEventBus });
       }
     },
-    [dateTimeFormat, isUseLocalTime, panelEventBus, persistent, persistentStorage, variable]
+    [isUseLocalTime, minimizeOutputFormat, panelEventBus, persistent, persistentStorage, variable]
   );
 
   return (

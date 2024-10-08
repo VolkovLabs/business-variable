@@ -21,7 +21,6 @@ import {
   ALWAYS_VISIBLE_FILTER_OPTIONS,
   AUTO_SCROLL_OPTIONS,
   COLLAPSED_BY_DEFAULT_OPTIONS,
-  DATE_TIME_FORMAT_OPTIONS,
   DISPLAY_MODE_OPTIONS,
   FAVORITES_ENABLED_OPTIONS,
   FAVORITES_STORAGE_OPTIONS,
@@ -42,10 +41,9 @@ import {
 } from './constants';
 import { getMigratedOptions } from './migration';
 import {
-  DateTimeFormat,
   DisplayMode,
   FavoritesStorage,
-  MinimizeDisplayMode,
+  MinimizeOutputFormat,
   PanelOptions,
   StatusStyleMode,
   VariableType,
@@ -115,10 +113,11 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       config.favorites.enabled &&
       config.favorites.storage === FavoritesStorage.DATASOURCE;
     const isDateTimePickerMode = (config: PanelOptions, variable?: TypedVariableModel) =>
-      variable &&
-      variable.type === VariableType.TEXTBOX &&
-      config.displayMode === DisplayMode.MINIMIZE &&
-      config.minimizeDisplayMode === MinimizeDisplayMode.DATE_TIME_PICKER;
+      (variable &&
+        (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+        config.displayMode === DisplayMode.MINIMIZE &&
+        config.minimizeOutputFormat === MinimizeOutputFormat.DATE) ||
+      config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP;
 
     /**
      * Common Options
@@ -322,17 +321,21 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: (config) => showForMinimizeView(config) || !config.groups?.length,
       })
       .addRadio({
-        path: 'minimizeDisplayMode',
-        name: 'Minimize display mode',
-        description: 'Set the display mode for the variable of the “Text box" type',
+        path: 'minimizeOutputFormat',
+        name: 'Minimize output format',
+        description: 'Set the display mode for the variable of the “Text box" type or "Constant" type',
         settings: {
           options: MINIMIZE_DISPLAY_MODE_OPTIONS,
         },
-        defaultValue: MinimizeDisplayMode.TEXT,
+        defaultValue: MinimizeOutputFormat.TEXT,
         category: ['Layout'],
         showIf: (config) => {
           const variable = getCurrentVariable(config);
-          return variable && variable.type === VariableType.TEXTBOX && config.displayMode === DisplayMode.MINIMIZE;
+          return (
+            variable &&
+            (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+            config.displayMode === DisplayMode.MINIMIZE
+          );
         },
       })
       .addRadio({
@@ -343,20 +346,6 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: TIME_TRANSFORMATION_OPTIONS,
         },
         defaultValue: false,
-        category: ['Layout'],
-        showIf: (config) => {
-          const variable = getCurrentVariable(config);
-          return isDateTimePickerMode(config, variable);
-        },
-      })
-      .addRadio({
-        path: 'dateTimeFormat',
-        name: 'Value format',
-        description: 'Value result format',
-        settings: {
-          options: DATE_TIME_FORMAT_OPTIONS,
-        },
-        defaultValue: DateTimeFormat.ISO_STRING,
         category: ['Layout'],
         showIf: (config) => {
           const variable = getCurrentVariable(config);

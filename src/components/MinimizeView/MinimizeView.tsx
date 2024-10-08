@@ -1,11 +1,11 @@
 import { css } from '@emotion/css';
 import { EventBus } from '@grafana/data';
 import { Alert, InlineField, useStyles2 } from '@grafana/ui';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
-import { DateTimeFormat, MinimizeDisplayMode, PanelOptions, VariableType } from '../../types';
+import { MinimizeOutputFormat, PanelOptions, VariableType } from '../../types';
 import { DateTimeSelector } from '../DateTimeSelector';
 import { OptionsVariable } from '../OptionsVariable';
 import { TextVariable } from '../TextVariable';
@@ -54,9 +54,8 @@ export const MinimizeView: React.FC<Props> = ({
     showLabel = false,
     labelWidth,
     maxVisibleValues,
-    minimizeDisplayMode = MinimizeDisplayMode.TEXT,
+    minimizeOutputFormat = MinimizeOutputFormat.TEXT,
     isUseLocalTime = false,
-    dateTimeFormat = DateTimeFormat.ISO_STRING,
   } = {},
   timeZone,
   eventBus,
@@ -66,6 +65,14 @@ export const MinimizeView: React.FC<Props> = ({
    * Runtime Variables
    */
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
+
+  /**
+   * Date Time Selector view
+   */
+  const isUseDateTimeSelector = useMemo(
+    () => minimizeOutputFormat === MinimizeOutputFormat.DATE || minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP,
+    [minimizeOutputFormat]
+  );
 
   /**
    * Styles
@@ -108,19 +115,19 @@ export const MinimizeView: React.FC<Props> = ({
               maxVisibleValues={maxVisibleValues}
             />
           )}
-          {variable.type === VariableType.TEXTBOX && minimizeDisplayMode === MinimizeDisplayMode.TEXT && (
-            <TextVariable variable={variable} panelEventBus={panelEventBus} />
-          )}
-          {variable.type === VariableType.TEXTBOX && minimizeDisplayMode === MinimizeDisplayMode.DATE_TIME_PICKER && (
-            <DateTimeSelector
-              variable={variable}
-              persistent={persistent}
-              panelEventBus={panelEventBus}
-              timeZone={timeZone}
-              isUseLocalTime={isUseLocalTime}
-              dateTimeFormat={dateTimeFormat}
-            />
-          )}
+          {(variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+            isUseDateTimeSelector && (
+              <DateTimeSelector
+                variable={variable}
+                persistent={persistent}
+                panelEventBus={panelEventBus}
+                timeZone={timeZone}
+                isUseLocalTime={isUseLocalTime}
+                minimizeOutputFormat={minimizeOutputFormat}
+              />
+            )}
+          {(variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+            !isUseDateTimeSelector && <TextVariable variable={variable} panelEventBus={panelEventBus} />}
         </>
       </InlineField>
     </div>
