@@ -55,15 +55,14 @@ describe('Use Table Hook', () => {
     if (variable.type === VariableType.TEXTBOX) {
       return getRuntimeVariable(variable as any);
     }
-
     if (variable.type === VariableType.QUERY || variable.type === VariableType.CUSTOM) {
       return getRuntimeVariable({
         ...variable,
         current: {
           ...(variable.current || {}),
           value:
-            variable.options?.filter((option) => option.selected).map(({ value }) => value.toString()) ||
             variable.current?.value ||
+            variable.options?.filter((option) => option.selected).map(({ value }) => value.toString()) ||
             [],
         } as any,
       } as any);
@@ -2093,6 +2092,72 @@ describe('Use Table Hook', () => {
                     text: 'Option 2',
                     value: 'option2',
                     selected: true,
+                  },
+                ],
+              } as any),
+            }) as any
+        );
+
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [] } as any,
+            options: createPanelOptions({
+              header: true,
+              showTotal: true,
+            }),
+            eventBus: null as any,
+            levels: [
+              { name: 'country', source: 'A' },
+              { name: 'device', source: 'A' },
+            ],
+            panelEventBus: null as any,
+            replaceVariables: jest.fn(),
+          })
+        );
+
+        const toggleAllRows = jest.fn();
+
+        /**
+         * Render header
+         */
+        render(
+          <TableHeader
+            columns={result.current.columns}
+            table={{
+              getCanSomeRowsExpand: () => true,
+              getToggleAllRowsExpandedHandler: () => toggleAllRows,
+              getIsAllRowsExpanded: () => true,
+            }}
+          />
+        );
+
+        const spanElement = screen.getByTestId(TEST_IDS.table.headerGroupCount);
+        expect(spanElement).toBeInTheDocument();
+        expect(spanElement).toHaveTextContent('(2/2 selected)');
+      });
+
+      it('Should render correct count text with All if All option not specified in options array', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: createRuntimeVariableMock({
+                type: VariableType.CUSTOM,
+                multi: true,
+                includeAll: true,
+                current: { value: [ALL_VALUE_PARAMETER] },
+                options: [
+                  {
+                    text: 'Option 1',
+                    value: 'option1',
+                    selected: false,
+                  },
+                  {
+                    text: 'Option 2',
+                    value: 'option2',
+                    selected: false,
                   },
                 ],
               } as any),
