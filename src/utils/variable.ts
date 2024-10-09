@@ -136,7 +136,12 @@ export const selectVariableValues = ({
         const selectedValues = locationService
           .getSearch()
           .getAll(`var-${name}`)
-          .filter((s) => s.toLowerCase().indexOf('all') !== 0);
+          .filter((s) => {
+            if (s === ALL_VALUE_PARAMETER) {
+              return false;
+            }
+            return s.toLowerCase().indexOf('all') !== 0;
+          });
 
         /**
          * Values selected, but not defined in the URL

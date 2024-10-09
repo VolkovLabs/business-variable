@@ -83,6 +83,7 @@ describe('ButtonView', () => {
     multi: true,
     includeAll: true,
     type: VariableType.CUSTOM,
+    current: { value: [] },
     options: [
       {
         text: ALL_VALUE,
@@ -136,7 +137,7 @@ describe('ButtonView', () => {
   });
 
   it('Should show no options', () => {
-    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+    jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable: { ...deviceVariable, options: [] },
@@ -156,7 +157,7 @@ describe('ButtonView', () => {
   });
 
   it('Should render variable options', () => {
-    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+    jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable: deviceVariable,
@@ -189,7 +190,7 @@ describe('ButtonView', () => {
           : option
       ),
     };
-    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+    jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
         ({
           variable,
