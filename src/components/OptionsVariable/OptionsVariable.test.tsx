@@ -116,6 +116,38 @@ describe('Options Variable', () => {
       expect(selectors.root()).toHaveValue(option1.value);
     });
 
+    it('Should apply All value if "All" option not Specified in options', () => {
+      render(
+        getComponent({
+          variable: {
+            ...singleVariable,
+            includeAll: true,
+            current: {
+              value: ALL_VALUE_PARAMETER,
+            },
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toHaveValue(ALL_VALUE_PARAMETER);
+    });
+
+    it('Should apply All value if "All" option not Specified in options and current value present as array', () => {
+      render(
+        getComponent({
+          variable: {
+            ...singleVariable,
+            includeAll: true,
+            current: {
+              value: [ALL_VALUE_PARAMETER],
+            },
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toHaveValue(ALL_VALUE_PARAMETER);
+    });
+
     it('Should select value', () => {
       render(
         getComponent({
