@@ -354,7 +354,7 @@ describe('ButtonView', () => {
     fireEvent.click(selectors.item(false, 'device1'));
 
     /**
-     * All should be selected
+     * device1 should be selected
      */
     expect(selectVariableValues).toHaveBeenCalledWith({
       values: ['device1'],
