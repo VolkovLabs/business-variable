@@ -178,6 +178,42 @@ describe('ButtonView', () => {
     expect(selectors.item(false, 'device2')).toBeInTheDocument();
   });
 
+  it('Should render variable options with All if "All" option not specified in options', () => {
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable: {
+            ...deviceVariable,
+            options: [
+              {
+                text: 'device1',
+                value: 'device1',
+                selected: false,
+              },
+              {
+                text: 'device2',
+                value: 'device2',
+                selected: false,
+              },
+            ],
+          },
+        }) as any
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+          status: 'last',
+        } as any,
+      })
+    );
+
+    expect(selectors.item(false, ALL_VALUE)).toBeInTheDocument();
+    expect(selectors.item(false, 'device1')).toBeInTheDocument();
+    expect(selectors.item(false, 'device2')).toBeInTheDocument();
+  });
+
   it('Should update variable options', () => {
     const variable = {
       ...deviceVariable,
@@ -219,6 +255,109 @@ describe('ButtonView', () => {
      */
     expect(selectVariableValues).toHaveBeenCalledWith({
       values: [ALL_VALUE_PARAMETER],
+      runtimeVariable: variable,
+      panelEventBus: expect.anything(),
+    });
+
+    /**
+     * Should clear persistent values
+     */
+    expect(persistentStorageMock.remove).toHaveBeenCalled();
+  });
+
+  it('Should display "All" option as selected if it not specified in options and All is selected', () => {
+    const options = [
+      {
+        text: 'device1',
+        value: 'device1',
+        selected: false,
+      },
+      {
+        text: 'device2',
+        value: 'device2',
+        selected: false,
+      },
+    ];
+
+    const variable = {
+      ...deviceVariable,
+      options: options,
+      current: { value: [ALL_VALUE_PARAMETER] },
+    };
+
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable,
+        }) as any
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+          status: 'last',
+          persistent: true,
+        } as any,
+      })
+    );
+
+    expect(selectors.item(false, 'device1')).toBeInTheDocument();
+    expect(selectors.item(false, ALL_VALUE)).toBeInTheDocument();
+    expect(selectors.item(false, ALL_VALUE)).toHaveStyle({
+      'background-color': 'rgba(204, 204, 220, 0.12)',
+    });
+  });
+
+  it('Should update variable options if "All" option not specified in options and All is selected', () => {
+    const options = [
+      {
+        text: 'device1',
+        value: 'device1',
+        selected: false,
+      },
+      {
+        text: 'device2',
+        value: 'device2',
+        selected: false,
+      },
+    ];
+
+    const variable = {
+      ...deviceVariable,
+      options: options,
+      current: { value: [ALL_VALUE_PARAMETER] },
+    };
+
+    jest.mocked(useRuntimeVariables).mockImplementation(
+      () =>
+        ({
+          variable,
+        }) as any
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+          status: 'last',
+          persistent: true,
+        } as any,
+      })
+    );
+
+    expect(selectors.item(false, 'device1')).toBeInTheDocument();
+
+    /**
+     * Deselect item
+     */
+    fireEvent.click(selectors.item(false, 'device1'));
+
+    /**
+     * All should be selected
+     */
+    expect(selectVariableValues).toHaveBeenCalledWith({
+      values: ['device1'],
       runtimeVariable: variable,
       panelEventBus: expect.anything(),
     });
