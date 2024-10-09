@@ -120,7 +120,7 @@ export const ButtonView: React.FC<Props> = ({
           {
             text: ALL_VALUE,
             value: ALL_VALUE_PARAMETER,
-            selected: false,
+            selected: isAllSelected,
           },
           ...variable.options,
         ];
@@ -130,7 +130,7 @@ export const ButtonView: React.FC<Props> = ({
     }
 
     return [];
-  }, [hasVariableAllOption, variable]);
+  }, [hasVariableAllOption, isAllSelected, variable]);
 
   /**
    * No variable selected
@@ -194,7 +194,7 @@ export const ButtonView: React.FC<Props> = ({
               /**
                * Reset to Initial first value (All)
                */
-              resetVariable([...values, variable.options[0].value]);
+              resetVariable([...values, variableOptions[0].value]);
 
               return;
             }
