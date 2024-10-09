@@ -5,7 +5,15 @@ import React, { useCallback, useMemo } from 'react';
 
 import { getStyles } from '../components/TableView/TableView.styles';
 import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../constants';
-import { Level, PanelOptions, RuntimeVariable, StatusStyleMode, TableItem, VariableType } from '../types';
+import {
+  Level,
+  PanelOptions,
+  RuntimeVariable,
+  RuntimeVariableOption,
+  StatusStyleMode,
+  TableItem,
+  VariableType,
+} from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
@@ -54,6 +62,16 @@ export const useTable = ({
   const variable = levels?.length ? levels[levels.length - 1]?.name : options.variable;
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
+  const hasVariableAllOption = useMemo(
+    () => runtimeVariable?.options.some((option) => option.value === ALL_VALUE_PARAMETER),
+    [runtimeVariable?.options]
+  );
+
+  const isOptionAllSelected = useMemo(() => {
+    const value = runtimeVariable?.current.value;
+    return Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
+  }, [runtimeVariable]);
+
   /**
    * Favorites
    */
@@ -72,7 +90,7 @@ export const useTable = ({
       return [];
     }
 
-    const isSelectedAll = isVariableAllSelected(runtimeVariable);
+    const isSelectedAll = isVariableAllSelected(runtimeVariable, hasVariableAllOption);
 
     const groupFields = levels || [];
 
@@ -148,7 +166,21 @@ export const useTable = ({
      * Use Variable Options
      */
     if (isVariableWithOptions(runtimeVariable)) {
-      return runtimeVariable.options.map((option) => {
+      let variableOptions: RuntimeVariableOption[] = [];
+      if (runtimeVariable?.includeAll && !hasVariableAllOption) {
+        variableOptions = [
+          {
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
+            selected: isOptionAllSelected,
+          },
+          ...runtimeVariable.options,
+        ];
+      } else {
+        variableOptions = runtimeVariable.options;
+      }
+
+      return variableOptions.map((option) => {
         return getItemWithStatus(
           {
             value: option.value,
@@ -196,11 +228,13 @@ export const useTable = ({
     runtimeVariable,
     levels,
     data,
-    getRuntimeVariable,
     favorites,
     getStatus,
-    options.favorites,
+    options.favorites.enabled,
     options.groupSelection,
+    getRuntimeVariable,
+    hasVariableAllOption,
+    isOptionAllSelected,
   ]);
 
   /**
@@ -282,8 +316,7 @@ export const useTable = ({
           /**
            * Calculate All Selection
            */
-          const isSelectedAll = runtimeVariable ? isVariableAllSelected(runtimeVariable) : false;
-
+          const isSelectedAll = runtimeVariable ? isVariableAllSelected(runtimeVariable, hasVariableAllOption) : false;
           /**
            * Show Header Counts
            */
@@ -292,16 +325,20 @@ export const useTable = ({
           /**
            * Selected Options include "all-option" variable
            */
-          const selectedOptions = runtimeVariable?.options.some((option) => option.text === 'All' && option.selected)
-            ? runtimeVariable?.options.length - 1
-            : runtimeVariable?.options.filter((option) => option.selected).length;
+          const selectedOptions =
+            runtimeVariable?.options && isOptionAllSelected
+              ? hasVariableAllOption
+                ? runtimeVariable?.options.length - 1
+                : runtimeVariable?.options.length
+              : runtimeVariable?.options.filter((option) => option.selected).length;
 
           /**
            * All Options include "all-option" variable
            */
-          const allOptions = runtimeVariable?.options.some((option) => option.text === 'All')
-            ? runtimeVariable?.options.length - 1
-            : runtimeVariable?.options.length;
+          const allOptions =
+            runtimeVariable?.options && hasVariableAllOption
+              ? runtimeVariable?.options.length - 1
+              : runtimeVariable?.options.length;
 
           return (
             <>
@@ -536,6 +573,8 @@ export const useTable = ({
     options.groupSelection,
     options.showGroupTotal,
     options.showName,
+    isOptionAllSelected,
+    hasVariableAllOption,
     styles.selectControl,
     styles.expandButton,
     styles.rowContent,

@@ -192,6 +192,12 @@ export const getItemWithStatus = (
   } else if (groupSelection && children?.length) {
     selectable = true;
   }
+  if (
+    item.value === ALL_VALUE_PARAMETER &&
+    !item.variable?.options.some((option) => option.value === ALL_VALUE_PARAMETER)
+  ) {
+    selectable = true;
+  }
 
   const canBeFavorite = favoritesEnabled && !children && item.value !== ALL_VALUE_PARAMETER;
 

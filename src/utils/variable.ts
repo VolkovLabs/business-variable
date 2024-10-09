@@ -267,7 +267,7 @@ export const getVariablesMap = (variables: TypedVariableModel[]): Record<string,
 /**
  * Is Variable All Selected
  */
-export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean => {
+export const isVariableAllSelected = (runtimeVariable: RuntimeVariable, hasVariableAllOption?: boolean): boolean => {
   if (isVariableWithOptions(runtimeVariable)) {
     if (Array.isArray(runtimeVariable.current.value)) {
       /**
@@ -277,7 +277,10 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
         /**
          * Options with all option
          */
-        if (!!runtimeVariable.helpers.getOption(ALL_VALUE_PARAMETER)?.selected) {
+        const value = runtimeVariable?.current.value;
+        const isSelected = Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
+
+        if (isSelected) {
           /**
            * All option selected
            */
@@ -287,7 +290,11 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
         /**
          * Comparing value with removed selected all option
          */
-        return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+        if (hasVariableAllOption) {
+          return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+        }
+
+        return runtimeVariable.current.value.length === runtimeVariable.options.length;
       }
 
       /**

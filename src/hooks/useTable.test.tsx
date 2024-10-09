@@ -1488,6 +1488,7 @@ describe('Use Table Hook', () => {
         current: {
           value: '123',
         },
+        options: [],
       } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
@@ -1544,6 +1545,7 @@ describe('Use Table Hook', () => {
       const deviceVariable = createRuntimeVariableMock({
         type: VariableType.TEXTBOX,
         current: {},
+        options: [],
       } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
@@ -1602,6 +1604,7 @@ describe('Use Table Hook', () => {
         current: {
           value: '123',
         },
+        options: [],
       };
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
