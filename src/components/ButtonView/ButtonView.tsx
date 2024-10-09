@@ -69,11 +69,17 @@ export const ButtonView: React.FC<Props> = ({
    */
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
 
+  /**
+   * Has variable "All" option
+   */
   const hasVariableAllOption = useMemo(
     () => variable?.options.some((option) => option.value === ALL_VALUE_PARAMETER),
     [variable]
   );
 
+  /**
+   * Is "All" option selected
+   */
   const isAllSelected = useMemo(() => {
     const value = variable?.current.value;
     return Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
@@ -89,6 +95,9 @@ export const ButtonView: React.FC<Props> = ({
    */
   const values = useMemo(() => {
     if (isVariableWithOptions(variable)) {
+      /**
+       * If "All" option is not specified in the option
+       */
       if (variable.includeAll && !hasVariableAllOption) {
         if (isAllSelected) {
           return [ALL_VALUE_PARAMETER];
@@ -112,10 +121,11 @@ export const ButtonView: React.FC<Props> = ({
     /**
      * Check options
      */
-    const options = isVariableWithOptions(variable) && variable.options.length;
-
-    if (options) {
+    if (isVariableWithOptions(variable) && variable.options.length) {
       if (variable?.includeAll && !hasVariableAllOption) {
+        /**
+         * Add All option if it should be, dashboard Scenes case
+         */
         return [
           {
             text: ALL_VALUE,

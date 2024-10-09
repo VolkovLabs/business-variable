@@ -62,11 +62,17 @@ export const useTable = ({
   const variable = levels?.length ? levels[levels.length - 1]?.name : options.variable;
   const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
 
+  /**
+   * Has variable "All" option
+   */
   const hasVariableAllOption = useMemo(
     () => runtimeVariable?.options.some((option) => option.value === ALL_VALUE_PARAMETER),
     [runtimeVariable?.options]
   );
 
+  /**
+   * Is "All" option selected
+   */
   const isOptionAllSelected = useMemo(() => {
     const value = runtimeVariable?.current.value;
     return Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
@@ -168,6 +174,9 @@ export const useTable = ({
     if (isVariableWithOptions(runtimeVariable)) {
       let variableOptions: RuntimeVariableOption[] = [];
       if (runtimeVariable?.includeAll && !hasVariableAllOption) {
+        /**
+         * Add All option if it should be, dashboard Scenes case
+         */
         variableOptions = [
           {
             text: ALL_VALUE,

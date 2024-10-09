@@ -71,6 +71,9 @@ export const OptionsVariable: React.FC<Props> = ({
    */
   const persistentStorage = usePersistentStorage(variable.name);
 
+  /**
+   * Has variable "All" option
+   */
   const hasVariableAllOption = useMemo(
     () => variable.options.some((option) => option.value === ALL_VALUE_PARAMETER),
     [variable.options]
@@ -85,6 +88,9 @@ export const OptionsVariable: React.FC<Props> = ({
       return Array.isArray(value) ? value : [value];
     }
 
+    /**
+     * Set All as selected if "All" option not specified in options
+     */
     if (variable.includeAll && !hasVariableAllOption) {
       const isAllSelected = Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
 
@@ -148,6 +154,9 @@ export const OptionsVariable: React.FC<Props> = ({
       });
     }
 
+    /**
+     * Add All option if it should be
+     */
     if (variable.includeAll && !hasVariableAllOption) {
       options.unshift({
         label: ALL_VALUE,
