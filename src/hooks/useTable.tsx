@@ -201,7 +201,6 @@ export const useTable = ({
     getStatus,
     options.favorites,
     options.groupSelection,
-    ,
   ]);
 
   /**

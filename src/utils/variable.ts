@@ -304,11 +304,6 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean
          * Comparing value with removed selected all option
          */
         return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
-        // if (hasVariableAllOption) {
-        //   return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
-        // }
-
-        // return runtimeVariable.current.value.length === runtimeVariable.options.length;
       }
 
       /**
