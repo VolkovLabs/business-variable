@@ -2,7 +2,7 @@ import { EventBus, SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
 import React, { useCallback, useMemo } from 'react';
 
-import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
+import { TEST_IDS } from '../../constants';
 import { usePersistentStorage } from '../../hooks';
 import { CustomVariableModel, QueryVariableModel } from '../../types';
 import { updateVariableOptions } from '../../utils';
@@ -72,35 +72,16 @@ export const OptionsVariable: React.FC<Props> = ({
   const persistentStorage = usePersistentStorage(variable.name);
 
   /**
-   * Has variable "All" option
-   */
-  const hasVariableAllOption = useMemo(
-    () => variable.options.some((option) => option.value === ALL_VALUE_PARAMETER),
-    [variable.options]
-  );
-
-  /**
    * Current values
    */
   const values = useMemo(() => {
-    const value = variable.current.value;
     if (customValue) {
+      const value = variable.current.value;
       return Array.isArray(value) ? value : [value];
     }
 
-    /**
-     * Set All as selected if "All" option not specified in options
-     */
-    if (variable.includeAll && !hasVariableAllOption) {
-      const isAllSelected = Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
-
-      if (isAllSelected) {
-        return [ALL_VALUE_PARAMETER];
-      }
-    }
-
     return variable.options.filter((option) => option.selected).map((option) => option.value);
-  }, [customValue, hasVariableAllOption, variable]);
+  }, [customValue, variable]);
 
   /**
    * On Change
@@ -113,6 +94,7 @@ export const OptionsVariable: React.FC<Props> = ({
       if (persistent) {
         persistentStorage.remove();
       }
+
       updateVariableOptions({
         previousValues: values,
         value: Array.isArray(value) ? value.map((option: SelectableValue) => option.value) : value.value || '',
@@ -154,17 +136,8 @@ export const OptionsVariable: React.FC<Props> = ({
       });
     }
 
-    /**
-     * Add All option if it should be
-     */
-    if (variable.includeAll && !hasVariableAllOption) {
-      options.unshift({
-        label: ALL_VALUE,
-        value: ALL_VALUE_PARAMETER,
-      });
-    }
     return options;
-  }, [customValue, hasVariableAllOption, values, variable.includeAll, variable.options]);
+  }, [customValue, values, variable.options]);
 
   return (
     <Select

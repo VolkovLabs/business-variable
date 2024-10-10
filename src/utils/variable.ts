@@ -136,12 +136,13 @@ export const selectVariableValues = ({
         const selectedValues = locationService
           .getSearch()
           .getAll(`var-${name}`)
-          .filter((s) => {
-            if (s === ALL_VALUE_PARAMETER) {
-              return false;
-            }
-            return s.toLowerCase().indexOf('all') !== 0;
-          });
+          .filter((s) => s.toLowerCase().indexOf('all') !== 0);
+        // .filter((s) => {
+        //   if (s === ALL_VALUE_PARAMETER) {
+        //     return false;
+        //   }
+        //   return s.toLowerCase().indexOf('all') !== 0;
+        // });
 
         /**
          * Values selected, but not defined in the URL
@@ -267,7 +268,7 @@ export const getVariablesMap = (variables: TypedVariableModel[]): Record<string,
 /**
  * Is Variable All Selected
  */
-export const isVariableAllSelected = (runtimeVariable: RuntimeVariable, hasVariableAllOption?: boolean): boolean => {
+export const isVariableAllSelected = (runtimeVariable: RuntimeVariable): boolean => {
   if (isVariableWithOptions(runtimeVariable)) {
     if (Array.isArray(runtimeVariable.current.value)) {
       /**
@@ -277,10 +278,7 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable, hasVaria
         /**
          * Options with all option
          */
-        const value = runtimeVariable?.current.value;
-        const isSelected = Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
-
-        if (isSelected) {
+        if (!!runtimeVariable.helpers.getOption(ALL_VALUE_PARAMETER)?.selected) {
           /**
            * All option selected
            */
@@ -290,11 +288,12 @@ export const isVariableAllSelected = (runtimeVariable: RuntimeVariable, hasVaria
         /**
          * Comparing value with removed selected all option
          */
-        if (hasVariableAllOption) {
-          return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
-        }
+        return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+        // if (hasVariableAllOption) {
+        //   return runtimeVariable.current.value.length === runtimeVariable.options.length - 1;
+        // }
 
-        return runtimeVariable.current.value.length === runtimeVariable.options.length;
+        // return runtimeVariable.current.value.length === runtimeVariable.options.length;
       }
 
       /**

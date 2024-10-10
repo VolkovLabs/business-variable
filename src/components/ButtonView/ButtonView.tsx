@@ -70,22 +70,6 @@ export const ButtonView: React.FC<Props> = ({
   const { variable } = useRuntimeVariables(eventBus, variableName || '');
 
   /**
-   * Has variable "All" option
-   */
-  const hasVariableAllOption = useMemo(
-    () => variable?.options.some((option) => option.value === ALL_VALUE_PARAMETER),
-    [variable]
-  );
-
-  /**
-   * Is "All" option selected
-   */
-  const isAllSelected = useMemo(() => {
-    const value = variable?.current.value;
-    return Array.isArray(value) ? value.includes(ALL_VALUE_PARAMETER) : value === ALL_VALUE_PARAMETER;
-  }, [variable]);
-
-  /**
    * Persistent storage
    */
   const persistentStorage = usePersistentStorage(variableName ?? '');
@@ -95,52 +79,15 @@ export const ButtonView: React.FC<Props> = ({
    */
   const values = useMemo(() => {
     if (isVariableWithOptions(variable)) {
-      /**
-       * If "All" option is not specified in the option
-       */
-      if (variable.includeAll && !hasVariableAllOption) {
-        if (isAllSelected) {
-          return [ALL_VALUE_PARAMETER];
-        }
-      }
-
       return variable?.options.filter((option) => option.selected).map((option) => option.value);
     }
     return [];
-  }, [hasVariableAllOption, isAllSelected, variable]);
+  }, [variable]);
 
   /**
    * Status
    */
   const getStatus = useStatus({ data, name, status });
-
-  /**
-   * Variable options
-   */
-  const variableOptions = useMemo(() => {
-    /**
-     * Check options
-     */
-    if (isVariableWithOptions(variable) && variable.options.length) {
-      if (variable?.includeAll && !hasVariableAllOption) {
-        /**
-         * Add All option if it should be, dashboard Scenes case
-         */
-        return [
-          {
-            text: ALL_VALUE,
-            value: ALL_VALUE_PARAMETER,
-            selected: isAllSelected,
-          },
-          ...variable.options,
-        ];
-      }
-
-      return variable.options;
-    }
-
-    return [];
-  }, [hasVariableAllOption, isAllSelected, variable]);
 
   /**
    * No variable selected
@@ -196,6 +143,12 @@ export const ButtonView: React.FC<Props> = ({
           tooltip="Reset Variable"
           className={styles.resetButton}
           onClick={() => {
+            const selectedValue = Array.isArray(variable.current.value)
+              ? variable.current.value[0]
+              : variable.current.value;
+
+            const isAllSelected = selectedValue === ALL_VALUE_PARAMETER;
+
             /**
              * Variable with All option
              * Check if "All" option already selected
@@ -204,7 +157,7 @@ export const ButtonView: React.FC<Props> = ({
               /**
                * Reset to Initial first value (All)
                */
-              resetVariable([...values, variableOptions[0].value]);
+              resetVariable([...values, variable.options[0].value]);
 
               return;
             }
@@ -213,14 +166,14 @@ export const ButtonView: React.FC<Props> = ({
              * Variable with Multi Select option without All
              */
             if (variable.multi) {
-              const isOnlyFirstSelected = variable.current.value.length === 1 && variableOptions[0].selected;
+              const isOnlyFirstSelected = variable.current.value.length === 1 && variable.options[0].selected;
 
               /**
                * Reset to Initial first value
                * Check if only first option already selected
                */
               if (!isOnlyFirstSelected) {
-                resetVariable(variableOptions[0].value);
+                resetVariable(variable.options[0].value);
               }
 
               return;
@@ -229,7 +182,7 @@ export const ButtonView: React.FC<Props> = ({
             /**
              * Reset to Initial first value for default cases
              */
-            resetVariable(variableOptions[0].value);
+            resetVariable(variable.options[0].value);
           }}
           aria-label="Reset Variable"
           data-testid={TEST_IDS.buttonView.resetVariable}
@@ -240,7 +193,7 @@ export const ButtonView: React.FC<Props> = ({
           {variable.label || variable.name}
         </InlineLabel>
       )}
-      {variableOptions.map((option) => {
+      {variable.options.map((option) => {
         const value = option.value === ALL_VALUE_PARAMETER ? ALL_VALUE : option.value;
         const status = getStatus(value);
         const backgroundColor = option.selected

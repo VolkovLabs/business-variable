@@ -164,34 +164,6 @@ describe('Variable Utils', () => {
         );
       });
 
-      it('Should remove "$__all" values from already selected', () => {
-        jest.mocked(locationService.getSearch).mockImplementation(
-          () =>
-            ({
-              getAll: jest.fn(() => [ALL_VALUE_PARAMETER]),
-            }) as any
-        );
-        const variable = {
-          name: 'variable',
-          type: VariableType.CUSTOM,
-          current: { value: [ALL_VALUE_PARAMETER] },
-          options: [],
-          multi: true,
-        };
-        selectVariableValues({
-          values: ['value1', 'value2'],
-          runtimeVariable: variable as any,
-          panelEventBus: eventBus,
-        });
-
-        expect(locationService.partial).toHaveBeenCalledWith(
-          {
-            [`var-${variable.name}`]: ['value1', 'value2'],
-          },
-          true
-        );
-      });
-
       it('Should add all unique values to already selected values', () => {
         jest.mocked(locationService.getSearch).mockImplementation(
           () =>
