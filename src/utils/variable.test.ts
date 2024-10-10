@@ -2,7 +2,7 @@ import { locationService } from '@grafana/runtime';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import { VariableChangedEvent, VariableType } from '../types';
-import { selectVariableValues } from './variable';
+import { getRuntimeVariable, selectVariableValues } from './variable';
 
 /**
  * Mock @grafana/runtime
@@ -530,6 +530,64 @@ describe('Variable Utils', () => {
       selectVariableValues({ values: ['value1'], runtimeVariable: variable as any, panelEventBus: eventBus });
 
       expect(locationService.partial).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getRuntimeVariable', () => {
+    it('Should return variable with "All" option if option not return in options list', () => {
+      const variable = {
+        name: 'variable',
+        type: VariableType.CUSTOM,
+        current: {
+          value: ALL_VALUE_PARAMETER,
+        },
+        options: [
+          {
+            text: 'value1',
+            value: 'value1',
+            selected: false,
+          },
+          {
+            text: 'value2',
+            value: 'value2',
+            selected: false,
+          },
+        ],
+        includeAll: true,
+        multi: true,
+      } as any;
+      const result = getRuntimeVariable(variable);
+
+      expect(result?.options[0].value).toEqual(ALL_VALUE_PARAMETER);
+      expect(result?.options[0].selected).toBeTruthy();
+    });
+
+    it('Should return variable with "All" option if option not return in options list and not select if not present in current value', () => {
+      const variable = {
+        name: 'variable',
+        type: VariableType.CUSTOM,
+        current: {
+          value: [],
+        },
+        options: [
+          {
+            text: 'value1',
+            value: 'value1',
+            selected: false,
+          },
+          {
+            text: 'value2',
+            value: 'value2',
+            selected: false,
+          },
+        ],
+        includeAll: true,
+        multi: true,
+      } as any;
+      const result = getRuntimeVariable(variable);
+
+      expect(result?.options[0].value).toEqual(ALL_VALUE_PARAMETER);
+      expect(result?.options[0].selected).not.toBeTruthy();
     });
   });
 });
