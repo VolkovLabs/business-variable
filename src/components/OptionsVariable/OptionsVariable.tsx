@@ -77,9 +77,9 @@ export const OptionsVariable: React.FC<Props> = ({
   const values = useMemo(() => {
     if (customValue) {
       const value = variable.current.value;
+
       return Array.isArray(value) ? value : [value];
     }
-
     return variable.options.filter((option) => option.selected).map((option) => option.value);
   }, [customValue, variable]);
 
