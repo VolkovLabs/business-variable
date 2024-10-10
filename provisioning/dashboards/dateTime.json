@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -88,7 +89,7 @@
         "tabsInOrder": true,
         "variable": "first"
       },
-      "pluginVersion": "3.5.0",
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -100,112 +101,6 @@
       ],
       "title": "Variable: First - ISO string",
       "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "name": "Static",
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "thresholdsStyle": {
-              "mode": "color",
-              "thresholds": []
-            }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 5,
-        "y": 0
-      },
-      "id": 4,
-      "options": {
-        "alwaysVisibleFilter": false,
-        "autoScroll": false,
-        "collapsedByDefault": false,
-        "customValue": false,
-        "displayMode": "minimize",
-        "emptyValue": false,
-        "favorites": {
-          "enabled": false,
-          "storage": "browser"
-        },
-        "filter": false,
-        "groupSelection": false,
-        "header": true,
-        "isUseLocalTime": false,
-        "minimizeDisplayMode": "dateTimePicker",
-        "minimizeOutputFormat": "date",
-        "padding": 10,
-        "persistent": false,
-        "saveSelectedGroup": false,
-        "saveSelectedGroupKey": "",
-        "showGroupTotal": false,
-        "showLabel": false,
-        "showName": false,
-        "showResetButton": false,
-        "showTotal": false,
-        "statusSort": false,
-        "sticky": false,
-        "tabsInOrder": true,
-        "variable": "firstConstant"
-      },
-      "pluginVersion": "3.5.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "P1D2C73DC01F2359B"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Variable: firstConstant - ISO string",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 7,
-        "x": 10,
-        "y": 0
-      },
-      "id": 6,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<p>firstConstant: ${firstConstant}</p>\n<p>secondConstant: ${secondConstant}</p>",
-        "mode": "html"
-      },
-      "pluginVersion": "11.2.0",
-      "title": "Panel Title",
-      "type": "text"
     },
     {
       "datasource": {
@@ -275,7 +170,7 @@
         "tabsInOrder": true,
         "variable": "second"
       },
-      "pluginVersion": "3.5.0",
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -286,87 +181,6 @@
         }
       ],
       "title": "Variable: Second - Timestamp",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "name": "Static",
-        "type": "marcusolsson-static-datasource",
-        "uid": "P1D2C73DC01F2359B"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "thresholdsStyle": {
-              "mode": "color",
-              "thresholds": []
-            }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 5,
-        "y": 4
-      },
-      "id": 5,
-      "options": {
-        "alwaysVisibleFilter": false,
-        "autoScroll": false,
-        "collapsedByDefault": false,
-        "customValue": false,
-        "displayMode": "minimize",
-        "emptyValue": false,
-        "favorites": {
-          "enabled": false,
-          "storage": "browser"
-        },
-        "filter": false,
-        "groupSelection": false,
-        "header": true,
-        "isUseLocalTime": false,
-        "minimizeDisplayMode": "dateTimePicker",
-        "minimizeOutputFormat": "timestamp",
-        "padding": 10,
-        "persistent": false,
-        "saveSelectedGroup": false,
-        "saveSelectedGroupKey": "",
-        "showGroupTotal": false,
-        "showLabel": false,
-        "showName": false,
-        "showResetButton": false,
-        "showTotal": false,
-        "statusSort": false,
-        "sticky": false,
-        "tabsInOrder": true,
-        "variable": "secondConstant"
-      },
-      "pluginVersion": "3.5.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "P1D2C73DC01F2359B"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Variable: secondConstant - Timestamp",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -437,7 +251,7 @@
         "tabsInOrder": true,
         "variable": "third"
       },
-      "pluginVersion": "3.5.0",
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -451,18 +265,17 @@
       "type": "volkovlabs-variable-panel"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "2024-05-03T14:48:00.000Z",
           "value": "2024-05-03T14:48:00.000Z"
         },
-        "hide": 0,
         "label": "First",
         "name": "first",
         "options": [
@@ -472,17 +285,14 @@
             "value": "2024-05-05T14:48:00.000Z"
           }
         ],
-        "query": "2024-05-03T14:48:00.000Z",
-        "skipUrlSync": false,
+        "query": "2024-05-18T14:48:00.000Z",
         "type": "textbox"
       },
       {
         "current": {
-          "selected": false,
           "text": "1720873830000",
           "value": "1720873830000"
         },
-        "hide": 0,
         "label": "Second",
         "name": "second",
         "options": [
@@ -492,35 +302,16 @@
             "value": "1722429030000"
           }
         ],
-        "query": "1720873830000",
-        "skipUrlSync": false,
+        "query": "1721305830000",
         "type": "textbox"
       },
       {
         "current": {},
-        "hide": 0,
         "label": "Third",
         "name": "third",
         "options": [],
         "query": "",
-        "skipUrlSync": false,
         "type": "textbox"
-      },
-      {
-        "hide": 2,
-        "label": "First Constant",
-        "name": "firstConstant",
-        "query": "2024-05-05T14:48:00.000Z",
-        "skipUrlSync": false,
-        "type": "constant"
-      },
-      {
-        "hide": 2,
-        "label": "Second Constant",
-        "name": "secondConstant",
-        "query": "1720873830000",
-        "skipUrlSync": false,
-        "type": "constant"
       }
     ]
   },
@@ -532,6 +323,6 @@
   "timezone": "browser",
   "title": "Date Time Picker",
   "uid": "cdzuqqfc9y3nkc",
-  "version": 7,
+  "version": 1,
   "weekStart": ""
 }
