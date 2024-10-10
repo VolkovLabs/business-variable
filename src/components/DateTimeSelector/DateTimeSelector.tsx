@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { usePersistentStorage } from '../../hooks';
-import { ConstantVariable, MinimizeOutputFormat, TextBoxVariable } from '../../types';
+import { MinimizeOutputFormat, TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -14,9 +14,9 @@ interface Props {
   /**
    * Variable
    *
-   * @type {TextBoxVariable | ConstantVariable}
+   * @type {TextBoxVariable}
    */
-  variable: TextBoxVariable | ConstantVariable;
+  variable: TextBoxVariable;
 
   /**
    * Persistent

@@ -501,24 +501,6 @@ describe('Variable Utils', () => {
       });
     });
 
-    describe('Constant', () => {
-      it('Should apply only first value', () => {
-        const variable = { name: 'variable', type: VariableType.CONSTANT };
-        selectVariableValues({
-          values: ['value1', 'value2'],
-          runtimeVariable: variable as any,
-          panelEventBus: eventBus,
-        });
-
-        expect(locationService.partial).toHaveBeenCalledWith(
-          {
-            [`var-${variable.name}`]: 'value1',
-          },
-          true
-        );
-      });
-    });
-
     it('Should not apply value if no variable passed', () => {
       selectVariableValues({ values: ['value1'], panelEventBus: eventBus });
 
