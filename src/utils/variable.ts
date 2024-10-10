@@ -232,8 +232,8 @@ export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariabl
   }
   if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
     let options = variable.options;
-    const hasVariableAllOption = variable.options.some((option) => option.value === ALL_VALUE_PARAMETER);
-    if (variable.includeAll && !hasVariableAllOption) {
+    const hasVariableAllOption = options.length && variable.options[0].value === ALL_VALUE_PARAMETER;
+    if (options.length && variable.includeAll && !hasVariableAllOption) {
       options = [
         {
           text: ALL_VALUE,
