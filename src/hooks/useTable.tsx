@@ -196,11 +196,12 @@ export const useTable = ({
     runtimeVariable,
     levels,
     data,
+    getRuntimeVariable,
     favorites,
     getStatus,
-    options.favorites.enabled,
+    options.favorites,
     options.groupSelection,
-    getRuntimeVariable,
+    ,
   ]);
 
   /**
