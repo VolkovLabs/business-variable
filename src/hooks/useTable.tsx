@@ -283,6 +283,7 @@ export const useTable = ({
            * Calculate All Selection
            */
           const isSelectedAll = runtimeVariable ? isVariableAllSelected(runtimeVariable) : false;
+
           /**
            * Show Header Counts
            */
