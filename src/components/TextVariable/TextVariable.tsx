@@ -3,7 +3,7 @@ import { Input } from '@grafana/ui';
 import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { ConstantVariable, TextBoxVariable } from '../../types';
+import { TextBoxVariable } from '../../types';
 import { selectVariableValues } from '../../utils';
 
 /**
@@ -13,9 +13,9 @@ interface Props {
   /**
    * Variable
    *
-   * @type {TextBoxVariable | ConstantVariable}
+   * @type {TextBoxVariable}
    */
-  variable: TextBoxVariable | ConstantVariable;
+  variable: TextBoxVariable;
 
   /**
    * Panel Event Bus

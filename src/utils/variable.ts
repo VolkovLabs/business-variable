@@ -136,7 +136,12 @@ export const selectVariableValues = ({
         const selectedValues = locationService
           .getSearch()
           .getAll(`var-${name}`)
-          .filter((s) => s.toLowerCase().indexOf('all') !== 0);
+          .filter((s) => {
+            if (s === ALL_VALUE_PARAMETER) {
+              return false;
+            }
+            return s.toLowerCase().indexOf('all') !== 0;
+          });
 
         /**
          * Values selected, but not defined in the URL
@@ -190,11 +195,6 @@ export const selectVariableValues = ({
       setVariableValue(runtimeVariable.name, value, panelEventBus);
       return;
     }
-    case VariableType.CONSTANT: {
-      const value = values[0];
-      setVariableValue(runtimeVariable.name, value, panelEventBus);
-      return;
-    }
     default: {
       /**
        * Unsupported variable type
@@ -222,14 +222,30 @@ export const isVariableWithOptions = (
  * @param variable
  */
 export const getRuntimeVariable = (variable: TypedVariableModel): RuntimeVariable | undefined => {
-  if (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) {
+  if (variable.type === VariableType.TEXTBOX) {
     return variable;
   }
   if (variable.type === VariableType.CUSTOM || variable.type === VariableType.QUERY) {
+    let options = variable.options;
+    const hasVariableAllOption = options.length && options[0].value === ALL_VALUE_PARAMETER;
+    if (options.length && variable.includeAll && !hasVariableAllOption) {
+      options = [
+        {
+          text: ALL_VALUE,
+          value: ALL_VALUE_PARAMETER,
+          selected: Array.isArray(variable?.current.value)
+            ? variable?.current.value.includes(ALL_VALUE_PARAMETER)
+            : variable?.current.value === ALL_VALUE_PARAMETER,
+        },
+        ...variable.options,
+      ];
+    }
+
     const runtimeVariable = {
       ...variable,
+      options: options,
       type: VariableType.CUSTOM,
-      optionIndexByName: variable.options.reduce((acc, option, index) => {
+      optionIndexByName: options.reduce((acc, option, index) => {
         acc.set(option.value as string, index);
         return acc;
       }, new Map()),

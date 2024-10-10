@@ -56,6 +56,7 @@ describe('Use Slider', () => {
   it('Should update slider value when variable changes', () => {
     const variable = getRuntimeVariable({
       options: [
+        { selected: false, text: ALL_VALUE, value: ALL_VALUE_PARAMETER },
         { selected: false, text: 'Option 1', value: 'option1' },
         { selected: true, text: 'Option 2', value: 'option2' },
         { selected: false, text: 'Option 3', value: 'option3' },
@@ -71,7 +72,7 @@ describe('Use Slider', () => {
       initialProps: variable,
     });
 
-    expect(result.current.value).toEqual(1);
+    expect(result.current.value).toEqual(2);
 
     /**
      * Re-render with updated variable value
@@ -96,6 +97,7 @@ describe('Use Slider', () => {
   it('Should return value if variable value is array', () => {
     const variable = getRuntimeVariable({
       options: [
+        { selected: false, text: ALL_VALUE, value: ALL_VALUE_PARAMETER },
         { selected: false, text: 'Option 1', value: 'option1' },
         { selected: true, text: 'Option 2', value: 'option2' },
         { selected: false, text: 'Option 3', value: 'option3' },
@@ -109,7 +111,7 @@ describe('Use Slider', () => {
 
     const { result } = renderHook(() => useSlider(variable as any));
 
-    expect(result.current.value).toEqual(1);
+    expect(result.current.value).toEqual(2);
   });
 
   it('Should return text for value', async () => {
@@ -120,7 +122,6 @@ describe('Use Slider', () => {
         { selected: false, text: 'Option 3', value: 'option3' },
       ],
       type: VariableType.QUERY,
-      includeAll: true,
       current: {
         value: ['option2'],
       },

@@ -1,5 +1,4 @@
 import {
-  ConstantVariableModel,
   CustomVariableModel as CoreCustomVariableModel,
   QueryVariableModel as CoreQueryVariableModel,
   TextBoxVariableModel,
@@ -113,11 +112,6 @@ export type QueryVariableModel = Omit<CoreQueryVariableModel, 'options' | 'type'
 export type TextBoxVariable = TextBoxVariableModel & { current: Partial<VariableOption>; helpers?: never };
 
 /**
- * Constant Variable
- */
-export type ConstantVariable = ConstantVariableModel & { current: Partial<VariableOption> };
-
-/**
  * Runtime Variable With Options
  */
 export type RuntimeVariableWithOptions = CustomVariableModel | QueryVariableModel;
@@ -125,4 +119,4 @@ export type RuntimeVariableWithOptions = CustomVariableModel | QueryVariableMode
 /**
  * Runtime Variable
  */
-export type RuntimeVariable = RuntimeVariableWithOptions | TextBoxVariable | ConstantVariable;
+export type RuntimeVariable = RuntimeVariableWithOptions | TextBoxVariable;

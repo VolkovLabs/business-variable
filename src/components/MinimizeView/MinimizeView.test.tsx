@@ -156,40 +156,6 @@ describe('Minimize View', () => {
     expect(selectors.dateTimeSelector()).toBeInTheDocument();
   });
 
-  it('Should show variable control for constant type and Date Time Picker view', () => {
-    jest.mocked(useRuntimeVariables).mockImplementation(
-      () =>
-        ({
-          variable: {
-            label: '123',
-            type: VariableType.CONSTANT,
-          },
-        }) as any
-    );
-
-    const { rerender } = render(
-      getComponent({
-        options: {
-          minimizeOutputFormat: MinimizeOutputFormat.DATE,
-        } as any,
-      })
-    );
-
-    expect(selectors.root()).toBeInTheDocument();
-    expect(selectors.dateTimeSelector()).toBeInTheDocument();
-
-    rerender(
-      getComponent({
-        options: {
-          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
-        } as any,
-      })
-    );
-
-    expect(selectors.root()).toBeInTheDocument();
-    expect(selectors.dateTimeSelector()).toBeInTheDocument();
-  });
-
   it('Should show variable label', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>

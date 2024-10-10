@@ -114,7 +114,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       config.favorites.storage === FavoritesStorage.DATASOURCE;
     const isDateTimePickerMode = (config: PanelOptions, variable?: TypedVariableModel) =>
       (variable &&
-        (variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
+        variable.type === VariableType.TEXTBOX &&
         config.displayMode === DisplayMode.MINIMIZE &&
         config.minimizeOutputFormat === MinimizeOutputFormat.DATE) ||
       config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP;
@@ -323,7 +323,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addRadio({
         path: 'minimizeOutputFormat',
         name: 'Minimize output format',
-        description: 'Set the display mode for the variable of the “Text box" or "Constant" type',
+        description: 'Set the display mode for the variable of the “Text box" type',
         settings: {
           options: MINIMIZE_OUTPUT_FORMAT_OPTIONS,
         },

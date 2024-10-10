@@ -17,10 +17,6 @@ const variablesMock = [
     name: 'textBox',
     type: VariableType.TEXTBOX,
   },
-  {
-    name: 'constant',
-    type: VariableType.CONSTANT,
-  },
 ];
 
 jest.mock('@grafana/runtime', () => ({
@@ -201,20 +197,6 @@ describe('plugin', () => {
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
     });
 
-    it('Should show variants for Constant variable', () => {
-      const shownOptionsPaths: string[] = [];
-
-      builder.addRadio.mockImplementation(
-        addInputImplementation(
-          createPanelOptions({ variable: 'constant', displayMode: DisplayMode.MINIMIZE }),
-          shownOptionsPaths
-        )
-      );
-      plugin['optionsSupplier'](builder);
-
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat']));
-    });
-
     it('Should show Time options for DateTime picker for TextBox variable', () => {
       const shownOptionsPaths: string[] = [];
 
@@ -222,24 +204,6 @@ describe('plugin', () => {
         addInputImplementation(
           createPanelOptions({
             variable: 'textBox',
-            displayMode: DisplayMode.MINIMIZE,
-            minimizeOutputFormat: MinimizeOutputFormat.DATE,
-          }),
-          shownOptionsPaths
-        )
-      );
-      plugin['optionsSupplier'](builder);
-
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeOutputFormat', 'isUseLocalTime']));
-    });
-
-    it('Should show Time options for DateTime picker for Constant variable', () => {
-      const shownOptionsPaths: string[] = [];
-
-      builder.addRadio.mockImplementation(
-        addInputImplementation(
-          createPanelOptions({
-            variable: 'constant',
             displayMode: DisplayMode.MINIMIZE,
             minimizeOutputFormat: MinimizeOutputFormat.DATE,
           }),
