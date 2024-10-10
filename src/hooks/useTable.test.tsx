@@ -62,8 +62,8 @@ describe('Use Table Hook', () => {
         current: {
           ...(variable.current || {}),
           value:
-            variable.current?.value ||
             variable.options?.filter((option) => option.selected).map(({ value }) => value.toString()) ||
+            variable.current?.value ||
             [],
         } as any,
       } as any);
