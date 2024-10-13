@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -35,6 +34,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -69,10 +74,19 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -82,10 +96,12 @@
         "showName": false,
         "showResetButton": false,
         "showTotal": false,
-        "statusSort": false,
+        "statusSort": true,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "country"
       },
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -116,6 +132,7 @@
           }
         }
       ],
+      "title": "Country variable",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -125,6 +142,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -159,10 +182,19 @@
         "customValue": false,
         "displayMode": "minimize",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 20,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -174,8 +206,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "state"
       },
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -215,6 +249,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -249,10 +289,19 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -264,8 +313,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "city"
       },
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -296,6 +347,7 @@
           }
         }
       ],
+      "title": "City variable",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -305,6 +357,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -339,7 +397,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "groups": [
@@ -366,6 +431,8 @@
           }
         ],
         "header": false,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -377,8 +444,10 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "device"
       },
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -447,6 +516,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -477,10 +552,19 @@
         "customValue": false,
         "displayMode": "minimize",
         "emptyValue": false,
-        "favorites": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 20,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -492,8 +576,11 @@
         "showTotal": false,
         "statusSort": false,
         "sticky": false,
+        "tabsInOrder": true,
         "variable": "text"
       },
+      "pluginVersion": "3.6.0",
+      "title": "Minimize",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -503,6 +590,12 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -537,7 +630,14 @@
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
-        "favorites": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": true,
+          "getQuery": {},
+          "storage": "browser"
+        },
         "filter": true,
         "groupSelection": false,
         "groups": [
@@ -577,6 +677,8 @@
           }
         ],
         "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -588,8 +690,10 @@
         "showTotal": false,
         "statusSort": true,
         "sticky": true,
+        "tabsInOrder": true,
         "variable": "device"
       },
+      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -678,6 +782,7 @@
           }
         }
       ],
+      "title": "Metrics",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -697,6 +802,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 50,
             "gradientMode": "scheme",
@@ -834,6 +940,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 50,
             "gradientMode": "scheme",
@@ -1223,6 +1330,6 @@
   "timezone": "",
   "title": "Metrics",
   "uid": "Rcb6nob4k",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }
