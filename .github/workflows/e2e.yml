@@ -73,6 +73,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-dep
+          name: playwright-report-dependency
           path: playwright-report/
           retention-days: 30
