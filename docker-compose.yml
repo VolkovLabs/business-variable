@@ -25,6 +25,7 @@ services:
     profiles:
       - dev
       - main
+      - dependency
 
   server:
     build:
@@ -41,6 +42,7 @@ services:
     profiles:
       - dev
       - main
+      - dependency
 
   grafana-main:
     image: grafana/grafana:main
@@ -56,6 +58,20 @@ services:
     profiles:
       - main
 
+  grafana-dep:
+    image: grafana/grafana:10.3.0
+    ports:
+      - 3000:3000/tcp
+    environment:
+      - GF_DEFAULT_APP_MODE=development
+      - GF_USERS_DEFAULT_THEME=light
+      - GF_INSTALL_PLUGINS=marcusolsson-static-datasource
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/volkovlabs-variable-panel
+      - ./provisioning:/etc/grafana/provisioning
+    profiles:
+      - dependency
+
   test:
     build:
       context: .
@@ -68,3 +84,4 @@ services:
     network_mode: host
     profiles:
       - e2e
+      - dependency

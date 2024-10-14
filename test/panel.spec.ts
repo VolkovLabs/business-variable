@@ -96,7 +96,7 @@ test.describe('Volkovlabs Variable Panel', () => {
        * Change variable value
        */
       minimizePanel.getTextInput().changeInputValue('test');
-      await page.waitForTimeout(200);
+      await page.waitForTimeout(400);
       const urlParams = new UrlHelper(await page.url());
       urlParams.checkVariable('var-text', 'test');
     });
@@ -121,6 +121,7 @@ test.describe('Volkovlabs Variable Panel', () => {
       /**
        * Change variable value
        */
+      await panel.getMinimizePanel().getSelect().checkPresence();
       await minimizePanel.getSelect().changeValue(dashboardPage, 'myKey');
       await page.waitForTimeout(200);
       const urlParams = new UrlHelper(await page.url());
