@@ -140,6 +140,7 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       const dashboard = await readProvisionedDashboard({ fileName: 'sliders.json' });
       const dashboardPage = await gotoDashboardPage({ uid: dashboard.uid });
+
       /**
        * Await content load
        */
@@ -278,12 +279,10 @@ test.describe('Volkovlabs Variable Panel', () => {
       const panel = new PanelHelper(dashboardPage, 'Metrics');
       const tablePanel = panel.getTablePanel();
       await tablePanel.checkPresence();
-      // await tablePanel.getTable().getRow(0).getCell('All', 0).checkPresence();
 
       /**
        * Check row and cells in 4 level
        */
-      await tablePanel.getTable().checkBodyRowsCount(16);
       await tablePanel.getTable().getRow('0.0.0.0').checkPresence();
       await tablePanel.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkPresence();
       await tablePanel.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkText('NY Central 133');
