@@ -115,19 +115,19 @@ export const MinimizeView: React.FC<Props> = ({
               maxVisibleValues={maxVisibleValues}
             />
           )}
-          {(variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
-            isUseDateTimeSelector && (
-              <DateTimeSelector
-                variable={variable}
-                persistent={persistent}
-                panelEventBus={panelEventBus}
-                timeZone={timeZone}
-                isUseLocalTime={isUseLocalTime}
-                minimizeOutputFormat={minimizeOutputFormat}
-              />
-            )}
-          {(variable.type === VariableType.TEXTBOX || variable.type === VariableType.CONSTANT) &&
-            !isUseDateTimeSelector && <TextVariable variable={variable} panelEventBus={panelEventBus} />}
+          {variable.type === VariableType.TEXTBOX && isUseDateTimeSelector && (
+            <DateTimeSelector
+              variable={variable}
+              persistent={persistent}
+              panelEventBus={panelEventBus}
+              timeZone={timeZone}
+              isUseLocalTime={isUseLocalTime}
+              minimizeOutputFormat={minimizeOutputFormat}
+            />
+          )}
+          {variable.type === VariableType.TEXTBOX && !isUseDateTimeSelector && (
+            <TextVariable variable={variable} panelEventBus={panelEventBus} />
+          )}
         </>
       </InlineField>
     </div>
