@@ -1,6 +1,7 @@
 import { test, expect } from '@grafana/plugin-e2e';
 import { TEST_IDS } from '../src/constants/tests';
 import { PanelHelper, UrlHelper } from './utils';
+
 test.describe('Volkovlabs Variable Panel', () => {
   test('Check grafana version', async ({ grafanaVersion }) => {
     console.log('Grafana version: ', grafanaVersion);
