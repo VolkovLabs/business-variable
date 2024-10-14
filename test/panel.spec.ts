@@ -293,21 +293,21 @@ test.describe('Volkovlabs Variable Panel', () => {
        * Go To Panels dashboard home.json
        * return dashboardPage
        */
-      const dashboard = await readProvisionedDashboard({ fileName: 'home.json' });
+      const dashboard = await readProvisionedDashboard({ fileName: 'performance10k.json' });
       const dashboardPage = await gotoDashboardPage({ uid: dashboard.uid });
       /**
        * Await content load
        */
       await page.waitForTimeout(1500);
-      const panel = new PanelHelper(dashboardPage, 'Metrics');
+      const panel = new PanelHelper(dashboardPage, 'Tree View Updated');
       const tablePanel = panel.getTablePanel();
       await tablePanel.checkPresence();
 
-      await tablePanel.getTable().checkBodyRowsCount(16);
+      await tablePanel.getTable().checkBodyRowsCount(21);
       await panel.getTablePanel().getTableHeader().expandAll();
-      await tablePanel.getTable().checkBodyRowsCount(5);
+      await tablePanel.getTable().checkBodyRowsCount(9);
       await panel.getTablePanel().getTableHeader().expandAll();
-      await tablePanel.getTable().checkBodyRowsCount(16);
+      await tablePanel.getTable().checkBodyRowsCount(21);
     });
 
     test('Should set variable using tree view', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
