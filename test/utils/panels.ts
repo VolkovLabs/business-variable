@@ -1,5 +1,5 @@
 import { Locator } from '@playwright/test';
-import { DashboardPage, expect, Panel, PanelEditPage } from '@grafana/plugin-e2e';
+import { DashboardPage, expect, Panel } from '@grafana/plugin-e2e';
 import { TEST_IDS } from '../../src/constants/tests';
 import { getLocatorSelectors, LocatorSelectors } from './selectors';
 
@@ -152,7 +152,7 @@ class TableHeaderHelper {
 /**
  * Table panel Helper
  */
-class TablePanelHelper {
+class TableViewHelper {
   public selectors: LocatorSelectors<typeof TEST_IDS.tableView>;
 
   constructor(public readonly locator: Locator) {
@@ -187,7 +187,7 @@ class TablePanelHelper {
 /**
  * Button View Helper
  */
-class ButtonPanelHelper {
+class ButtonViewHelper {
   public selectors: LocatorSelectors<typeof TEST_IDS.buttonView>;
 
   constructor(public readonly locator: Locator) {
@@ -283,7 +283,7 @@ class SelectVariableHelper {
 /**
  * Minimize View Helper
  */
-class MinimizePanelHelper {
+class MinimizeViewHelper {
   public selectors: LocatorSelectors<typeof TEST_IDS.minimizeView>;
   public textSelectors: LocatorSelectors<typeof TEST_IDS.textVariable>;
 
@@ -320,7 +320,7 @@ class MinimizePanelHelper {
 /**
  * Slider view Helper
  */
-class SliderPanelHelper {
+class SliderViewHelper {
   public selectors: LocatorSelectors<typeof TEST_IDS.sliderView>;
 
   constructor(public readonly locator: Locator) {
@@ -360,20 +360,20 @@ export class PanelHelper {
     return `Panel: ${msg}`;
   }
 
-  public getTablePanel() {
-    return new TablePanelHelper(this.locator);
+  public getTableView() {
+    return new TableViewHelper(this.locator);
   }
 
-  public getSliderPanel() {
-    return new SliderPanelHelper(this.locator);
+  public getSliderView() {
+    return new SliderViewHelper(this.locator);
   }
 
-  public getButtonPanel() {
-    return new ButtonPanelHelper(this.locator);
+  public getButtonView() {
+    return new ButtonViewHelper(this.locator);
   }
 
-  public getMinimizePanel() {
-    return new MinimizePanelHelper(this.locator);
+  public getMinimizeView() {
+    return new MinimizeViewHelper(this.locator);
   }
 
   public async checkIfNoErrors() {

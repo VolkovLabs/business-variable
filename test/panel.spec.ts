@@ -1,5 +1,4 @@
 import { test, expect } from '@grafana/plugin-e2e';
-import { TEST_IDS } from '../src/constants/tests';
 import { PanelHelper, UrlHelper } from './utils';
 
 test.describe('Volkovlabs Variable Panel', () => {
@@ -37,9 +36,9 @@ test.describe('Volkovlabs Variable Panel', () => {
      * Check Presence
      */
     const panel = new PanelHelper(dashboardPage, 'New Panel');
-    const tablePanel = panel.getTablePanel();
-    await tablePanel.checkPresence();
-    await tablePanel.checkAlert();
+    const tableView = panel.getTableView();
+    await tableView.checkPresence();
+    await tableView.checkAlert();
     await panel.checkIfNoErrors();
   });
 
@@ -60,10 +59,10 @@ test.describe('Volkovlabs Variable Panel', () => {
      * Check Presence
      */
     const panel = new PanelHelper(dashboardPage, 'Device Simple');
-    const tablePanel = panel.getTablePanel();
-    await tablePanel.checkPresence();
+    const tableView = panel.getTableView();
+    await tableView.checkPresence();
 
-    const table = tablePanel.getTable();
+    const table = tableView.getTable();
     await table.getRow(0).getCell('All', 0).checkPresence();
     await table.getRow(1).getCell('Device1', 0).checkText('Device1');
     await table.getRow(2).getCell('Device2', 0).checkText('Device2');
@@ -91,12 +90,12 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Minimize');
-      const minimizePanel = panel.getMinimizePanel();
-      await minimizePanel.checkPresence();
+      const minimizeView = panel.getMinimizeView();
+      await minimizeView.checkPresence();
       /**
        * Change variable value
        */
-      minimizePanel.getTextInput().changeInputValue('test');
+      minimizeView.getTextInput().changeInputValue('test');
       await page.waitForTimeout(400);
       const urlParams = new UrlHelper(await page.url());
       urlParams.checkVariable('var-text', 'test');
@@ -117,13 +116,13 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Minimize');
-      const minimizePanel = panel.getMinimizePanel();
-      await minimizePanel.checkPresence();
+      const minimizeView = panel.getMinimizeView();
+      await minimizeView.checkPresence();
       /**
        * Change variable value
        */
-      await panel.getMinimizePanel().getSelect().checkPresence();
-      await minimizePanel.getSelect().changeValue(dashboardPage, 'myKey');
+      await panel.getMinimizeView().getSelect().checkPresence();
+      await minimizeView.getSelect().changeValue(dashboardPage, 'myKey');
       await page.waitForTimeout(200);
       const urlParams = new UrlHelper(await page.url());
       urlParams.checkVariable('var-test', 'myvalue');
@@ -148,7 +147,7 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Empty');
-      const sliderPanel = panel.getSliderPanel();
+      const sliderPanel = panel.getSliderView();
       await sliderPanel.checkVariableAlert();
     });
   });
@@ -173,11 +172,11 @@ test.describe('Volkovlabs Variable Panel', () => {
        * Check Presence
        */
       const panel = new PanelHelper(dashboardPage, 'Device 1 Multi + All');
-      const buttonPanel = panel.getButtonPanel();
-      await buttonPanel.checkPresence();
-      const button = await buttonPanel.getButton('Device4');
+      const buttonView = panel.getButtonView();
+      await buttonView.checkPresence();
+      const button = await buttonView.getButton('Device4');
       await expect(button).toBeVisible();
-      await buttonPanel.clickOnButton('Device4');
+      await buttonView.clickOnButton('Device4');
       await page.waitForTimeout(300);
       /**
        * Check variable values
@@ -205,18 +204,18 @@ test.describe('Volkovlabs Variable Panel', () => {
        * Check Presence
        */
       const panel = new PanelHelper(dashboardPage, 'Device 1 Multi + All');
-      const buttonPanel = panel.getButtonPanel();
-      await buttonPanel.checkPresence();
-      const button = await buttonPanel.getButton('Device3');
+      const buttonView = panel.getButtonView();
+      await buttonView.checkPresence();
+      const button = await buttonView.getButton('Device3');
       await expect(button).toBeVisible();
-      await buttonPanel.clickOnButton('Device3');
+      await buttonView.clickOnButton('Device3');
       await page.waitForTimeout(200);
       /**
        * Check variable values
        */
       const urlParams = new UrlHelper(await page.url());
       urlParams.checkVariable('var-device', 'Device3');
-      await buttonPanel.clickOnResetButton();
+      await buttonView.clickOnResetButton();
       await page.waitForTimeout(200);
       urlParams.updateParams(await page.url());
       urlParams.checkIfNoVariableValue('var-device', 'Device3');
@@ -240,9 +239,9 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Empty');
-      const tablePanel = panel.getTablePanel();
-      await tablePanel.checkPresence();
-      await tablePanel.checkAlert();
+      const tableView = panel.getTableView();
+      await tableView.checkPresence();
+      await tableView.checkAlert();
     });
 
     test('Should display All option if variable include-all', async ({
@@ -261,10 +260,10 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'City variable');
-      const tablePanel = panel.getTablePanel();
-      await tablePanel.checkPresence();
-      await tablePanel.getTable().getRow(0).getCell('All', 0).checkPresence();
-      await tablePanel.getTable().checkBodyRowsCount(6);
+      const tableView = panel.getTableView();
+      await tableView.checkPresence();
+      await tableView.getTable().getRow(0).getCell('All', 0).checkPresence();
+      await tableView.getTable().checkBodyRowsCount(6);
     });
 
     test('Should display tree cells in depth', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
@@ -279,15 +278,15 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Metrics');
-      const tablePanel = panel.getTablePanel();
-      await tablePanel.checkPresence();
+      const tableView = panel.getTableView();
+      await tableView.checkPresence();
 
       /**
        * Check row and cells in 4 level
        */
-      await tablePanel.getTable().getRow('0.0.0.0').checkPresence();
-      await tablePanel.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkPresence();
-      await tablePanel.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkText('NY Central 133');
+      await tableView.getTable().getRow('0.0.0.0').checkPresence();
+      await tableView.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkPresence();
+      await tableView.getTable().getRow('0.0.0.0').getCell('NY Central 133', 3).checkText('NY Central 133');
     });
 
     test('Should expand all rows', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
@@ -302,14 +301,14 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'Tree View Updated');
-      const tablePanel = panel.getTablePanel();
-      await tablePanel.checkPresence();
+      const tableView = panel.getTableView();
+      await tableView.checkPresence();
 
-      await tablePanel.getTable().checkBodyRowsCount(21);
-      await panel.getTablePanel().getTableHeader().expandAll();
-      await tablePanel.getTable().checkBodyRowsCount(9);
-      await panel.getTablePanel().getTableHeader().expandAll();
-      await tablePanel.getTable().checkBodyRowsCount(21);
+      await tableView.getTable().checkBodyRowsCount(21);
+      await panel.getTableView().getTableHeader().expandAll();
+      await tableView.getTable().checkBodyRowsCount(9);
+      await panel.getTableView().getTableHeader().expandAll();
+      await tableView.getTable().checkBodyRowsCount(21);
     });
 
     test('Should set variable using tree view', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
@@ -324,21 +323,21 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       await page.waitForTimeout(1500);
       const panel = new PanelHelper(dashboardPage, 'City variable');
-      const tablePanel = panel.getTablePanel();
-      await tablePanel.checkPresence();
+      const tableView = panel.getTableView();
+      await tableView.checkPresence();
 
-      await tablePanel.getTable().getRow(1).checkPresence();
-      await tablePanel.getTable().getRow(1).checkControl();
-      await tablePanel.getTable().getRow(1).toggleValue();
+      await tableView.getTable().getRow(1).checkPresence();
+      await tableView.getTable().getRow(1).checkControl();
+      await tableView.getTable().getRow(1).toggleValue();
 
       await page.waitForTimeout(200);
 
       const urlParams = new UrlHelper(await page.url());
       urlParams.checkVariable('var-city', 'Moscow');
 
-      await tablePanel.getTable().getRow(0).checkPresence();
-      await tablePanel.getTable().getRow(0).checkControl();
-      await tablePanel.getTable().getRow(0).toggleValue();
+      await tableView.getTable().getRow(0).checkPresence();
+      await tableView.getTable().getRow(0).checkControl();
+      await tableView.getTable().getRow(0).toggleValue();
       await page.waitForTimeout(200);
       urlParams.updateParams(await page.url());
       urlParams.checkIfNoVariableValue('var-city', 'Moscow');
