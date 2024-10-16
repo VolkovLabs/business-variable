@@ -128,6 +128,25 @@ describe('SliderView', () => {
     expect(selectors.noOptionsMessage());
   });
 
+  it('Should show no available options message', () => {
+    jest.mocked(useRuntimeVariables).mockImplementationOnce(
+      () =>
+        ({
+          variable: { ...deviceVariable, options: [], type: VariableType.CUSTOM, multi: false },
+        }) as any
+    );
+
+    render(
+      getComponent({
+        options: {
+          variable: 'device',
+        } as any,
+      })
+    );
+
+    expect(selectors.noAvailableOptionsMessage());
+  });
+
   describe('Display Slider', () => {
     const options = [
       {
