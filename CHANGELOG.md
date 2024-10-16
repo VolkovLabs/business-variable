@@ -7,6 +7,7 @@
 - Updated behavior in table view for Textbox variable type (#211)
 - Added Date Time Selector (#209)
 - Add All options in Scenes dashboards (#213)
+- Updated e2e tests (#216)
 
 ## 3.5.0 (2024-10-02)
 
