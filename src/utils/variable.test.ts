@@ -1,6 +1,5 @@
 import { VariableHide, VariableRefresh } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
-import { sceneUtils } from '@grafana/scenes';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import { VariableChangedEvent, VariableType } from '../types';
