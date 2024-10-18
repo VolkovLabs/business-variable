@@ -1,9 +1,36 @@
-import { EventBus, TypedVariableModel } from '@grafana/data';
+import {
+  AdHocVariableModel,
+  ConstantVariableModel,
+  CustomVariableModel as CoreCustomVariableModel,
+  DataSourceVariableModel,
+  EventBus,
+  IntervalVariableModel,
+  LoadingState,
+  QueryVariableModel as QueryCoreVariableModel,
+  TextBoxVariableModel,
+  TypedVariableModel,
+  VariableOption,
+} from '@grafana/data';
 import { locationService } from '@grafana/runtime';
+import {
+  AdHocFiltersVariable,
+  ConstantVariable,
+  CustomVariable,
+  DataSourceVariable,
+  IntervalVariable,
+  MultiValueVariable,
+  QueryVariable,
+  sceneUtils,
+  SceneVariables,
+  TextBoxVariable,
+  VariableValue,
+} from '@grafana/scenes';
+import { VariableHide, VariableRefresh } from '@grafana/schema';
 import { ChangeEvent, MouseEvent, PointerEvent } from 'react';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import {
+  ConvertCommonProperties,
   CustomVariableModel,
   QueryVariableModel,
   RuntimeVariable,
@@ -324,3 +351,290 @@ export const shouldKeepSelection = (event: ChangeEvent | MouseEvent): boolean =>
 
   return isMac() ? nativeEvent.metaKey : nativeEvent.ctrlKey;
 };
+
+/**
+ * Scene Variables transform to TypedModel Variable flow
+ * Transform new interval scene model to old interval core model
+ */
+export const getIntervalsQueryFromNewIntervalModel = (intervals: string[]): string => {
+  const variableQuery = Array.isArray(intervals) ? intervals.join(',') : '';
+  return variableQuery;
+};
+
+/**
+ * Scene Variables transform to TypedModel Variable flow
+ * Transform new interval scene model to old interval core model
+ */
+export const sceneStateToVariableOptions = (varState: MultiValueVariable['state']): VariableOption[] => {
+  return varState.options.map((option) => ({
+    value: String(option.value),
+    text: option.label,
+    selected: Array.isArray(varState.value) ? varState.value.includes(option.value) : varState.value === option.value,
+  }));
+};
+
+/**
+ * Convert property from value, text
+ */
+export const convertCurrentProperty = (option: VariableValue) => {
+  let value: string | string[];
+  if (Array.isArray(option)) {
+    value = option.map((item) => String(item));
+  } else {
+    value = String(option);
+  }
+  return value;
+};
+
+/**
+ * Convert to Query Variable
+ */
+export const convertToQueryVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: QueryVariable,
+  keepQueryOptions?: boolean
+): QueryCoreVariableModel => {
+  let options: VariableOption[] = [];
+  if (variable.state.refresh === VariableRefresh.never || keepQueryOptions) {
+    options = sceneStateToVariableOptions(variable.state);
+  }
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.text,
+  } as VariableOption | Record<string, never>;
+  return {
+    ...commonProperties,
+    current: currentValue,
+    type: VariableType.QUERY,
+    options: options,
+    query: variable.state.query,
+    definition: variable.state.definition || '',
+    datasource: variable.state.datasource,
+    sort: variable.state.sort,
+    refresh: variable.state.refresh,
+    regex: variable.state.regex,
+    allValue: variable.state.allValue,
+    includeAll: variable.state?.includeAll ? variable.state?.includeAll : false,
+    multi: variable.state?.isMulti ? variable.state?.isMulti : false,
+    skipUrlSync: variable.state.skipUrlSync ? variable.state.skipUrlSync : false,
+  };
+};
+
+/**
+ * Convert to Custom Variable
+ */
+export const convertToCustomVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: CustomVariable
+): CoreCustomVariableModel => {
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.text,
+  } as VariableOption | Record<string, never>;
+
+  return {
+    ...commonProperties,
+    current: currentValue,
+    options: sceneStateToVariableOptions(variable.state),
+    query: variable.state.query,
+    type: VariableType.CUSTOM,
+    multi: variable.state?.isMulti ? variable.state?.isMulti : false,
+    allValue: variable.state.allValue,
+    includeAll: variable.state?.includeAll ? variable.state?.includeAll : false,
+  };
+};
+
+/**
+ * Convert to Text box
+ */
+export const convertToTextBoxVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: TextBoxVariable
+): TextBoxVariableModel => {
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.value,
+  } as VariableOption | Record<string, never>;
+
+  return {
+    ...commonProperties,
+    current: currentValue,
+    type: VariableType.TEXTBOX,
+    options: [
+      {
+        value: variable.state.value,
+        text: variable.state.value,
+        selected: true,
+      },
+    ],
+    originalQuery: variable.state.value,
+    query: variable.state.value,
+  };
+};
+
+/**
+ * Convert to Data Source Variable
+ */
+export const convertToDataSourceVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: DataSourceVariable
+): DataSourceVariableModel => {
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.text,
+  } as VariableOption | Record<string, never>;
+
+  return {
+    ...commonProperties,
+    current: currentValue,
+    options: [],
+    type: VariableType.DATASOURCE,
+    regex: variable.state.regex,
+    refresh: VariableRefresh.onDashboardLoad,
+    query: variable.state.pluginId,
+    multi: variable.state?.isMulti ? variable.state?.isMulti : false,
+    allValue: variable.state.allValue,
+    includeAll: variable.state?.includeAll ? variable.state?.includeAll : false,
+  };
+};
+
+/**
+ * Convert to Constant Variable
+ */
+export const convertToConstantVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: ConstantVariable
+): ConstantVariableModel => {
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.value,
+  } as VariableOption | Record<string, never>;
+
+  return {
+    ...commonProperties,
+    current: currentValue,
+    type: VariableType.CONSTANT,
+    options: [
+      {
+        value: String(variable.state.value),
+        text: String(variable.state.value),
+        selected: true,
+      },
+    ],
+    query: String(variable.state.value),
+    hide: VariableHide.hideVariable,
+  };
+};
+
+/**
+ * Convert to Interval Variable
+ */
+export const convertToIntervalVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: IntervalVariable
+): IntervalVariableModel => {
+  const currentValue = {
+    value: variable.state.value,
+    text: variable.state.value,
+  } as VariableOption | Record<string, never>;
+
+  const intervals = getIntervalsQueryFromNewIntervalModel(variable.state.intervals);
+
+  return {
+    ...commonProperties,
+    current: currentValue,
+    query: intervals,
+    refresh: variable.state.refresh,
+    options: variable.state.intervals.map((interval) => ({
+      value: interval,
+      text: interval,
+      selected: interval === variable.state.value,
+    })),
+    type: VariableType.INTERVAL,
+    auto: variable.state.autoEnabled,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    auto_min: variable.state.autoMinInterval,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    auto_count: variable.state.autoStepCount,
+  };
+};
+
+/**
+ * Convert to Adhoc Variable
+ */
+export const convertToAdhocVariable = (
+  commonProperties: ConvertCommonProperties,
+  variable: AdHocFiltersVariable
+): AdHocVariableModel => {
+  return {
+    ...commonProperties,
+    type: VariableType.ADHOC,
+    datasource: variable.state.datasource,
+    filters: variable.state.filters,
+    defaultKeys: variable.state.defaultKeys,
+    baseFilters: variable.state.baseFilters,
+  };
+};
+
+/**
+ * Converts a SceneVariables object into an array of VariableModel objects.
+ * templateSrv.getVariables returns TypedVariableModel but sceneVariablesSetToVariables return persisted schema model
+ * They look close to identical (differ in what is optional in some places).
+ * current property not included in scene variable result
+ * The way templateSrv.getVariables is used it should not matter. it is mostly used to get names of all variables (for query editors).
+ * So type and name are important. Maybe some external data sources also check current value so that is also important.
+ * @param set - The SceneVariables object containing the variables to convert.
+ * @param keepQueryOptions - (Optional) A boolean flag indicating whether to keep the options for query variables.
+ *                           This should be set to `false` when variables are saved in the dashboard model,
+ *                           but should be set to `true` when variables are used in the templateSrv to keep them in sync.
+ *                           If `true`, the options for query variables are kept.
+ */
+export function getVariablesCompatibility(set: SceneVariables, keepQueryOptions?: boolean) {
+  const variables: TypedVariableModel[] = [];
+
+  for (const variable of set.state.variables) {
+    const commonProperties: ConvertCommonProperties = {
+      name: variable.state.name,
+      label: variable.state.label,
+      skipUrlSync: Boolean(variable.state.skipUrlSync),
+      hide: variable.state.hide || VariableHide.dontHide,
+      global: true,
+      id: variable.state.key ?? '',
+      rootStateKey: variable.state.key || null,
+      state: LoadingState.Done,
+      error: variable.state.error,
+      index: 0,
+      description: variable.state.description || null,
+    };
+
+    if (sceneUtils.isQueryVariable(variable)) {
+      variables.push(convertToQueryVariable(commonProperties, variable, keepQueryOptions));
+    }
+
+    if (sceneUtils.isCustomVariable(variable)) {
+      variables.push(convertToCustomVariable(commonProperties, variable));
+    }
+
+    if (sceneUtils.isDataSourceVariable(variable)) {
+      variables.push(convertToDataSourceVariable(commonProperties, variable));
+    }
+
+    if (sceneUtils.isTextBoxVariable(variable)) {
+      variables.push(convertToTextBoxVariable(commonProperties, variable));
+    }
+
+    if (sceneUtils.isConstantVariable(variable)) {
+      variables.push(convertToConstantVariable(commonProperties, variable));
+    }
+
+    if (sceneUtils.isIntervalVariable(variable)) {
+      variables.push(convertToIntervalVariable(commonProperties, variable));
+    }
+
+    if (sceneUtils.isAdHocVariable(variable)) {
+      variables.push(convertToAdhocVariable(commonProperties, variable));
+    }
+  }
+
+  return variables;
+}

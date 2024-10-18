@@ -173,4 +173,22 @@ describe('Use Slider', () => {
       });
     });
   });
+
+  it('Should return result in no options without errors', async () => {
+    const variable = getRuntimeVariable({
+      options: [],
+      type: VariableType.QUERY,
+      includeAll: true,
+      current: {
+        value: ['option2'],
+      },
+    } as any);
+
+    const { result } = renderHook(() => useSlider(variable as any));
+
+    expect(result.current.min).toEqual(1);
+    expect(result.current.max).toEqual(0);
+    expect(result.current.marks).toEqual('');
+    expect(result.current.variableValue).toEqual('option2');
+  });
 });

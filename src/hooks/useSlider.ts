@@ -7,6 +7,13 @@ import { RuntimeVariableWithOptions } from '../types';
  */
 export const useSlider = (variable?: RuntimeVariableWithOptions) => {
   /**
+   * Options
+   */
+  const options = useMemo(() => {
+    return !variable?.options ? [] : variable.options;
+  }, [variable?.options]);
+
+  /**
    * Min value
    */
   const min = useMemo(() => {
@@ -22,11 +29,11 @@ export const useSlider = (variable?: RuntimeVariableWithOptions) => {
    */
   const max = useMemo(() => {
     if (variable) {
-      return variable.options.length - 1;
+      return options.length >= 1 ? options.length - 1 : 0;
     }
 
     return 0;
-  }, [variable]);
+  }, [options.length, variable]);
 
   /**
    * Get index for the currently selected variable value
@@ -59,14 +66,14 @@ export const useSlider = (variable?: RuntimeVariableWithOptions) => {
    * Marks for slider
    */
   const marks = useMemo(() => {
-    if (variable) {
+    if (variable && options.length > 0) {
       return {
-        [min]: variable.options[min].text,
-        [max]: variable.options[max].text,
+        [min]: options[min].text,
+        [max]: options[max].text,
       };
     }
     return '';
-  }, [max, min, variable]);
+  }, [max, min, options, variable]);
 
   /**
    * Variable value was updated somewhere so update slider value

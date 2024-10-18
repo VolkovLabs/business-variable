@@ -9,6 +9,7 @@
     "@tanstack/react-virtual": "3.10.8",
     "@volkovlabs/components": "^3.2.0",
     "@volkovlabs/grafana-utils": "^1.4.4",
+    "@grafana/scenes": "5.20.0",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",

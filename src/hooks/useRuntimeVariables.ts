@@ -1,9 +1,10 @@
 import { EventBus } from '@grafana/data';
 import { getTemplateSrv, RefreshEvent } from '@grafana/runtime';
+import { sceneGraph, SceneObject } from '@grafana/scenes';
 import { useCallback, useEffect, useState } from 'react';
 
 import { RuntimeVariable } from '../types';
-import { getVariablesMap } from '../utils';
+import { getVariablesCompatibility, getVariablesMap } from '../utils';
 
 /**
  * Runtime Variables
@@ -15,13 +16,40 @@ export const useRuntimeVariables = (eventBus: EventBus, variableName: string) =>
   const [variable, setVariable] = useState<RuntimeVariable>();
 
   useEffect(() => {
-    setVariables(getVariablesMap(getTemplateSrv().getVariables()));
+    let variables: Record<string, RuntimeVariable>;
+    /**
+     * Check scene grafana context
+     */
+    if (window && window.hasOwnProperty('__grafanaSceneContext')) {
+      /**
+       * Get scene context
+       */
+      const sceneContext = window.__grafanaSceneContext;
 
+      /**
+       * Get scene Variables
+       */
+      variables = getVariablesMap(
+        getVariablesCompatibility(sceneGraph.getVariables(sceneContext as SceneObject), true)
+      );
+    } else {
+      variables = getVariablesMap(getTemplateSrv().getVariables());
+    }
+    setVariables(variables);
     /**
      * Update variable on Refresh
      */
     const subscriber = eventBus.getStream(RefreshEvent).subscribe(() => {
-      setVariables(getVariablesMap(getTemplateSrv().getVariables()));
+      let variables: Record<string, RuntimeVariable>;
+      if (window && window.hasOwnProperty('__grafanaSceneContext')) {
+        const sceneContext = window.__grafanaSceneContext;
+        variables = getVariablesMap(
+          getVariablesCompatibility(sceneGraph.getVariables(sceneContext as SceneObject), true)
+        );
+      } else {
+        variables = getVariablesMap(getTemplateSrv().getVariables());
+      }
+      setVariables(variables);
     });
 
     return () => {
