@@ -1,7 +1,9 @@
 import {
   CustomVariableModel as CoreCustomVariableModel,
-  QueryVariableModel as CoreQueryVariableModel,
+  LoadingState,
+  QueryVariableModel as QueryVariableCoreModel,
   TextBoxVariableModel,
+  VariableHide,
   VariableOption,
 } from '@grafana/data';
 
@@ -25,6 +27,20 @@ export enum VariableType {
   TEXTBOX = 'textbox',
   CUSTOM = 'custom',
   SYSTEM = 'system',
+}
+
+export interface ConvertCommonProperties {
+  name: string;
+  label?: string;
+  skipUrlSync: boolean;
+  hide: VariableHide;
+  global: boolean;
+  id: string;
+  rootStateKey: string | null;
+  state: LoadingState;
+  error: unknown | null;
+  index: number;
+  description: string | null;
 }
 
 /**
@@ -101,7 +117,7 @@ export type CustomVariableModel = Omit<CoreCustomVariableModel, 'options' | 'typ
 /**
  * Query Variable Model
  */
-export type QueryVariableModel = Omit<CoreQueryVariableModel, 'options' | 'type'> &
+export type QueryVariableModel = Omit<QueryVariableCoreModel, 'options' | 'type'> &
   ({
     type: VariableType.QUERY;
   } & RuntimeVariableWithOptionsBase);
