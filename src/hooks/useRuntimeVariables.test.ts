@@ -1,32 +1,13 @@
-import { CustomVariableModel, EventBusSrv, LoadingState, VariableHide } from '@grafana/data';
+import { CustomVariableModel, EventBusSrv, LoadingState, TypedVariableModel, VariableHide } from '@grafana/data';
 import { renderHook } from '@testing-library/react';
 
 import { VariableType } from '../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
 
 /**
- * Variable
- */
-interface Variable {
-  /**
-   * Name
-   *
-   * @type {string}
-   */
-  name: string;
-
-  /**
-   * Type
-   *
-   * @type {string}
-   */
-  type: string;
-}
-
-/**
  * Mock @grafana/runtime
  */
-const getVariablesMock = jest.fn((): Variable[] => []);
+const getVariablesMock = jest.fn((): TypedVariableModel[] => []);
 
 jest.mock('@grafana/runtime', () => ({
   ...jest.requireActual('@grafana/runtime'),
