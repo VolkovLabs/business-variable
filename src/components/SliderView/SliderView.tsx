@@ -82,7 +82,7 @@ export const SliderView: React.FC<Props> = ({
   if (!variable.options.length) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noAvailableOptionsMessage}>
-        Variable doesn`t return options
+        No Variable Options.
       </Alert>
     );
   }
