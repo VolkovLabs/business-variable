@@ -1,9 +1,7 @@
 import {
   CustomVariableModel as CoreCustomVariableModel,
-  LoadingState,
   QueryVariableModel as QueryVariableCoreModel,
   TextBoxVariableModel,
-  VariableHide,
   VariableOption,
 } from '@grafana/data';
 
@@ -27,20 +25,6 @@ export enum VariableType {
   TEXTBOX = 'textbox',
   CUSTOM = 'custom',
   SYSTEM = 'system',
-}
-
-export interface ConvertCommonProperties {
-  name: string;
-  label?: string;
-  skipUrlSync: boolean;
-  hide: VariableHide;
-  global: boolean;
-  id: string;
-  rootStateKey: string | null;
-  state: LoadingState;
-  error: unknown | null;
-  index: number;
-  description: string | null;
 }
 
 /**

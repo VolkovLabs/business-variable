@@ -87,10 +87,14 @@ export const useTable = ({
          */
         const value = `${item[key as keyof typeof item]}`;
         let levelVariable = allVariables[key];
+
         if (!levelVariable) {
           const variable = getRuntimeVariable(key);
-          levelVariable = variable;
-          allVariables[key] = variable;
+
+          if (variable) {
+            levelVariable = variable;
+            allVariables[key] = variable;
+          }
         }
         const variableOption = isVariableWithOptions(levelVariable)
           ? levelVariable.helpers.getOption(value)
