@@ -5,38 +5,6 @@ import { VariableChangedEvent, VariableType } from '../types';
 import { getRuntimeVariable, selectVariableValues } from './variable';
 
 /**
- * Mock @grafana/scenes
- */
-jest.mock('@grafana/scenes', () => ({
-  sceneGraph: {
-    getVariables: jest.fn(),
-  },
-  sceneUtils: {
-    isQueryVariable: jest.fn((value) => {
-      return value.state.type === VariableType.QUERY;
-    }),
-    isCustomVariable: jest.fn((value) => {
-      return value.state.type === VariableType.CUSTOM;
-    }),
-    isDataSourceVariable: jest.fn((value) => {
-      return value.state.type === VariableType.DATASOURCE;
-    }),
-    isTextBoxVariable: jest.fn((value) => {
-      return value.state.type === VariableType.TEXTBOX;
-    }),
-    isConstantVariable: jest.fn((value) => {
-      return value.state.type === VariableType.CONSTANT;
-    }),
-    isIntervalVariable: jest.fn((value) => {
-      return value.state.type === VariableType.INTERVAL;
-    }),
-    isAdHocVariable: jest.fn((value) => {
-      return value.state.type === VariableType.ADHOC;
-    }),
-  },
-}));
-
-/**
  * Mock @grafana/runtime
  */
 jest.mock('@grafana/runtime', () => ({
