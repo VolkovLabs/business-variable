@@ -84,4 +84,3 @@ services:
     network_mode: host
     profiles:
       - e2e
-      - dependency
