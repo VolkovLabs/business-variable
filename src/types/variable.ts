@@ -1,6 +1,6 @@
 import {
   CustomVariableModel as CoreCustomVariableModel,
-  QueryVariableModel as CoreQueryVariableModel,
+  QueryVariableModel as QueryVariableCoreModel,
   TextBoxVariableModel,
   VariableOption,
 } from '@grafana/data';
@@ -101,7 +101,7 @@ export type CustomVariableModel = Omit<CoreCustomVariableModel, 'options' | 'typ
 /**
  * Query Variable Model
  */
-export type QueryVariableModel = Omit<CoreQueryVariableModel, 'options' | 'type'> &
+export type QueryVariableModel = Omit<QueryVariableCoreModel, 'options' | 'type'> &
   ({
     type: VariableType.QUERY;
   } & RuntimeVariableWithOptionsBase);

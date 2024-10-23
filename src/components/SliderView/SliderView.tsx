@@ -76,6 +76,17 @@ export const SliderView: React.FC<Props> = ({
     );
   }
 
+  /**
+   * Check if variable can be used with slider view
+   */
+  if (!variable.options.length) {
+    return (
+      <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noAvailableOptionsMessage}>
+        No Variable Options.
+      </Alert>
+    );
+  }
+
   return (
     <div
       className={cx(
