@@ -9,6 +9,7 @@
 - Added All options in Scenes dashboards (#213)
 - Updated e2e tests (#216)
 - Updated Slider view to prevent display error (#220)
+- Updated to Grafana 11.3.0 and dependencies ()
 
 ## 3.5.0 (2024-10-02)
 
