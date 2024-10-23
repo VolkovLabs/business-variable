@@ -83,6 +83,9 @@ export const useContentPosition = ({
       dashboardSubmenuRef.current = document.querySelector('[aria-label="Dashboard submenu"]');
     }
 
+    /**
+     * Set dashboard controls
+     */
     if (!dashboardVariablesContainer.current) {
       const variablesElement = document.querySelector('[data-testid="data-testid dashboard controls"]');
       dashboardVariablesContainer.current = variablesElement?.parentElement;
@@ -189,16 +192,19 @@ export const useContentPosition = ({
 
     calcPosition();
 
+    /**
+     * Listen for Scroll events in Scenes
+     */
     if (window && window.hasOwnProperty('__grafanaSceneContext') && sticky) {
       document.addEventListener('scroll', calcPosition);
 
       return () => {
-        document.addEventListener('scroll', calcPosition);
+        document.removeEventListener('scroll', calcPosition);
       };
     }
 
     /**
-     * Listen for Scroll events
+     * Listen for Scroll events in non-Scenes
      */
     if (dashboardScrollViewRef.current && sticky && !window.hasOwnProperty('__grafanaSceneContext')) {
       dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
