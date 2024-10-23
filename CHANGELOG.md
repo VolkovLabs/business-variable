@@ -1,13 +1,14 @@
 # Change Log
 
-## 3.6.0 (IN PROGRESS)
+## 3.6.0 (2024-10-23)
 
 ### Features / Enhancements
 
 - Updated behavior in table view for Textbox variable type (#211)
 - Added Date Time Selector (#209)
-- Add All options in Scenes dashboards (#213)
+- Added All options in Scenes dashboards (#213)
 - Updated e2e tests (#216)
+- Updated Slider view to prevent display error (#220)
 
 ## 3.5.0 (2024-10-02)
 
