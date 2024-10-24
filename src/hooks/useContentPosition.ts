@@ -25,6 +25,7 @@ export const useContentPosition = ({
    */
   const dashboardScrollViewRef = useRef<HTMLDivElement | null>(null);
   const dashboardSubmenuRef = useRef<HTMLDivElement | null>(null);
+  const dashboardVariablesContainer = useRef<HTMLElement | null | undefined>(null);
 
   /**
    * Content Element Styles
@@ -83,9 +84,66 @@ export const useContentPosition = ({
     }
 
     /**
+     * Set dashboard controls
+     */
+    if (!dashboardVariablesContainer.current) {
+      const variablesElement = document.querySelector('[data-testid="data-testid dashboard controls"]');
+      dashboardVariablesContainer.current = variablesElement?.parentElement;
+    }
+
+    /**
      * Calculate Position
      */
     const calcPosition = () => {
+      if (window && window.hasOwnProperty('__grafanaSceneContext')) {
+        if (dashboardVariablesContainer?.current && containerRef.current) {
+          if (sticky) {
+            const { y: startY, height } = containerRef?.current?.getBoundingClientRect();
+
+            /**
+             * .bottom use as sum of variable container height and header menu height
+             */
+            const dashboardContentOffsetY = dashboardVariablesContainer?.current.getBoundingClientRect().bottom;
+            const availableVisibleHeight = window.innerHeight - dashboardContentOffsetY;
+            const relativeStartY = startY - dashboardContentOffsetY;
+
+            const transformY = Math.abs(Math.min(relativeStartY, 0));
+
+            const visibleHeightTest = availableVisibleHeight - startY + dashboardContentOffsetY;
+
+            const calculateHeightTest = Math.min(
+              Math.max(height - transformY, 0),
+              relativeStartY < 0 ? availableVisibleHeight : visibleHeightTest
+            );
+
+            /**
+             * Set styles directly to element to prevent flashing on scroll
+             */
+            if (scrollableContainerRef.current) {
+              scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
+              scrollableContainerRef.current.style.height = `${calculateHeightTest}px`;
+            }
+
+            /**
+             * Set styles
+             */
+            updateStateThrottle.current({
+              height: calculateHeightTest,
+              transform: `translateY(${transformY}px)`,
+              width,
+            });
+            return;
+          }
+
+          setStyle({
+            width,
+            height,
+          });
+
+          return;
+        }
+      }
+
       if (containerRef.current && dashboardScrollViewRef.current) {
         if (sticky) {
           /**
@@ -135,9 +193,20 @@ export const useContentPosition = ({
     calcPosition();
 
     /**
-     * Listen for Scroll events
+     * Listen for Scroll events in Scenes
      */
-    if (dashboardScrollViewRef.current && sticky) {
+    if (window && window.hasOwnProperty('__grafanaSceneContext') && sticky) {
+      document.addEventListener('scroll', calcPosition);
+
+      return () => {
+        document.removeEventListener('scroll', calcPosition);
+      };
+    }
+
+    /**
+     * Listen for Scroll events in non-Scenes
+     */
+    if (dashboardScrollViewRef.current && sticky && !window.hasOwnProperty('__grafanaSceneContext')) {
       dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
 
       return () => {
