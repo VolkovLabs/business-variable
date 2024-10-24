@@ -134,14 +134,14 @@ export const useContentPosition = ({
             });
             return;
           }
+
+          setStyle({
+            width,
+            height,
+          });
+
+          return;
         }
-
-        setStyle({
-          width,
-          height,
-        });
-
-        return;
       }
 
       if (containerRef.current && dashboardScrollViewRef.current) {
