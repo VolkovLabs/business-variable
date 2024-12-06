@@ -202,4 +202,30 @@ describe('Migration', () => {
       expect(window.localStorage.setItem).not.toHaveBeenCalled();
     });
   });
+
+  describe('v3.7.0', () => {
+    it('Should update datasource to uid instead name', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.MINIMIZE,
+        favorites: createFavoritesConfig({
+          enabled: false,
+          datasource: 'Datasource 1',
+          storage: FavoritesStorage.BROWSER,
+        }),
+      };
+
+      expect(
+        await getMigratedOptions({
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.MINIMIZE,
+          favorites: expect.objectContaining({
+            datasource: 'ds1',
+          }),
+        })
+      );
+    });
+  });
 });
