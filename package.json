@@ -8,7 +8,7 @@
     "@grafana/ui": "^11.3.0",
     "@tanstack/react-table": "^8.20.5",
     "@tanstack/react-virtual": "3.10.8",
-    "@volkovlabs/components": "^3.5.0",
+    "@volkovlabs/components": "^3.7.0",
     "@volkovlabs/grafana-utils": "^1.4.4",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",

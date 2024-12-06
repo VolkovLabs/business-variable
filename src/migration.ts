@@ -1,4 +1,5 @@
-import { PanelModel } from '@grafana/data';
+import { DataSourceApi, PanelModel } from '@grafana/data';
+import { getBackendSrv } from '@grafana/runtime';
 import semver from 'semver';
 
 import { FAVORITES_KEY } from './constants';
@@ -17,10 +18,31 @@ interface OutdatedPanelOptions extends Omit<PanelOptions, 'favorites'> {
 }
 
 /**
+ * Fetch datasources
+ */
+const fetchData = async () => {
+  return await getBackendSrv().get('/api/datasources');
+};
+
+/**
+ * Normalize Payload Options
+ *
+ * @param obj
+ * @param name
+ *
+ */
+const normalizeDatasourceOptions = (ds: DataSourceApi[], name?: string): string => {
+  const currentDs = ds.find((element) => element.name === name);
+  return currentDs?.uid || '';
+};
+
+/**
  * Get Migrated Options
  * @param panel
  */
-export const getMigratedOptions = (panel: PanelModel<OutdatedPanelOptions & PanelOptions>): PanelOptions => {
+export const getMigratedOptions = async (
+  panel: PanelModel<OutdatedPanelOptions & PanelOptions>
+): Promise<PanelOptions> => {
   const { ...normalizedOptions } = panel.options as never as PanelOptions;
 
   /**
@@ -52,6 +74,17 @@ export const getMigratedOptions = (panel: PanelModel<OutdatedPanelOptions & Pane
     if (json) {
       window.localStorage.setItem(FAVORITES_KEY, json);
     }
+  }
+
+  /**
+   * Normalize favorites before 3.7.0
+   */
+  if (!panel.pluginVersion || (semver.lt(panel.pluginVersion, '3.7.0') && normalizedOptions.favorites.datasource)) {
+    const dataSources: DataSourceApi[] = await fetchData();
+    normalizedOptions.favorites = {
+      ...normalizedOptions.favorites,
+      datasource: normalizeDatasourceOptions(dataSources, normalizedOptions.favorites.datasource),
+    };
   }
 
   return normalizedOptions;

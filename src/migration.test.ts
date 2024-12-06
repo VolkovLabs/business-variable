@@ -1,7 +1,16 @@
+import { getBackendSrv } from '@grafana/runtime';
+
 import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
 import { DisplayMode, FavoritesStorage, PanelOptions } from './types';
 import { createFavoritesConfig } from './utils';
+
+/**
+ * Mock @grafana/runtime
+ */
+jest.mock('@grafana/runtime', () => ({
+  getBackendSrv: jest.fn(),
+}));
 
 /**
  * Local Storage
@@ -12,25 +21,55 @@ const localStorageMock = {
 };
 
 describe('Migration', () => {
-  it('Should return panel options', () => {
+  beforeEach(() => {
+    jest.mocked(getBackendSrv).mockImplementation(
+      () =>
+        ({
+          get: jest.fn(() => [
+            {
+              name: 'Datasource 1',
+              uid: 'ds1',
+            },
+            {
+              name: 'Datasource 2',
+              uid: 'ds2',
+            },
+            {
+              name: 'Datasource 3',
+              uid: 'ds3',
+            },
+            {
+              name: 'Datasource 4',
+              uid: 'ds4',
+            },
+            {
+              name: 'Datasource 5',
+              uid: 'ds5',
+            },
+          ]),
+        }) as any
+    );
+  });
+
+  it('Should return panel options', async () => {
     const options: Partial<PanelOptions> = {
       displayMode: DisplayMode.TABLE,
     };
 
     expect(
-      getMigratedOptions({
+      await getMigratedOptions({
         options: options,
       } as any)
     ).toEqual(expect.objectContaining(options));
   });
 
-  it('Should enable label for minimizeView', () => {
+  it('Should enable label for minimizeView', async () => {
     const options: Partial<PanelOptions> = {
       displayMode: DisplayMode.MINIMIZE,
     };
 
     expect(
-      getMigratedOptions({
+      await getMigratedOptions({
         options: options,
       } as any)
     ).toEqual(
@@ -41,14 +80,14 @@ describe('Migration', () => {
     );
   });
 
-  it('Should keep defined showLabel for minimizeView', () => {
+  it('Should keep defined showLabel for minimizeView', async () => {
     const options: Partial<PanelOptions> = {
       displayMode: DisplayMode.MINIMIZE,
       showLabel: false,
     };
 
     expect(
-      getMigratedOptions({
+      await getMigratedOptions({
         options: options,
       } as any)
     ).toEqual(
@@ -60,9 +99,9 @@ describe('Migration', () => {
   });
 
   describe('v3.3.0', () => {
-    it('Should normalize favorites config', () => {
+    it('Should normalize favorites config', async () => {
       expect(
-        getMigratedOptions({
+        await getMigratedOptions({
           options: {
             favorites: true,
           },
@@ -76,7 +115,7 @@ describe('Migration', () => {
         })
       );
       expect(
-        getMigratedOptions({
+        await getMigratedOptions({
           options: {
             favorites: false,
           },
@@ -91,9 +130,9 @@ describe('Migration', () => {
       );
     });
 
-    it('Should keep current favorites config', () => {
+    it('Should keep current favorites config', async () => {
       expect(
-        getMigratedOptions({
+        await getMigratedOptions({
           options: {
             favorites: createFavoritesConfig({
               enabled: false,
@@ -123,14 +162,14 @@ describe('Migration', () => {
       jest.mocked(window.localStorage.setItem).mockClear();
     });
 
-    it('Should migrate old favorites from localStorage', () => {
+    it('Should migrate old favorites from localStorage', async () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() =>
         JSON.stringify({
           device: ['device1', 'device2'],
         })
       );
 
-      getMigratedOptions({
+      await getMigratedOptions({
         pluginVersion: '3.3.0',
         options: {},
       } as any);
@@ -138,24 +177,24 @@ describe('Migration', () => {
       expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
     });
 
-    it('Should migrate old favorites from localStorage when no version specified', () => {
+    it('Should migrate old favorites from localStorage when no version specified', async () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() =>
         JSON.stringify({
           device: ['device1', 'device2'],
         })
       );
 
-      getMigratedOptions({
+      await getMigratedOptions({
         options: {},
       } as any);
 
       expect(window.localStorage.setItem).toHaveBeenCalledWith(FAVORITES_KEY, '{"device":["device1","device2"]}');
     });
 
-    it('Should not call setItem if no values in favorites key', () => {
+    it('Should not call setItem if no values in favorites key', async () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() => null);
 
-      getMigratedOptions({
+      await getMigratedOptions({
         pluginVersion: '3.3.0',
         options: {},
       } as any);
