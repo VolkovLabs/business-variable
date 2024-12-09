@@ -26,6 +26,7 @@ export const useContentPosition = ({
   const dashboardScrollViewRef = useRef<HTMLDivElement | null>(null);
   const dashboardSubmenuRef = useRef<HTMLDivElement | null>(null);
   const dashboardVariablesContainer = useRef<HTMLElement | null | undefined>(null);
+  const dashboardHeaderContainer = useRef<HTMLElement | null | undefined>(null);
 
   /**
    * Content Element Styles
@@ -84,7 +85,7 @@ export const useContentPosition = ({
     }
 
     /**
-     * Set dashboard controls
+     * Set dashboard controls (variables line; refresh; time picker -  sticky from 10.3)
      */
     if (!dashboardVariablesContainer.current) {
       const variablesElement = document.querySelector('[data-testid="data-testid dashboard controls"]');
@@ -92,59 +93,71 @@ export const useContentPosition = ({
     }
 
     /**
+     * Set dashboard header (menu; breadcrumbs -  sticky from 10.3)
+     */
+    if (!dashboardHeaderContainer.current) {
+      dashboardHeaderContainer.current = document.querySelector('header');
+    }
+
+    /**
      * Calculate Position
      */
     const calcPosition = () => {
       if (window && window.hasOwnProperty('__grafanaSceneContext')) {
-        if (dashboardVariablesContainer?.current && containerRef.current) {
-          if (sticky) {
-            const { y: startY, height } = containerRef?.current?.getBoundingClientRect();
+        if (containerRef.current && sticky) {
+          const { y: startY, height } = containerRef?.current?.getBoundingClientRect();
 
-            /**
-             * .bottom use as sum of variable container height and header menu height
-             */
-            const dashboardContentOffsetY = dashboardVariablesContainer?.current.getBoundingClientRect().bottom;
-            const availableVisibleHeight = window.innerHeight - dashboardContentOffsetY;
-            const relativeStartY = startY - dashboardContentOffsetY;
+          /**
+           * .bottom use as sum of variable container height and header menu height.
+           * If controls are hidden, use only header content
+           */
+          let headerContent = 0;
+          if (dashboardHeaderContainer?.current) {
+            headerContent = dashboardHeaderContainer?.current.getBoundingClientRect().height;
+          }
+          const dashboardContentOffsetY = dashboardVariablesContainer?.current
+            ? dashboardVariablesContainer?.current.getBoundingClientRect().bottom
+            : headerContent;
 
-            const transformY = Math.abs(Math.min(relativeStartY, 0));
+          const availableVisibleHeight = window.innerHeight - dashboardContentOffsetY;
+          const relativeStartY = startY - dashboardContentOffsetY;
 
-            const visibleHeightTest = availableVisibleHeight - startY + dashboardContentOffsetY;
+          const transformY = Math.abs(Math.min(relativeStartY, 0));
+          const visibleHeight = availableVisibleHeight - startY + dashboardContentOffsetY;
 
-            const calculateHeightTest = Math.min(
-              Math.max(height - transformY, 0),
-              relativeStartY < 0 ? availableVisibleHeight : visibleHeightTest
-            );
+          const calculateHeight = Math.min(
+            Math.max(height - transformY, 0),
+            relativeStartY < 0 ? availableVisibleHeight : visibleHeight
+          );
 
-            /**
-             * Set styles directly to element to prevent flashing on scroll
-             */
-            if (scrollableContainerRef.current) {
-              scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
-              scrollableContainerRef.current.style.height = `${calculateHeightTest}px`;
-            }
-
-            /**
-             * Set styles
-             */
-            updateStateThrottle.current({
-              height: calculateHeightTest,
-              transform: `translateY(${transformY}px)`,
-              width,
-            });
-            return;
+          /**
+           * Set styles directly to element to prevent flashing on scroll
+           */
+          if (scrollableContainerRef.current) {
+            scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
+            scrollableContainerRef.current.style.height = `${calculateHeight}px`;
           }
 
-          setStyle({
+          /**
+           * Set styles
+           */
+          updateStateThrottle.current({
+            height: calculateHeight,
+            transform: `translateY(${transformY}px)`,
             width,
-            height,
           });
-
           return;
         }
+
+        setStyle({
+          width,
+          height,
+        });
+
+        return;
       }
 
-      if (containerRef.current && dashboardScrollViewRef.current) {
+      if (containerRef.current && dashboardScrollViewRef.current && !window.hasOwnProperty('__grafanaSceneContext')) {
         if (sticky) {
           /**
            * Get dashboard submenu sticky rect

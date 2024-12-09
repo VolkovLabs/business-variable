@@ -54,14 +54,29 @@ describe('Use Content Position', () => {
   /**
    * Scrollable Container
    */
-  const MainViewContainer = ({ children, style }: { children: React.ReactElement; style: React.CSSProperties }) => (
-    <div id="pageContent">
-      <div style={style} data-testid={InTestIds.dashboardControlsContainer}>
-        <div data-testid={InTestIds.dashboardControls}></div>
-      </div>
+  const MainViewContainer = ({
+    children,
+    style,
+    showControls = true,
+  }: {
+    children: React.ReactElement;
+    style: React.CSSProperties;
+    showControls?: boolean;
+  }) => (
+    <>
+      <header style={{ height: '200px' }}>
+        <div>Header controls</div>
+      </header>
+      <div id="pageContent">
+        {showControls && (
+          <div style={style} data-testid={InTestIds.dashboardControlsContainer}>
+            <div data-testid={InTestIds.dashboardControls}></div>
+          </div>
+        )}
 
-      {children}
-    </div>
+        {children}
+      </div>
+    </>
   );
 
   it('Should apply size on scroll', () => {
@@ -88,8 +103,88 @@ describe('Use Content Position', () => {
         <Component width={250} height={250} sticky={false} />
       </MainViewContainer>
     );
-
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '250px' });
+  });
+
+  it('Should apply sizes for scene dashboard sticky header and dashboard controls enabled', () => {
+    window.__grafanaSceneContext = {
+      body: {
+        text: 'hello',
+      },
+    };
+
+    render(
+      <MainViewContainer style={{ height: 1000 }}>
+        <Component width={250} height={250} sticky={true} />
+      </MainViewContainer>
+    );
+
+    const controlsContainer = screen.getByTestId(InTestIds.dashboardControlsContainer);
+    const container = screen.getByTestId(InTestIds.container);
+
+    /**
+     * Panel Container
+     */
+    container.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          y: 200,
+          height: 250,
+        }) as any
+    );
+
+    /**
+     * set visible offset
+     */
+    controlsContainer.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          bottom: 220,
+        }) as any
+    );
+
+    document.dispatchEvent(new Event('scroll'));
+
+    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({
+      width: '250px',
+      height: '230px',
+      transform: 'translateY(20px)',
+    });
+  });
+
+  it('Should apply sizes for scene dashboard sticky header enabled; dashboard controls disabled', () => {
+    window.__grafanaSceneContext = {
+      body: {
+        text: 'hello',
+      },
+    };
+
+    render(
+      <MainViewContainer style={{ height: 1000 }} showControls={false}>
+        <Component width={250} height={250} sticky={true} />
+      </MainViewContainer>
+    );
+
+    const container = screen.getByTestId(InTestIds.container);
+
+    /**
+     * Panel Container
+     */
+    container.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          y: 200,
+          height: 250,
+        }) as any
+    );
+
+    document.dispatchEvent(new Event('scroll'));
+
+    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({
+      width: '250px',
+      height: '250px',
+      transform: 'translateY(0px)',
+    });
   });
 
   it('Should follow on scroll', () => {
