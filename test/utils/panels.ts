@@ -171,6 +171,14 @@ class TableViewHelper {
     return expect(this.selectors.infoMessage()).toBeVisible();
   }
 
+  public getContent() {
+    return this.selectors.content();
+  }
+
+  public async checkStyleProperty(property: string, value: string) {
+    return expect(this.selectors.content().first(), this.getMsg('Check style property')).toHaveCSS(property, value);
+  }
+
   private getSelectors(locator: Locator) {
     return getTablePanelSelectors(locator);
   }
