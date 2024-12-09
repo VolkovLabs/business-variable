@@ -300,6 +300,7 @@ test.describe('Volkovlabs Variable Panel', () => {
        */
       const dashboard = await readProvisionedDashboard({ fileName: 'sceneControls.json' });
       const dashboardPage = await gotoDashboardPage({ uid: dashboard.uid });
+
       /**
        * Await content load
        */
@@ -310,7 +311,7 @@ test.describe('Volkovlabs Variable Panel', () => {
       /**
        * Check height
        */
-      await tableView.checkStyleProperty('height', '984px');
+      await tableView.checkStyleProperty('height', '414px');
     });
 
     test('Should expand all rows', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {

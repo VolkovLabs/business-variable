@@ -24,8 +24,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 19,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": {
@@ -46,14 +46,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -61,7 +53,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 27,
+        "h": 12,
         "w": 11,
         "x": 0,
         "y": 0
@@ -78,12 +70,12 @@
           "addQuery": {},
           "datasource": "",
           "deleteQuery": {},
-          "enabled": true,
+          "enabled": false,
           "getQuery": {},
           "storage": "browser"
         },
-        "filter": true,
-        "groupSelection": true,
+        "filter": false,
+        "groupSelection": false,
         "groups": [
           {
             "items": [
@@ -118,7 +110,7 @@
         "showLabel": false,
         "showName": true,
         "showResetButton": false,
-        "showTotal": true,
+        "showTotal": false,
         "statusSort": true,
         "sticky": true,
         "tabsInOrder": true,
@@ -319,7 +311,6 @@
           }
         }
       ],
-      "title": "",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -533,7 +524,112 @@
           }
         }
       ],
-      "title": "",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescale"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 0,
+        "y": 12
+      },
+      "id": 17,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "button",
+        "emptyValue": true,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
+        "padding": 20,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": true,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "device"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescale"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select state, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics where $__timeFilter(time) group by name) mm\non mm.name=dd.name\nwhere country in ($country)\ngroup by state;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -640,7 +736,6 @@
           }
         }
       ],
-      "title": "",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -681,113 +776,6 @@
         "w": 13,
         "x": 11,
         "y": 15
-      },
-      "id": 17,
-      "options": {
-        "alwaysVisibleFilter": false,
-        "autoScroll": false,
-        "collapsedByDefault": false,
-        "customValue": false,
-        "displayMode": "button",
-        "emptyValue": true,
-        "favorites": {
-          "addQuery": {},
-          "datasource": "",
-          "deleteQuery": {},
-          "enabled": false,
-          "getQuery": {},
-          "storage": "browser"
-        },
-        "filter": false,
-        "groupSelection": false,
-        "header": true,
-        "isUseLocalTime": false,
-        "minimizeOutputFormat": "text",
-        "padding": 20,
-        "persistent": false,
-        "saveSelectedGroup": false,
-        "saveSelectedGroupKey": "",
-        "showGroupTotal": false,
-        "showLabel": true,
-        "showName": false,
-        "showResetButton": false,
-        "showTotal": false,
-        "statusSort": false,
-        "sticky": false,
-        "tabsInOrder": true,
-        "variable": "device"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "timescale"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "select state, max(mm.value)\nfrom devices dd\ninner join (select name, last(value, time) as value from metrics where $__timeFilter(time) group by name) mm\non mm.name=dd.name\nwhere country in ($country)\ngroup by state;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "",
-      "type": "volkovlabs-variable-panel"
-    },
-    {
-      "datasource": {
-        "type": "postgres",
-        "uid": "timescale"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "thresholdsStyle": {
-              "mode": "color",
-              "thresholds": []
-            }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 13,
-        "x": 11,
-        "y": 21
       },
       "id": 18,
       "options": {
@@ -854,17 +842,17 @@
           }
         }
       ],
-      "title": "",
       "type": "volkovlabs-variable-panel"
     }
   ],
-  "preload": false,
-  "schemaVersion": 40,
+  "refresh": "",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -876,15 +864,19 @@
         "hide": 2,
         "includeAll": true,
         "label": "Country",
+        "multi": false,
         "name": "country",
         "options": [],
         "query": "select distinct country from devices;",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
         "type": "query"
       },
       {
         "current": {
+          "selected": false,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -902,10 +894,13 @@
         "query": "select distinct state from devices where country in ($country);",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
         "type": "query"
       },
       {
         "current": {
+          "selected": false,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -923,10 +918,13 @@
         "query": "select distinct city from devices where country in ($country) and state in ($state);",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
         "type": "query"
       },
       {
         "current": {
+          "selected": false,
           "text": ["All"],
           "value": ["$__all"]
         },
@@ -945,11 +943,13 @@
         "query": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 3,
         "type": "query"
       },
       {
         "current": {
+          "selected": true,
           "text": "1234434awwaws",
           "value": "1234434awwaws"
         },
@@ -964,6 +964,7 @@
           }
         ],
         "query": "1234434awwaws",
+        "skipUrlSync": false,
         "type": "textbox"
       }
     ]
@@ -972,12 +973,13 @@
     "from": "now-5m",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {
     "hidden": true
   },
   "timezone": "",
   "title": "Scene hidden controls",
   "uid": "de6eb7659kk5cc",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
