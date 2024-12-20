@@ -7,14 +7,9 @@ import {
   TypedVariableModel,
 } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
+import { DatasourceEditor } from '@volkovlabs/components';
 
-import {
-  DatasourceEditor,
-  DatasourcePayloadEditor,
-  GroupsEditor,
-  StatusStyleEditor,
-  VariablePanel,
-} from './components';
+import { DatasourcePayloadEditor, GroupsEditor, StatusStyleEditor, VariablePanel } from './components';
 import {
   ALLOW_CUSTOM_VALUE_OPTIONS,
   ALLOW_EMPTY_VALUE_OPTIONS,

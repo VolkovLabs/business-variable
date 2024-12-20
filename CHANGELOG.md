@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.7.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Updated datasource ID instead of name and added support variables (#229)
+
 ## 3.6.0 (2024-10-24)
 
 ### Features / Enhancements

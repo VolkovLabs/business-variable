@@ -6,7 +6,7 @@ const actual = jest.requireActual('@volkovlabs/components');
 /**
  * Mock Slider
  */
-const Slider: React.FC<any> = ({ onChange, value, onAfterChange }) => {
+const SliderMock: React.FC<any> = ({ onChange, value, onAfterChange }) => {
   return (
     <input
       type="range"
@@ -26,9 +26,40 @@ const Slider: React.FC<any> = ({ onChange, value, onAfterChange }) => {
   );
 };
 
-export default Slider;
+const Slider = jest.fn(SliderMock);
+
+/**
+ * Mock DatasourcePayloadEditor
+ */
+const DatasourcePayloadEditorMock = ({ onChange, ...restProps }: any) => {
+  return (
+    <>
+      <input
+        data-testid="data-testid query-editor"
+        value={restProps.value}
+        onChange={(event) => {
+          if (onChange) {
+            onChange(event.target.value);
+          }
+        }}
+      />
+      <span data-testid="data-testid datasourceUID-key">{restProps.datasourceUid}</span>
+    </>
+  );
+};
+
+const DatasourcePayloadEditor = jest.fn(DatasourcePayloadEditorMock);
+
+/**
+ * Set mocks
+ */
+beforeEach(() => {
+  DatasourcePayloadEditor.mockImplementation(DatasourcePayloadEditorMock);
+  Slider.mockImplementation(SliderMock);
+});
 
 module.exports = {
   ...actual,
   Slider,
+  DatasourcePayloadEditor,
 };
