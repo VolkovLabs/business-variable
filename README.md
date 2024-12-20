@@ -18,7 +18,7 @@ The Business Variable panel offers many layouts with robust options, including a
 
 ## Requirements
 
-- Business Variable panel 3.X requires **Grafana 10** or **Grafana 11**.
+- Business Variable panel 3.X requires **Grafana 10.3** or **Grafana 11**.
 - Variable panel 1.X, 2.X requires **Grafana 9.2** or **Grafana 10**.
 
 ## Getting Started
