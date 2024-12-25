@@ -491,7 +491,7 @@ export const useTable = ({
       },
     ];
 
-    if (options.favorites) {
+    if (options.favorites.enabled) {
       columns.push({
         id: 'isFavorite',
         accessorKey: 'isFavorite',
