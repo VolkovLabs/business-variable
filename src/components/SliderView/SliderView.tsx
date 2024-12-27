@@ -60,7 +60,8 @@ export const SliderView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noVariableMessage}>
-        Variable is not selected.
+        Variable is not selected. Constant, Data Source, Interval, AD hoc filters, variable types are not currently
+        supported.
       </Alert>
     );
   }
@@ -71,7 +72,8 @@ export const SliderView: React.FC<Props> = ({
   if ((isVariableWithOptions(variable) && variable.multi) || !isVariableWithOptions(variable)) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noOptionsMessage}>
-        View is not supported for the selected variable.
+        View is not supported for the selected variable. Multiple values not supported. Variable without options not
+        supported.
       </Alert>
     );
   }

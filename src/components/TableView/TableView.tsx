@@ -172,7 +172,8 @@ export const TableView: React.FC<Props> = ({
       >
         {!tableData.length && (
           <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
-            Variable is not selected or do not match returned fields.
+            Variable is not selected or do not match returned fields. Constant, Data Source, Interval, AD hoc filters,
+            variable types are not currently supported.
           </Alert>
         )}
 
