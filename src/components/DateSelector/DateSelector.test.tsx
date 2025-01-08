@@ -3,9 +3,8 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { MinimizeOutputFormat } from '../../types';
 import { selectVariableValues } from '../../utils';
-import { DateTimeSelector } from './DateTimeSelector';
+import { DateSelector } from './DateSelector';
 
 /**
  * Mock utils
@@ -32,95 +31,75 @@ jest.mock('../../hooks', () => ({
 /**
  * Properties
  */
-type Props = React.ComponentProps<typeof DateTimeSelector>;
+type Props = React.ComponentProps<typeof DateSelector>;
 
 /**
- * Date Time Selector
+ * Date Selector
  */
 describe('Date Time Selector', () => {
   const defaultVariable = {
     label: 'dateTimeTS',
     current: {
-      value: '1717080480000',
+      value: '2025-01-21',
     },
   };
 
   /**
    * Selectors
    */
-  const getSelectors = getJestSelectors(TEST_IDS.dateTimePicker);
+  const getSelectors = getJestSelectors(TEST_IDS.datePicker);
   const selectors = getSelectors(screen);
 
   /**
    * Get Tested Component
    */
   const getComponent = (props: Partial<Props>) => {
-    return <DateTimeSelector variable={defaultVariable} panelEventBus={{} as any} {...(props as any)} />;
+    return <DateSelector variable={defaultVariable} panelEventBus={{} as any} {...(props as any)} />;
   };
 
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
   });
 
-  it('Should apply initial variable value from timestamp', () => {
+  it('Should apply initial variable value from variable', () => {
     render(
       getComponent({
         variable: defaultVariable as any,
-        timeZone: 'browser',
       })
     );
 
     expect(selectors.root()).toBeVisible();
-    expect(selectors.root()).toHaveValue('Thu May 30 2024 14:48:00 GMT+0000');
+    expect(selectors.root()).toHaveValue('2025-01-21');
   });
 
-  it('Should apply initial variable value from isoString', () => {
+  it('Should apply initial variable value from variable if value is empty', () => {
+    const variable = {
+      label: 'dateTimeTS',
+      current: {
+        value: '',
+      },
+    } as any;
+
     render(
       getComponent({
-        variable: {
-          label: 'dateTimeTS',
-          current: {
-            value: '2024-05-01T14:48:00.000Z',
-          },
-        } as any,
-        timeZone: 'browser',
+        variable: variable,
       })
     );
 
     expect(selectors.root()).toBeVisible();
-    expect(selectors.root()).toHaveValue('Wed May 01 2024 14:48:00 GMT+0000');
+    expect(selectors.root()).toHaveValue('');
   });
 
-  it('Should display invalid date if value not specified', () => {
-    render(
-      getComponent({
-        variable: {
-          label: 'dateTimeTS',
-          current: {
-            value: '',
-          },
-        } as any,
-        timeZone: 'browser',
-      })
-    );
-
-    expect(selectors.root()).toBeVisible();
-    expect(selectors.root()).toHaveValue('Invalid date');
-  });
-
-  it('Should update variable with timestamp value', async () => {
+  it('Should update variable value from string', async () => {
     render(
       getComponent({
         variable: defaultVariable as any,
-        timeZone: 'browser',
         persistent: true,
-        isUseLocalTime: true,
-        minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
       })
     );
 
     expect(selectors.root()).toBeVisible();
-    expect(selectors.root()).toHaveValue('Thu May 30 2024 14:48:00 GMT+0000');
+    expect(selectors.root()).toHaveValue('2025-01-21');
 
     /**
      * Change Date
@@ -129,7 +108,7 @@ describe('Date Time Selector', () => {
     await act(() => fireEvent.change(selectors.root(), { target: { value: date.toISOString() } }));
 
     expect(selectVariableValues).toHaveBeenCalledWith({
-      values: ['1722429030000'],
+      values: ['2024-07-31'],
       runtimeVariable: defaultVariable,
       panelEventBus: {},
     });
@@ -137,28 +116,25 @@ describe('Date Time Selector', () => {
     expect(persistentStorageMock.remove).toHaveBeenCalled();
   });
 
-  it('Should update variable with isoString value', async () => {
+  it('Should update variable value', async () => {
     render(
       getComponent({
         variable: defaultVariable as any,
-        timeZone: 'browser',
         persistent: true,
-        isUseLocalTime: true,
-        minimizeOutputFormat: MinimizeOutputFormat.DATE_TIME,
       })
     );
 
     expect(selectors.root()).toBeVisible();
-    expect(selectors.root()).toHaveValue('Thu May 30 2024 14:48:00 GMT+0000');
+    expect(selectors.root()).toHaveValue('2025-01-21');
 
     /**
      * Change Date
      */
-    const date = new Date('2024-07-31 12:30:30');
-    await act(() => fireEvent.change(selectors.root(), { target: { value: date.toISOString() } }));
+    const date = '2009-09-09';
+    await act(() => fireEvent.change(selectors.root(), { target: { value: date } }));
 
     expect(selectVariableValues).toHaveBeenCalledWith({
-      values: ['2024-07-31T12:30:30.000+00:00'],
+      values: ['2009-09-09'],
       runtimeVariable: defaultVariable,
       panelEventBus: {},
     });

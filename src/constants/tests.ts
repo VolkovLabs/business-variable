@@ -62,6 +62,9 @@ export const TEST_IDS = {
   dateTimePicker: {
     root: 'data-testid date-time-picker',
   },
+  datePicker: {
+    root: 'data-testid date-picker',
+  },
   buttonView: {
     root: 'data-testid button-view',
     noVariableMessage: 'data-testid button-view no-variable-message',

@@ -23,6 +23,29 @@ const DateTimePickerMock = ({ onChange, date, ...restProps }: any) => {
 const DateTimePicker = jest.fn(DateTimePickerMock);
 
 /**
+ * Mock DatePickerWithInput component
+ */
+const DatePickerWithInputMock = ({ onChange, value, ...restProps }: any) => {
+  return (
+    <input
+      data-testid={restProps['data-testid']}
+      value={value}
+      onChange={(event) => {
+        /**
+         * Check Date type handle
+         */
+        const value = event.target.value === '2009-09-09' ? new Date(event.target.value) : event.target.value;
+        if (onChange) {
+          onChange(value);
+        }
+      }}
+    />
+  );
+};
+
+const DatePickerWithInput = jest.fn(DatePickerWithInputMock);
+
+/**
  * Mock Select component
  */
 const SelectMock = ({ options, onChange, value, isMulti, ...restProps }: any) => {
@@ -83,6 +106,7 @@ beforeEach(() => {
   Select.mockImplementation(SelectMock);
   DateTimePicker.mockImplementation(DateTimePickerMock);
   ToolbarButtonRow.mockImplementation(ToolbarButtonRowMock);
+  DatePickerWithInput.mockImplementation(DatePickerWithInputMock);
 });
 
 module.exports = {
@@ -90,4 +114,5 @@ module.exports = {
   ToolbarButtonRow,
   Select,
   DateTimePicker,
+  DatePickerWithInput,
 };
