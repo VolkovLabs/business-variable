@@ -74,7 +74,7 @@
         "header": true,
         "isUseLocalTime": false,
         "minimizeDisplayMode": "dateTimePicker",
-        "minimizeOutputFormat": "date",
+        "minimizeOutputFormat": "dateTime",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
@@ -89,7 +89,6 @@
         "tabsInOrder": true,
         "variable": "first"
       },
-      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -100,6 +99,86 @@
         }
       ],
       "title": "Variable: First - ISO string",
+      "type": "volkovlabs-variable-panel"
+    },
+    {
+      "datasource": {
+        "name": "Static",
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 5,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "minimize",
+        "emptyValue": false,
+        "favorites": {
+          "enabled": false,
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "isUseLocalTime": true,
+        "minimizeDisplayMode": "dateTimePicker",
+        "minimizeOutputFormat": "date",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "DateOnly"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "P1D2C73DC01F2359B"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Variable: Date Only",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -170,7 +249,6 @@
         "tabsInOrder": true,
         "variable": "second"
       },
-      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -251,7 +329,6 @@
         "tabsInOrder": true,
         "variable": "third"
       },
-      "pluginVersion": "3.6.0",
       "targets": [
         {
           "datasource": {
@@ -285,7 +362,7 @@
             "value": "2024-05-05T14:48:00.000Z"
           }
         ],
-        "query": "2024-05-18T14:48:00.000Z",
+        "query": "2024-05-03T14:48:00.000Z",
         "type": "textbox"
       },
       {
@@ -302,7 +379,7 @@
             "value": "1722429030000"
           }
         ],
-        "query": "1721305830000",
+        "query": "1720873830000",
         "type": "textbox"
       },
       {
@@ -311,6 +388,23 @@
         "name": "third",
         "options": [],
         "query": "",
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "text": "2025-01-03",
+          "value": "2025-01-03"
+        },
+        "label": "DateOnly",
+        "name": "DateOnly",
+        "options": [
+          {
+            "selected": true,
+            "text": "2025-01-03",
+            "value": "2025-01-03"
+          }
+        ],
+        "query": "2025-01-03",
         "type": "textbox"
       }
     ]
