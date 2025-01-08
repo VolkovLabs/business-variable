@@ -19,7 +19,7 @@ export const MINIMIZE_OUTPUT_FORMAT_OPTIONS = [
   { value: MinimizeOutputFormat.TEXT, label: 'Text' },
   { value: MinimizeOutputFormat.DATE_TIME, label: 'ISO string' },
   { value: MinimizeOutputFormat.TIMESTAMP, label: 'Timestamp' },
-  { value: MinimizeOutputFormat.DATE, label: 'Date format only' },
+  { value: MinimizeOutputFormat.DATE, label: 'Date only' },
 ];
 
 /**

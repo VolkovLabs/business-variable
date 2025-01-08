@@ -124,7 +124,12 @@ export const MinimizeView: React.FC<Props> = ({
             />
           )}
           {variable.type === VariableType.TEXTBOX && isUseDateSelector && (
-            <DateSelector variable={variable} persistent={persistent} panelEventBus={panelEventBus} />
+            <DateSelector
+              variable={variable}
+              persistent={persistent}
+              panelEventBus={panelEventBus}
+              isUseLocalTime={isUseLocalTime}
+            />
           )}
           {variable.type === VariableType.TEXTBOX && isUseDateTimeSelector && (
             <DateTimeSelector

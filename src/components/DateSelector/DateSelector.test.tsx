@@ -3,7 +3,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { selectVariableValues } from '../../utils';
+import { getDateInLocalTimeFormat, selectVariableValues } from '../../utils';
 import { DateSelector } from './DateSelector';
 
 /**
@@ -11,6 +11,7 @@ import { DateSelector } from './DateSelector';
  */
 jest.mock('../../utils', () => ({
   selectVariableValues: jest.fn(),
+  getDateInLocalTimeFormat: jest.fn(),
 }));
 
 /**
@@ -59,6 +60,7 @@ describe('Date Time Selector', () => {
 
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
+    jest.mocked(getDateInLocalTimeFormat).mockClear();
   });
 
   it('Should apply initial variable value from variable', () => {
@@ -140,5 +142,27 @@ describe('Date Time Selector', () => {
     });
 
     expect(persistentStorageMock.remove).toHaveBeenCalled();
+  });
+
+  it('Should update variable value in local time', async () => {
+    render(
+      getComponent({
+        variable: defaultVariable as any,
+        persistent: true,
+        isUseLocalTime: true,
+      })
+    );
+
+    expect(selectors.root()).toBeVisible();
+    expect(selectors.root()).toHaveValue('2025-01-21');
+
+    /**
+     * Change Date
+     */
+    const date = '2009-09-09';
+    await act(() => fireEvent.change(selectors.root(), { target: { value: date } }));
+
+    const checkDate = new Date(date);
+    expect(getDateInLocalTimeFormat).toHaveBeenCalledWith(checkDate);
   });
 });
