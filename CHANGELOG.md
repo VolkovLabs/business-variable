@@ -6,6 +6,7 @@
 
 - Updated datasource ID instead of name and added support variables (#229)
 - Updated sticky header for Scenes dashboards (#230)
+- Updated display favorites icon (#234)
 
 ## 3.6.0 (2024-10-24)
 
