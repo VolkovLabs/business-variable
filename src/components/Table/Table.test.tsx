@@ -546,6 +546,35 @@ describe('Table', () => {
     expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
   });
 
+  it('Should not show favorites filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [
+          { value: 'device1', isFavorite: true },
+          { value: 'device2', isFavorite: false },
+        ] as any,
+      })
+    );
+
+    /**
+     * Check Filter not presence
+     */
+    expect(selectors.favoritesFilter(true)).not.toBeInTheDocument();
+  });
+
   it('Should not show filter', () => {
     render(
       getComponent({
