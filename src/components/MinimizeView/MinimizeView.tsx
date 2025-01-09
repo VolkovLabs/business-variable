@@ -85,8 +85,7 @@ export const MinimizeView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.minimizeView.noVariableMessage}>
-        Variable is not selected. Constant, Data Source, Interval, AD hoc filters, variable types are not currently
-        supported.
+        Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.
       </Alert>
     );
   }

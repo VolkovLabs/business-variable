@@ -309,7 +309,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addSelect({
         path: 'variable',
         name: 'Select variable to display',
-        description: 'Constant, Data Source, Interval, AD hoc filters, variable types are not supported.',
+        description: 'Constant, Data Source, Interval, AD hoc filters are not supported.',
         settings: {
           options: variableOptions,
         },
