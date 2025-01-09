@@ -488,7 +488,7 @@ describe('Use Table Hook', () => {
                     },
                     getValue: () => row.value,
                   })}
-                  {columns[1].cell({
+                  {columns[1]?.cell({
                     row: {
                       original: row,
                       depth,
@@ -1817,6 +1817,54 @@ describe('Use Table Hook', () => {
         fireEvent.click(favoritesControl);
 
         expect(favoritesMock.remove).toHaveBeenCalledWith('device', 'device1');
+      });
+
+      it('Should not show favorites column if disabled', () => {
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn(() => deviceVariable),
+            }) as any
+        );
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: createPanelOptions({
+              favorites: createFavoritesConfig({
+                enabled: false,
+              }),
+            }),
+            eventBus: null as any,
+            levels: [{ name: 'device', source: 'A' }],
+            panelEventBus: null as any,
+            replaceVariables: jest.fn(),
+          })
+        );
+
+        /**
+         * Render rows
+         */
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowDevice1 = screen.getByTestId(InTestIds.row('device1', 0));
+
+        expect(rowDevice1).toBeInTheDocument();
+
+        /**
+         * Device can be removed to favorites
+         */
+        const favoritesControl = within(rowDevice1).queryByTestId(TEST_IDS.table.favoritesControl);
+        expect(favoritesControl).toBeNull();
       });
 
       it('Show remove from favorites selectable row', () => {
