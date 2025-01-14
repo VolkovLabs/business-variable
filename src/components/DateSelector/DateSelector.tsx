@@ -1,11 +1,11 @@
-import { EventBus } from '@grafana/data';
+import { dateTimeFormat, EventBus } from '@grafana/data';
 import { DatePickerWithInput } from '@grafana/ui';
 import React, { useCallback, useMemo } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { usePersistentStorage } from '../../hooks';
 import { TextBoxVariable } from '../../types';
-import { getDateInLocalTimeFormat, selectVariableValues } from '../../utils';
+import { selectVariableValues } from '../../utils';
 
 /**
  * Properties
@@ -68,14 +68,10 @@ export const DateSelector: React.FC<Props> = ({ variable, persistent, panelEvent
       if (persistent) {
         persistentStorage.remove();
       }
-
-      let currentValue: string;
-
-      if (typeof date === 'string') {
-        currentValue = date.split('T')[0];
-      } else {
-        currentValue = isUseLocalTime ? getDateInLocalTimeFormat(date) : date.toISOString().split('T')[0];
-      }
+      const currentValue: string = dateTimeFormat(date, {
+        timeZone: isUseLocalTime ? '' : 'utc',
+        format: 'YYYY-MM-DD',
+      });
       selectVariableValues({ values: [currentValue], runtimeVariable: variable, panelEventBus });
     },
     [isUseLocalTime, panelEventBus, persistent, persistentStorage, variable]

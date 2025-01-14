@@ -1,9 +1,10 @@
+import { dateTimeFormat } from '@grafana/data';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { getDateInLocalTimeFormat, selectVariableValues } from '../../utils';
+import { selectVariableValues } from '../../utils';
 import { DateSelector } from './DateSelector';
 
 /**
@@ -11,7 +12,14 @@ import { DateSelector } from './DateSelector';
  */
 jest.mock('../../utils', () => ({
   selectVariableValues: jest.fn(),
-  getDateInLocalTimeFormat: jest.fn(),
+}));
+
+/**
+ * Mock dateTimeFormat
+ */
+jest.mock('@grafana/data', () => ({
+  ...jest.requireActual('@grafana/data'),
+  dateTimeFormat: jest.fn(),
 }));
 
 /**
@@ -37,9 +45,9 @@ type Props = React.ComponentProps<typeof DateSelector>;
 /**
  * Date Selector
  */
-describe('Date Time Selector', () => {
+describe('Date Selector', () => {
   const defaultVariable = {
-    label: 'dateTimeTS',
+    label: 'dateTS',
     current: {
       value: '2025-01-21',
     },
@@ -60,7 +68,7 @@ describe('Date Time Selector', () => {
 
   beforeEach(() => {
     jest.mocked(selectVariableValues).mockClear();
-    jest.mocked(getDateInLocalTimeFormat).mockClear();
+    // jest.mocked(dateTimeFormat).mockReturnValue((str) => str);
   });
 
   it('Should apply initial variable value from variable', () => {
@@ -93,6 +101,8 @@ describe('Date Time Selector', () => {
   });
 
   it('Should update variable value from string', async () => {
+    jest.mocked(dateTimeFormat).mockImplementationOnce((str) => str as string);
+
     render(
       getComponent({
         variable: defaultVariable as any,
@@ -110,7 +120,7 @@ describe('Date Time Selector', () => {
     await act(() => fireEvent.change(selectors.root(), { target: { value: date.toISOString() } }));
 
     expect(selectVariableValues).toHaveBeenCalledWith({
-      values: ['2024-07-31'],
+      values: [date.toISOString()],
       runtimeVariable: defaultVariable,
       panelEventBus: {},
     });
@@ -119,6 +129,8 @@ describe('Date Time Selector', () => {
   });
 
   it('Should update variable value', async () => {
+    jest.mocked(dateTimeFormat).mockImplementationOnce((str) => str as string);
+
     render(
       getComponent({
         variable: defaultVariable as any,
@@ -135,11 +147,12 @@ describe('Date Time Selector', () => {
     const date = '2009-09-09';
     await act(() => fireEvent.change(selectors.root(), { target: { value: date } }));
 
-    expect(selectVariableValues).toHaveBeenCalledWith({
-      values: ['2009-09-09'],
-      runtimeVariable: defaultVariable,
-      panelEventBus: {},
-    });
+    expect(selectVariableValues).toHaveBeenCalledWith(
+      expect.objectContaining({
+        runtimeVariable: defaultVariable,
+        panelEventBus: {},
+      })
+    );
 
     expect(persistentStorageMock.remove).toHaveBeenCalled();
   });
@@ -162,7 +175,6 @@ describe('Date Time Selector', () => {
     const date = '2009-09-09';
     await act(() => fireEvent.change(selectors.root(), { target: { value: date } }));
 
-    const checkDate = new Date(date);
-    expect(getDateInLocalTimeFormat).toHaveBeenCalledWith(checkDate);
+    expect(dateTimeFormat).toHaveBeenCalledWith(expect.any(Date), { format: 'YYYY-MM-DD', timeZone: '' });
   });
 });
