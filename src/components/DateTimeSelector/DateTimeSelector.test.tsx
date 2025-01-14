@@ -144,7 +144,7 @@ describe('Date Time Selector', () => {
         timeZone: 'browser',
         persistent: true,
         isUseLocalTime: true,
-        minimizeOutputFormat: MinimizeOutputFormat.DATE_TIME,
+        minimizeOutputFormat: MinimizeOutputFormat.DATETIME,
       })
     );
 

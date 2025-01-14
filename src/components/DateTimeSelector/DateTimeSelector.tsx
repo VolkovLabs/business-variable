@@ -95,7 +95,7 @@ export const DateTimeSelector: React.FC<Props> = ({
         }
 
         let value = '';
-        if (minimizeOutputFormat === MinimizeOutputFormat.DATE_TIME) {
+        if (minimizeOutputFormat === MinimizeOutputFormat.DATETIME) {
           value = dateTime.toISOString(isUseLocalTime);
         } else {
           value = dateTime.valueOf().toString();

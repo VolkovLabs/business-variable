@@ -205,7 +205,7 @@ describe('plugin', () => {
           createPanelOptions({
             variable: 'textBox',
             displayMode: DisplayMode.MINIMIZE,
-            minimizeOutputFormat: MinimizeOutputFormat.DATE_TIME,
+            minimizeOutputFormat: MinimizeOutputFormat.DATETIME,
           }),
           shownOptionsPaths
         )

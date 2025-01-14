@@ -72,8 +72,7 @@ export const MinimizeView: React.FC<Props> = ({
    */
   const isUseDateTimeSelector = useMemo(
     () =>
-      minimizeOutputFormat === MinimizeOutputFormat.DATE_TIME ||
-      minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP,
+      minimizeOutputFormat === MinimizeOutputFormat.DATETIME || minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP,
     [minimizeOutputFormat]
   );
 

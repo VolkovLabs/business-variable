@@ -15,7 +15,7 @@ export enum DisplayMode {
  */
 export enum MinimizeOutputFormat {
   TEXT = 'text',
-  DATE_TIME = 'dateTime',
+  DATETIME = 'dateTime',
   DATE = 'date',
   TIMESTAMP = 'timestamp',
 }

@@ -219,7 +219,7 @@ describe('Minimize View', () => {
       const { rerender } = render(
         getComponent({
           options: {
-            minimizeOutputFormat: MinimizeOutputFormat.DATE_TIME,
+            minimizeOutputFormat: MinimizeOutputFormat.DATETIME,
           } as any,
         })
       );

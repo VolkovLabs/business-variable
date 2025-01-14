@@ -111,7 +111,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       variable &&
       variable.type === VariableType.TEXTBOX &&
       config.displayMode === DisplayMode.MINIMIZE &&
-      (config.minimizeOutputFormat === MinimizeOutputFormat.DATE_TIME ||
+      (config.minimizeOutputFormat === MinimizeOutputFormat.DATETIME ||
         config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP ||
         config.minimizeOutputFormat === MinimizeOutputFormat.DATE);
 
