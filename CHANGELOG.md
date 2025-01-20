@@ -8,6 +8,7 @@
 - Updated sticky header for Scenes dashboards (#230)
 - Updated display favorites icon (#234)
 - Added not supports variable type Alert message (#235)
+- Added Date picker (#237)
 
 ## 3.6.0 (2024-10-24)
 

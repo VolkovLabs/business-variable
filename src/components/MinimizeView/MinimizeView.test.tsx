@@ -14,6 +14,7 @@ const InTestIds = {
   optionsVariable: 'data-testid options-variable',
   textVariable: 'data-testid text-variable',
   dateTimeSelector: 'data-testid date-time-selector',
+  dateSelector: 'data-testid date-selector',
 };
 
 /**
@@ -31,10 +32,17 @@ jest.mock('../TextVariable', () => ({
 }));
 
 /**
- * Mock Text Variable
+ * Mock Date Time Selector
  */
 jest.mock('../DateTimeSelector', () => ({
   DateTimeSelector: jest.fn(() => <div data-testid={InTestIds.dateTimeSelector} />),
+}));
+
+/**
+ * Mock Date Selector
+ */
+jest.mock('../DateSelector', () => ({
+  DateSelector: jest.fn(() => <div data-testid={InTestIds.dateSelector} />),
 }));
 
 /**
@@ -122,40 +130,6 @@ describe('Minimize View', () => {
     expect(selectors.textVariable()).toBeInTheDocument();
   });
 
-  it('Should show variable control for text box type and Date Time Picker view', () => {
-    jest.mocked(useRuntimeVariables).mockImplementation(
-      () =>
-        ({
-          variable: {
-            label: '123',
-            type: VariableType.TEXTBOX,
-          },
-        }) as any
-    );
-
-    const { rerender } = render(
-      getComponent({
-        options: {
-          minimizeOutputFormat: MinimizeOutputFormat.DATE,
-        } as any,
-      })
-    );
-
-    expect(selectors.root()).toBeInTheDocument();
-    expect(selectors.dateTimeSelector()).toBeInTheDocument();
-
-    rerender(
-      getComponent({
-        options: {
-          minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
-        } as any,
-      })
-    );
-
-    expect(selectors.root()).toBeInTheDocument();
-    expect(selectors.dateTimeSelector()).toBeInTheDocument();
-  });
-
   it('Should show variable label', () => {
     jest.mocked(useRuntimeVariables).mockImplementation(
       () =>
@@ -225,5 +199,70 @@ describe('Minimize View', () => {
     );
 
     expect(screen.getByText('123')).toBeInTheDocument();
+  });
+
+  describe('Date time Selectors', () => {
+    /**
+     * Date Time Selector
+     */
+    it('Should show variable control for text box type and Date Time Picker view', () => {
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: {
+              label: '123',
+              type: VariableType.TEXTBOX,
+            },
+          }) as any
+      );
+
+      const { rerender } = render(
+        getComponent({
+          options: {
+            minimizeOutputFormat: MinimizeOutputFormat.DATETIME,
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toBeInTheDocument();
+      expect(selectors.dateTimeSelector()).toBeInTheDocument();
+
+      rerender(
+        getComponent({
+          options: {
+            minimizeOutputFormat: MinimizeOutputFormat.TIMESTAMP,
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toBeInTheDocument();
+      expect(selectors.dateTimeSelector()).toBeInTheDocument();
+    });
+
+    /**
+     * Date Only Selector
+     */
+    it('Should show variable control for text box type and Date Picker view', () => {
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable: {
+              label: '123',
+              type: VariableType.TEXTBOX,
+            },
+          }) as any
+      );
+
+      render(
+        getComponent({
+          options: {
+            minimizeOutputFormat: MinimizeOutputFormat.DATE,
+          } as any,
+        })
+      );
+
+      expect(selectors.root()).toBeInTheDocument();
+      expect(selectors.dateSelector()).toBeInTheDocument();
+    });
   });
 });
