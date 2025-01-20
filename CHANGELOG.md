@@ -9,6 +9,7 @@
 - Updated display favorites icon (#234)
 - Added not supports variable type Alert message (#235)
 - Added Date picker (#237)
+- Updated to Grafana 11.4.0 and dependencies (#238)
 
 ## 3.6.0 (2024-10-24)
 
