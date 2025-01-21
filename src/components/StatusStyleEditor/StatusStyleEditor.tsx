@@ -10,7 +10,7 @@ import { getStyles } from './StatusStyleEditor.styles';
 /**
  * Properties
  */
-interface Props extends StandardEditorProps<StatusStyleOptions, null, PanelOptions> {}
+type Props = StandardEditorProps<StatusStyleOptions, null, PanelOptions>;
 
 /**
  * Status Style Editor

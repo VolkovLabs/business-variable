@@ -11,7 +11,7 @@ import { TableView } from '../TableView';
 /**
  * Properties
  */
-interface Props extends PanelProps<PanelOptions> {}
+type Props = PanelProps<PanelOptions>;
 
 /**
  * Panel
