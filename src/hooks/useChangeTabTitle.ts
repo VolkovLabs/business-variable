@@ -34,19 +34,21 @@ export const useChangeTabTitle = ({
     /**
      * Define variable from pattern string
      */
-    const matches = [...browserTabNamePattern.matchAll(VARIABLE_REGEX)]
-      .map((match) => {
+    if (!!browserTabNamePattern) {
+      const matches = [...browserTabNamePattern.matchAll(VARIABLE_REGEX)]
+        .map((match) => {
+          /**
+           * Return name inside ${}
+           */
+          return match[1];
+        })
         /**
-         * Return name inside ${}
+         * Remove dashboard variables
          */
-        return match[1];
-      })
-      /**
-       * Remove dashboard variables
-       */
-      .filter((variable) => !variable.startsWith('__'));
+        .filter((variable) => !variable.startsWith('__'));
 
-    setCurrentVariable(matches[0]);
+      setCurrentVariable(matches[0]);
+    }
   }, [browserTabNamePattern, setCurrentVariable]);
 
   /**
