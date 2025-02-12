@@ -550,6 +550,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Advanced'],
         showIf: (config) => isVariableSelected(config),
+      })
+      .addTextInput({
+        path: 'browserTabNamePattern',
+        name: 'Change Tab name with variable',
+        description:
+          'Replace the browser tab name using a variable. Use ${__dashboard.title} pattern to get current dashboard title.',
+        defaultValue: '',
+        settings: {
+          placeholder: '${variable} ${__dashboard.title}',
+        },
+        category: ['Advanced'],
       });
 
     return builder;

@@ -368,6 +368,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   isUseLocalTime: boolean;
+
+  /**
+   * Browser Tab name pattern to replace
+   *
+   * @type {string}
+   */
+  browserTabNamePattern: string;
 }
 
 /**

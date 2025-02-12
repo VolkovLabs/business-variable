@@ -1,7 +1,7 @@
 import { EventBusSrv, PanelProps } from '@grafana/data';
 import React, { useRef } from 'react';
 
-import { useDashboardRedirect, usePersistentValues, useResetVariable } from '../../hooks';
+import { useChangeTabTitle, useDashboardRedirect, usePersistentValues, useResetVariable } from '../../hooks';
 import { DisplayMode, PanelOptions } from '../../types';
 import { ButtonView } from '../ButtonView';
 import { MinimizeView } from '../MinimizeView';
@@ -16,7 +16,7 @@ interface Props extends PanelProps<PanelOptions> {}
 /**
  * Panel
  */
-export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps }) => {
+export const VariablePanel: React.FC<Props> = ({ options, eventBus, replaceVariables, ...restProps }) => {
   /**
    * Panel scoped event bus
    */
@@ -26,6 +26,15 @@ export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps
    * Dashboard Redirect
    */
   useDashboardRedirect({ eventBus, variableName: options.dashboardVariable });
+
+  /**
+   * Advanced behavior. Change Browser tab name
+   */
+  useChangeTabTitle({
+    eventBus,
+    replaceVariables,
+    browserTabNamePattern: options.browserTabNamePattern,
+  });
 
   /**
    * Persistent Values
@@ -60,11 +69,27 @@ export const VariablePanel: React.FC<Props> = ({ options, eventBus, ...restProps
    * Slider View
    */
   if (options.displayMode === DisplayMode.SLIDER) {
-    return <SliderView options={options} eventBus={eventBus} panelEventBus={panelEventBus.current} {...restProps} />;
+    return (
+      <SliderView
+        replaceVariables={replaceVariables}
+        options={options}
+        eventBus={eventBus}
+        panelEventBus={panelEventBus.current}
+        {...restProps}
+      />
+    );
   }
 
   /**
    * Table View
    */
-  return <TableView options={options} eventBus={eventBus} panelEventBus={panelEventBus.current} {...restProps} />;
+  return (
+    <TableView
+      replaceVariables={replaceVariables}
+      options={options}
+      eventBus={eventBus}
+      panelEventBus={panelEventBus.current}
+      {...restProps}
+    />
+  );
 };

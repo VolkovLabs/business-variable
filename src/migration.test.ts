@@ -227,5 +227,70 @@ describe('Migration', () => {
         })
       );
     });
+
+    describe('Advanced browser options', () => {
+      it('Should update advanced options for browser title without plugin version', async () => {
+        const options: Partial<PanelOptions> = {
+          displayMode: DisplayMode.MINIMIZE,
+          favorites: createFavoritesConfig({
+            enabled: false,
+            datasource: 'Datasource 1',
+            storage: FavoritesStorage.BROWSER,
+          }),
+        };
+
+        expect(
+          await getMigratedOptions({
+            options: options,
+          } as any)
+        ).toEqual(
+          expect.objectContaining({
+            displayMode: DisplayMode.MINIMIZE,
+            browserTabNamePattern: '',
+          })
+        );
+      });
+
+      it('Should update advanced options for browser title with plugin version', async () => {
+        const options: Partial<PanelOptions> = {
+          displayMode: DisplayMode.MINIMIZE,
+          favorites: createFavoritesConfig({
+            enabled: false,
+            datasource: 'Datasource 1',
+            storage: FavoritesStorage.BROWSER,
+          }),
+        };
+
+        expect(
+          await getMigratedOptions({
+            pluginVersion: '3.3.0',
+            options: options,
+          } as any)
+        ).toEqual(
+          expect.objectContaining({
+            displayMode: DisplayMode.MINIMIZE,
+            browserTabNamePattern: '',
+          })
+        );
+      });
+
+      it('Should not update advanced options for browser title if already present', async () => {
+        const options: Partial<PanelOptions> = {
+          displayMode: DisplayMode.MINIMIZE,
+          browserTabNamePattern: '${title}',
+        };
+
+        expect(
+          await getMigratedOptions({
+            options: options,
+          } as any)
+        ).toEqual(
+          expect.objectContaining({
+            displayMode: DisplayMode.MINIMIZE,
+            browserTabNamePattern: '${title}',
+          })
+        );
+      });
+    });
   });
 });
