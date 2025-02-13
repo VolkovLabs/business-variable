@@ -1,0 +1,241 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "P1D2C73DC01F2359B"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "thresholdsStyle": {
+              "mode": "color",
+              "thresholds": []
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "alwaysVisibleFilter": false,
+        "autoScroll": false,
+        "browserTabNameMode": "dashboard",
+        "browserTabNamePattern": "${device} test ${__dashboard.title}",
+        "browserVariable": "device",
+        "browserVariableLocation": "start",
+        "collapsedByDefault": false,
+        "customValue": false,
+        "displayMode": "table",
+        "emptyValue": false,
+        "favorites": {
+          "addQuery": {},
+          "datasource": "",
+          "deleteQuery": {},
+          "enabled": false,
+          "getQuery": {},
+          "storage": "browser"
+        },
+        "filter": false,
+        "groupSelection": false,
+        "header": true,
+        "isUseLocalTime": false,
+        "minimizeOutputFormat": "text",
+        "padding": 10,
+        "persistent": false,
+        "saveSelectedGroup": false,
+        "saveSelectedGroupKey": "",
+        "showGroupTotal": false,
+        "showLabel": false,
+        "showName": false,
+        "showResetButton": false,
+        "showTotal": false,
+        "statusSort": false,
+        "sticky": false,
+        "tabsInOrder": true,
+        "variable": "device"
+      },
+      "title": "Panel Title",
+      "type": "volkovlabs-variable-panel"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "timescale"
+        },
+        "definition": "select distinct country from devices;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Country",
+        "multi": false,
+        "name": "country",
+        "options": [],
+        "query": "select distinct country from devices;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "timescale"
+        },
+        "definition": "select distinct state from devices where country in ($country);",
+        "hide": 0,
+        "includeAll": true,
+        "label": "State",
+        "multi": false,
+        "name": "state",
+        "options": [],
+        "query": "select distinct state from devices where country in ($country);",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "timescale"
+        },
+        "definition": "select distinct city from devices where country in ($country) and state in ($state);",
+        "hide": 0,
+        "includeAll": true,
+        "label": "City",
+        "multi": false,
+        "name": "city",
+        "options": [],
+        "query": "select distinct city from devices where country in ($country) and state in ($state);",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["RU 12 BU"],
+          "value": ["RU 12 BU"]
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "timescale"
+        },
+        "definition": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
+        "description": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Device",
+        "multi": true,
+        "name": "device",
+        "options": [],
+        "query": "select distinct name from devices where country in ($country) and state in ($state) and city in ($city);",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 3,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "12344343333",
+          "value": "12344343333"
+        },
+        "hide": 0,
+        "label": "Input",
+        "name": "text",
+        "options": [
+          {
+            "selected": true,
+            "text": "12344343333",
+            "value": "12344343333"
+          }
+        ],
+        "query": "12344343333",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Rename Tab title",
+  "uid": "becte8wngaqdcc",
+  "version": 1,
+  "weekStart": ""
+}

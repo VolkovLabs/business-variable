@@ -368,4 +368,20 @@ test.describe('Volkovlabs Variable Panel', () => {
       urlParams.checkIfNoVariableValue('var-city', 'Moscow');
     });
   });
+
+  test('Should set variable to browser tab name', async ({ gotoDashboardPage, readProvisionedDashboard, page }) => {
+    /**
+     * Go To Panels dashboard tabRename.json
+     * return dashboardPage
+     */
+    const dashboard = await readProvisionedDashboard({ fileName: 'tabRename.json' });
+    const dashboardPage = await gotoDashboardPage({ uid: dashboard.uid });
+    /**
+     * Await content load
+     */
+    await page.waitForTimeout(1500);
+
+    const title = await page.title();
+    expect(title).toContain('RU 12 BU test Rename Tab title');
+  });
 });

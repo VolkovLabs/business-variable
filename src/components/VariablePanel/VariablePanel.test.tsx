@@ -33,6 +33,13 @@ jest.mock('../../hooks/useRuntimeVariables', () => ({
 }));
 
 /**
+ * Mock useRuntimeVariables hook
+ */
+jest.mock('../../hooks/useChangeTabTitle', () => ({
+  useChangeTabTitle: jest.fn(),
+}));
+
+/**
  * Mock @grafana/runtime
  */
 jest.mock('@grafana/runtime', () => ({

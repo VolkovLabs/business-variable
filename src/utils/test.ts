@@ -51,5 +51,6 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   tabsInOrder: false,
   minimizeOutputFormat: MinimizeOutputFormat.TEXT,
   isUseLocalTime: false,
+  browserTabNamePattern: '',
   ...options,
 });

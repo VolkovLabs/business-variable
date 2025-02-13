@@ -1,4 +1,5 @@
 export * from './useAutoSave';
+export * from './useChangeTabTitle';
 export * from './useContentPosition';
 export * from './useContentSizes';
 export * from './useDashboardRedirect';

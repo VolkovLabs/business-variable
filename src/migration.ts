@@ -87,5 +87,14 @@ export const getMigratedOptions = async (
     };
   }
 
+  /**
+   * Normalize dashboard tab name properties
+   */
+  if (!panel.pluginVersion || semver.lt(panel.pluginVersion, '3.7.0')) {
+    if (!normalizedOptions.hasOwnProperty('browserTabNamePattern')) {
+      normalizedOptions.browserTabNamePattern = '';
+    }
+  }
+
   return normalizedOptions;
 };
