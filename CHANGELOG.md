@@ -1,6 +1,6 @@
 # Change Log
 
-## 3.7.0 (2025-01-20)
+## 3.7.0 (2025-02-13)
 
 ### Features / Enhancements
 
@@ -10,6 +10,7 @@
 - Added not supports variable type Alert message (#235)
 - Added Date picker (#237)
 - Updated to Grafana 11.4.0 and dependencies (#241)
+- Added advanced option to change browser tab title (#243)
 
 ## 3.6.0 (2024-10-24)
 
