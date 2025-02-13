@@ -534,7 +534,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addSelect({
         path: 'dashboardVariable',
         name: 'Select variable with dashboard UID',
-        description: 'Allows to redirect to different dashboards',
+        description: 'Allows to redirect to different dashboards.',
         settings: {
           options: variableOptions,
         },
@@ -555,9 +555,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addTextInput({
         path: 'browserTabNamePattern',
-        name: 'Change Tab name with variable',
-        description:
-          'Replace the browser tab name using a variable. Use ${__dashboard.title} pattern to get current dashboard title.',
+        name: 'Add variable to the browser tab name',
+        description: 'Use ${__dashboard.title} pattern to get current dashboard title.',
         defaultValue: '',
         settings: {
           placeholder: '${variable} ${__dashboard.title}',
