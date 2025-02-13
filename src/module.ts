@@ -108,11 +108,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       config.favorites.enabled &&
       config.favorites.storage === FavoritesStorage.DATASOURCE;
     const isDateTimePickerMode = (config: PanelOptions, variable?: TypedVariableModel) =>
-      (variable &&
-        variable.type === VariableType.TEXTBOX &&
-        config.displayMode === DisplayMode.MINIMIZE &&
-        config.minimizeOutputFormat === MinimizeOutputFormat.DATE) ||
-      config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP;
+      variable &&
+      variable.type === VariableType.TEXTBOX &&
+      config.displayMode === DisplayMode.MINIMIZE &&
+      (config.minimizeOutputFormat === MinimizeOutputFormat.DATETIME ||
+        config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP ||
+        config.minimizeOutputFormat === MinimizeOutputFormat.DATE);
 
     /**
      * Common Options
@@ -309,6 +310,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addSelect({
         path: 'variable',
         name: 'Select variable to display',
+        description: 'Constant, Data Source, Interval, AD hoc filters are not supported.',
         settings: {
           options: variableOptions,
         },

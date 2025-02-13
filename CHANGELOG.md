@@ -1,11 +1,15 @@
 # Change Log
 
-## 3.7.0 (IN PROGRESS)
+## 3.7.0 (2025-01-20)
 
 ### Features / Enhancements
 
 - Updated datasource ID instead of name and added support variables (#229)
 - Updated sticky header for Scenes dashboards (#230)
+- Updated display favorites icon (#234)
+- Added not supports variable type Alert message (#235)
+- Added Date picker (#237)
+- Updated to Grafana 11.4.0 and dependencies (#241)
 
 ## 3.6.0 (2024-10-24)
 

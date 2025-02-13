@@ -6,6 +6,7 @@ import React, { useMemo } from 'react';
 import { TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { MinimizeOutputFormat, PanelOptions, VariableType } from '../../types';
+import { DateSelector } from '../DateSelector';
 import { DateTimeSelector } from '../DateTimeSelector';
 import { OptionsVariable } from '../OptionsVariable';
 import { TextVariable } from '../TextVariable';
@@ -70,9 +71,15 @@ export const MinimizeView: React.FC<Props> = ({
    * Date Time Selector view
    */
   const isUseDateTimeSelector = useMemo(
-    () => minimizeOutputFormat === MinimizeOutputFormat.DATE || minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP,
+    () =>
+      minimizeOutputFormat === MinimizeOutputFormat.DATETIME || minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP,
     [minimizeOutputFormat]
   );
+
+  /**
+   * Date only Selector view
+   */
+  const isUseDateSelector = useMemo(() => minimizeOutputFormat === MinimizeOutputFormat.DATE, [minimizeOutputFormat]);
 
   /**
    * Styles
@@ -85,7 +92,7 @@ export const MinimizeView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.minimizeView.noVariableMessage}>
-        Variable is not selected.
+        Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.
       </Alert>
     );
   }
@@ -115,6 +122,14 @@ export const MinimizeView: React.FC<Props> = ({
               maxVisibleValues={maxVisibleValues}
             />
           )}
+          {variable.type === VariableType.TEXTBOX && isUseDateSelector && (
+            <DateSelector
+              variable={variable}
+              persistent={persistent}
+              panelEventBus={panelEventBus}
+              isUseLocalTime={isUseLocalTime}
+            />
+          )}
           {variable.type === VariableType.TEXTBOX && isUseDateTimeSelector && (
             <DateTimeSelector
               variable={variable}
@@ -125,7 +140,7 @@ export const MinimizeView: React.FC<Props> = ({
               minimizeOutputFormat={minimizeOutputFormat}
             />
           )}
-          {variable.type === VariableType.TEXTBOX && !isUseDateTimeSelector && (
+          {variable.type === VariableType.TEXTBOX && !isUseDateTimeSelector && !isUseDateSelector && (
             <TextVariable variable={variable} panelEventBus={panelEventBus} />
           )}
         </>
