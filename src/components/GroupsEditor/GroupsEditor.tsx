@@ -21,7 +21,7 @@ import { getStyles } from './GroupsEditor.styles';
 /**
  * Properties
  */
-interface Props extends StandardEditorProps<LevelsGroup[], null, PanelOptions> {}
+type Props = StandardEditorProps<LevelsGroup[], null, PanelOptions>;
 
 /**
  * Get Item Style
