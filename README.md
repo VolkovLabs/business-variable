@@ -31,6 +31,8 @@ For the latter, please use the following command.
 grafana-cli plugins install volkovlabs-variable-panel
 ```
 
+[![Install Business Suite plugins in Cloud, OSS, Enterprise | Open source community plugins](https://raw.githubusercontent.com/volkovlabs/.github/main/started.png)](https://youtu.be/1qYzHfPXJF8)
+
 ## Highlights
 
 - Allows working with dashboard variables in the **Table**, **Minimize**, **Button**, and **Slider** display modes.

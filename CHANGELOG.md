@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.8.0 (IN PROGRESS)
+
+### Features / Enhancements
+
+- Updated release workflow to include attestation (#246)
+
 ## 3.7.0 (2025-02-13)
 
 ### Features / Enhancements
