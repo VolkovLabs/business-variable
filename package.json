@@ -9,7 +9,6 @@
     "@tanstack/react-table": "^8.20.6",
     "@tanstack/react-virtual": "3.11.2",
     "@volkovlabs/components": "^4.1.0",
-    "@volkovlabs/grafana-utils": "^1.4.4",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
