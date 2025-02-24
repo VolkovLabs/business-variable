@@ -4,7 +4,7 @@
 
 ### Features / Enhancements
 
-- Updated release workflow to include attestation
+- Updated release workflow to include attestation (#246)
 
 ## 3.7.0 (2025-02-13)
 
