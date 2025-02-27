@@ -5,6 +5,7 @@
 ### Features / Enhancements
 
 - Updated release workflow to include attestation (#246)
+- Removed @volkovlabs/grafana-utils (#247)
 
 ## 3.7.0 (2025-02-13)
 
