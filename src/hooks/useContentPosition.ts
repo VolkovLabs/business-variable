@@ -1,5 +1,8 @@
+import { EventBus } from '@grafana/data';
 import { throttle } from 'lodash';
 import { CSSProperties, RefObject, useLayoutEffect, useRef, useState } from 'react';
+
+import { DashboardPanelsChangedEvent } from '../types';
 
 /**
  * Content Position
@@ -9,10 +12,12 @@ export const useContentPosition = ({
   height,
   sticky,
   scrollableContainerRef,
+  eventBus,
 }: {
   width: number;
   height: number;
   sticky: boolean;
+  eventBus: EventBus;
   scrollableContainerRef: RefObject<HTMLDivElement>;
 }) => {
   /**
@@ -27,6 +32,11 @@ export const useContentPosition = ({
   const dashboardSubmenuRef = useRef<HTMLDivElement | null>(null);
   const dashboardVariablesContainer = useRef<HTMLElement | null | undefined>(null);
   const dashboardHeaderContainer = useRef<HTMLElement | null | undefined>(null);
+
+  /**
+   * Main dashboard container since v.11.3.0
+   */
+  const mainDashboard = useRef<HTMLDivElement | null>(null);
 
   /**
    * Content Element Styles
@@ -82,6 +92,14 @@ export const useContentPosition = ({
      */
     if (!dashboardSubmenuRef.current) {
       dashboardSubmenuRef.current = document.querySelector('[aria-label="Dashboard submenu"]');
+    }
+
+    /**
+     * Set main dashboard container
+     *
+     */
+    if (!mainDashboard.current) {
+      mainDashboard.current = document.querySelector('.main-view');
     }
 
     /**
@@ -165,7 +183,6 @@ export const useContentPosition = ({
           const dashboardSubmenuStickyRect = getDashboardSubmenuStickyRect();
 
           const { y: startY, height } = containerRef.current.getBoundingClientRect();
-
           const dashboardScrollViewRect = dashboardScrollViewRef.current.getBoundingClientRect();
           const dashboardContentOffsetY = dashboardScrollViewRect.top + dashboardSubmenuStickyRect.height;
           const relativeStartY = startY - dashboardContentOffsetY;
@@ -209,10 +226,23 @@ export const useContentPosition = ({
      * Listen for Scroll events in Scenes
      */
     if (window && window.hasOwnProperty('__grafanaSceneContext') && sticky) {
+      /**
+       * Add resize observer to main
+       * Call calculation if panels inside control panel were changed without scrolling
+       */
+      const resizeObserver = new ResizeObserver(() => {
+        calcPosition();
+      });
+
+      if (mainDashboard.current) {
+        resizeObserver.observe(mainDashboard.current);
+      }
+
       document.addEventListener('scroll', calcPosition);
 
       return () => {
         document.removeEventListener('scroll', calcPosition);
+        resizeObserver.disconnect();
       };
     }
 
@@ -220,15 +250,26 @@ export const useContentPosition = ({
      * Listen for Scroll events in non-Scenes
      */
     if (dashboardScrollViewRef.current && sticky && !window.hasOwnProperty('__grafanaSceneContext')) {
+      /**
+       * subscribe on Panels change event
+       * It is necessary to wait until the current container dimensions and positions are received after the event is called.
+       */
+      const subscription = eventBus.subscribe(DashboardPanelsChangedEvent, () => {
+        setTimeout(() => {
+          calcPosition();
+        }, 150);
+      });
+
       dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
 
       return () => {
         dashboardScrollViewRef.current?.removeEventListener('scroll', calcPosition);
+        subscription.unsubscribe();
       };
     }
 
     return () => {};
-  }, [containerRef, width, height, sticky, scrollableContainerRef]);
+  }, [containerRef, width, height, sticky, scrollableContainerRef, eventBus]);
 
   return {
     containerRef,
