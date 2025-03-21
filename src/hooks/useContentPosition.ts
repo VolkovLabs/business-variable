@@ -257,7 +257,7 @@ export const useContentPosition = ({
       const subscription = eventBus.subscribe(DashboardPanelsChangedEvent, () => {
         setTimeout(() => {
           calcPosition();
-        }, 150);
+        }, 300);
       });
 
       dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
