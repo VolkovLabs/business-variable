@@ -91,6 +91,7 @@ export const TableView: React.FC<Props> = ({
     height,
     sticky: options.sticky,
     scrollableContainerRef,
+    eventBus,
   });
 
   /**

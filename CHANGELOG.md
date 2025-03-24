@@ -6,6 +6,7 @@
 
 - Updated release workflow to include attestation (#246)
 - Removed @volkovlabs/grafana-utils (#247)
+- Added resize behavior for panel with 'Sticky' header (#253)
 
 ## 3.7.0 (2025-02-13)
 
