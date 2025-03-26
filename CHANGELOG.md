@@ -2,7 +2,7 @@
 
 All notable changes to the Business Variable panel are documented here.
 
-## 3.8.0 (In Progress)
+## 3.8.0 (2025-03-26)
 
 ### Features & Enhancements
 
