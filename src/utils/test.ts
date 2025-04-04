@@ -52,5 +52,6 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   minimizeOutputFormat: MinimizeOutputFormat.TEXT,
   isUseLocalTime: false,
   browserTabNamePattern: '',
+  alertCustomMessage: '',
   ...options,
 });
