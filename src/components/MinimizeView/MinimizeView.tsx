@@ -3,7 +3,7 @@ import { EventBus } from '@grafana/data';
 import { Alert, InlineField, useStyles2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
-import { TEST_IDS } from '../../constants';
+import { NO_VARIABLE_DEFAULT_MESSAGE, TEST_IDS } from '../../constants';
 import { useRuntimeVariables } from '../../hooks';
 import { MinimizeOutputFormat, PanelOptions, VariableType } from '../../types';
 import { DateSelector } from '../DateSelector';
@@ -57,6 +57,7 @@ export const MinimizeView: React.FC<Props> = ({
     maxVisibleValues,
     minimizeOutputFormat = MinimizeOutputFormat.TEXT,
     isUseLocalTime = false,
+    alertCustomMessage = '',
   } = {},
   timeZone,
   eventBus,
@@ -92,7 +93,7 @@ export const MinimizeView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.minimizeView.noVariableMessage}>
-        Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.
+        {alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
       </Alert>
     );
   }

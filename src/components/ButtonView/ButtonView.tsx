@@ -3,7 +3,13 @@ import { EventBus, PanelData } from '@grafana/data';
 import { Alert, Button, IconButton, InlineLabel, useStyles2, useTheme2 } from '@grafana/ui';
 import React, { useMemo } from 'react';
 
-import { ALL_VALUE, ALL_VALUE_PARAMETER, TEST_IDS } from '../../constants';
+import {
+  ALL_VALUE,
+  ALL_VALUE_PARAMETER,
+  NO_VARIABLE_DEFAULT_MESSAGE,
+  OPTIONS_NOT_AVAILABLE_MESSAGE,
+  TEST_IDS,
+} from '../../constants';
 import { usePersistentStorage, useRuntimeVariables, useStatus } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
@@ -53,6 +59,7 @@ export const ButtonView: React.FC<Props> = ({
     persistent = false,
     showLabel = false,
     showResetButton = false,
+    alertCustomMessage = '',
   } = {},
   eventBus,
   panelEventBus,
@@ -95,7 +102,7 @@ export const ButtonView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.buttonView.noVariableMessage}>
-        Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.
+        {alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
       </Alert>
     );
   }
@@ -104,10 +111,14 @@ export const ButtonView: React.FC<Props> = ({
    * Check options
    */
   const options = isVariableWithOptions(variable) && variable.options.length;
+
+  /**
+   * No options alert message
+   */
   if (!options) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.buttonView.noOptionsMessage}>
-        Options are not available.
+        {OPTIONS_NOT_AVAILABLE_MESSAGE}
       </Alert>
     );
   }

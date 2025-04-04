@@ -119,17 +119,19 @@ describe('Use Content Position', () => {
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '200px', height: '200px' });
   });
 
-  it('Should apply sizes for scene dashboard', () => {
+  it('Should apply sizes for scene dashboard', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
       },
     };
 
-    render(
-      <MainViewContainer style={{ height: 1000 }}>
-        <Component width={250} height={250} sticky={false} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 1000 }}>
+          <Component width={250} height={250} sticky={false} />
+        </MainViewContainer>
+      )
     );
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '250px' });
   });

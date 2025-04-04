@@ -128,6 +128,13 @@ export interface LevelsGroup {
   name: string;
 
   /**
+   * No data in table custom alert message
+   *
+   * @type {string}
+   */
+  noDataCustomMessage?: string;
+
+  /**
    * Items
    *
    * @type {Level[]}
@@ -376,6 +383,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   browserTabNamePattern: string;
+
+  /**
+   * Alert Custom Message
+   *
+   * @type {string}
+   */
+  alertCustomMessage: string;
 }
 
 /**

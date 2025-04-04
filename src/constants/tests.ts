@@ -35,6 +35,8 @@ export const TEST_IDS = {
     buttonStartRename: 'data-testid fields-editor button-start-rename',
     buttonCancelRename: 'data-testid fields-editor button-cancel-rename',
     buttonSaveRename: 'data-testid fields-editor button-save-rename',
+    rowErrorMessage: (name: string) => `data-testid fields-editor row-error-message-${name}`,
+    fieldErrorMessage: (name: string) => `data-testid fields-editor field-error-message-${name}`,
     fieldName: 'data-testid fields-editor field-name',
     item: (name: string) => `data-testid fields-editor item-${name}`,
     newItem: 'data-testid fields-editor new-level',

@@ -128,6 +128,17 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     });
 
     /**
+     * Common Options
+     */
+    builder.addTextInput({
+      path: 'alertCustomMessage',
+      name: 'Custom message when variable is not selected',
+      description:
+        'Leave empty for the default message. Constant, Data Source, Interval, AD hoc filters are not supported.',
+      defaultValue: '',
+    });
+
+    /**
      * Minimize Mode Options
      */
     builder.addSliderInput({

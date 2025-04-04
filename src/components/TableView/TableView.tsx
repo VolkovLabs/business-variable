@@ -3,7 +3,7 @@ import { EventBus, PanelProps } from '@grafana/data';
 import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { TEST_IDS } from '../../constants';
+import { NO_VARIABLE_DEFAULT_MESSAGE, TEST_IDS } from '../../constants';
 import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { Table } from '../Table';
@@ -52,6 +52,29 @@ export const TableView: React.FC<Props> = ({
   }, [options.groups, currentGroup]);
 
   /**
+   * Scoped variable to operate group name
+   */
+  const scopedGroupVariable = useMemo(
+    () => ({
+      currentGroupName: { value: currentGroup, text: currentGroup },
+    }),
+    [currentGroup]
+  );
+
+  /**
+   * Error message for current group
+   */
+  const currentGroupNoDataMessage = useMemo(() => {
+    if (options.groups?.length && currentGroup) {
+      const groupMessage = options.groups.find((group) => group.name === currentGroup)?.noDataCustomMessage;
+
+      return groupMessage ? replaceVariables(groupMessage, scopedGroupVariable) : '';
+    }
+
+    return '';
+  }, [currentGroup, options.groups, replaceVariables, scopedGroupVariable]);
+
+  /**
    * Change current group if was removed
    */
   useEffect(() => {
@@ -63,7 +86,7 @@ export const TableView: React.FC<Props> = ({
   /**
    * Table config
    */
-  const { tableData, columns, getSubRows } = useTable({
+  const { tableData, columns, getSubRows, runtimeVariable } = useTable({
     data,
     options,
     eventBus,
@@ -146,6 +169,35 @@ export const TableView: React.FC<Props> = ({
   }, []);
 
   /**
+   * Error alert message
+   */
+  const errorMessage = useMemo(() => {
+    /**
+     * Check variable
+     */
+    if (!runtimeVariable) {
+      return (
+        <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
+          {options.alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
+        </Alert>
+      );
+    }
+
+    /**
+     * Check table data
+     */
+    if (!tableData.length) {
+      return (
+        <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
+          {currentGroupNoDataMessage || `The table currently contains no data to display.`}
+        </Alert>
+      );
+    }
+
+    return <></>;
+  }, [currentGroupNoDataMessage, options.alertCustomMessage, runtimeVariable, tableData.length]);
+
+  /**
    * Return
    */
   return (
@@ -171,13 +223,7 @@ export const TableView: React.FC<Props> = ({
           isFocused.current = true;
         }}
       >
-        {!tableData.length && (
-          <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
-            Variable is not selected or do not match returned fields. Constant, Data Source, Interval, AD hoc filters
-            are not supported.
-          </Alert>
-        )}
-
+        {errorMessage}
         <div
           style={style}
           className={styles.content}
