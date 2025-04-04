@@ -2,6 +2,12 @@
 
 All notable changes to the Business Variable panel are documented here.
 
+## 3.8.0 (In Progress)
+
+### Features & Enhancements
+
+- Added a custom message for the 'no data' and 'variable not selected' cases. (#262)
+
 ## 3.8.0 (2025-03-26)
 
 ### Features & Enhancements
