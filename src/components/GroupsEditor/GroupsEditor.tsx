@@ -282,7 +282,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                             <Input
                               placeholder="Unique error message"
                               value={noDataCustomMessage}
-                              className=""
+                              className={styles.fieldCustomError}
                               onChange={(event) => {
                                 onChangeItem({
                                   name,
