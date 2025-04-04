@@ -5,6 +5,7 @@ export const TEST_IDS = {
   tableView: {
     content: 'data-testid panel content',
     infoMessage: 'data-testid panel info',
+    noDataMessage: 'data-testid table-view no-data-message',
     root: 'data-testid panel',
     tab: (name: string) => `data-testid panel tab-${name}`,
   },

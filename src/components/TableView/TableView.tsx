@@ -188,7 +188,7 @@ export const TableView: React.FC<Props> = ({
      */
     if (!tableData.length) {
       return (
-        <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
+        <Alert data-testid={TEST_IDS.tableView.noDataMessage} severity="info" title="Variable">
           {currentGroupNoDataMessage || `The table currently contains no data to display.`}
         </Alert>
       );
