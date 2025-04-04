@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 14,
+  "id": 15,
   "links": [],
   "panels": [
     {
@@ -67,6 +67,7 @@
         "displayMode": "table",
         "emptyValue": false,
         "favorites": {
+          "datasource": "",
           "enabled": false,
           "storage": "browser"
         },
@@ -152,6 +153,7 @@
         "displayMode": "table",
         "emptyValue": false,
         "favorites": {
+          "datasource": "",
           "enabled": false,
           "storage": "browser"
         },
@@ -237,6 +239,7 @@
         "displayMode": "minimize",
         "emptyValue": false,
         "favorites": {
+          "datasource": "",
           "enabled": false,
           "storage": "browser"
         },
@@ -555,6 +558,7 @@
         "displayMode": "table",
         "emptyValue": false,
         "favorites": {
+          "datasource": "",
           "enabled": false,
           "storage": "browser"
         },
@@ -569,7 +573,7 @@
               }
             ],
             "name": "Table1",
-            "noDataCustomMessage": "No data custom. Tab name: ${currentGroupName}"
+            "noDataCustomMessage": "No data custom. Tab name: Table 1"
           },
           {
             "items": [
@@ -579,7 +583,7 @@
               }
             ],
             "name": "Table2",
-            "noDataCustomMessage": "No data custom. Tab name: ${currentGroupName}"
+            "noDataCustomMessage": "No data custom. Tab name: Table 2"
           }
         ],
         "header": true,
@@ -615,7 +619,7 @@
           "refId": "A"
         }
       ],
-      "title": "No data custom message with tab and variable",
+      "title": "No data custom message with tab name",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -896,6 +900,6 @@
   "timezone": "",
   "title": "Alert messages",
   "uid": "fehvlh1ia5fk0b",
-  "version": 12,
+  "version": 1,
   "weekStart": ""
 }

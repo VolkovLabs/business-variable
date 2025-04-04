@@ -52,27 +52,17 @@ export const TableView: React.FC<Props> = ({
   }, [options.groups, currentGroup]);
 
   /**
-   * Scoped variable to operate group name
-   */
-  const scopedGroupVariable = useMemo(
-    () => ({
-      currentGroupName: { value: currentGroup, text: currentGroup },
-    }),
-    [currentGroup]
-  );
-
-  /**
    * Error message for current group
    */
   const currentGroupNoDataMessage = useMemo(() => {
     if (options.groups?.length && currentGroup) {
       const groupMessage = options.groups.find((group) => group.name === currentGroup)?.noDataCustomMessage;
 
-      return groupMessage ? replaceVariables(groupMessage, scopedGroupVariable) : '';
+      return groupMessage || '';
     }
 
     return '';
-  }, [currentGroup, options.groups, replaceVariables, scopedGroupVariable]);
+  }, [currentGroup, options.groups]);
 
   /**
    * Change current group if was removed

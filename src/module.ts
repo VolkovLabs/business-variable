@@ -23,6 +23,7 @@ import {
   GROUP_SELECTION_OPTIONS,
   HEADER_OPTIONS,
   MINIMIZE_OUTPUT_FORMAT_OPTIONS,
+  NO_VARIABLE_DEFAULT_MESSAGE,
   PERSISTENT_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
@@ -135,6 +136,9 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       name: 'Custom message when variable is not selected',
       description:
         'Leave empty for the default message. Constant, Data Source, Interval, AD hoc filters are not supported.',
+      settings: {
+        placeholder: NO_VARIABLE_DEFAULT_MESSAGE,
+      },
       defaultValue: '',
     });
 

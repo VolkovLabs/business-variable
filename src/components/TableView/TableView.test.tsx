@@ -352,59 +352,6 @@ describe('Table View', () => {
     );
   });
 
-  it('Should call replaceVariables for custom error message', async () => {
-    const replaceVariables = jest.fn();
-
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { name: 'Variable' } as any,
-    }));
-
-    /**
-     * Mock table
-     */
-
-    jest.mocked(Table).mockImplementationOnce((props) => {
-      return jest.requireActual('../Table').Table(props);
-    });
-
-    await act(async () =>
-      render(
-        getComponent({
-          replaceVariables,
-          options: {
-            groups: [
-              {
-                name: 'group1',
-                items: [
-                  {
-                    name: 'group1Field',
-                  },
-                ],
-                noDataCustomMessage: 'Custom message no data',
-              },
-              {
-                name: 'group2',
-                items: [
-                  {
-                    name: 'group2Field',
-                  },
-                ],
-              },
-            ],
-          } as any,
-        })
-      )
-    );
-
-    expect(replaceVariables).toHaveBeenCalled();
-    expect(replaceVariables).toHaveBeenCalledWith('Custom message no data', {
-      currentGroupName: { text: 'group1', value: 'group1' },
-    });
-  });
-
   it('Should display custom error message if no data', async () => {
     const replaceVariables = jest.fn((string: string) => string);
 
@@ -451,11 +398,6 @@ describe('Table View', () => {
         })
       )
     );
-
-    expect(replaceVariables).toHaveBeenCalled();
-    expect(replaceVariables).toHaveBeenCalledWith('Custom message no data', {
-      currentGroupName: { text: 'group1', value: 'group1' },
-    });
 
     expect(selectors.noDataMessage()).toBeInTheDocument();
   });

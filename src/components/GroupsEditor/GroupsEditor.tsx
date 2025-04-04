@@ -12,7 +12,7 @@ import {
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
 
-import { TEST_IDS } from '../../constants';
+import { OPTIONS_NOT_AVAILABLE_MESSAGE, TEST_IDS } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { reorder } from '../../utils';
 import { LevelsEditor } from '../LevelsEditor';
@@ -275,12 +275,12 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                           <InlineFieldRow data-testid={TEST_IDS.groupsEditor.rowErrorMessage(name)}>
                             <InlineLabel
                               width="auto"
-                              tooltip="Custom message when no data for table. Leave empty for the default message. Use ${currentGroupName} to get current group name."
+                              tooltip="Custom message when no data for table. Leave empty for the default message."
                             >
                               Alert message
                             </InlineLabel>
                             <Input
-                              placeholder="Unique error message"
+                              placeholder={OPTIONS_NOT_AVAILABLE_MESSAGE}
                               value={noDataCustomMessage}
                               className={styles.fieldCustomError}
                               onChange={(event) => {
