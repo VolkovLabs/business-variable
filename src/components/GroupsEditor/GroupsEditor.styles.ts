@@ -43,5 +43,8 @@ export const getStyles = (theme: GrafanaTheme2) => {
     actionButton: css`
       color: ${theme.colors.text.secondary};
     `,
+    fieldCustomError: css`
+      margin-bottom: ${theme.spacing(1)};
+    `,
   };
 };

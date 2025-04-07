@@ -4,7 +4,7 @@ import { Alert, InlineField, useStyles2 } from '@grafana/ui';
 import { Slider } from '@volkovlabs/components';
 import React from 'react';
 
-import { TEST_IDS } from '../../constants';
+import { NO_VARIABLE_DEFAULT_MESSAGE, TEST_IDS } from '../../constants';
 import { useRuntimeVariables, useSlider } from '../../hooks';
 import { PanelOptions } from '../../types';
 import { isVariableWithOptions, updateVariableOptions } from '../../utils';
@@ -35,7 +35,7 @@ interface Props extends PanelProps {
  */
 export const SliderView: React.FC<Props> = ({
   width,
-  options: { variable: variableName, padding = 0, showLabel = false, labelWidth },
+  options: { variable: variableName, padding = 0, showLabel = false, labelWidth, alertCustomMessage = '' },
   eventBus,
   panelEventBus,
 }) => {
@@ -60,7 +60,7 @@ export const SliderView: React.FC<Props> = ({
   if (!variable) {
     return (
       <Alert severity="info" title="Variable" data-testid={TEST_IDS.sliderView.noVariableMessage}>
-        Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.
+        {alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
       </Alert>
     );
   }

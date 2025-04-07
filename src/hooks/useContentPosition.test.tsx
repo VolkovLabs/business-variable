@@ -10,6 +10,11 @@ import { useContentPosition } from './useContentPosition';
  */
 jest.useFakeTimers();
 
+jest.mock('lodash', () => ({
+  ...jest.requireActual('lodash'),
+  throttle: (fn: any) => fn,
+}));
+
 /**
  * In Test Ids
  */
@@ -119,32 +124,36 @@ describe('Use Content Position', () => {
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '200px', height: '200px' });
   });
 
-  it('Should apply sizes for scene dashboard', () => {
+  it('Should apply sizes for scene dashboard', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
       },
     };
 
-    render(
-      <MainViewContainer style={{ height: 1000 }}>
-        <Component width={250} height={250} sticky={false} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 1000 }}>
+          <Component width={250} height={250} sticky={false} />
+        </MainViewContainer>
+      )
     );
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '250px' });
   });
 
-  it('Should apply sizes for scene dashboard sticky header and dashboard controls enabled', () => {
+  it('Should apply sizes for scene dashboard sticky header and dashboard controls enabled', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
       },
     };
 
-    render(
-      <MainViewContainer style={{ height: 1000 }}>
-        <Component width={250} height={250} sticky={true} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 1000 }}>
+          <Component width={250} height={250} sticky={true} />
+        </MainViewContainer>
+      )
     );
 
     const controlsContainer = screen.getByTestId(InTestIds.dashboardControlsContainer);
@@ -170,8 +179,9 @@ describe('Use Content Position', () => {
           bottom: 220,
         }) as any
     );
-
-    document.dispatchEvent(new Event('scroll'));
+    await act(async () => {
+      document.dispatchEvent(new Event('scroll'));
+    });
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({
       width: '250px',
@@ -180,11 +190,13 @@ describe('Use Content Position', () => {
     });
   });
 
-  it('Should recalculate position when DashboardPanelsChangedEvent is triggered', () => {
-    render(
-      <ScrollableContainer style={{ height: 1000 }}>
-        <Component width={200} height={200} sticky={true} />
-      </ScrollableContainer>
+  it('Should recalculate position when DashboardPanelsChangedEvent is triggered', async () => {
+    await act(async () =>
+      render(
+        <ScrollableContainer style={{ height: 1000 }}>
+          <Component width={200} height={200} sticky={true} />
+        </ScrollableContainer>
+      )
     );
 
     const container = screen.getByTestId(InTestIds.container);
@@ -229,10 +241,12 @@ describe('Use Content Position', () => {
       },
     };
 
-    render(
-      <ScrollableContainer style={{ height: 100 }}>
-        <Component width={10} height={10} sticky={true} />
-      </ScrollableContainer>
+    await act(async () =>
+      render(
+        <ScrollableContainer style={{ height: 100 }}>
+          <Component width={10} height={10} sticky={true} />
+        </ScrollableContainer>
+      )
     );
 
     const container = screen.getByTestId(InTestIds.container);
@@ -265,17 +279,19 @@ describe('Use Content Position', () => {
     expect(content).toHaveStyle({ height: '0px' });
   });
 
-  it('Should apply sizes for scene dashboard sticky header enabled; dashboard controls disabled', () => {
+  it('Should apply sizes for scene dashboard sticky header enabled; dashboard controls disabled', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
       },
     };
 
-    render(
-      <MainViewContainer style={{ height: 1000 }} showControls={false}>
-        <Component width={250} height={250} sticky={true} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 1000 }} showControls={false}>
+          <Component width={250} height={250} sticky={true} />
+        </MainViewContainer>
+      )
     );
 
     const container = screen.getByTestId(InTestIds.container);
@@ -291,7 +307,9 @@ describe('Use Content Position', () => {
         }) as any
     );
 
-    document.dispatchEvent(new Event('scroll'));
+    await act(async () => {
+      document.dispatchEvent(new Event('scroll'));
+    });
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({
       width: '250px',
@@ -300,11 +318,13 @@ describe('Use Content Position', () => {
     });
   });
 
-  it('Should follow on scroll', () => {
-    render(
-      <ScrollableContainer style={{ height: 1000 }}>
-        <Component width={200} height={200} sticky={true} />
-      </ScrollableContainer>
+  it('Should follow on scroll', async () => {
+    await act(async () =>
+      render(
+        <ScrollableContainer style={{ height: 1000 }}>
+          <Component width={200} height={200} sticky={true} />
+        </ScrollableContainer>
+      )
     );
 
     const scrollableElement = screen.getByTestId(InTestIds.scrollableElement);
@@ -331,7 +351,7 @@ describe('Use Content Position', () => {
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
   });
 
-  it('Should follow on scroll for scene dashboard', () => {
+  it('Should follow on scroll for scene dashboard', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
@@ -340,10 +360,12 @@ describe('Use Content Position', () => {
 
     window.innerHeight = 750;
 
-    render(
-      <MainViewContainer style={{ height: 500 }}>
-        <Component width={250} height={550} sticky={true} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 500 }}>
+          <Component width={250} height={550} sticky={true} />
+        </MainViewContainer>
+      )
     );
 
     const content = screen.getByTestId(InTestIds.content);
@@ -375,11 +397,13 @@ describe('Use Content Position', () => {
         }) as any
     );
 
-    document.dispatchEvent(new Event('scroll'));
+    await act(async () => {
+      document.dispatchEvent(new Event('scroll'));
+    });
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '380px' });
   });
 
-  it('Should follow on scroll for scene dashboard if startY return -startY', () => {
+  it('Should follow on scroll for scene dashboard if startY return -startY', async () => {
     window.__grafanaSceneContext = {
       body: {
         text: 'hello',
@@ -388,10 +412,12 @@ describe('Use Content Position', () => {
 
     window.innerHeight = 750;
 
-    render(
-      <MainViewContainer style={{ height: 500 }}>
-        <Component width={250} height={550} sticky={true} />
-      </MainViewContainer>
+    await act(async () =>
+      render(
+        <MainViewContainer style={{ height: 500 }}>
+          <Component width={250} height={550} sticky={true} />
+        </MainViewContainer>
+      )
     );
 
     const content = screen.getByTestId(InTestIds.content);
@@ -423,23 +449,28 @@ describe('Use Content Position', () => {
         }) as any
     );
 
-    document.dispatchEvent(new Event('scroll'));
+    await act(async () => {
+      document.dispatchEvent(new Event('scroll'));
+    });
+
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '280px' });
     expect(content).toHaveStyle({ transform: 'translateY(270px)' });
   });
 
-  it('Should add a spacing if grafana variable section with fixed position', () => {
-    render(
-      <ScrollableContainer style={{ height: 1000 }}>
-        <>
-          <section
-            aria-label="Dashboard submenu"
-            data-testid={InTestIds.grafanaVariablesSection}
-            style={{ height: 80, position: 'fixed' }}
-          ></section>
-          <Component width={200} height={200} sticky={true} />
-        </>
-      </ScrollableContainer>
+  it('Should add a spacing if grafana variable section with fixed position', async () => {
+    await act(async () =>
+      render(
+        <ScrollableContainer style={{ height: 1000 }}>
+          <>
+            <section
+              aria-label="Dashboard submenu"
+              data-testid={InTestIds.grafanaVariablesSection}
+              style={{ height: 80, position: 'fixed' }}
+            ></section>
+            <Component width={200} height={200} sticky={true} />
+          </>
+        </ScrollableContainer>
+      )
     );
 
     const scrollableElement = screen.getByTestId(InTestIds.scrollableElement);

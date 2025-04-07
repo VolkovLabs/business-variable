@@ -234,6 +234,7 @@ describe('Table View', () => {
       ],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
+      runtimeVariable: { name: 'Variable' } as any,
     }));
 
     /**
@@ -349,5 +350,55 @@ describe('Table View', () => {
       }),
       expect.anything()
     );
+  });
+
+  it('Should display custom error message if no data', async () => {
+    const replaceVariables = jest.fn((string: string) => string);
+
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { name: 'Variable' } as any,
+    }));
+
+    /**
+     * Mock table
+     */
+
+    jest.mocked(Table).mockImplementationOnce((props) => {
+      return jest.requireActual('../Table').Table(props);
+    });
+
+    await act(async () =>
+      render(
+        getComponent({
+          replaceVariables,
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [
+                  {
+                    name: 'group1Field',
+                  },
+                ],
+                noDataCustomMessage: 'Custom message no data',
+              },
+              {
+                name: 'group2',
+                items: [
+                  {
+                    name: 'group2Field',
+                  },
+                ],
+              },
+            ],
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.noDataMessage()).toBeInTheDocument();
   });
 });
