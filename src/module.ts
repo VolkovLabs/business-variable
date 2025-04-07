@@ -134,8 +134,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     builder.addTextInput({
       path: 'alertCustomMessage',
       name: 'Custom message when variable is not selected',
-      description:
-        'Leave empty for the default message. Constant, Data Source, Interval, AD hoc filters are not supported.',
+      description: 'Leave empty for the default message.',
       settings: {
         placeholder: NO_VARIABLE_DEFAULT_MESSAGE,
       },

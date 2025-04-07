@@ -275,7 +275,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                           <InlineFieldRow data-testid={TEST_IDS.groupsEditor.rowErrorMessage(name)}>
                             <InlineLabel
                               width="auto"
-                              tooltip="Custom message when no data for table. Leave empty for the default message."
+                              tooltip="Custom message when no data returned. Leave empty for the default message."
                             >
                               Alert message
                             </InlineLabel>
