@@ -49,7 +49,7 @@ jest.mock('../OptionsVariable', () => ({
 }));
 
 /**
- * Mock OptionsVariable
+ * Mock DrawerTable
  */
 jest.mock('./components', () => ({
   DrawerTable: jest.fn(() => <div data-testid={InTestIds.drawerMockTableView}>Drawer Table Mock</div>),
