@@ -1,6 +1,5 @@
-import { getDataSourceSrv, getTemplateSrv } from '@grafana/runtime';
 import { ColumnDef } from '@tanstack/react-table';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
@@ -12,14 +11,6 @@ import { DrawerTable } from './DrawerTable';
  * Props
  */
 type Props = React.ComponentProps<typeof DrawerTable>;
-
-/**
- * Mock @grafana/runtime
- */
-jest.mock('@grafana/runtime', () => ({
-  getDataSourceSrv: jest.fn(),
-  getTemplateSrv: jest.fn(),
-}));
 
 /**
  * Mock table
@@ -36,6 +27,7 @@ describe('DrawerTable', () => {
     ...TEST_IDS.drawerTable,
     tableMock: 'data-testid table-mock-element',
   });
+
   const selectors = getSelectors(screen);
 
   const columns: Array<ColumnDef<TableItem>> = [];
@@ -60,13 +52,6 @@ describe('DrawerTable', () => {
   const getComponent = (props: Partial<Props>) => {
     return <DrawerTable {...(props as any)} />;
   };
-
-  beforeEach(() => {
-    jest.mocked(getDataSourceSrv).mockReset();
-    jest.mocked(getTemplateSrv).mockReturnValue({
-      replace: jest.fn((str) => str),
-    } as never);
-  });
 
   it('Should renders without crashing', () => {
     render(getComponent(defaultProps));
