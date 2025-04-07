@@ -376,6 +376,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   browserTabNamePattern: string;
+
+  /**
+   * Is minimize use for table view
+   *
+   * @type {boolean}
+   */
+  isMinimizeForTable: boolean;
 }
 
 /**

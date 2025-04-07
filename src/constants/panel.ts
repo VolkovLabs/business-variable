@@ -39,6 +39,14 @@ export const STICKY_OPTIONS = [
 ];
 
 /**
+ * Sticky Position
+ */
+export const TABLE_MINIMIZE_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Show the table in minimized view. The tree view opens in a drawer.' },
+  { value: false, label: 'Disabled', description: 'Show tree view in the panel.' },
+];
+
+/**
  * Filter Options
  */
 export const FILTER_OPTIONS = [

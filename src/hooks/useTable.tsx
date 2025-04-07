@@ -564,5 +564,6 @@ export const useTable = ({
     tableData,
     columns,
     getSubRows,
+    runtimeVariable,
   };
 };

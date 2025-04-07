@@ -4,7 +4,7 @@ import React from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useSavedState, useTable } from '../../hooks';
-import { StatusStyleMode } from '../../types';
+import { StatusStyleMode, VariableType } from '../../types';
 import { Table } from '../Table';
 import { TableView } from './TableView';
 
@@ -27,6 +27,14 @@ jest.mock('../../hooks', () => ({
 }));
 
 /**
+ * In Test Ids
+ */
+const InTestIds = {
+  outsideElement: 'data-testid outside-element',
+  drawerMockTableView: 'data-testid drawer-mock-table-view',
+};
+
+/**
  * Mock table
  */
 jest.mock('../Table', () => ({
@@ -34,16 +42,23 @@ jest.mock('../Table', () => ({
 }));
 
 /**
+ * Mock OptionsVariable
+ */
+jest.mock('../OptionsVariable', () => ({
+  OptionsVariable: jest.fn(() => <div>Options Variable</div>),
+}));
+
+/**
+ * Mock OptionsVariable
+ */
+jest.mock('./components', () => ({
+  DrawerTable: jest.fn(() => <div data-testid={InTestIds.drawerMockTableView}>Drawer Table Mock</div>),
+}));
+
+/**
  * Properties
  */
 type Props = React.ComponentProps<typeof TableView>;
-
-/**
- * In Test Ids
- */
-const InTestIds = {
-  outsideElement: 'data-testid outside-element',
-};
 
 /**
  * Table View
@@ -234,6 +249,7 @@ describe('Table View', () => {
       ],
       columns: [{ id: 'value', accessorKey: 'value' }],
       getSubRows: () => undefined,
+      runtimeVariable: {} as any,
     }));
 
     /**
@@ -349,5 +365,119 @@ describe('Table View', () => {
       }),
       expect.anything()
     );
+  });
+
+  it('Should open and close drawer for QUERY variable', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.QUERY } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            isMinimizeForTable: true,
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.buttonOpenDrawer()).toBeInTheDocument();
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonOpenDrawer());
+
+    expect(selectors.drawerMockTableView()).toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonCloseDrawer());
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+  });
+
+  it('Should open and close drawer for CUSTOM variable', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.CUSTOM } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            isMinimizeForTable: true,
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.buttonOpenDrawer()).toBeInTheDocument();
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonOpenDrawer());
+
+    expect(selectors.drawerMockTableView()).toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonCloseDrawer());
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+  });
+
+  it('Should not display minimize if variable not valid type', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.TEXTBOX } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            isMinimizeForTable: true,
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.buttonOpenDrawer(true)).not.toBeInTheDocument();
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
   });
 });

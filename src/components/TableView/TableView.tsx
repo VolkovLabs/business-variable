@@ -1,12 +1,22 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelProps } from '@grafana/data';
-import { Alert, ClickOutsideWrapper, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+  Alert,
+  ClickOutsideWrapper,
+  Drawer,
+  IconButton,
+  ToolbarButton,
+  ToolbarButtonRow,
+  useTheme2,
+} from '@grafana/ui';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
 import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
-import { PanelOptions } from '../../types';
+import { PanelOptions, VariableType } from '../../types';
+import { OptionsVariable } from '../OptionsVariable';
 import { Table } from '../Table';
+import { DrawerTable } from './components';
 import { getStyles } from './TableView.styles';
 
 /**
@@ -32,6 +42,11 @@ export const TableView: React.FC<Props> = ({
   panelEventBus,
   replaceVariables,
 }) => {
+  /**
+   * State
+   */
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   /**
    * Current group
    */
@@ -63,7 +78,7 @@ export const TableView: React.FC<Props> = ({
   /**
    * Table config
    */
-  const { tableData, columns, getSubRows } = useTable({
+  const { tableData, columns, getSubRows, runtimeVariable } = useTable({
     data,
     options,
     eventBus,
@@ -146,6 +161,35 @@ export const TableView: React.FC<Props> = ({
   }, []);
 
   /**
+   * Table toolbar
+   */
+  const renderTableToolbar = () => {
+    return (
+      <div ref={headerRef} className={styles.header}>
+        <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
+          {sortedGroups.map((group, index) => (
+            <ToolbarButton
+              key={group.name}
+              variant={currentGroup === group.name ? 'active' : 'default'}
+              onClick={() => {
+                setCurrentGroup(group.name);
+                shouldScroll.current = true;
+              }}
+              data-testid={TEST_IDS.tableView.tab(group.name)}
+              className={styles.toolbarButton}
+              style={{
+                maxWidth: index === 0 ? width - 60 : undefined,
+              }}
+            >
+              {group.name}
+            </ToolbarButton>
+          ))}
+        </ToolbarButtonRow>
+      </div>
+    );
+  };
+
+  /**
    * Return
    */
   return (
@@ -177,46 +221,69 @@ export const TableView: React.FC<Props> = ({
             are not supported.
           </Alert>
         )}
-
-        <div
-          style={style}
-          className={styles.content}
-          ref={scrollableContainerRef}
-          data-testid={TEST_IDS.tableView.content}
-        >
-          {sortedGroups.length > 1 && (
-            <div ref={headerRef} className={styles.header}>
-              <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
-                {sortedGroups.map((group, index) => (
-                  <ToolbarButton
-                    key={group.name}
-                    variant={currentGroup === group.name ? 'active' : 'default'}
-                    onClick={() => {
-                      setCurrentGroup(group.name);
-                      shouldScroll.current = true;
-                    }}
-                    data-testid={TEST_IDS.tableView.tab(group.name)}
-                    className={styles.toolbarButton}
-                    style={{
-                      maxWidth: index === 0 ? width - 60 : undefined,
-                    }}
-                  >
-                    {group.name}
-                  </ToolbarButton>
-                ))}
-              </ToolbarButtonRow>
+        {options.isMinimizeForTable &&
+          !!runtimeVariable &&
+          (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (
+            <div className={styles.minimizeTableView}>
+              <IconButton
+                name="gf-movepane-right"
+                size="xl"
+                onClick={() => setIsDrawerOpen(true)}
+                aria-label="Open tree view"
+                className={styles.openDrawerButton}
+                data-testid={TEST_IDS.tableView.buttonOpenDrawer}
+              />
+              <OptionsVariable
+                variable={runtimeVariable}
+                emptyValue={false}
+                persistent={false}
+                customValue={false}
+                panelEventBus={panelEventBus}
+                maxVisibleValues={2}
+              />
             </div>
           )}
-          <Table
-            key={currentGroup}
+        {!options.isMinimizeForTable && (
+          <div
+            style={style}
+            className={styles.content}
+            ref={scrollableContainerRef}
+            data-testid={TEST_IDS.tableView.content}
+          >
+            {sortedGroups.length > 1 && renderTableToolbar()}
+            <Table
+              key={currentGroup}
+              columns={columns}
+              data={tableData}
+              getSubRows={getSubRows}
+              showHeader={options.header}
+              tableRef={tableRef}
+              tableHeaderRef={tableHeaderRef}
+              topOffset={tableTopOffset}
+              scrollableContainerRef={scrollableContainerRef}
+              alwaysVisibleFilter={options.alwaysVisibleFilter}
+              isFocused={isFocused}
+              autoScroll={options.autoScroll}
+              shouldScroll={shouldScroll}
+              onAfterScroll={onAfterScroll}
+              collapsedByDefault={options.collapsedByDefault}
+              eventBus={panelEventBus}
+            />
+          </div>
+        )}
+      </div>
+
+      {isDrawerOpen && (
+        <Drawer title={sortedGroups.length > 1 && <>{renderTableToolbar()}</>} onClose={() => setIsDrawerOpen(false)}>
+          <DrawerTable
+            currentGroup={currentGroup}
             columns={columns}
-            data={tableData}
+            tableData={tableData}
             getSubRows={getSubRows}
             showHeader={options.header}
             tableRef={tableRef}
             tableHeaderRef={tableHeaderRef}
             topOffset={tableTopOffset}
-            scrollableContainerRef={scrollableContainerRef}
             alwaysVisibleFilter={options.alwaysVisibleFilter}
             isFocused={isFocused}
             autoScroll={options.autoScroll}
@@ -225,8 +292,8 @@ export const TableView: React.FC<Props> = ({
             collapsedByDefault={options.collapsedByDefault}
             eventBus={panelEventBus}
           />
-        </div>
-      </div>
+        </Drawer>
+      )}
     </ClickOutsideWrapper>
   );
 };

@@ -14,6 +14,10 @@ export const getStyles = (theme: GrafanaTheme2) => {
       overflow: auto;
       overflow-x: hidden;
     `,
+    contentInDrawer: css`
+      overflow: auto;
+      overflow-x: hidden;
+    `,
     header: css`
       position: sticky;
       top: 0;
@@ -61,6 +65,15 @@ export const getStyles = (theme: GrafanaTheme2) => {
       }
       padding: ${theme.spacing(0.5)} 0 ${theme.spacing(0.5)} ${theme.spacing(1)};
       border-bottom: 1px solid ${theme.colors.border.weak};
+    `,
+    openDrawerButton: css`
+      margin-left: ${theme.spacing(1)};
+    `,
+    minimizeTableView: css`
+      margin-top: ${theme.spacing(1)};
+      margin-right: ${theme.spacing(1)};
+      display: flex;
+      flex-direction: row;
     `,
     toolbarButton: css`
       overflow: hidden;
