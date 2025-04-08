@@ -18,7 +18,7 @@ export const useContentPosition = ({
   height: number;
   sticky: boolean;
   eventBus: EventBus;
-  scrollableContainerRef: RefObject<HTMLDivElement>;
+  scrollableContainerRef: RefObject<HTMLDivElement | null>;
 }) => {
   /**
    * Element ref
@@ -41,10 +41,7 @@ export const useContentPosition = ({
   /**
    * Content Element Styles
    */
-  const [style, setStyle] = useState<CSSProperties>({
-    width,
-    height,
-  });
+  const [style, setStyle] = useState<CSSProperties>({ width, height });
 
   /**
    * Update state throttle to performance optimization
@@ -64,17 +61,11 @@ export const useContentPosition = ({
       const isSticky = styles.position === 'fixed' && styles.visibility !== 'hidden';
 
       if (isSticky) {
-        return {
-          enabled: true,
-          height: dashboardSubmenuRef.current.clientHeight,
-        };
+        return { enabled: true, height: dashboardSubmenuRef.current.clientHeight };
       }
     }
 
-    return {
-      enabled: false,
-      height: 0,
-    };
+    return { enabled: false, height: 0 };
   };
 
   useLayoutEffect(() => {
@@ -151,7 +142,7 @@ export const useContentPosition = ({
           /**
            * Set styles directly to element to prevent flashing on scroll
            */
-          if (scrollableContainerRef.current) {
+          if (scrollableContainerRef?.current) {
             scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
             scrollableContainerRef.current.style.height = `${calculateHeight}px`;
           }
@@ -159,18 +150,11 @@ export const useContentPosition = ({
           /**
            * Set styles
            */
-          updateStateThrottle.current({
-            height: calculateHeight,
-            transform: `translateY(${transformY}px)`,
-            width,
-          });
+          updateStateThrottle.current({ height: calculateHeight, transform: `translateY(${transformY}px)`, width });
           return;
         }
 
-        setStyle({
-          width,
-          height,
-        });
+        setStyle({ width, height });
 
         return;
       }
@@ -196,7 +180,7 @@ export const useContentPosition = ({
           /**
            * Set styles directly to element to prevent flashing on scroll
            */
-          if (scrollableContainerRef.current) {
+          if (scrollableContainerRef?.current) {
             scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
             scrollableContainerRef.current.style.height = `${calculateHeight}px`;
           }
@@ -204,19 +188,12 @@ export const useContentPosition = ({
           /**
            * Set styles
            */
-          updateStateThrottle.current({
-            height: calculateHeight,
-            transform: `translateY(${transformY}px)`,
-            width,
-          });
+          updateStateThrottle.current({ height: calculateHeight, transform: `translateY(${transformY}px)`, width });
 
           return;
         }
 
-        setStyle({
-          width,
-          height,
-        });
+        setStyle({ width, height });
       }
     };
 
@@ -271,8 +248,5 @@ export const useContentPosition = ({
     return () => {};
   }, [containerRef, width, height, sticky, scrollableContainerRef, eventBus]);
 
-  return {
-    containerRef,
-    style,
-  };
+  return { containerRef, style };
 };
