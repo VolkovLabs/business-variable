@@ -217,3 +217,14 @@ export const AUTO_SAVE_TIMEOUT = 1000;
  * Favorites Key
  */
 export const FAVORITES_KEY = 'volkovlabs.variable.panel.favorites';
+
+/**
+ * No variable default message
+ */
+export const NO_VARIABLE_DEFAULT_MESSAGE = `Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not
+        supported.`;
+
+/**
+ * Options are not available message
+ */
+export const OPTIONS_NOT_AVAILABLE_MESSAGE = `Options are not available.`;

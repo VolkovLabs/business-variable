@@ -868,4 +868,49 @@ describe('GroupsEditor', () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it('Should allow to change error message', async () => {
+    const onChange = jest.fn();
+
+    render(
+      getComponent({
+        context: {
+          data: [dataFrameA, dataFrameB],
+          options: {
+            groups: [
+              {
+                name: 'group1',
+                items: [],
+                noDataCustomMessage: '',
+              },
+              {
+                name: 'group2',
+                items: [],
+              },
+            ],
+          } as any,
+        } as any,
+        onChange,
+      })
+    );
+
+    const item = selectors.item(false, 'group1');
+
+    /**
+     * Open group1
+     */
+    fireEvent.click(item);
+
+    expect(selectors.rowErrorMessage(false, 'group1')).toBeInTheDocument();
+    expect(selectors.fieldErrorMessage(false, 'group1')).toBeInTheDocument();
+
+    await act(() =>
+      fireEvent.change(selectors.fieldErrorMessage(false, 'group1'), { target: { value: 'Custom message' } })
+    );
+
+    expect(onChange).toHaveBeenCalledWith([
+      { name: 'group1', items: [], noDataCustomMessage: 'Custom message' },
+      { name: 'group2', items: [] },
+    ]);
+  });
 });

@@ -11,7 +11,7 @@ import {
 } from '@grafana/ui';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { TEST_IDS } from '../../constants';
+import { NO_VARIABLE_DEFAULT_MESSAGE, TEST_IDS } from '../../constants';
 import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
 import { PanelOptions, VariableType } from '../../types';
 import { OptionsVariable } from '../OptionsVariable';
@@ -65,6 +65,19 @@ export const TableView: React.FC<Props> = ({
     }
     return;
   }, [options.groups, currentGroup]);
+
+  /**
+   * Error message for current group
+   */
+  const currentGroupNoDataMessage = useMemo(() => {
+    if (options.groups?.length && currentGroup) {
+      const groupMessage = options.groups.find((group) => group.name === currentGroup)?.noDataCustomMessage;
+
+      return groupMessage || '';
+    }
+
+    return '';
+  }, [currentGroup, options.groups]);
 
   /**
    * Change current group if was removed
@@ -161,6 +174,35 @@ export const TableView: React.FC<Props> = ({
   }, []);
 
   /**
+   * Error alert message
+   */
+  const errorMessage = useMemo(() => {
+    /**
+     * Check variable
+     */
+    if (!runtimeVariable) {
+      return (
+        <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
+          {options.alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
+        </Alert>
+      );
+    }
+
+    /**
+     * Check table data
+     */
+    if (!tableData.length) {
+      return (
+        <Alert data-testid={TEST_IDS.tableView.noDataMessage} severity="info" title="Variable">
+          {currentGroupNoDataMessage || `The table currently contains no data to display.`}
+        </Alert>
+      );
+    }
+
+    return <></>;
+  }, [currentGroupNoDataMessage, options.alertCustomMessage, runtimeVariable, tableData.length]);
+
+  /**
    * Table toolbar
    */
   const renderTableToolbar = () => {
@@ -215,12 +257,7 @@ export const TableView: React.FC<Props> = ({
           isFocused.current = true;
         }}
       >
-        {!tableData.length && (
-          <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
-            Variable is not selected or do not match returned fields. Constant, Data Source, Interval, AD hoc filters
-            are not supported.
-          </Alert>
-        )}
+        {errorMessage}
         {options.isMinimizeForTable &&
           !!runtimeVariable &&
           (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (

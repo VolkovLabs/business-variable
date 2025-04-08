@@ -53,5 +53,6 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   isUseLocalTime: false,
   browserTabNamePattern: '',
   isMinimizeForTable: false,
+  alertCustomMessage: '',
   ...options,
 });

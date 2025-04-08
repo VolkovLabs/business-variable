@@ -1,6 +1,6 @@
 import { cx } from '@emotion/css';
 import { StandardEditorProps } from '@grafana/data';
-import { Button, Icon, InlineField, InlineFieldRow, Input, useTheme2 } from '@grafana/ui';
+import { Button, Icon, InlineField, InlineFieldRow, InlineLabel, Input, useTheme2 } from '@grafana/ui';
 import { Collapse } from '@volkovlabs/components';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
@@ -12,7 +12,7 @@ import {
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
 
-import { TEST_IDS } from '../../constants';
+import { OPTIONS_NOT_AVAILABLE_MESSAGE, TEST_IDS } from '../../constants';
 import { LevelsGroup, PanelOptions } from '../../types';
 import { reorder } from '../../utils';
 import { LevelsEditor } from '../LevelsEditor';
@@ -168,7 +168,7 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
         <Droppable droppableId="groups-editor">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {items.map(({ name, items: levels }, index) => (
+              {items.map(({ name, items: levels, noDataCustomMessage }, index) => (
                 <Draggable key={name} draggableId={name} index={index}>
                   {(provided, snapshot) => (
                     <div
@@ -271,7 +271,30 @@ export const GroupsEditor: React.FC<Props> = ({ context: { options, data }, onCh
                         isOpen={collapseState[name]}
                         onToggle={() => onToggleGroup(name)}
                       >
-                        <LevelsEditor name={name} items={levels} data={data} onChange={onChangeItem} />
+                        <>
+                          <InlineFieldRow data-testid={TEST_IDS.groupsEditor.rowErrorMessage(name)}>
+                            <InlineLabel
+                              width="auto"
+                              tooltip="Custom message when no data returned. Leave empty for the default message."
+                            >
+                              Alert message
+                            </InlineLabel>
+                            <Input
+                              placeholder={OPTIONS_NOT_AVAILABLE_MESSAGE}
+                              value={noDataCustomMessage}
+                              className={styles.fieldCustomError}
+                              onChange={(event) => {
+                                onChangeItem({
+                                  name,
+                                  items: levels,
+                                  noDataCustomMessage: event.currentTarget.value,
+                                });
+                              }}
+                              data-testid={TEST_IDS.groupsEditor.fieldErrorMessage(name)}
+                            />
+                          </InlineFieldRow>
+                          <LevelsEditor name={name} items={levels} data={data} onChange={onChangeItem} />
+                        </>
                       </Collapse>
                     </div>
                   )}
