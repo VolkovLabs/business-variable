@@ -32,6 +32,7 @@ import {
   SHOW_RESET_BUTTON_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
+  TABLE_MINIMIZE_OPTIONS,
   TABS_ORDER_OPTIONS,
   TIME_TRANSFORMATION_OPTIONS,
 } from './constants';
@@ -251,6 +252,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         showIf: showForTableView,
       });
+
+    builder.addRadio({
+      path: 'isMinimizeForTable',
+      name: 'Table minimize view',
+      settings: {
+        options: TABLE_MINIMIZE_OPTIONS,
+      },
+      defaultValue: false,
+      showIf: showForTableView,
+    });
 
     /**
      * Header
