@@ -49,12 +49,12 @@ interface Props<TTableData extends TableItem> {
   /**
    * Table Ref
    */
-  tableRef?: RefObject<HTMLTableElement>;
+  tableRef?: RefObject<HTMLTableElement | null>;
 
   /**
    * Table Header Ref
    */
-  tableHeaderRef: RefObject<HTMLTableSectionElement>;
+  tableHeaderRef: RefObject<HTMLTableSectionElement | null>;
 
   /**
    * Top Offset
