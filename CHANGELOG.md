@@ -2,11 +2,13 @@
 
 All notable changes to the Business Variable panel are documented here.
 
-## 3.9.0 (In Progress)
+## 3.9.0 (2025-04-08)
 
 ### Features & Enhancements
 
-- Added a custom message for the 'no data' and 'variable not selected' cases. (#262)
+- Added a custom message for the 'no data' and 'variable not selected' cases (#262)
+- Added minimized view for Tree View layout (#263)
+- Upgraded to Grafana 11.6.0 with updated dependencies (#265)
 
 ## 3.8.0 (2025-03-26)
 

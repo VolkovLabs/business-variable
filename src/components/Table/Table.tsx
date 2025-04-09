@@ -61,12 +61,12 @@ interface Props<TTableData extends TableItem> {
   /**
    * Table Ref
    */
-  tableRef?: RefObject<HTMLTableElement>;
+  tableRef?: RefObject<HTMLTableElement | null>;
 
   /**
    * Table Header Ref
    */
-  tableHeaderRef: RefObject<HTMLTableSectionElement>;
+  tableHeaderRef: RefObject<HTMLTableSectionElement | null>;
 
   /**
    * Top Offset
@@ -78,7 +78,7 @@ interface Props<TTableData extends TableItem> {
   /**
    * Scrollable Container Ref
    */
-  scrollableContainerRef: RefObject<HTMLDivElement>;
+  scrollableContainerRef: RefObject<HTMLDivElement | null>;
 
   /**
    * Always Visible Filter
@@ -172,10 +172,7 @@ export const Table = <TTableData extends TableItem>({
     onColumnFiltersChange: setColumnFilters,
     enableExpanding: true,
     onExpandedChange: setExpanded,
-    state: {
-      expanded,
-      columnFilters,
-    },
+    state: { expanded, columnFilters },
   });
 
   /**

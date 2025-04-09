@@ -14,7 +14,7 @@ services:
       - dev
 
   timescale:
-    image: timescale/timescaledb:latest-pg12
+    image: timescale/timescaledb:latest-pg14
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres

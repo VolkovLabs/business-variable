@@ -41,11 +41,5 @@ export const useContentSizes = ({
     }
   }, [tableData, height, options.groups]);
 
-  return {
-    containerRef,
-    headerRef,
-    tableRef,
-    tableHeaderRef,
-    tableTopOffset,
-  };
+  return { containerRef, headerRef, tableRef, tableHeaderRef, tableTopOffset };
 };
