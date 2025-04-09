@@ -96,5 +96,12 @@ export const getMigratedOptions = async (
     }
   }
 
+  /**
+   * Minimize view for table view
+   */
+  if (normalizedOptions.isMinimizeForTable === undefined) {
+    normalizedOptions.isMinimizeForTable = false;
+  }
+
   return normalizedOptions;
 };

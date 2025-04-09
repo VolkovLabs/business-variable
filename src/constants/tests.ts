@@ -1,3 +1,5 @@
+import { selectors } from '@grafana/e2e-selectors';
+
 /**
  * Test Identifiers
  */
@@ -8,6 +10,8 @@ export const TEST_IDS = {
     noDataMessage: 'data-testid table-view no-data-message',
     root: 'data-testid panel',
     tab: (name: string) => `data-testid panel tab-${name}`,
+    buttonOpenDrawer: 'data-testid table-view button open-drawer',
+    buttonCloseDrawer: selectors.components.Drawer.General.close,
   },
   table: {
     allControl: 'data-testid table all-control',
@@ -29,6 +33,9 @@ export const TEST_IDS = {
     label: 'data-testid table label',
     statusColor: 'data-testid table status-color',
     statusImage: 'data-testid table status-image',
+  },
+  drawerTable: {
+    root: 'data-testid drawer-table root container',
   },
   groupsEditor: {
     buttonAddNew: 'data-testid fields-editor button-add-new',

@@ -1,3 +1,4 @@
+import { selectors } from '@grafana/e2e-selectors';
 import { DateTime, dateTime } from '@grafana/data';
 import React from 'react';
 
@@ -100,6 +101,23 @@ const ToolbarButtonRowMock = ({ leftItems, children }: any) => {
 const ToolbarButtonRow = jest.fn(ToolbarButtonRowMock);
 
 /**
+ * Drawer Mock
+ */
+const DrawerMock = ({ title, children, onClose }: any) => {
+  return (
+    <div>
+      <button data-testid={selectors.components.Drawer.General.close} onClick={() => onClose()}>
+        Close Drawer
+      </button>
+      {title}
+      {children}
+    </div>
+  );
+};
+
+const Drawer = jest.fn(DrawerMock);
+
+/**
  * Set mocks
  */
 beforeEach(() => {
@@ -107,6 +125,7 @@ beforeEach(() => {
   DateTimePicker.mockImplementation(DateTimePickerMock);
   ToolbarButtonRow.mockImplementation(ToolbarButtonRowMock);
   DatePickerWithInput.mockImplementation(DatePickerWithInputMock);
+  Drawer.mockImplementation(DrawerMock);
 });
 
 module.exports = {
@@ -115,4 +134,5 @@ module.exports = {
   Select,
   DateTimePicker,
   DatePickerWithInput,
+  Drawer,
 };
