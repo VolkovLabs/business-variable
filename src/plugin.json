@@ -10,7 +10,7 @@
       "name": "Volkov Labs",
       "url": "https://volkovlabs.io"
     },
-    "description": "Update single, dependent and multi-variables.",
+    "description": "Enhances dashboards with movable, standalone filter panels for dynamic control.",
     "keywords": ["variable"],
     "links": [
       {
@@ -20,6 +20,10 @@
       {
         "name": "GitHub",
         "url": "https://github.com/volkovlabs/business-variable"
+      },
+      {
+        "name": "Sponsor",
+        "url": "https://volkovlabs.io/pricing/"
       }
     ],
     "logos": {

@@ -2,77 +2,81 @@
 
 ![Dashboard](https://github.com/VolkovLabs/business-variable/raw/main/src/img/dashboard.png)
 
-![Grafana](https://img.shields.io/badge/Grafana-11.6-orange)
-![CI](https://github.com/volkovlabs/business-variable/workflows/CI/badge.svg)
-![E2E](https://github.com/volkovlabs/business-variable/workflows/E2E/badge.svg)
+[![Grafana](https://img.shields.io/badge/Grafana-11.6-orange)](https://grafana.com/)
+[![CI](https://github.com/volkovlabs/business-variable/workflows/CI/badge.svg)](https://github.com/volkovlabs/business-variable/actions/workflows/ci.yml)
+[![E2E](https://github.com/volkovlabs/business-variable/workflows/E2E/badge.svg)](https://github.com/volkovlabs/business-variable/actions/workflows/e2e.yml)
 [![Codecov](https://codecov.io/gh/VolkovLabs/business-variable/branch/main/graph/badge.svg)](https://codecov.io/gh/VolkovLabs/business-variable)
 [![CodeQL](https://github.com/VolkovLabs/business-variable/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/VolkovLabs/business-variable/actions/workflows/codeql-analysis.yml)
 
+**Enhance your Grafana dashboards with a dedicated, customizable panel for dashboard variables.**
+
 ## Overview
 
-The **Business Variable** panel enhances Grafana’s dashboard variables by presenting them in a dedicated, customizable panel. Position it anywhere on your dashboard and choose from a variety of layouts, including an advanced **TreeView** option, to streamline filtering and improve usability.
+The **Business Variable** panel transforms how you interact with Grafana dashboard variables. Place it anywhere on your dashboard and choose from multiple layouts, including an advanced **TreeView** option, to simplify filtering and boost usability.
 
 [![Watch: Business Variable Panel for Grafana - New Features in 3.0.0](https://raw.githubusercontent.com/volkovlabs/business-variable/main/img/business-variable.png)](https://youtu.be/vcdcLDVQYek)
 
-## Requirements
+## Compatibility
 
-- **Version 3.x**: Compatible with Grafana 10.3 or Grafana 11
-- **Versions 1.x, 2.x**: Compatible with Grafana 9.2 or Grafana 10
+- **Version 3.x**: Grafana 10.3 or Grafana 11
+- **Versions 1.x, 2.x**: Grafana 9.2 or Grafana 10
 
 ## Installation
 
-Install the Business Variable panel via the [Grafana Plugins Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or use the Grafana CLI:
+Install the Business Variable panel easily through the [Grafana Plugins Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or via the Grafana CLI:
 
 ```bash
 grafana-cli plugins install volkovlabs-variable-panel
 ```
 
-For a visual guide, watch our installation tutorial:  
+For a step-by-step visual guide, check out our installation tutorial:  
 [![Watch: Install Business Suite Plugins in Cloud, OSS, and Enterprise](https://raw.githubusercontent.com/volkovlabs/.github/main/started.png)](https://youtu.be/1qYzHfPXJF8)
 
-## Features
+## Key Features
 
-- **Display Modes**: Table, Minimize, Button, Slider
-- **TreeView**: Configurable within Table mode for hierarchical data
-- **Thresholds**: Visualize statuses based on data source thresholds
-- **Variable Support**: Single/multi-value variables with "All" option
-- **Filtering**: Pattern-based and favorite-based value filtering
-- **Sticky Positioning**: Follows scrolling for accessibility
-- **Tabbed TreeViews**: Organize multiple TreeViews with groups/tabs
-- **Input Box**: Supports text input variables
+- **Display Modes**: Choose from Table, Minimize, Button, or Slider layouts.
+- **TreeView**: Hierarchical data visualization within Table mode.
+- **Thresholds**: Highlight statuses using data source thresholds.
+- **Variable Support**: Handle single or multi-value variables with an "All" option.
+- **Filtering**: Apply pattern-based or favorite-based value filtering.
+- **Sticky Positioning**: Panel follows scrolling for easy access.
+- **Tabbed TreeViews**: Organize multiple TreeViews into groups or tabs.
+- **Input Box**: Support for text input variables.
 
 ## Documentation
 
-| Section                                                                   | Description                            |
-| ------------------------------------------------------------------------- | -------------------------------------- |
-| [Data Flow](https://volkovlabs.io/plugins/business-variable/data-flow/)   | Details the panel’s data flow          |
-| [Display Modes](https://volkovlabs.io/plugins/business-variable/layout/)  | Explores available layout options      |
-| [Features](https://volkovlabs.io/plugins/business-variable/features/)     | Describes key panel capabilities       |
-| [Tutorials](https://volkovlabs.io/plugins/business-variable/tutorials/)   | Step-by-step guides                    |
-| [Release Notes](https://volkovlabs.io/plugins/business-variable/release/) | Highlights recent updates and features |
+Explore detailed guides and resources for the Business Variable panel:
 
-## Business Suite for Grafana
+| Section                                                                   | Description                          |
+| ------------------------------------------------------------------------- | ------------------------------------ |
+| [Data Flow](https://volkovlabs.io/plugins/business-variable/data-flow/)   | Understand the panel’s data flow     |
+| [Display Modes](https://volkovlabs.io/plugins/business-variable/layout/)  | Explore layout customization options |
+| [Features](https://volkovlabs.io/plugins/business-variable/features/)     | Learn about key capabilities         |
+| [Tutorials](https://volkovlabs.io/plugins/business-variable/tutorials/)   | Follow step-by-step guides           |
+| [Release Notes](https://volkovlabs.io/plugins/business-variable/release/) | Stay updated with recent changes     |
 
-The Business Variable panel is part of the **Business Suite**, a collection of open-source plugins developed and maintained by Volkov Labs. Designed to address common business challenges, the suite offers intuitive interfaces backed by detailed documentation, examples, and video tutorials.
+## Part of Business Suite for Grafana
+
+The Business Variable panel is a component of the **Business Suite**, a set of open-source plugins by Volkov Labs. These plugins address common business needs with user-friendly interfaces, backed by extensive documentation, examples, and video tutorials.
 
 [![Explore the Business Suite](https://raw.githubusercontent.com/VolkovLabs/.github/main/business.png)](https://volkovlabs.io/plugins/)
 
 ### Enterprise Support
 
-Subscribe to [Business Suite Enterprise](https://volkovlabs.io/pricing/) for comprehensive support:
+Opt for [Business Suite Enterprise](https://volkovlabs.io/pricing/) to access premium support:
 
-- Dedicated support team via Zendesk
-- Priority feature requests and bug fixes
+- Dedicated support via Zendesk
+- Priority handling for feature requests and bug fixes
 - In-person consultations
-- Access to Business Intelligence platform
+- Access to a Business Intelligence platform
 
 ## Community & Feedback
 
-We’d love to hear from you!
+We value your input! Connect with us and share your thoughts:
 
-- File issues, request features, or ask questions on [GitHub Issues](https://github.com/volkovlabs/business-variable/issues)
-- Subscribe to our [YouTube Channel](https://youtube.com/@volkovlabs) and share your thoughts
+- Report issues, request features, or ask questions on [GitHub Issues](https://github.com/volkovlabs/business-variable/issues)
+- Subscribe to our [YouTube Channel](https://youtube.com/@volkovlabs) for tutorials and updates
 
 ## License
 
-Licensed under the Apache License 2.0. See [LICENSE](https://github.com/volkovlabs/business-variable/blob/main/LICENSE) for details.
+This project is licensed under the Apache License 2.0. See the [LICENSE](https://github.com/volkovlabs/business-variable/blob/main/LICENSE) file for details.
