@@ -1,266 +1,347 @@
-# Changelog
+# Change Log
 
-All notable changes to the Business Variable panel are documented here.
+All notable changes to the **Business Variable Panel** for Grafana are documented in this file. This panel provides advanced variable management and visualization capabilities for Grafana dashboards.
 
-## 3.9.0 (2025-04-08)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Features & Enhancements
+## [Unreleased]
 
-- Added a custom message for the 'no data' and 'variable not selected' cases (#262)
-- Added minimized view for Tree View layout (#263)
-- Upgraded to Grafana 11.6.0 with updated dependencies (#265)
+- No unreleased changes at this time.
 
-## 3.8.0 (2025-03-26)
+## [3.9.0] - 2025-04-08
 
-### Features & Enhancements
+### Added
 
-- Added attestation to release workflow (#246)
-- Removed `@volkovlabs/grafana-utils` dependency (#247)
-- Introduced resize behavior for panels with sticky headers (#253)
+- Custom message for 'no data' and 'variable not selected' cases ([#262](https://github.com/volkovlabs/business-variable/issues/262))
+- Minimized view for Tree View layout ([#263](https://github.com/volkovlabs/business-variable/issues/263))
 
-## 3.7.0 (2025-02-13)
+### Changed
 
-### Features & Enhancements
+- Upgraded to Grafana 11.6.0 with updated dependencies ([#265](https://github.com/volkovlabs/business-variable/issues/265))
 
-- Updated to use datasource ID instead of name, with variable support (#229)
-- Enhanced sticky header for Scenes dashboards (#230)
-- Improved favorites icon visibility (#234)
-- Excluded Alert Message variable type from support (#235)
-- Added Date Picker component (#237)
-- Upgraded to Grafana 11.4.0 with updated dependencies (#241)
-- Added advanced option to modify browser tab title (#243)
+## [3.8.0] - 2025-03-26
 
-## 3.6.0 (2024-10-24)
+### Added
 
-### Features & Enhancements
+- Attestation to release workflow ([#246](https://github.com/volkovlabs/business-variable/issues/246))
+- Resize behavior for panels with sticky headers ([#253](https://github.com/volkovlabs/business-variable/issues/253))
 
-- Refined Textbox variable behavior in Table view (#211)
-- Added Date Time Selector (#209)
-- Enabled "All" option in Scenes dashboards (#213)
-- Updated E2E tests (#216)
-- Fixed display errors in Slider view (#220)
-- Upgraded to Grafana 11.3.0 with dependency updates (#222)
-- Improved sticky positioning in Scenes dashboards (#221)
+### Removed
 
-## 3.5.0 (2024-10-02)
+- Dependency on `@volkovlabs/grafana-utils` ([#247](https://github.com/volkovlabs/business-variable/issues/247))
 
-### Features & Enhancements
+## [3.7.0] - 2025-02-13
 
-- Improved variable selection in Minimize view (#197)
-- Updated `@tanstack/virtual` to latest version (#207)
-- Upgraded to Grafana 11.2.2 with dependency updates (#207)
+### Added
 
-## 3.4.0 (2024-08-23)
+- Date Picker component ([#237](https://github.com/volkovlabs/business-variable/issues/237))
+- Advanced option to modify browser tab title ([#243](https://github.com/volkovlabs/business-variable/issues/243))
 
-### Features & Enhancements
+### Changed
 
-- Added option to reorder tabs in panel settings (#193)
-- Updated local storage key for favorites (#194)
-- Upgraded to Grafana 11.1.4 (#195)
+- Updated to use datasource ID instead of name, with variable support ([#229](https://github.com/volkovlabs/business-variable/issues/229))
+- Enhanced sticky header for Scenes dashboards ([#230](https://github.com/volkovlabs/business-variable/issues/230))
+- Improved favorites icon visibility ([#234](https://github.com/volkovlabs/business-variable/issues/234))
+- Upgraded to Grafana 11.4.0 with updated dependencies ([#241](https://github.com/volkovlabs/business-variable/issues/241))
 
-## 3.3.0 (2024-08-14)
+### Removed
 
-### Features & Enhancements
+- Alert Message variable type from support ([#235](https://github.com/volkovlabs/business-variable/issues/235))
 
-- Integrated datasource-driven favorites (#184)
-- Enhanced documentation (#185)
-- Added scrollbar to Button view (#187)
+## [3.6.0] - 2024-10-24
 
-## 3.2.0 (2024-07-09)
+### Added
 
-### Features & Enhancements
+- Date Time Selector ([#209](https://github.com/volkovlabs/business-variable/issues/209))
+- "All" option in Scenes dashboards ([#213](https://github.com/volkovlabs/business-variable/issues/213))
 
-- Updated video tutorial (#166)
-- Improved E2E workflow with Docker (#173)
-- Added image threshold styling for status in Table view (#170)
+### Changed
 
-## 3.1.0 (2024-06-06)
+- Refined Textbox variable behavior in Table view ([#211](https://github.com/volkovlabs/business-variable/issues/211))
+- Updated E2E tests ([#216](https://github.com/volkovlabs/business-variable/issues/216))
+- Improved sticky positioning in Scenes dashboards ([#221](https://github.com/volkovlabs/business-variable/issues/221))
+- Upgraded to Grafana 11.3.0 with dependency updates ([#222](https://github.com/volkovlabs/business-variable/issues/222))
 
-### Features & Enhancements
+### Fixed
 
-- Added option to collapse/expand rows on load (#159)
-- Updated selection behavior with Ctrl key (#160)
-- Upgraded to Grafana 11.0.0 with dependency updates (#161)
-- Added Reset button to Button view (#162)
-- Enhanced key/value pair selection for variables (#165)
+- Display errors in Slider view ([#220](https://github.com/volkovlabs/business-variable/issues/220))
 
-## 3.0.0 (2024-05-09)
+## [3.5.0] - 2024-10-02
+
+### Changed
+
+- Improved variable selection in Minimize view ([#197](https://github.com/volkovlabs/business-variable/issues/197))
+- Updated `@tanstack/virtual` to the latest version ([#207](https://github.com/volkovlabs/business-variable/issues/207))
+- Upgraded to Grafana 11.2.2 with dependency updates ([#207](https://github.com/volkovlabs/business-variable/issues/207))
+
+## [3.4.0] - 2024-08-23
+
+### Added
+
+- Option to reorder tabs in panel settings ([#193](https://github.com/volkovlabs/business-variable/issues/193))
+
+### Changed
+
+- Updated local storage key for favorites ([#194](https://github.com/volkovlabs/business-variable/issues/194))
+- Upgraded to Grafana 11.1.4 ([#195](https://github.com/volkovlabs/business-variable/issues/195))
+
+## [3.3.0] - 2024-08-14
+
+### Added
+
+- Scrollbar to Button view ([#187](https://github.com/volkovlabs/business-variable/issues/187))
+
+### Changed
+
+- Integrated datasource-driven favorites ([#184](https://github.com/volkovlabs/business-variable/issues/184))
+- Enhanced documentation ([#185](https://github.com/volkovlabs/business-variable/issues/185))
+
+## [3.2.0] - 2024-07-09
+
+### Added
+
+- Image threshold styling for status in Table view ([#170](https://github.com/volkovlabs/business-variable/issues/170))
+
+### Changed
+
+- Updated video tutorial ([#166](https://github.com/volkovlabs/business-variable/issues/166))
+- Improved E2E workflow with Docker ([#173](https://github.com/volkovlabs/business-variable/issues/173))
+
+## [3.1.0] - 2024-06-06
+
+### Added
+
+- Option to collapse/expand rows on load ([#159](https://github.com/volkovlabs/business-variable/issues/159))
+- Reset button to Button view ([#162](https://github.com/volkovlabs/business-variable/issues/162))
+
+### Changed
+
+- Updated selection behavior with Ctrl key ([#160](https://github.com/volkovlabs/business-variable/issues/160))
+- Upgraded to Grafana 11.0.0 with dependency updates ([#161](https://github.com/volkovlabs/business-variable/issues/161))
+- Enhanced key/value pair selection for variables ([#165](https://github.com/volkovlabs/business-variable/issues/165))
+
+## [3.0.0] - 2024-05-09
 
 ### Breaking Changes
 
 - Requires Grafana 10 or Grafana 11
 
-### Features & Enhancements
+### Added
 
-- Improved multi-level selection/deselection (#139)
-- Updated Minimize label width to Auto/Static (#144)
-- Added option to show/hide Minimize label (#144)
-- Introduced maximum visible values in Minimize view (#147)
-- Added plugin E2E tests, removed Cypress (#149)
-- Added row count in Table view (#148)
-- Enhanced autoscroll behavior (#152)
-- Introduced Slider view (#154)
-- Prepared for Grafana 11 compatibility (#155)
-- Upgraded to Grafana 10.4.2 with dependency updates (#158)
+- Option to show/hide Minimize label ([#144](https://github.com/volkovlabs/business-variable/issues/144))
+- Maximum visible values in Minimize view ([#147](https://github.com/volkovlabs/business-variable/issues/147))
+- Plugin E2E tests, removed Cypress ([#149](https://github.com/volkovlabs/business-variable/issues/149))
+- Row count in Table view ([#148](https://github.com/volkovlabs/business-variable/issues/148))
+- Slider view ([#154](https://github.com/volkovlabs/business-variable/issues/154))
 
-## 2.5.0 (2024-04-01)
+### Changed
 
-### Features & Enhancements
+- Improved multi-level selection/deselection ([#139](https://github.com/volkovlabs/business-variable/issues/139))
+- Updated Minimize label width to Auto/Static ([#144](https://github.com/volkovlabs/business-variable/issues/144))
+- Enhanced autoscroll behavior ([#152](https://github.com/volkovlabs/business-variable/issues/152))
+- Prepared for Grafana 11 compatibility ([#155](https://github.com/volkovlabs/business-variable/issues/155))
+- Upgraded to Grafana 10.4.2 with dependency updates ([#158](https://github.com/volkovlabs/business-variable/issues/158))
 
-- Added indeterminate checkbox state (#127)
-- Improved Tree View scrolling (#128)
-- Added responsive tabs (#130)
-- Supported new items in Minimize mode (#134)
-- Preserved group selection across dashboards (#135)
-- Enhanced Tree View display and scrolling (#136)
-- Added reset for dependent variables on value selection (#138)
+## [2.5.0] - 2024-04-01
 
-## 2.4.0 (2024-03-17)
+### Added
+
+- Indeterminate checkbox state ([#127](https://github.com/volkovlabs/business-variable/issues/127))
+- Responsive tabs ([#130](https://github.com/volkovlabs/business-variable/issues/130))
+
+### Changed
+
+- Improved Tree View scrolling ([#128](https://github.com/volkovlabs/business-variable/issues/128))
+- Supported new items in Minimize mode ([#134](https://github.com/volkovlabs/business-variable/issues/134))
+- Preserved group selection across dashboards ([#135](https://github.com/volkovlabs/business-variable/issues/135))
+- Enhanced Tree View display and scrolling ([#136](https://github.com/volkovlabs/business-variable/issues/136))
+- Added reset for dependent variables on value selection ([#138](https://github.com/volkovlabs/business-variable/issues/138))
+
+## [2.4.0] - 2024-03-17
 
 ### Breaking Changes
 
 - Requires Grafana 9.2 or Grafana 10
 
-### Features & Enhancements
+### Added
 
-- Updated README video tutorial (#111)
-- Enhanced Timescale data handling (#119)
-- Updated dependencies and GitHub Actions (#120)
-- Improved default color contrast (#122)
-- Added preserve selected group option (#124)
-- Added label support in Button view (#125)
+- Preserve selected group option ([#124](https://github.com/volkovlabs/business-variable/issues/124))
+- Label support in Button view ([#125](https://github.com/volkovlabs/business-variable/issues/125))
 
-## 2.3.1 (2023-12-14)
+### Changed
 
-### Bug Fixes
+- Updated README video tutorial ([#111](https://github.com/volkovlabs/business-variable/issues/111))
+- Enhanced Timescale data handling ([#119](https://github.com/volkovlabs/business-variable/issues/119))
+- Updated dependencies and GitHub Actions ([#120](https://github.com/volkovlabs/business-variable/issues/120))
+- Improved default color contrast ([#122](https://github.com/volkovlabs/business-variable/issues/122))
 
-- Fixed draggable icon for Grafana 10.3 (#107)
+## [2.3.1] - 2023-12-14
 
-## 2.3.0 (2023-12-13)
+### Fixed
 
-### Features & Enhancements
+- Draggable icon for Grafana 10.3 ([#107](https://github.com/volkovlabs/business-variable/issues/107))
 
-- Cleared table state on tab change (#101)
-- Updated ESLint config and refactored code (#102)
-- Added persistent mode (#103)
-- Upgraded to Grafana 10.2.2 with Volkov Labs package updates (#104)
+## [2.3.0] - 2023-12-13
 
-## 2.2.0 (2023-11-20)
+### Added
 
-### Features & Enhancements
+- Persistent mode ([#103](https://github.com/volkovlabs/business-variable/issues/103))
 
-- Added dashboard redirect option (#92)
-- Updated ESLint config and sorted imports (#93)
-- Improved Safari layout for favorites (#97)
-- Upgraded to Grafana 10.2.1 (#98)
-- Added clear filter value button (#99)
+### Changed
 
-## 2.1.0 (2023-11-08)
+- Cleared table state on tab change ([#101](https://github.com/volkovlabs/business-variable/issues/101))
+- Updated ESLint config and refactored code ([#102](https://github.com/volkovlabs/business-variable/issues/102))
+- Upgraded to Grafana 10.2.2 with Volkov Labs package updates ([#104](https://github.com/volkovlabs/business-variable/issues/104))
 
-### Features & Enhancements
+## [2.2.0] - 2023-11-20
 
-- Added always-visible search filter option (#83)
-- Enabled group rename functionality (#84)
-- Supported field selection from data frames without RefId (#85)
-- Added toggle for expanded row state via label click (#86)
+### Added
 
-### Bug Fixes
+- Dashboard redirect option ([#92](https://github.com/volkovlabs/business-variable/issues/92))
+- Clear filter value button ([#99](https://github.com/volkovlabs/business-variable/issues/99))
 
-- Fixed deselection of undefined "All" variable in URL (#87)
-- Removed group favoriting capability (#88)
+### Changed
 
-## 2.0.0 (2023-10-16)
+- Updated ESLint config and sorted imports ([#93](https://github.com/volkovlabs/business-variable/issues/93))
+- Improved Safari layout for favorites ([#97](https://github.com/volkovlabs/business-variable/issues/97))
+- Upgraded to Grafana 10.2.1 ([#98](https://github.com/volkovlabs/business-variable/issues/98))
 
-### Features & Enhancements
+## [2.1.0] - 2023-11-08
 
-- Updated parent item labels in Tree View (#62)
-- Added Enter/Escape key handling for Text Variable (#69)
-- Implemented table virtualization for performance (#64, #74)
-- Enabled clear value for multi-choice variables (#66)
-- Upgraded to Plugin Tools 2.1.1 (#72)
-- Signed plugin with Grafana Access Policy (#72)
-- Upgraded to Grafana 10.1.5 (#73)
+### Added
 
-### Bug Fixes
+- Always-visible search filter option ([#83](https://github.com/volkovlabs/business-variable/issues/83))
+- Group rename functionality ([#84](https://github.com/volkovlabs/business-variable/issues/84))
+- Toggle for expanded row state via label click ([#86](https://github.com/volkovlabs/business-variable/issues/86))
 
-- Fixed key:value option selection in Minimize/Button views (#75)
+### Changed
 
-## 1.7.0 (2023-08-08)
+- Supported field selection from data frames without RefId ([#85](https://github.com/volkovlabs/business-variable/issues/85))
 
-### Features & Enhancements
+### Fixed
 
-- Added text/value variables in Table/Tree View (#57)
-- Introduced Button View (#59)
-- Enabled group selection (#58)
-- Upgraded to Grafana 10.0.3 (#60)
+- Deselection of undefined "All" variable in URL ([#87](https://github.com/volkovlabs/business-variable/issues/87))
+- Removed group favoriting capability ([#88](https://github.com/volkovlabs/business-variable/issues/88))
 
-## 1.6.0 (2023-07-26)
+## [2.0.0] - 2023-10-16
 
-### Features & Enhancements
+### Added
 
-- Updated ESLint configuration (#47)
-- Added status sort button (#49, #51)
-- Introduced Minimize mode for Query/Custom variables (#50)
-- Added input for Textbox variable (#53)
+- Enter/Escape key handling for Text Variable ([#69](https://github.com/volkovlabs/business-variable/issues/69))
+- Clear value for multi-choice variables ([#66](https://github.com/volkovlabs/business-variable/issues/66))
 
-## 1.5.0 (2023-07-11)
+### Changed
 
-### Features & Enhancements
+- Updated parent item labels in Tree View ([#62](https://github.com/volkovlabs/business-variable/issues/62))
+- Implemented table virtualization for performance ([#64](https://github.com/volkovlabs/business-variable/issues/64), [#74](https://github.com/volkovlabs/business-variable/issues/74))
+- Upgraded to Plugin Tools 2.1.1 ([#72](https://github.com/volkovlabs/business-variable/issues/72))
+- Signed plugin with Grafana Access Policy ([#72](https://github.com/volkovlabs/business-variable/issues/72))
+- Upgraded to Grafana 10.1.5 ([#73](https://github.com/volkovlabs/business-variable/issues/73))
 
-- Enhanced single-select variables with "All" option (#41)
-- Added sticky header and autoscroll for multi-group selection (#38)
-- Enabled drag-and-drop for groups (#42)
-- Added expand/collapse all in header (#46)
+### Fixed
 
-## 1.4.0 (2023-07-06)
+- Key:value option selection in Minimize/Button views ([#75](https://github.com/volkovlabs/business-variable/issues/75))
 
-### Features & Enhancements
+## [1.7.0] - 2023-08-08
 
-- Added tutorial (#21)
-- Updated level addition to append at end (#22)
-- Hid unselectable items (#24)
-- Supported Grafana 9 with main view scroll (#26)
-- Added favorite filter icon (#25)
-- Introduced Tree View groups (requires config update) (#20)
-- Added option to prefix variable name to value (#30)
-- Increased test coverage (#31)
-- Added autoscroll to selected value (#32)
-- Released as community-signed plugin (#37)
+### Added
 
-## 1.3.0 (2023-06-30)
+- Text/value variables in Table/Tree View ([#57](https://github.com/volkovlabs/business-variable/issues/57))
+- Button View ([#59](https://github.com/volkovlabs/business-variable/issues/59))
+- Group selection ([#58](https://github.com/volkovlabs/business-variable/issues/58))
 
-### Features & Enhancements
+### Changed
 
-- Added Display Header option (#15)
-- Enabled collapsing parent rows (#16)
-- Added sticky scrolling option (#17)
-- Introduced Table Filter (#18)
-- Added favorite selection (#19)
-- Updated documentation (#20)
+- Upgraded to Grafana 10.0.3 ([#60](https://github.com/volkovlabs/business-variable/issues/60))
 
-## 1.2.0 (2023-06-26)
+## [1.6.0] - 2023-07-26
 
-### Features & Enhancements
+### Added
 
-- Introduced Tree View (#12, #13)
-- Updated README and screenshot (#14)
+- Status sort button ([#49](https://github.com/volkovlabs/business-variable/issues/49), [#51](https://github.com/volkovlabs/business-variable/issues/51))
+- Minimize mode for Query/Custom variables ([#50](https://github.com/volkovlabs/business-variable/issues/50))
+- Input for Textbox variable ([#53](https://github.com/volkovlabs/business-variable/issues/53))
 
-## 1.1.0 (2023-06-21)
+### Changed
 
-### Features & Enhancements
+- Updated ESLint configuration ([#47](https://github.com/volkovlabs/business-variable/issues/47))
 
-- Added variable statuses via thresholds (#6)
-- Replaced Table with react-table v8 (#8)
-- Added field options for values/statuses (#9)
-- Updated provisioning and README (#10)
-- Supported Grafana 8.5.0 (#11)
+## [1.5.0] - 2023-07-11
 
-## 1.0.0 (2023-06-19)
+### Added
 
-### Features & Enhancements
+- Sticky header and autoscroll for multi-group selection ([#38](https://github.com/volkovlabs/business-variable/issues/38))
+- Drag-and-drop for groups ([#42](https://github.com/volkovlabs/business-variable/issues/42))
+- Expand/collapse all in header ([#46](https://github.com/volkovlabs/business-variable/issues/46))
 
-- Initial release based on Volkov Labs ABC Panel template
-- Updated README and configuration (#1)
-- Refactored legacy code (#2, #4)
-- Upgraded to Grafana 10.0.0 (#3)
-- Updated provisioning and README (#5)
+### Changed
+
+- Enhanced single-select variables with "All" option ([#41](https://github.com/volkovlabs/business-variable/issues/41))
+
+## [1.4.0] - 2023-07-06
+
+### Added
+
+- Tutorial ([#21](https://github.com/volkovlabs/business-variable/issues/21))
+- Favorite filter icon ([#25](https://github.com/volkovlabs/business-variable/issues/25))
+- Tree View groups (requires config update) ([#20](https://github.com/volkovlabs/business-variable/issues/20))
+- Option to prefix variable name to value ([#30](https://github.com/volkovlabs/business-variable/issues/30))
+- Autoscroll to selected value ([#32](https://github.com/volkovlabs/business-variable/issues/32))
+- Released as community-signed plugin ([#37](https://github.com/volkovlabs/business-variable/issues/37))
+
+### Changed
+
+- Updated level addition to append at end ([#22](https://github.com/volkovlabs/business-variable/issues/22))
+- Hid unselectable items ([#24](https://github.com/volkovlabs/business-variable/issues/24))
+- Supported Grafana 9 with main view scroll ([#26](https://github.com/volkovlabs/business-variable/issues/26))
+- Increased test coverage ([#31](https://github.com/volkovlabs/business-variable/issues/31))
+
+## [1.3.0] - 2023-06-30
+
+### Added
+
+- Display Header option ([#15](https://github.com/volkovlabs/business-variable/issues/15))
+- Collapsing parent rows ([#16](https://github.com/volkovlabs/business-variable/issues/16))
+- Sticky scrolling option ([#17](https://github.com/volkovlabs/business-variable/issues/17))
+- Table Filter ([#18](https://github.com/volkovlabs/business-variable/issues/18))
+- Favorite selection ([#19](https://github.com/volkovlabs/business-variable/issues/19))
+
+### Changed
+
+- Updated documentation ([#20](https://github.com/volkovlabs/business-variable/issues/20))
+
+## [1.2.0] - 2023-06-26
+
+### Added
+
+- Tree View ([#12](https://github.com/volkovlabs/business-variable/issues/12), [#13](https://github.com/volkovlabs/business-variable/issues/13))
+
+### Changed
+
+- Updated README and screenshot ([#14](https://github.com/volkovlabs/business-variable/issues/14))
+
+## [1.1.0] - 2023-06-21
+
+### Added
+
+- Variable statuses via thresholds ([#6](https://github.com/volkovlabs/business-variable/issues/6))
+- Field options for values/statuses ([#9](https://github.com/volkovlabs/business-variable/issues/9))
+
+### Changed
+
+- Replaced Table with react-table v8 ([#8](https://github.com/volkovlabs/business-variable/issues/8))
+- Updated provisioning and README ([#10](https://github.com/volkovlabs/business-variable/issues/10))
+- Supported Grafana 8.5.0 ([#11](https://github.com/volkovlabs/business-variable/issues/11))
+
+## [1.0.0] - 2023-06-19
+
+### Added
+
+- Initial release based on Volkov Labs Panel template
+
+### Changed
+
+- Updated README and configuration ([#1](https://github.com/volkovlabs/business-variable/issues/1))
+- Refactored legacy code ([#2](https://github.com/volkovlabs/business-variable/issues/2), [#4](https://github.com/volkovlabs/business-variable/issues/4))
+- Upgraded to Grafana 10.0.0 ([#3](https://github.com/volkovlabs/business-variable/issues/3))
+- Updated provisioning and README ([#5](https://github.com/volkovlabs/business-variable/issues/5))

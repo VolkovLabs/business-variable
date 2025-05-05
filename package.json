@@ -15,12 +15,12 @@
     "semver": "^7.7.1",
     "tslib": "^2.8.0"
   },
-  "description": "Update Dashboard Variables",
+  "description": "Enhances dashboards with movable, standalone filter panels for dynamic control.",
   "devDependencies": {
     "@grafana/eslint-config": "^8.0.0",
-    "@grafana/plugin-e2e": "^1.19.3",
+    "@grafana/plugin-e2e": "^2.0.0",
     "@grafana/tsconfig": "^2.0.0",
-    "@playwright/test": "1.49.1",
+    "@playwright/test": "^1.52.0",
     "@stylistic/eslint-plugin-ts": "^2.13.0",
     "@swc/core": "^1.11.18",
     "@swc/helpers": "^0.5.15",
@@ -82,5 +82,5 @@
     "test:e2e:docker": "docker compose --profile e2e up --exit-code-from test",
     "upgrade": "npm upgrade --save"
   },
-  "version": "3.9.0"
+  "version": "4.0.0"
 }
