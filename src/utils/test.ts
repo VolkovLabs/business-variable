@@ -54,5 +54,8 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   browserTabNamePattern: '',
   isMinimizeForTable: false,
   alertCustomMessage: '',
+  selectedValues: {
+    showSelected: false,
+  },
   ...options,
 });

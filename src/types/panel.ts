@@ -100,6 +100,18 @@ export interface FavoritesConfig {
 }
 
 /**
+ * Selected values Config
+ */
+export interface SelectedValuesConfig {
+  /**
+   * Enabled
+   *
+   * @type {boolean}
+   */
+  showSelected: boolean;
+}
+
+/**
  * Level
  */
 export interface Level {
@@ -202,6 +214,13 @@ export interface TableViewOptions {
    * @type {FavoritesConfig}
    */
   favorites: FavoritesConfig;
+
+  /**
+   * Show selected
+   *
+   * @type {SelectedValuesConfig}
+   */
+  selectedValues: SelectedValuesConfig;
 
   /**
    * Save Selected Group

@@ -71,6 +71,14 @@ export const FAVORITES_ENABLED_OPTIONS = [
 ];
 
 /**
+ * Show selected values
+ */
+export const SHOW_SELECTED_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Show button in header', icon: 'eye' },
+  { value: false, label: 'Disabled', description: 'Hide Button in header.', icon: 'eye-slash' },
+];
+
+/**
  * Favorites Storage Options
  */
 export const FAVORITES_STORAGE_OPTIONS = [

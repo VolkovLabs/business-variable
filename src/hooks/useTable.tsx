@@ -14,6 +14,7 @@ import {
   getRows,
   isVariableAllSelected,
   isVariableWithOptions,
+  selectedFilters,
   selectVariableValues,
   shouldKeepSelection,
   statusSort,
@@ -491,6 +492,21 @@ export const useTable = ({
       },
     ];
 
+    if (options.selectedValues?.showSelected) {
+      columns.push({
+        id: 'selected',
+        accessorKey: 'selected',
+        enableColumnFilter: true,
+        enableResizing: false,
+        enableSorting: false,
+        header: '',
+        filterFn: selectedFilters,
+        cell: () => {
+          return null;
+        },
+      });
+    }
+
     if (options.favorites.enabled) {
       columns.push({
         id: 'isFavorite',
@@ -535,7 +551,8 @@ export const useTable = ({
     variable,
     options.filter,
     options.statusSort,
-    options.favorites,
+    options.selectedValues?.showSelected,
+    options.favorites.enabled,
     options.showTotal,
     options.groupSelection,
     options.showGroupTotal,
