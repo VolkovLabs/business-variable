@@ -109,6 +109,7 @@ export const getMigratedOptions = async (
   if (normalizedOptions.selectedValues === undefined) {
     normalizedOptions.selectedValues = {
       showSelected: false,
+      maxCount: 0,
     };
   }
 

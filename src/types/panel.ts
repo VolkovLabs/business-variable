@@ -109,6 +109,13 @@ export interface SelectedValuesConfig {
    * @type {boolean}
    */
   showSelected: boolean;
+
+  /**
+   * Max Count of selected values
+   *
+   * @type {boolean}
+   */
+  maxCount: number;
 }
 
 /**

@@ -56,6 +56,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   alertCustomMessage: '',
   selectedValues: {
     showSelected: false,
+    maxCount: 0,
   },
   ...options,
 });

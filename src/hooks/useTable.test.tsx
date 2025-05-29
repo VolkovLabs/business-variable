@@ -1488,7 +1488,9 @@ describe('Use Table Hook', () => {
         current: {
           value: '123',
         },
+        options: [],
       } as any);
+
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
           ({
@@ -1496,6 +1498,7 @@ describe('Use Table Hook', () => {
             getVariable: jest.fn(() => deviceVariable),
           }) as any
       );
+
       const dataFrame = toDataFrame({
         fields: [
           {
@@ -1544,6 +1547,7 @@ describe('Use Table Hook', () => {
       const deviceVariable = createRuntimeVariableMock({
         type: VariableType.TEXTBOX,
         current: {},
+        options: [],
       } as any);
       jest.mocked(useRuntimeVariables).mockImplementation(
         () =>
@@ -2031,6 +2035,7 @@ describe('Use Table Hook', () => {
             options: createPanelOptions({
               selectedValues: {
                 showSelected: true,
+                maxCount: 0,
               },
               favorites: createFavoritesConfig({
                 enabled: false,
@@ -2065,6 +2070,108 @@ describe('Use Table Hook', () => {
         const rowDevice1 = screen.getByTestId(InTestIds.row('device1', 0));
 
         expect(rowDevice1).toBeInTheDocument();
+      });
+
+      it('Should return selected column and some of controls should be disabled if maxCount is specified ', () => {
+        const deviceVariable = createRuntimeVariableMock({
+          multi: true,
+          includeAll: true,
+          name: 'device',
+          type: VariableType.CUSTOM,
+          options: [
+            {
+              text: ALL_VALUE,
+              value: ALL_VALUE_PARAMETER,
+              selected: false,
+            },
+            {
+              text: 'device1',
+              value: 'device1',
+              selected: true,
+            },
+            {
+              text: 'device2',
+              value: 'device2',
+              selected: false,
+            },
+          ],
+        } as any);
+
+        const dataFrame = toDataFrame({
+          fields: [
+            {
+              name: 'device',
+              values: ['device1', 'device2'],
+            },
+            {
+              name: 'country',
+              values: ['USA', 'Japan'],
+            },
+          ],
+          refId: 'A',
+        });
+
+        jest.mocked(useRuntimeVariables).mockImplementation(
+          () =>
+            ({
+              variable: deviceVariable,
+              getVariable: jest.fn(() => deviceVariable),
+            }) as any
+        );
+        /**
+         * Use Table
+         */
+        const { result } = renderHook(() =>
+          useTable({
+            data: { series: [dataFrame] } as any,
+            options: createPanelOptions({
+              selectedValues: {
+                showSelected: true,
+                maxCount: 1,
+              },
+              favorites: createFavoritesConfig({
+                enabled: false,
+              }),
+            }),
+            eventBus: null as any,
+            levels: [{ name: 'device', source: 'A' }],
+            panelEventBus: null as any,
+            replaceVariables: jest.fn(),
+          })
+        );
+
+        const selectedColumn = result.current.columns[1];
+
+        expect(selectedColumn).toEqual(
+          expect.objectContaining({
+            id: 'selected',
+            accessorKey: 'selected',
+            enableColumnFilter: true,
+            cell: expect.any(Function),
+          })
+        );
+
+        render(
+          <Rows
+            data={result.current.tableData}
+            columns={result.current.columns}
+            getSubRows={result.current.getSubRows}
+          />
+        );
+
+        const rowDevice1 = screen.getByTestId(InTestIds.row('device1', 0));
+        const rowDevice2 = screen.getByTestId(InTestIds.row('device2', 0));
+        expect(rowDevice1).toBeInTheDocument();
+        expect(rowDevice2).toBeInTheDocument();
+
+        const controlElement1 = within(rowDevice1).getByTestId(TEST_IDS.table.control);
+        const controlElement2 = within(rowDevice2).getByTestId(TEST_IDS.table.control);
+
+        expect(controlElement1).toBeInTheDocument();
+        expect(controlElement2).toBeInTheDocument();
+
+        expect(controlElement1).not.toBeDisabled();
+        expect(controlElement2).toBeDisabled();
       });
     });
 

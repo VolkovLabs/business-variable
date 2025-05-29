@@ -310,6 +310,7 @@ describe('Migration', () => {
         expect.objectContaining({
           displayMode: DisplayMode.TABLE,
           selectedValues: {
+            maxCount: 0,
             showSelected: false,
           },
         })
@@ -321,6 +322,7 @@ describe('Migration', () => {
         displayMode: DisplayMode.TABLE,
         selectedValues: {
           showSelected: true,
+          maxCount: 1,
         },
       };
 
@@ -334,6 +336,7 @@ describe('Migration', () => {
           displayMode: DisplayMode.TABLE,
           selectedValues: {
             showSelected: true,
+            maxCount: 1,
           },
         })
       );

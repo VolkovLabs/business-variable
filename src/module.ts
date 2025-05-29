@@ -203,6 +203,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Values'],
         showIf: (config) => showForMinimizeView(config),
+      })
+      .addNumberInput({
+        path: 'selectedValues.maxCount',
+        name: 'Maximum selected values',
+        description: 'Allows you to set the limit of value selection. 0 is the same as "auto".',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Values'],
+        showIf: (config) => showForTableView(config),
       });
 
     /**
