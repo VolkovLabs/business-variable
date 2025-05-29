@@ -25,6 +25,7 @@ export const TEST_IDS = {
     control: 'data-testid table value-control',
     favoritesControl: 'data-testid table favorites-control',
     favoritesFilter: 'data-testid table favorites-filter',
+    selectedFilter: 'data-testid table selected-filter',
     fieldFilterValue: 'data-testid table field-filter-value',
     buttonCleanFilterValue: 'data-testid table button-clean-filter-value',
     header: 'data-testid table header',

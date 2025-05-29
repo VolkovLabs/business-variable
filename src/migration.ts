@@ -103,5 +103,15 @@ export const getMigratedOptions = async (
     normalizedOptions.isMinimizeForTable = false;
   }
 
+  /**
+   * Minimize view for table view
+   */
+  if (normalizedOptions.selectedValues === undefined) {
+    normalizedOptions.selectedValues = {
+      showSelected: false,
+      maxCount: 0,
+    };
+  }
+
   return normalizedOptions;
 };

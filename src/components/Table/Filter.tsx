@@ -77,6 +77,27 @@ export const Filter = <TTableData extends object>({ column, alwaysVisible }: Pro
   }
 
   /**
+   * Render filter for selected values
+   */
+  if (column.columnDef.id === 'selected') {
+    return (
+      <Button
+        variant="secondary"
+        title="Show all selected values"
+        className={styles.selectedAllFilterButton}
+        fill="text"
+        size="sm"
+        onClick={() => {
+          column.setFilterValue(!columnFilterValue);
+        }}
+        data-testid={TEST_IDS.table.selectedFilter}
+      >
+        {columnFilterValue ? <Icon name="check-square" /> : <Icon name="square-shape" />}
+      </Button>
+    );
+  }
+
+  /**
    * Search
    */
   const search = (

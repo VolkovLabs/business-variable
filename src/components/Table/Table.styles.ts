@@ -24,6 +24,14 @@ export const getStyles = (theme: GrafanaTheme2) => {
     disableGrow: css`
       width: 0;
     `,
+    selectedColumn: css`
+      min-width: ${theme.spacing(0.25)}!important;
+      width: ${theme.spacing(0.25)}!important;
+      padding: 0;
+    `,
+    selectedAllFilterButton: css`
+      padding: 0;
+    `,
     header: css`
       position: sticky;
       background-color: ${theme.colors.background.primary};

@@ -293,4 +293,53 @@ describe('Migration', () => {
       });
     });
   });
+
+  describe('v4.0.0', () => {
+    it('Should update selectedValues options if not specified', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        selectedValues: undefined,
+      };
+
+      expect(
+        await getMigratedOptions({
+          pluginVersion: '3.3.0',
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          selectedValues: {
+            maxCount: 0,
+            showSelected: false,
+          },
+        })
+      );
+    });
+
+    it('Should not update selectedValues options if specified', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        selectedValues: {
+          showSelected: true,
+          maxCount: 1,
+        },
+      };
+
+      expect(
+        await getMigratedOptions({
+          pluginVersion: '3.3.0',
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          selectedValues: {
+            showSelected: true,
+            maxCount: 1,
+          },
+        })
+      );
+    });
+  });
 });

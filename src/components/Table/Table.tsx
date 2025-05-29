@@ -252,6 +252,7 @@ export const Table = <TTableData extends TableItem>({
                       className={cx(styles.headerCell, {
                         [styles.disableGrow]: !header.column.getCanResize(),
                         [styles.sortableHeader]: header.column.getCanSort(),
+                        [styles.selectedColumn]: header.column.id === 'selected',
                       })}
                       colSpan={header.colSpan}
                       style={{ width: header.column.columnDef.id === 'isFavorite' ? 48 : 'auto' }}
@@ -303,7 +304,14 @@ export const Table = <TTableData extends TableItem>({
             >
               {row.getVisibleCells().map((cell) => {
                 return (
-                  <td data-index={virtualRow.index} ref={rowVirtualizer.measureElement} key={cell.id}>
+                  <td
+                    data-index={virtualRow.index}
+                    className={cx({
+                      [styles.selectedColumn]: cell.column.id === 'selected',
+                    })}
+                    ref={rowVirtualizer.measureElement}
+                    key={cell.id}
+                  >
                     {renderCell(cell, cell.getContext())}
                   </td>
                 );

@@ -30,6 +30,7 @@ import {
   SHOW_LABEL_OPTIONS,
   SHOW_NAME_OPTIONS,
   SHOW_RESET_BUTTON_OPTIONS,
+  SHOW_SELECTED_OPTIONS,
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
   TABLE_MINIMIZE_OPTIONS,
@@ -202,6 +203,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         category: ['Values'],
         showIf: (config) => showForMinimizeView(config),
+      })
+      .addNumberInput({
+        path: 'selectedValues.maxCount',
+        name: 'Maximum selected values',
+        description: 'Allows you to set the limit of value selection. 0 is the same as "auto".',
+        settings: {
+          placeholder: 'auto',
+        },
+        category: ['Values'],
+        showIf: (config) => showForTableView(config),
       });
 
     /**
@@ -302,6 +313,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         name: 'Allow selecting favorites',
         settings: {
           options: FAVORITES_ENABLED_OPTIONS,
+        },
+        defaultValue: false,
+        category: ['Header'],
+        showIf: (config) => showForTableView(config) && config.header,
+      })
+      .addRadio({
+        path: 'selectedValues.showSelected',
+        name: 'Allow show selected values',
+        settings: {
+          options: SHOW_SELECTED_OPTIONS,
         },
         defaultValue: false,
         category: ['Header'],

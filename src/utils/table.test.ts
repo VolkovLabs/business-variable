@@ -6,6 +6,7 @@ import {
   favoriteFilter,
   getFirstSelectedRowIndex,
   getRows,
+  selectedFilters,
   statusSort,
   valueFilter,
 } from './table';
@@ -853,6 +854,34 @@ describe('Table Utils', () => {
       expect(favoriteFilter(row1 as any, {} as any, false, () => {})).toBeTruthy();
       expect(favoriteFilter(row2 as any, {} as any, false, () => {})).toBeTruthy();
       expect(favoriteFilter(parentRow as any, {} as any, false, () => {})).toBeTruthy();
+    });
+  });
+
+  describe('Selected Filters', () => {
+    it('Should include parent row if child favorites exist', () => {
+      const parentRow1 = { original: { childSelectedCount: 1, childValues: ['device1'] } };
+      const parentRow2 = { original: { childSelectedCount: 0, childValues: ['device2'] } };
+
+      expect(selectedFilters(parentRow1 as any, {} as any, true, () => {})).toBeTruthy();
+      expect(selectedFilters(parentRow2 as any, {} as any, true, () => {})).toBeFalsy();
+    });
+
+    it('Should include row if selected', () => {
+      const row1 = { original: { value: 'device1', selected: true } };
+      const row2 = { original: { value: 'device1', selected: false } };
+
+      expect(selectedFilters(row1 as any, {} as any, true, () => {})).toBeTruthy();
+      expect(selectedFilters(row2 as any, {} as any, true, () => {})).toBeFalsy();
+    });
+
+    it('Should include all rows if filter disabled', () => {
+      const row1 = { original: { value: 'device1', isFavorite: true } };
+      const row2 = { original: { value: 'device1', isFavorite: false } };
+      const parentRow = { original: { childSelectedCount: 0, childValues: ['device2'] } };
+
+      expect(selectedFilters(row1 as any, {} as any, false, () => {})).toBeTruthy();
+      expect(selectedFilters(row2 as any, {} as any, false, () => {})).toBeTruthy();
+      expect(selectedFilters(parentRow as any, {} as any, false, () => {})).toBeTruthy();
     });
   });
 
