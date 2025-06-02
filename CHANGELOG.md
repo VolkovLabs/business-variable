@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Add show selected values filter and selected range ([#269](https://github.com/volkovlabs/business-variable/issues/269))
 
+### Changed
+
+- Upgraded to Grafana 12.0.1 with updated dependencies
+
 ## [3.9.0] - 2025-04-08
 
 ### Added
