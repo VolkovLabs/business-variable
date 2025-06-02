@@ -26,6 +26,7 @@ jest.mock('@tanstack/react-virtual', () => ({
 const InTestIds = {
   cell: (value: string, depth: number) => `data-testid cell-${depth}-${value},`,
   favoriteCell: (value: string, depth: number) => `data-testid cell-favorite-${depth}-${value}`,
+  selectedCell: (value: string, depth: number) => `data-testid cell-selected-${depth}-${value}`,
 };
 
 describe('Table', () => {
@@ -544,6 +545,65 @@ describe('Table', () => {
 
     expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
     expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
+  });
+
+  it('Should show selected filter', async () => {
+    render(
+      getComponent({
+        showHeader: true,
+        columns: [
+          {
+            id: 'value',
+            header: 'cell header',
+            accessorKey: 'value',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as string;
+              return <span data-testid={InTestIds.cell(value, row.depth)}>{value}</span>;
+            },
+          },
+          {
+            id: 'isFavorite',
+            header: '',
+            accessorKey: 'isFavorite',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as boolean;
+              return <span data-testid={InTestIds.favoriteCell(row.original.value, row.depth)}>{value}</span>;
+            },
+          },
+          {
+            id: 'selected',
+            header: '',
+            accessorKey: 'selected',
+            enableColumnFilter: true,
+            cell: ({ getValue, row }: any) => {
+              const value = getValue() as boolean;
+              return <span data-testid={InTestIds.selectedCell(row.original.value, row.depth)}>{value}</span>;
+            },
+          },
+        ],
+        data: [
+          { value: 'device1', isFavorite: true, selected: true },
+          { value: 'device2', isFavorite: false, selected: false },
+          { value: 'device3', isFavorite: true, selected: true },
+        ] as any,
+      })
+    );
+
+    /**
+     * Check Filter presence
+     */
+    expect(selectors.selectedFilter()).toBeInTheDocument();
+
+    /**
+     * Apply Favorite filter
+     */
+    await act(() => fireEvent.click(screen.getByTestId(TEST_IDS.table.selectedFilter)));
+
+    expect(selectors.cell(false, 'device1', 0)).toBeInTheDocument();
+    expect(selectors.cell(true, 'device2', 0)).not.toBeInTheDocument();
+    expect(selectors.cell(false, 'device3', 0)).toBeInTheDocument();
   });
 
   it('Should not show favorites filter', async () => {

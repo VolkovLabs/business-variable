@@ -65,6 +65,7 @@ export const Filter = <TTableData extends object>({ column, alwaysVisible }: Pro
       <Button
         variant="secondary"
         fill="text"
+        tooltip="Show all favorite items"
         size="sm"
         onClick={() => {
           column.setFilterValue(!columnFilterValue);
@@ -72,6 +73,27 @@ export const Filter = <TTableData extends object>({ column, alwaysVisible }: Pro
         data-testid={TEST_IDS.table.favoritesFilter}
       >
         {columnFilterValue ? <Icon name="favorite" /> : <Icon name="star" />}
+      </Button>
+    );
+  }
+
+  /**
+   * Render filter for selected values
+   */
+  if (column.columnDef.id === 'selected') {
+    return (
+      <Button
+        variant="secondary"
+        tooltip="Show all selected values"
+        className={styles.selectedAllFilterButton}
+        fill="text"
+        size="sm"
+        onClick={() => {
+          column.setFilterValue(!columnFilterValue);
+        }}
+        data-testid={TEST_IDS.table.selectedFilter}
+      >
+        {columnFilterValue ? <Icon name="check-square" /> : <Icon name="square-shape" />}
       </Button>
     );
   }

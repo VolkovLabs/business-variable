@@ -320,6 +320,30 @@ export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
 };
 
 /**
+ * Selected Filter
+ * @param row
+ * @param columnId
+ * @param value
+ */
+export const selectedFilters: FilterFn<TableItem> = (row, columnId, value) => {
+  if (!value) {
+    return true;
+  }
+
+  /**
+   * Filter parent rows
+   */
+  if (row.original.childValues) {
+    return (row.original.childSelectedCount || 0) > 0;
+  }
+
+  /**
+   * Filter last level row
+   */
+  return !!row.original.selected;
+};
+
+/**
  * Get First Selected Row Index
  * Rows are only visible items
  * @param rows

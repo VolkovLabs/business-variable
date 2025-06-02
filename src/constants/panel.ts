@@ -71,6 +71,14 @@ export const FAVORITES_ENABLED_OPTIONS = [
 ];
 
 /**
+ * Show selected values
+ */
+export const SHOW_SELECTED_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Show button in header', icon: 'eye' },
+  { value: false, label: 'Disabled', description: 'Hide Button in header.', icon: 'eye-slash' },
+];
+
+/**
  * Favorites Storage Options
  */
 export const FAVORITES_STORAGE_OPTIONS = [
@@ -221,8 +229,7 @@ export const FAVORITES_KEY = 'volkovlabs.variable.panel.favorites';
 /**
  * No variable default message
  */
-export const NO_VARIABLE_DEFAULT_MESSAGE = `Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not
-        supported.`;
+export const NO_VARIABLE_DEFAULT_MESSAGE = `Variable is not selected. Constant, Data Source, Interval, AD hoc filters are not supported.`;
 
 /**
  * Options are not available message

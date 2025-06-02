@@ -14,6 +14,7 @@ import {
   getRows,
   isVariableAllSelected,
   isVariableWithOptions,
+  selectedFilters,
   selectVariableValues,
   shouldKeepSelection,
   statusSort,
@@ -368,6 +369,19 @@ export const useTable = ({
           const value = row.original.label || (getValue() as string);
 
           /**
+           * Selected Options include "all-option" variable
+           */
+          const selectedOptions = runtimeVariable?.options.some((option) => option.text === 'All' && option.selected)
+            ? runtimeVariable?.options.length - 1
+            : runtimeVariable?.options.filter((option) => option.selected).length;
+
+          let isDisabled = false;
+
+          if (options.selectedValues?.maxCount && selectedOptions) {
+            isDisabled = options.selectedValues?.maxCount <= selectedOptions;
+          }
+
+          /**
            * Show Group Counts
            */
           const isShowGroupCount =
@@ -393,6 +407,7 @@ export const useTable = ({
                   checked={row.original.selected}
                   className={styles.selectControl}
                   id={`${prefix}-${row.original.value}`}
+                  disabled={isDisabled && !row.original.selected}
                   data-testid={TEST_IDS.table.control}
                   ref={(el) => {
                     /**
@@ -491,6 +506,21 @@ export const useTable = ({
       },
     ];
 
+    if (options.selectedValues?.showSelected) {
+      columns.push({
+        id: 'selected',
+        accessorKey: 'selected',
+        enableColumnFilter: true,
+        enableResizing: false,
+        enableSorting: false,
+        header: '',
+        filterFn: selectedFilters,
+        cell: () => {
+          return null;
+        },
+      });
+    }
+
     if (options.favorites.enabled) {
       columns.push({
         id: 'isFavorite',
@@ -535,7 +565,9 @@ export const useTable = ({
     variable,
     options.filter,
     options.statusSort,
-    options.favorites,
+    options.selectedValues?.showSelected,
+    options.selectedValues?.maxCount,
+    options.favorites.enabled,
     options.showTotal,
     options.groupSelection,
     options.showGroupTotal,
