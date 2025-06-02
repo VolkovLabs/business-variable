@@ -206,8 +206,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addNumberInput({
         path: 'selectedValues.maxCount',
-        name: 'Maximum selected values',
-        description: 'Allows you to set the limit of value selection. 0 is the same as "auto".',
+        name: 'Maximum number of selected values',
+        description: 'Defines how many selected values to show. 0 means “auto” (no limit).',
         settings: {
           placeholder: 'auto',
         },
@@ -320,7 +320,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'selectedValues.showSelected',
-        name: 'Allow show selected values',
+        name: 'Allow showing selected values',
         settings: {
           options: SHOW_SELECTED_OPTIONS,
         },

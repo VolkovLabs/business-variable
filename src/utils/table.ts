@@ -320,7 +320,7 @@ export const favoriteFilter: FilterFn<TableItem> = (row, columnId, value) => {
 };
 
 /**
- * Selected Filters
+ * Selected Filter
  * @param row
  * @param columnId
  * @param value

@@ -100,11 +100,11 @@ export interface FavoritesConfig {
 }
 
 /**
- * Selected values Config
+ * Selected Values Config
  */
 export interface SelectedValuesConfig {
   /**
-   * Enabled
+   * Show selected values
    *
    * @type {boolean}
    */
@@ -113,7 +113,7 @@ export interface SelectedValuesConfig {
   /**
    * Max Count of selected values
    *
-   * @type {boolean}
+   * @type {number}
    */
   maxCount: number;
 }
@@ -216,14 +216,14 @@ export interface TableViewOptions {
   alwaysVisibleFilter: boolean;
 
   /**
-   * Favorites
+   * Favorites Values
    *
    * @type {FavoritesConfig}
    */
   favorites: FavoritesConfig;
 
   /**
-   * Show selected
+   * Selected Values
    *
    * @type {SelectedValuesConfig}
    */
