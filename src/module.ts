@@ -207,9 +207,9 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       .addNumberInput({
         path: 'selectedValues.maxCount',
         name: 'Maximum number of selected values',
-        description: 'Defines how many selected values to show. 0 means “auto” (no limit).',
+        description: 'Defines how many values allowed to select. 0 means no limit.',
         settings: {
-          placeholder: 'auto',
+          placeholder: 'no limit',
         },
         category: ['Values'],
         showIf: (config) => showForTableView(config),

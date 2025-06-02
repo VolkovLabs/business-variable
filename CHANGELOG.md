@@ -4,9 +4,15 @@ All notable changes to the **Business Variable Panel** for Grafana are documente
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.0.0]
 
-- No unreleased changes at this time.
+### Breaking Changes
+
+- Requires Grafana 11 or Grafana 12
+
+### Added
+
+- Add show selected values filter and selected range ([#269](https://github.com/volkovlabs/business-variable/issues/269))
 
 ## [3.9.0] - 2025-04-08
 
