@@ -65,6 +65,7 @@ export const Filter = <TTableData extends object>({ column, alwaysVisible }: Pro
       <Button
         variant="secondary"
         fill="text"
+        tooltip="Show all favorites items"
         size="sm"
         onClick={() => {
           column.setFilterValue(!columnFilterValue);
@@ -83,7 +84,7 @@ export const Filter = <TTableData extends object>({ column, alwaysVisible }: Pro
     return (
       <Button
         variant="secondary"
-        title="Show all selected values"
+        tooltip="Show all selected values"
         className={styles.selectedAllFilterButton}
         fill="text"
         size="sm"
