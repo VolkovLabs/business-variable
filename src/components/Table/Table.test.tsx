@@ -15,9 +15,11 @@ type Props = React.ComponentProps<typeof Table>;
 
 jest.mock('@tanstack/react-virtual', () => ({
   ...jest.requireActual('@tanstack/react-virtual'),
-  useVirtualizer: jest.fn((options) => ({
-    ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
-  })),
+  useVirtualizer: jest.fn((options) => {
+    return {
+      ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
+    };
+  }),
 }));
 
 /**
@@ -92,6 +94,17 @@ describe('Table', () => {
 
     Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
       value: mockGetBoundingClientRect,
+    });
+
+    /**
+     * transitioned to using offsetHeight and offsetWidth for measuring the scroller's size
+     *  https://github.com/TanStack/virtual/issues/641#issuecomment-2872147546
+     */
+    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+      value: 800,
+    });
+    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+      value: 800,
     });
   });
 

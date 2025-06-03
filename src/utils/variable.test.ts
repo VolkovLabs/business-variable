@@ -1,8 +1,16 @@
+import {
+  AdHocVariableModel,
+  CustomVariableModel,
+  LoadingState,
+  TextBoxVariableModel,
+  TypedVariableModel,
+  VariableHide,
+} from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 
 import { ALL_VALUE, ALL_VALUE_PARAMETER, NO_VALUE_PARAMETER } from '../constants';
 import { VariableChangedEvent, VariableType } from '../types';
-import { getRuntimeVariable, selectVariableValues } from './variable';
+import { getRuntimeVariable, getVariablesMap, selectVariableValues } from './variable';
 
 /**
  * Mock @grafana/runtime
@@ -570,6 +578,128 @@ describe('Variable Utils', () => {
 
       expect(result?.options[0].value).toEqual(ALL_VALUE_PARAMETER);
       expect(result?.options[0].selected).not.toBeTruthy();
+    });
+  });
+
+  describe('getVariablesMap', () => {
+    /**
+     * Create Variable
+     */
+    const createCustomVariable = (item: Partial<CustomVariableModel>): CustomVariableModel => ({
+      type: VariableType.CUSTOM,
+      name: 'device',
+      options: [],
+      id: 'device-id',
+      multi: false,
+      includeAll: false,
+      current: {},
+      query: '',
+      rootStateKey: '',
+      global: false,
+      hide: VariableHide.dontHide,
+      description: '',
+      allValue: null,
+      skipUrlSync: false,
+      index: 0,
+      state: LoadingState.Done,
+      error: '',
+      ...item,
+    });
+
+    /**
+     * Create Core TextBox Variable
+     */
+    const createTextBoxVariable = (item: Partial<TextBoxVariableModel>): TextBoxVariableModel => ({
+      type: VariableType.TEXTBOX,
+      name: 'search',
+      options: [],
+      id: 'search-id',
+      current: {},
+      query: 'default value',
+      rootStateKey: '',
+      global: false,
+      hide: VariableHide.dontHide,
+      description: '',
+      skipUrlSync: false,
+      index: 0,
+      state: LoadingState.Done,
+      error: '',
+      originalQuery: null,
+      ...item,
+    });
+
+    /**
+     * Create Adhoc Variable
+     */
+    const createAdhocVariable = (item: Partial<AdHocVariableModel>): AdHocVariableModel => ({
+      type: VariableType.ADHOC,
+      datasource: null,
+      name: 'adhoc',
+      id: 'adhoc-id',
+      state: LoadingState.Done,
+      filters: [],
+      rootStateKey: null,
+      global: false,
+      hide: VariableHide.dontHide,
+      skipUrlSync: false,
+      index: 0,
+      error: '',
+      description: '',
+      ...item,
+    });
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('Should return empty object when no variables provided', () => {
+      const result = getVariablesMap([]);
+      expect(result).toEqual({});
+    });
+
+    it('Should return variables map when getRuntimeVariable returns valid variables', () => {
+      const deviceVariable = createCustomVariable({});
+      const searchVariable = createTextBoxVariable({});
+
+      const variables: TypedVariableModel[] = [deviceVariable, searchVariable];
+
+      const result = getVariablesMap(variables);
+
+      expect(result).toEqual({
+        device: {
+          ...deviceVariable,
+          helpers: {
+            getOption: expect.any(Function),
+          },
+          optionIndexByName: expect.any(Map),
+        },
+        search: searchVariable,
+      });
+    });
+
+    it('Should return variables map with correct variables and don`t add variables if getRuntimeVariable return undefined', () => {
+      const deviceVariable = createCustomVariable({});
+      const searchVariable = createTextBoxVariable({});
+
+      /**
+       * Should not add adhoc variable to result array
+       */
+      const adhocVariable = createAdhocVariable({});
+
+      const variables: TypedVariableModel[] = [deviceVariable, searchVariable, adhocVariable];
+
+      const result = getVariablesMap(variables);
+
+      expect(result).toEqual({
+        device: {
+          ...deviceVariable,
+          helpers: {
+            getOption: expect.any(Function),
+          },
+          optionIndexByName: expect.any(Map),
+        },
+        search: searchVariable,
+      });
     });
   });
 });
