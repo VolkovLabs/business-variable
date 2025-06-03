@@ -16,7 +16,6 @@ type Props = React.ComponentProps<typeof Table>;
 jest.mock('@tanstack/react-virtual', () => ({
   ...jest.requireActual('@tanstack/react-virtual'),
   useVirtualizer: jest.fn((options) => {
-    console.log('useVirtualizer', options);
     return {
       ...jest.requireActual('@tanstack/react-virtual').useVirtualizer(options),
     };
