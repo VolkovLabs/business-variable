@@ -75,13 +75,55 @@ export const getStyles = (theme: GrafanaTheme2) => {
       display: flex;
       flex-direction: row;
     `,
+    tabWithPin: css`
+      position: relative;
+      display: flex;
+      align-items: center;
+    `,
     toolbarButton: css`
+      position: relative;
       overflow: hidden;
       max-width: 100%;
 
       > div {
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+    `,
+    tabContent: css`
+      display: flex;
+      align-items: center;
+      gap: ${theme.spacing(0.5)};
+      width: 100%;
+      justify-content: space-between;
+    `,
+    tabText: css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    `,
+    pinButton: css`
+      transition: opacity 0.2s ease;
+      color: ${theme.colors.text.secondary};
+      flex-shrink: 0;
+
+      &:hover {
+        opacity: 1;
+        color: ${theme.colors.text.primary};
+      }
+
+      &:focus-visible {
+        opacity: 1;
+      }
+    `,
+    pinButtonActive: css`
+      opacity: 1;
+      color: ${theme.colors.primary.main};
+
+      &:hover {
+        color: ${theme.colors.primary.shade};
       }
     `,
   };

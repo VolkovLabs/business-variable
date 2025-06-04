@@ -50,11 +50,34 @@ export const TableView: React.FC<Props> = ({
   /**
    * Current group
    */
-  const [currentGroup, setCurrentGroup] = useSavedState<string>({
+  const [currentGroup, setCurrentGroup, groupLoaded] = useSavedState<string>({
     key: `volkovlabs.variable.panel.${options.saveSelectedGroupKey || id}`,
     initialValue: options.groups?.[0]?.name || '',
     enabled: options.saveSelectedGroup,
   });
+
+  /**
+   * Pinned groups state
+   * Array of pinned tab names stored in localStorage
+   */
+  const [pinnedGroups, setPinnedGroups, pinnedLoaded] = useSavedState<string[]>({
+    key: `volkovlabs.variable.panel.pinned.${options.saveSelectedGroupKey || id}`,
+    initialValue: [],
+    enabled: true,
+  });
+
+  /**
+   * Safe pinned groups
+   */
+  const safePinnedGroups = useMemo(() => {
+    if (Array.isArray(pinnedGroups)) {
+      return pinnedGroups;
+    }
+    if (pinnedGroups && typeof pinnedGroups === 'object') {
+      return Object.values(pinnedGroups).filter((value) => typeof value === 'string') as string[];
+    }
+    return [];
+  }, [pinnedGroups]);
 
   /**
    * Current Levels
@@ -80,13 +103,51 @@ export const TableView: React.FC<Props> = ({
   }, [currentGroup, options.groups]);
 
   /**
-   * Change current group if was removed
+   * Validate current group
    */
   useEffect(() => {
-    if (!options.groups?.some((group) => group.name === currentGroup)) {
-      setCurrentGroup(options.groups?.[0]?.name || '');
+    if (groupLoaded && options.groups && !options.groups.some((group) => group.name === currentGroup)) {
+      setCurrentGroup(options.groups[0]?.name || '');
     }
-  }, [currentGroup, id, options.groups, setCurrentGroup]);
+  }, [currentGroup, groupLoaded, id, options.groups, setCurrentGroup]);
+
+  /**
+   * Clean up pinned groups
+   */
+  useEffect(() => {
+    if (pinnedLoaded && options.groups && safePinnedGroups.length > 0) {
+      const existingGroupNames = options.groups.map((group) => group.name);
+      const validPinnedGroups = safePinnedGroups.filter((pinnedGroup) => existingGroupNames.includes(pinnedGroup));
+      if (validPinnedGroups.length !== safePinnedGroups.length || !Array.isArray(pinnedGroups)) {
+        setPinnedGroups(validPinnedGroups);
+      }
+    }
+  }, [options.groups, safePinnedGroups, setPinnedGroups, pinnedLoaded, pinnedGroups]);
+
+  /**
+   * Toggle pin status for a group
+   * If group is already pinned - remove it from pinned list
+   * If group is not pinned - add it to the end of pinned list
+   * @param groupName - Name of the group to pin/unpin
+   */
+  const togglePinGroup = useCallback(
+    (groupName: string) => {
+      setPinnedGroups((previousPinnedGroups) => {
+        const currentPinned = Array.isArray(previousPinnedGroups)
+          ? previousPinnedGroups
+          : typeof previousPinnedGroups === 'object' && previousPinnedGroups !== null
+            ? (Object.values(previousPinnedGroups).filter((value) => typeof value === 'string') as string[])
+            : [];
+
+        if (currentPinned.includes(groupName)) {
+          return currentPinned.filter((name) => name !== groupName);
+        } else {
+          return [...currentPinned, groupName];
+        }
+      });
+    },
+    [setPinnedGroups]
+  );
 
   /**
    * Table config
@@ -139,32 +200,28 @@ export const TableView: React.FC<Props> = ({
   const styles = getStyles(theme);
 
   /**
-   * Show selected group first
+   * Sorted groups
+   * Returns groups array with pinned groups first, then unpinned
    */
   const sortedGroups = useMemo(() => {
     if (!options.groups) {
       return [];
     }
 
-    /**
-     * Find active selected group
-     */
-    const activeGroup = options.groups.find((group) => group.name === currentGroup);
-
-    /**
-     * Selected group is not found
-     */
-    if (!activeGroup || options.tabsInOrder) {
+    if (!pinnedLoaded) {
       return options.groups;
     }
 
-    /**
-     * Filter groups, exclude active group
-     */
-    const withoutActive = options.groups.filter((group) => group.name !== currentGroup);
+    const all = [...options.groups];
 
-    return [activeGroup, ...withoutActive];
-  }, [currentGroup, options.groups, options.tabsInOrder]);
+    const pinnedGroups = safePinnedGroups
+      .map((pinnedName) => all.find((group) => group.name === pinnedName))
+      .filter(Boolean) as typeof all;
+
+    const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name));
+
+    return [...pinnedGroups, ...unpinnedGroups];
+  }, [options.groups, safePinnedGroups, pinnedLoaded]);
 
   /**
    * On after scroll
@@ -209,23 +266,42 @@ export const TableView: React.FC<Props> = ({
     return (
       <div ref={headerRef} className={styles.header}>
         <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
-          {sortedGroups.map((group, index) => (
-            <ToolbarButton
-              key={group.name}
-              variant={currentGroup === group.name ? 'active' : 'default'}
-              onClick={() => {
-                setCurrentGroup(group.name);
-                shouldScroll.current = true;
-              }}
-              data-testid={TEST_IDS.tableView.tab(group.name)}
-              className={styles.toolbarButton}
-              style={{
-                maxWidth: index === 0 ? width - 60 : undefined,
-              }}
-            >
-              {group.name}
-            </ToolbarButton>
-          ))}
+          {sortedGroups.map((group) => {
+            const isPinned = safePinnedGroups.includes(group.name);
+            const isActive = currentGroup === group.name;
+
+            return (
+              <div key={group.name} className={styles.tabWithPin}>
+                <ToolbarButton
+                  variant={isActive ? 'active' : 'default'}
+                  onClick={() => {
+                    setCurrentGroup(group.name);
+                    shouldScroll.current = true;
+                  }}
+                  data-testid={TEST_IDS.tableView.tab(group.name)}
+                  className={cx(styles.toolbarButton)}
+                >
+                  <span className={styles.tabContent}>
+                    <span className={styles.tabText}>{group.name}</span>
+                    <IconButton
+                      name="gf-pin"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        togglePinGroup(group.name);
+                      }}
+                      className={cx(styles.pinButton, {
+                        [styles.pinButtonActive]: isPinned,
+                      })}
+                      tooltip={isPinned ? 'Unpin tab' : 'Pin tab'}
+                      data-testid={TEST_IDS.tableView.pinButton(group.name)}
+                      aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
+                    />
+                  </span>
+                </ToolbarButton>
+              </div>
+            );
+          })}
         </ToolbarButtonRow>
       </div>
     );
