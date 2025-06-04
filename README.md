@@ -2,13 +2,11 @@
 
 ![Dashboard](https://github.com/VolkovLabs/business-variable/raw/main/src/img/dashboard.png)
 
-[![Grafana](https://img.shields.io/badge/Grafana-11.6-orange)](https://grafana.com/)
+[![Grafana](https://img.shields.io/badge/Grafana-12.0-orange)](https://grafana.com/)
 [![CI](https://github.com/volkovlabs/business-variable/workflows/CI/badge.svg)](https://github.com/volkovlabs/business-variable/actions/workflows/ci.yml)
 [![E2E](https://github.com/volkovlabs/business-variable/workflows/E2E/badge.svg)](https://github.com/volkovlabs/business-variable/actions/workflows/e2e.yml)
 [![Codecov](https://codecov.io/gh/VolkovLabs/business-variable/branch/main/graph/badge.svg)](https://codecov.io/gh/VolkovLabs/business-variable)
 [![CodeQL](https://github.com/VolkovLabs/business-variable/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/VolkovLabs/business-variable/actions/workflows/codeql-analysis.yml)
-
-**Enhance your Grafana dashboards with a dedicated, customizable panel for dashboard variables.**
 
 ## Overview
 
@@ -27,7 +25,7 @@ The **Business Variable** panel transforms how you interact with Grafana dashboa
 Install the Business Variable panel easily through the [Grafana Plugins Catalog](https://grafana.com/grafana/plugins/volkovlabs-variable-panel/) or via the Grafana CLI:
 
 ```bash
-grafana-cli plugins install volkovlabs-variable-panel
+grafana cli plugins install volkovlabs-variable-panel
 ```
 
 For a step-by-step visual guide, check out our installation tutorial:  
@@ -56,7 +54,7 @@ Explore detailed guides and resources for the Business Variable panel:
 | [Tutorials](https://volkovlabs.io/plugins/business-variable/tutorials/)   | Follow step-by-step guides           |
 | [Release Notes](https://volkovlabs.io/plugins/business-variable/release/) | Stay updated with recent changes     |
 
-## Part of Business Suite for Grafana
+## Business Suite for Grafana
 
 The Business Variable panel is a component of the **Business Suite**, a set of open-source plugins by Volkov Labs. These plugins address common business needs with user-friendly interfaces, backed by extensive documentation, examples, and video tutorials.
 

@@ -4,41 +4,47 @@ All notable changes to the **Business Variable Panel** for Grafana are documente
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0]
+## [4.0.0] - 2025-06-03
+
+**Summary**: Major update with Grafana 12 compatibility and new filtering features.
 
 ### Breaking Changes
 
-- Requires Grafana 11 or Grafana 12
+- Requires Grafana 11 or Grafana 12.
 
 ### Added
 
-- Add show selected values filter and selected range ([#269](https://github.com/volkovlabs/business-variable/issues/269))
+- Show selected values filter and selected range ([#269](https://github.com/volkovlabs/business-variable/issues/269)).
 
 ### Changed
 
-- Upgraded to Grafana 12.0.1 with updated dependencies
+- Upgraded to Grafana 12.0.1 with updated dependencies ([#271](https://github.com/volkovlabs/business-variable/issues/271)).
 
 ## [3.9.0] - 2025-04-08
 
+**Summary**: Enhanced user experience with custom messages and minimized views.
+
 ### Added
 
-- Custom message for 'no data' and 'variable not selected' cases ([#262](https://github.com/volkovlabs/business-variable/issues/262))
-- Minimized view for Tree View layout ([#263](https://github.com/volkovlabs/business-variable/issues/263))
+- Custom message for 'no data' and 'variable not selected' cases ([#262](https://github.com/volkovlabs/business-variable/issues/262)).
+- Minimized view for Tree View layout ([#263](https://github.com/volkovlabs/business-variable/issues/263)).
 
 ### Changed
 
-- Upgraded to Grafana 11.6.0 with updated dependencies ([#265](https://github.com/volkovlabs/business-variable/issues/265))
+- Upgraded to Grafana 11.6.0 with updated dependencies ([#265](https://github.com/volkovlabs/business-variable/issues/265)).
 
 ## [3.8.0] - 2025-03-26
 
+**Summary**: Workflow improvements and dependency cleanup.
+
 ### Added
 
-- Attestation to release workflow ([#246](https://github.com/volkovlabs/business-variable/issues/246))
-- Resize behavior for panels with sticky headers ([#253](https://github.com/volkovlabs/business-variable/issues/253))
+- Attestation to release workflow ([#246](https://github.com/volkovlabs/business-variable/issues/246)).
+- Resize behavior for panels with sticky headers ([#253](https://github.com/volkovlabs/business-variable/issues/253)).
 
 ### Removed
 
-- Dependency on `@volkovlabs/grafana-utils` ([#247](https://github.com/volkovlabs/business-variable/issues/247))
+- Dependency on `@volkovlabs/grafana-utils` ([#247](https://github.com/volkovlabs/business-variable/issues/247)).
 
 ## [3.7.0] - 2025-02-13
 
