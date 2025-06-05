@@ -201,7 +201,8 @@ export const TableView: React.FC<Props> = ({
 
   /**
    * Sorted groups
-   * Returns groups array with pinned groups first, then unpinned
+   * Returns groups array with pinned groups first, then unpinned groups
+   * If tabsInOrder is enabled, active group is shown after pinned groups
    */
   const sortedGroups = useMemo(() => {
     if (!options.groups) {
@@ -218,10 +219,27 @@ export const TableView: React.FC<Props> = ({
       .map((pinnedName) => all.find((group) => group.name === pinnedName))
       .filter(Boolean) as typeof all;
 
-    const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name));
+    if (options.tabsInOrder) {
+      const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name));
+      return [...pinnedGroups, ...unpinnedGroups];
+    }
 
-    return [...pinnedGroups, ...unpinnedGroups];
-  }, [options.groups, safePinnedGroups, pinnedLoaded]);
+    const activeGroup = all.find((group) => group.name === currentGroup);
+
+    const isActiveGroupPinned = activeGroup && safePinnedGroups.includes(activeGroup.name);
+
+    const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name) && group.name !== currentGroup);
+
+    const result = [...pinnedGroups];
+
+    if (activeGroup && !isActiveGroupPinned) {
+      result.push(activeGroup);
+    }
+
+    result.push(...unpinnedGroups);
+
+    return result;
+  }, [options.groups, safePinnedGroups, pinnedLoaded, currentGroup, options.tabsInOrder]);
 
   /**
    * On after scroll

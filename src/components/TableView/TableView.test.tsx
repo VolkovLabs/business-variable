@@ -840,6 +840,56 @@ describe('Table View', () => {
         expect(updateFunction(undefined)).toEqual(['group1']);
         expect(updateFunction(null)).toEqual(['group1']);
       });
+
+      describe('TabsInOrder functionality', () => {
+        const mockSetPinnedGroups = jest.fn();
+
+        beforeEach(() => {
+          jest.mocked(useSavedState).mockImplementation((config: any) => {
+            if (config.key.includes('pinned')) {
+              return [['group2'], mockSetPinnedGroups, true] as any;
+            }
+            return ['group1', jest.fn(), true] as any;
+          });
+
+          jest.mocked(useTable).mockImplementation(() => ({
+            tableData: [
+              { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+            ],
+            columns: [],
+            getSubRows: jest.fn(),
+            runtimeVariable: { name: 'Variable' } as any,
+          }));
+        });
+
+        afterEach(() => {
+          mockSetPinnedGroups.mockClear();
+        });
+
+        it('Should use new logic when tabsInOrder is true', async () => {
+          await act(async () =>
+            render(
+              getComponent({
+                options: {
+                  tabsInOrder: true,
+                  groups: [
+                    { name: 'group1', items: [] },
+                    { name: 'group2', items: [] },
+                    { name: 'group3', items: [] },
+                    { name: 'group4', items: [] },
+                  ],
+                } as any,
+              })
+            )
+          );
+
+          const tabs = screen.getAllByRole('button', { name: /group/i });
+          expect(tabs[0]).toHaveTextContent('group2');
+          expect(tabs[1]).toHaveTextContent('group1');
+          expect(tabs[2]).toHaveTextContent('group3');
+          expect(tabs[3]).toHaveTextContent('group4');
+        });
+      });
     });
 
     describe('Sorted groups', () => {
