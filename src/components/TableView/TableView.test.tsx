@@ -805,6 +805,41 @@ describe('Table View', () => {
 
         expect(mockSetCurrentGroup).not.toHaveBeenCalled();
       });
+
+      it('Should handle primitive values (string, number, boolean) when toggling pin', async () => {
+        jest.mocked(useTable).mockImplementation(() => ({
+          tableData: [
+            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+          ],
+          columns: [],
+          getSubRows: jest.fn(),
+          runtimeVariable: { name: 'Variable' } as any,
+        }));
+
+        await act(async () =>
+          render(
+            getComponent({
+              options: {
+                groups: [
+                  { name: 'group1', items: [] },
+                  { name: 'group2', items: [] },
+                ],
+              } as any,
+            })
+          )
+        );
+
+        const pinButton = selectors.pinButton(false, 'group1');
+        fireEvent.click(pinButton);
+
+        const updateFunction = mockSetPinnedGroups.mock.calls[0][0];
+
+        expect(updateFunction('some-string')).toEqual(['group1']);
+        expect(updateFunction(123)).toEqual(['group1']);
+        expect(updateFunction(true)).toEqual(['group1']);
+        expect(updateFunction(undefined)).toEqual(['group1']);
+        expect(updateFunction(null)).toEqual(['group1']);
+      });
     });
 
     describe('Sorted groups', () => {
