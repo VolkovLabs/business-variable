@@ -135,9 +135,6 @@ export const TableView: React.FC<Props> = ({
    */
   const togglePinGroup = useCallback(
     (groupName: string) => {
-      if (!options.isPinTabsEnabled) {
-        return;
-      }
       setPinnedGroups((previousPinnedGroups) => {
         const currentPinned = Array.isArray(previousPinnedGroups)
           ? previousPinnedGroups
@@ -152,7 +149,7 @@ export const TableView: React.FC<Props> = ({
         }
       });
     },
-    [setPinnedGroups, options.isPinTabsEnabled]
+    [setPinnedGroups]
   );
 
   /**
