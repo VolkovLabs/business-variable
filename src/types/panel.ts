@@ -263,6 +263,13 @@ export interface TableViewOptions {
    * @type {boolean}
    */
   collapsedByDefault: boolean;
+
+  /**
+   * Enable pin/unpin functionality for tabs
+   *
+   * @type {boolean}
+   */
+  isPinTabsEnabled?: boolean;
 }
 
 /**
@@ -430,10 +437,10 @@ export interface PanelOptions extends TableViewOptions {
  */
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<RecursivePartial<U>>
-    : T[P] extends object | undefined
-      ? RecursivePartial<T[P]>
-      : T[P];
+  ? Array<RecursivePartial<U>>
+  : T[P] extends object | undefined
+  ? RecursivePartial<T[P]>
+  : T[P];
 };
 
 /**

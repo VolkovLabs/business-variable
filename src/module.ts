@@ -25,6 +25,7 @@ import {
   MINIMIZE_OUTPUT_FORMAT_OPTIONS,
   NO_VARIABLE_DEFAULT_MESSAGE,
   PERSISTENT_OPTIONS,
+  PIN_TAB_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
   SHOW_LABEL_OPTIONS,
@@ -262,17 +263,25 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         showIf: showForTableView,
-      });
-
-    builder.addRadio({
-      path: 'isMinimizeForTable',
-      name: 'Table minimize view',
-      settings: {
-        options: TABLE_MINIMIZE_OPTIONS,
-      },
-      defaultValue: false,
-      showIf: showForTableView,
-    });
+      })
+      .addRadio({
+        path: 'isMinimizeForTable',
+        name: 'Table minimize view',
+        settings: {
+          options: TABLE_MINIMIZE_OPTIONS,
+        },
+        defaultValue: false,
+        showIf: showForTableView,
+      })
+      .addRadio({
+        path: 'isPinTabsEnabled',
+        name: 'Pin/Unpin functionality for tabs',
+        settings: {
+          options: PIN_TAB_OPTIONS,
+        },
+        defaultValue: false,
+        showIf: showForTableView,
+      })
 
     /**
      * Header
