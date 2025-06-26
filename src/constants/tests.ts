@@ -13,6 +13,7 @@ export const TEST_IDS = {
     buttonOpenDrawer: 'data-testid table-view button open-drawer',
     buttonCloseDrawer: selectors.components.Drawer.General.close,
     pinButton: (groupName: string) => `data-testid-pin-button-${groupName}`,
+    outsideElement: 'data-testid outside-element',
   },
   table: {
     allControl: 'data-testid table all-control',

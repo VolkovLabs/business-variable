@@ -30,7 +30,6 @@ jest.mock('../../hooks', () => ({
  * In Test Ids
  */
 const InTestIds = {
-  outsideElement: 'data-testid outside-element',
   drawerMockTableView: 'data-testid drawer-mock-table-view',
 };
 
@@ -519,6 +518,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -543,6 +543,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -567,6 +568,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -593,6 +595,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -607,6 +610,7 @@ describe('Table View', () => {
           rerender(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group3', items: [] },
@@ -631,6 +635,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -656,6 +661,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -684,6 +690,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -722,6 +729,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -753,6 +761,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -791,6 +800,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -820,6 +830,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -871,6 +882,7 @@ describe('Table View', () => {
             render(
               getComponent({
                 options: {
+                  isPinTabsEnabled: true,
                   tabsInOrder: true,
                   groups: [
                     { name: 'group1', items: [] },
@@ -883,7 +895,12 @@ describe('Table View', () => {
             )
           );
 
-          const tabs = screen.getAllByRole('button', { name: /group/i });
+          const tabs = [
+            selectors.tab(false, 'group2'),
+            selectors.tab(false, 'group1'),
+            selectors.tab(false, 'group3'),
+            selectors.tab(false, 'group4'),
+          ];
           expect(tabs[0]).toHaveTextContent('group2');
           expect(tabs[1]).toHaveTextContent('group1');
           expect(tabs[2]).toHaveTextContent('group3');
@@ -914,6 +931,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -925,7 +943,12 @@ describe('Table View', () => {
           )
         );
 
-        const tabs = screen.getAllByRole('button', { name: /group/i });
+        const tabs = [
+          selectors.tab(false, 'group2'),
+          selectors.tab(false, 'group3'),
+          selectors.tab(false, 'group1'),
+          selectors.tab(false, 'group4'),
+        ];
         expect(tabs[0]).toHaveTextContent('group2');
         expect(tabs[1]).toHaveTextContent('group3');
         expect(tabs[2]).toHaveTextContent('group1');
@@ -953,6 +976,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -963,7 +987,11 @@ describe('Table View', () => {
           )
         );
 
-        const tabs = screen.getAllByRole('button', { name: /group/i });
+        const tabs = [
+          selectors.tab(false, 'group3'),
+          selectors.tab(false, 'group1'),
+          selectors.tab(false, 'group2'),
+        ];
         expect(tabs[0]).toHaveTextContent('group3');
         expect(tabs[1]).toHaveTextContent('group1');
         expect(tabs[2]).toHaveTextContent('group2');
@@ -990,6 +1018,7 @@ describe('Table View', () => {
           render(
             getComponent({
               options: {
+                isPinTabsEnabled: true,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -999,10 +1028,90 @@ describe('Table View', () => {
           )
         );
 
-        const tabs = screen.getAllByRole('button', { name: /group/i });
+        const tabs = [
+          selectors.tab(false, 'group1'),
+          selectors.tab(false, 'group2'),
+        ];
         expect(tabs[0]).toHaveTextContent('group1');
         expect(tabs[1]).toHaveTextContent('group2');
       });
+    });
+  });
+
+  describe('Pin tabs disabled (isPinTabsEnabled = false)', () => {
+    it('Should render tabs in original order regardless of pinnedGroups', async () => {
+      jest.mocked(useSavedState).mockImplementation((config: any) => {
+        if (config.key.includes('pinned')) {
+          return [['group2', 'group1'], jest.fn(), true] as any;
+        }
+        return [config.initialValue, jest.fn(), true] as any;
+      });
+      jest.mocked(useTable).mockImplementation(() => ({
+        tableData: [
+          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+        ],
+        columns: [],
+        getSubRows: jest.fn(),
+        runtimeVariable: { name: 'Variable' } as any,
+      }));
+
+      await act(async () =>
+        render(
+          getComponent({
+            options: {
+              isPinTabsEnabled: false,
+              groups: [
+                { name: 'group1', items: [] },
+                { name: 'group2', items: [] },
+                { name: 'group3', items: [] },
+              ],
+            } as any,
+          })
+        )
+      );
+
+      const tabs = [
+        selectors.tab(false, 'group1'),
+        selectors.tab(false, 'group2'),
+        selectors.tab(false, 'group3'),
+      ];
+      expect(tabs[0]).toHaveTextContent('group1');
+      expect(tabs[1]).toHaveTextContent('group2');
+      expect(tabs[2]).toHaveTextContent('group3');
+    });
+
+    it('Should not call setPinnedGroups when pin tabs is disabled', async () => {
+      const mockSetPinnedGroups = jest.fn();
+      jest.mocked(useSavedState).mockImplementation((config: any) => {
+        if (config.key.includes('pinned')) {
+          return [['group2', 'group1'], mockSetPinnedGroups, true] as any;
+        }
+        return [config.initialValue, jest.fn(), true] as any;
+      });
+      jest.mocked(useTable).mockImplementation(() => ({
+        tableData: [
+          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+        ],
+        columns: [],
+        getSubRows: jest.fn(),
+        runtimeVariable: { name: 'Variable' } as any,
+      }));
+
+      await act(async () =>
+        render(
+          getComponent({
+            options: {
+              isPinTabsEnabled: false,
+              groups: [
+                { name: 'group1', items: [] },
+                { name: 'group2', items: [] },
+              ],
+            } as any,
+          })
+        )
+      );
+
+      expect(mockSetPinnedGroups).not.toHaveBeenCalled();
     });
   });
 
@@ -1017,16 +1126,19 @@ describe('Table View', () => {
         runtimeVariable: { name: 'Variable' } as any,
       }));
 
-      const { container } = await act(async () =>
+      await act(async () =>
         render(
-          getComponent({
-            options: {
-              groups: [
-                { name: 'group1', items: [] },
-                { name: 'group2', items: [] },
-              ],
-            } as any,
-          })
+          <>
+            {getComponent({
+              options: {
+                groups: [
+                  { name: 'group1', items: [] },
+                  { name: 'group2', items: [] },
+                ],
+              } as any,
+            })}
+            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
+          </>
         )
       );
 
@@ -1034,10 +1146,7 @@ describe('Table View', () => {
 
       fireEvent.mouseDown(rootElement);
 
-      const outsideElement = document.createElement('div');
-      outsideElement.setAttribute('data-testid', 'outside-element');
-      container.appendChild(outsideElement);
-
+      const outsideElement = selectors.outsideElement();
       fireEvent.click(outsideElement, { bubbles: true });
 
       expect(rootElement).toBeInTheDocument();
@@ -1053,20 +1162,20 @@ describe('Table View', () => {
         runtimeVariable: { name: 'Variable' } as any,
       }));
 
-      const { container } = await act(async () =>
+      await act(async () =>
         render(
-          getComponent({
-            options: {
-              groups: [{ name: 'group1', items: [] }],
-            } as any,
-          })
+          <>
+            {getComponent({
+              options: {
+                groups: [{ name: 'group1', items: [] }],
+              } as any,
+            })}
+            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
+          </>
         )
       );
 
-      const outsideElement = document.createElement('div');
-      outsideElement.setAttribute('data-testid', 'outside-element');
-      container.appendChild(outsideElement);
-
+      const outsideElement = selectors.outsideElement();
       fireEvent.click(outsideElement, { bubbles: true });
 
       expect(selectors.root()).toBeInTheDocument();
@@ -1084,14 +1193,17 @@ describe('Table View', () => {
 
       await act(async () =>
         render(
-          getComponent({
-            options: {
-              groups: [
-                { name: 'group1', items: [] },
-                { name: 'group2', items: [] },
-              ],
-            } as any,
-          })
+          <>
+            {getComponent({
+              options: {
+                groups: [
+                  { name: 'group1', items: [] },
+                  { name: 'group2', items: [] },
+                ],
+              } as any,
+            })}
+            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
+          </>
         )
       );
 
@@ -1116,20 +1228,21 @@ describe('Table View', () => {
         runtimeVariable: { name: 'Variable' } as any,
       }));
 
-      const { container } = await act(async () =>
+      await act(async () =>
         render(
-          getComponent({
-            options: {
-              groups: [{ name: 'group1', items: [] }],
-            } as any,
-          })
+          <>
+            {getComponent({
+              options: {
+                groups: [{ name: 'group1', items: [] }],
+              } as any,
+            })}
+            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
+          </>
         )
       );
 
       const rootElement = selectors.root();
-      const outsideElement = document.createElement('div');
-      outsideElement.setAttribute('data-testid', 'outside-element');
-      container.appendChild(outsideElement);
+      const outsideElement = selectors.outsideElement();
 
       fireEvent.mouseDown(rootElement);
       fireEvent.click(outsideElement, { bubbles: true });

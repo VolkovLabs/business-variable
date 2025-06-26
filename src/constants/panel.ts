@@ -31,7 +31,7 @@ export const HEADER_OPTIONS = [
 ];
 
 /**
- * Sticky Position
+ * Sticky Position Options
  */
 export const STICKY_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Follow when scrolling.' },
@@ -39,11 +39,27 @@ export const STICKY_OPTIONS = [
 ];
 
 /**
- * Sticky Position
+ * Auto Scroll Options
+ */
+export const AUTO_SCROLL_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
+  { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
+];
+
+/**
+ * Table Minimize Options
  */
 export const TABLE_MINIMIZE_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show the table in minimized view. The tree view opens in a drawer.' },
   { value: false, label: 'Disabled', description: 'Show tree view in the panel.' },
+];
+
+/**
+ * Pin/Unpin Options
+ */
+export const PIN_TAB_OPTIONS = [
+  { value: true, label: 'Enabled', description: 'Enable pin/unpin functionality.' },
+  { value: false, label: 'Disabled', description: 'Disable pin/unpin functionality.' },
 ];
 
 /**
@@ -134,14 +150,6 @@ export const TABS_ORDER_OPTIONS = [
 export const COLLAPSED_BY_DEFAULT_OPTIONS = [
   { value: true, label: 'Collapsed', description: 'All levels are collapsed.', icon: 'folder' },
   { value: false, label: 'Expanded', description: 'All levels are expanded.', icon: 'folder-open' },
-];
-
-/**
- * Auto Scroll Options
- */
-export const AUTO_SCROLL_OPTIONS = [
-  { value: true, label: 'Enabled', description: 'Auto scroll to the first selected value.' },
-  { value: false, label: 'Disabled', description: 'Disable auto scroll.' },
 ];
 
 /**

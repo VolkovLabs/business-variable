@@ -104,7 +104,14 @@ export const getMigratedOptions = async (
   }
 
   /**
-   * Minimize view for table view
+   * Pin/Unpin functionality for tabs
+   */
+  if (normalizedOptions.isPinTabsEnabled === undefined) {
+    normalizedOptions.isPinTabsEnabled = false;
+  }
+
+  /**
+   * Normalize selected values
    */
   if (normalizedOptions.selectedValues === undefined) {
     normalizedOptions.selectedValues = {

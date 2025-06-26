@@ -63,13 +63,16 @@ export const TableView: React.FC<Props> = ({
   const [pinnedGroups, setPinnedGroups, pinnedLoaded] = useSavedState<string[]>({
     key: `volkovlabs.variable.panel.pinned.${options.saveSelectedGroupKey || id}`,
     initialValue: [],
-    enabled: true,
+    enabled: options.isPinTabsEnabled === true,
   });
 
   /**
    * Safe pinned groups
    */
   const safePinnedGroups = useMemo(() => {
+    if (!options.isPinTabsEnabled) {
+      return [];
+    }
     if (Array.isArray(pinnedGroups)) {
       return pinnedGroups;
     }
@@ -77,7 +80,7 @@ export const TableView: React.FC<Props> = ({
       return Object.values(pinnedGroups).filter((value) => typeof value === 'string') as string[];
     }
     return [];
-  }, [pinnedGroups]);
+  }, [pinnedGroups, options.isPinTabsEnabled]);
 
   /**
    * Current Levels
@@ -132,6 +135,9 @@ export const TableView: React.FC<Props> = ({
    */
   const togglePinGroup = useCallback(
     (groupName: string) => {
+      if (!options.isPinTabsEnabled) {
+        return;
+      }
       setPinnedGroups((previousPinnedGroups) => {
         const currentPinned = Array.isArray(previousPinnedGroups)
           ? previousPinnedGroups
@@ -146,7 +152,7 @@ export const TableView: React.FC<Props> = ({
         }
       });
     },
-    [setPinnedGroups]
+    [setPinnedGroups, options.isPinTabsEnabled]
   );
 
   /**
@@ -208,7 +214,9 @@ export const TableView: React.FC<Props> = ({
     if (!options.groups) {
       return [];
     }
-
+    if (!options.isPinTabsEnabled) {
+      return options.groups;
+    }
     if (!pinnedLoaded) {
       return options.groups;
     }
@@ -239,7 +247,7 @@ export const TableView: React.FC<Props> = ({
     result.push(...unpinnedGroups);
 
     return result;
-  }, [options.groups, safePinnedGroups, pinnedLoaded, currentGroup, options.tabsInOrder]);
+  }, [options.groups, safePinnedGroups, pinnedLoaded, currentGroup, options.tabsInOrder, options.isPinTabsEnabled]);
 
   /**
    * On after scroll
@@ -301,20 +309,22 @@ export const TableView: React.FC<Props> = ({
                 >
                   <span className={styles.tabContent}>
                     <span className={styles.tabText}>{group.name}</span>
-                    <IconButton
-                      name="gf-pin"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        togglePinGroup(group.name);
-                      }}
-                      className={cx(styles.pinButton, {
-                        [styles.pinButtonActive]: isPinned,
-                      })}
-                      tooltip={isPinned ? 'Unpin tab' : 'Pin tab'}
-                      data-testid={TEST_IDS.tableView.pinButton(group.name)}
-                      aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
-                    />
+                    {options.isPinTabsEnabled && (
+                      <IconButton
+                        name="gf-pin"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          togglePinGroup(group.name);
+                        }}
+                        className={cx(styles.pinButton, {
+                          [styles.pinButtonActive]: isPinned,
+                        })}
+                        tooltip={isPinned ? 'Unpin tab' : 'Pin tab'}
+                        data-testid={TEST_IDS.tableView.pinButton(group.name)}
+                        aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
+                      />
+                    )}
                   </span>
                 </ToolbarButton>
               </div>
