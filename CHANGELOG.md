@@ -8,8 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- Add ability to pin/unpin group filters (#274)
-- Add the ability to select native/custom icon for the minimized variable panel (#281)
+- Added ability to pin/unpin group filters ([#274](https://github.com/volkovlabs/business-variable/issues/274)).
+- Added the ability to select native/custom icon for the minimized variable panel ([#281](https://github.com/volkovlabs/business-variable/issues/281)).
 
 ## [4.0.0] - 2025-06-03
 
