@@ -41,6 +41,7 @@ describe('plugin', () => {
     addSliderInput: jest.fn().mockImplementation(() => builder),
     addTextInput: jest.fn().mockImplementation(() => builder),
     addNumberInput: jest.fn().mockImplementation(() => builder),
+    addBooleanSwitch: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -63,6 +64,7 @@ describe('plugin', () => {
     expect(builder.addSliderInput).toHaveBeenCalled();
     expect(builder.addTextInput).toHaveBeenCalled();
     expect(builder.addNumberInput).toHaveBeenCalled();
+    expect(builder.addBooleanSwitch).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {

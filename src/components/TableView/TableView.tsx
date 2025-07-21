@@ -363,14 +363,29 @@ export const TableView: React.FC<Props> = ({
           !!runtimeVariable &&
           (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (
             <div className={styles.minimizeTableView}>
-              <IconButton
-                name="gf-movepane-right"
-                size="xl"
-                onClick={() => setIsDrawerOpen(true)}
-                aria-label="Open tree view"
-                className={styles.openDrawerButton}
-                data-testid={TEST_IDS.tableView.buttonOpenDrawer}
-              />
+              {!options.isColumnManagerShowCustomIcon && (
+                <IconButton
+                  className={styles.openDrawerButton}
+                  name={options.columnManagerNativeIcon}
+                  aria-label="Open tree view"
+                  onClick={() => setIsDrawerOpen(true)}
+                  size="xl"
+                  data-testid={TEST_IDS.tableView.buttonOpenDrawer}
+                />
+              )}
+
+              {options.isColumnManagerShowCustomIcon &&
+                options.columnManagerCustomIcon &&
+                !!options.columnManagerCustomIcon.length && (
+                  <img
+                    src={options.columnManagerCustomIcon}
+                    alt="Open tree view"
+                    className={styles.openDrawerButtonCustomIcon}
+                    onClick={() => setIsDrawerOpen(true)}
+                    data-testid={TEST_IDS.tableView.buttonOpenDrawerCustomIcon}
+                  />
+                )}
+
               <OptionsVariable
                 variable={runtimeVariable}
                 emptyValue={false}

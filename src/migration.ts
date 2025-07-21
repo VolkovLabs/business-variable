@@ -104,6 +104,28 @@ export const getMigratedOptions = async (
   }
 
   /**
+   * Normalize isColumnManagerShowCustomIcon
+   */
+  if (normalizedOptions.isColumnManagerShowCustomIcon === undefined) {
+    normalizedOptions.isColumnManagerShowCustomIcon = false;
+  }
+
+  /**
+   * Normalize columnManagerNativeIcon
+   */
+  if (normalizedOptions.columnManagerNativeIcon === undefined) {
+    normalizedOptions.columnManagerNativeIcon = 'table';
+  }
+
+  /**
+   * Normalize columnManagerCustomIcon
+   */
+  if (normalizedOptions.columnManagerCustomIcon === undefined) {
+    normalizedOptions.columnManagerCustomIcon = '';
+  }
+
+
+  /**
    * Pin/Unpin functionality for tabs
    */
   if (normalizedOptions.isPinTabsEnabled === undefined) {
