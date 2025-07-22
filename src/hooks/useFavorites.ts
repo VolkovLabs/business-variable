@@ -1,9 +1,9 @@
 import { InterpolateFunction, isDataFrame, LoadingState } from '@grafana/data';
+import { useDatasourceRequest } from '@volkovlabs/components';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FAVORITES_KEY } from '../constants';
 import { FavoritesConfig, FavoritesStorage } from '../types';
-import { useDatasourceRequest } from './useDatasourceRequest';
 
 /**
  * Favorites type

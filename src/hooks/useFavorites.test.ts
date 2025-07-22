@@ -1,9 +1,9 @@
 import { LoadingState, toDataFrame } from '@grafana/data';
 import { act, renderHook, RenderHookResult, waitFor } from '@testing-library/react';
+import { useDatasourceRequest } from '@volkovlabs/components';
 
 import { FavoritesStorage } from '../types';
 import { createFavoritesConfig } from '../utils';
-import { useDatasourceRequest } from './useDatasourceRequest';
 import { useFavorites } from './useFavorites';
 
 /**
@@ -13,13 +13,6 @@ const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
 };
-
-/**
- * Mock useDatasourceRequest
- */
-jest.mock('./useDatasourceRequest', () => ({
-  useDatasourceRequest: jest.fn(),
-}));
 
 /**
  * Favorites

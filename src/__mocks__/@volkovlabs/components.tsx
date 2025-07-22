@@ -51,6 +51,11 @@ const DatasourcePayloadEditorMock = ({ onChange, ...restProps }: any) => {
 const DatasourcePayloadEditor = jest.fn(DatasourcePayloadEditorMock);
 
 /**
+ * Mock useDatasourceRequest hook
+ */
+const useDatasourceRequest = jest.fn();
+
+/**
  * Set mocks
  */
 beforeEach(() => {
@@ -62,4 +67,5 @@ module.exports = {
   ...actual,
   Slider,
   DatasourcePayloadEditor,
+  useDatasourceRequest,
 };
