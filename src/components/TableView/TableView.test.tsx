@@ -470,8 +470,8 @@ describe('Table View', () => {
           id: 15,
           options: {
             isMinimizeForTable: true,
-            isColumnManagerShowCustomIcon: true,
-            columnManagerCustomIcon: 'https://example.com/custom-icon.png',
+            isMinimizeViewShowCustomIcon: true,
+            minimizeViewCustomIcon: 'https://example.com/custom-icon.png',
             groups: [
               { name: 'group1', items: [{ name: '1' }] },
               { name: 'group2', items: [{ name: '2' }] },
@@ -529,7 +529,7 @@ describe('Table View', () => {
     expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
   });
 
-  it('Should not display custom icon button when isColumnManagerShowCustomIcon is true but columnManagerCustomIcon is empty', async () => {
+  it('Should not display custom icon button when isMinimizeViewShowCustomIcon is true but minimizeViewCustomIcon is empty', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
       tableData: [
         { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
@@ -545,8 +545,8 @@ describe('Table View', () => {
           id: 15,
           options: {
             isMinimizeForTable: true,
-            isColumnManagerShowCustomIcon: true,
-            columnManagerCustomIcon: '',
+            isMinimizeViewShowCustomIcon: true,
+            minimizeViewCustomIcon: '',
             groups: [
               { name: 'group1', items: [{ name: '1' }] },
               { name: 'group2', items: [{ name: '2' }] },

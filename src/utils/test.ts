@@ -53,9 +53,9 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   isUseLocalTime: false,
   browserTabNamePattern: '',
   isMinimizeForTable: false,
-  isColumnManagerShowCustomIcon: false,
-  columnManagerNativeIcon: 'table',
-  columnManagerCustomIcon: '',
+  isMinimizeViewShowCustomIcon: false,
+  minimizeViewNativeIcon: 'table',
+  minimizeViewCustomIcon: '',
   alertCustomMessage: '',
   selectedValues: {
     showSelected: false,

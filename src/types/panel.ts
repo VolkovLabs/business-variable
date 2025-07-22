@@ -425,25 +425,25 @@ export interface PanelOptions extends TableViewOptions {
   isMinimizeForTable: boolean;
 
   /**
-   * Show Custom Icons in Column Manager
+   * Show Custom Icons in Minimize View
    *
    * @type {boolean}
    */
-  isColumnManagerShowCustomIcon: boolean
+  isMinimizeViewShowCustomIcon: boolean
 
   /**
-   * Column Manager Native Icon
+   * Minimize View Native Icon
    *
    * @type {IconName}
    */
-  columnManagerNativeIcon: IconName;
+  minimizeViewNativeIcon: IconName;
 
   /**
-   * Column Manager Custom Icon
+   * Minimize View Custom Icon
    *
    * @type {string}
    */
-  columnManagerCustomIcon: string;
+  minimizeViewCustomIcon: string;
 
   /**
    * Alert Custom Message

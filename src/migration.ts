@@ -104,24 +104,24 @@ export const getMigratedOptions = async (
   }
 
   /**
-   * Normalize isColumnManagerShowCustomIcon
+   * Normalize isMinimizeViewShowCustomIcon
    */
-  if (normalizedOptions.isColumnManagerShowCustomIcon === undefined) {
-    normalizedOptions.isColumnManagerShowCustomIcon = false;
+  if (normalizedOptions.isMinimizeViewShowCustomIcon === undefined) {
+    normalizedOptions.isMinimizeViewShowCustomIcon = false;
   }
 
   /**
-   * Normalize columnManagerNativeIcon
+   * Normalize minimizeViewNativeIcon
    */
-  if (normalizedOptions.columnManagerNativeIcon === undefined) {
-    normalizedOptions.columnManagerNativeIcon = 'table';
+  if (normalizedOptions.minimizeViewNativeIcon === undefined) {
+    normalizedOptions.minimizeViewNativeIcon = 'table';
   }
 
   /**
-   * Normalize columnManagerCustomIcon
+   * Normalize minimizeViewCustomIcon
    */
-  if (normalizedOptions.columnManagerCustomIcon === undefined) {
-    normalizedOptions.columnManagerCustomIcon = '';
+  if (normalizedOptions.minimizeViewCustomIcon === undefined) {
+    normalizedOptions.minimizeViewCustomIcon = '';
   }
 
 

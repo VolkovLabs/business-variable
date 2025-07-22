@@ -363,10 +363,10 @@ export const TableView: React.FC<Props> = ({
           !!runtimeVariable &&
           (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (
             <div className={styles.minimizeTableView}>
-              {!options.isColumnManagerShowCustomIcon && (
+              {!options.isMinimizeViewShowCustomIcon && (
                 <IconButton
                   className={styles.openDrawerButton}
-                  name={options.columnManagerNativeIcon}
+                  name={options.minimizeViewNativeIcon}
                   aria-label="Open tree view"
                   onClick={() => setIsDrawerOpen(true)}
                   size="xl"
@@ -374,11 +374,11 @@ export const TableView: React.FC<Props> = ({
                 />
               )}
 
-              {options.isColumnManagerShowCustomIcon &&
-                options.columnManagerCustomIcon &&
-                !!options.columnManagerCustomIcon.length && (
+              {options.isMinimizeViewShowCustomIcon &&
+                options.minimizeViewCustomIcon &&
+                !!options.minimizeViewCustomIcon.length && (
                   <img
-                    src={options.columnManagerCustomIcon}
+                    src={options.minimizeViewCustomIcon}
                     alt="Open tree view"
                     className={styles.openDrawerButtonCustomIcon}
                     onClick={() => setIsDrawerOpen(true)}

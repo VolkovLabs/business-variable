@@ -288,27 +288,27 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         showIf: showForTableView,
       })
       .addBooleanSwitch({
-        path: 'isColumnManagerShowCustomIcon',
+        path: 'isMinimizeViewShowCustomIcon',
         name: 'Show Custom Icon',
-        description: 'Show custom icon for the column manager button.',
+        description: 'Show custom icon for the minimize view.',
         showIf: (config) => showForTableView(config) && config.isMinimizeForTable,
         defaultValue: false,
       })
       .addSelect({
-        path: 'columnManagerNativeIcon',
+        path: 'minimizeViewNativeIcon',
         name: 'Native Icon',
-        description: 'Use native icon for the column manager button.',
-        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && !config.isColumnManagerShowCustomIcon,
+        description: 'Use native icon for the minimize view.',
+        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && !config.isMinimizeViewShowCustomIcon,
         settings: {
           options: iconOptions,
         },
         defaultValue: 'table',
       })
       .addTextInput({
-        path: 'columnManagerCustomIcon',
+        path: 'minimizeViewCustomIcon',
         name: 'Custom Icon URL',
-        description: 'Custom icon for the column manager button.',
-        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && config.isColumnManagerShowCustomIcon,
+        description: 'Custom icon for the minimize view.',
+        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && config.isMinimizeViewShowCustomIcon,
         defaultValue: '',
       })
       .addRadio({

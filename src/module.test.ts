@@ -249,7 +249,7 @@ describe('plugin', () => {
       );
     });
 
-    it('Should show isColumnManagerShowCustomIcon when table view and minimize for table enabled', () => {
+    it('Should show isMinimizeViewShowCustomIcon when table view and minimize for table enabled', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addBooleanSwitch.mockImplementation(
@@ -263,10 +263,10 @@ describe('plugin', () => {
       );
       plugin['optionsSupplier'](builder);
 
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['isColumnManagerShowCustomIcon']));
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['isMinimizeViewShowCustomIcon']));
     });
 
-    it('Should show columnManagerNativeIcon when table view, minimize for table enabled, and custom icon disabled', () => {
+    it('Should show minimizeViewNativeIcon when table view, minimize for table enabled, and custom icon disabled', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addSelect.mockImplementation(
@@ -274,19 +274,19 @@ describe('plugin', () => {
           createPanelOptions({
             displayMode: DisplayMode.TABLE,
             isMinimizeForTable: true,
-            isColumnManagerShowCustomIcon: false,
+            isMinimizeViewShowCustomIcon: false,
           }),
           shownOptionsPaths
         )
       );
       plugin['optionsSupplier'](builder);
 
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['columnManagerNativeIcon']));
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeViewNativeIcon']));
     });
 
 
 
-    it('Should show columnManagerCustomIcon when table view, minimize for table enabled, and custom icon enabled', () => {
+    it('Should show minimizeViewCustomIcon when table view, minimize for table enabled, and custom icon enabled', () => {
       const shownOptionsPaths: string[] = [];
 
       builder.addTextInput.mockImplementation(
@@ -294,14 +294,14 @@ describe('plugin', () => {
           createPanelOptions({
             displayMode: DisplayMode.TABLE,
             isMinimizeForTable: true,
-            isColumnManagerShowCustomIcon: true,
+            isMinimizeViewShowCustomIcon: true,
           }),
           shownOptionsPaths
         )
       );
       plugin['optionsSupplier'](builder);
 
-      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['columnManagerCustomIcon']));
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeViewCustomIcon']));
     });
   });
 
