@@ -284,8 +284,6 @@ describe('plugin', () => {
       expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeViewNativeIcon']));
     });
 
-
-
     it('Should show minimizeViewCustomIcon when table view, minimize for table enabled, and custom icon enabled', () => {
       const shownOptionsPaths: string[] = [];
 
