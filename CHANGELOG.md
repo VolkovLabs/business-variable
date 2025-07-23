@@ -4,6 +4,12 @@ All notable changes to the **Business Variable Panel** for Grafana are documente
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2025-07-23
+
+### Added
+
+- Added the ability to select native/custom icon for the minimized variable panel ([#281](https://github.com/volkovlabs/business-variable/issues/281)).
+
 ## [4.1.0] - 2025-07-21
 
 ### Added
