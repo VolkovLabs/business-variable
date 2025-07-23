@@ -21,6 +21,16 @@ export enum MinimizeOutputFormat {
 }
 
 /**
+ * Minimize Display Mode
+ */
+export enum RequestLatencyMode {
+  LOW = 'low',
+  NORMAL = 'normal',
+  HIGH = 'high',
+  UNSTABLE = 'unstable',
+}
+
+/**
  * Data Source Config
  */
 export interface DatasourceConfig {
@@ -430,6 +440,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   alertCustomMessage: string;
+
+  /**
+   * Request latency mode
+   *
+   * @type {string}
+   */
+  requestLatency: RequestLatencyMode;
 }
 
 /**
@@ -437,10 +454,10 @@ export interface PanelOptions extends TableViewOptions {
  */
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<RecursivePartial<U>>
-  : T[P] extends object | undefined
-  ? RecursivePartial<T[P]>
-  : T[P];
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object | undefined
+      ? RecursivePartial<T[P]>
+      : T[P];
 };
 
 /**

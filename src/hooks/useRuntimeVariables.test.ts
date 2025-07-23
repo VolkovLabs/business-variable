@@ -2,7 +2,7 @@ import { CustomVariableModel, EventBusSrv, LoadingState, TypedVariableModel, Var
 import { renderHook } from '@testing-library/react';
 import { useDashboardVariables } from '@volkovlabs/components';
 
-import { VariableType } from '../types';
+import { RequestLatencyMode, VariableType } from '../types';
 import { useRuntimeVariables } from './useRuntimeVariables';
 
 const mockUseDashboardVariables = useDashboardVariables as jest.MockedFunction<typeof useDashboardVariables>;
@@ -88,7 +88,7 @@ describe('useRuntimeVariables', () => {
       }),
     } as any);
 
-    const { result } = renderHook(() => useRuntimeVariables(eventBus, 'device'));
+    const { result } = renderHook(() => useRuntimeVariables(eventBus, 'device', RequestLatencyMode.LOW));
 
     expect(result.current.variable).toEqual(deviceVariable);
     expect(result.current.getVariable('device')).toEqual(deviceVariable);
@@ -108,7 +108,7 @@ describe('useRuntimeVariables', () => {
       }),
     } as any);
 
-    const { result } = renderHook(() => useRuntimeVariables(eventBus, 'nonexistent'));
+    const { result } = renderHook(() => useRuntimeVariables(eventBus, 'nonexistent', RequestLatencyMode.LOW));
 
     expect(result.current.variable).toBeUndefined();
     expect(result.current.getVariable('nonexistent')).toBeUndefined();
@@ -116,6 +116,27 @@ describe('useRuntimeVariables', () => {
   });
 
   it('Should call useDashboardVariables with correct parameters', () => {
+    const deviceVariable = createVariable({ name: 'device' });
+
+    mockUseDashboardVariables.mockReturnValue({
+      variable: deviceVariable,
+      getVariable: jest.fn(),
+    } as any);
+
+    renderHook(() => useRuntimeVariables(eventBus, 'device', RequestLatencyMode.LOW));
+
+    expect(mockUseDashboardVariables).toHaveBeenCalledWith({
+      eventBus,
+      variableName: 'device',
+      toState: expect.any(Function),
+      getOne: expect.any(Function),
+      initial: {},
+      refreshCheckCount: 5,
+      refreshCheckInterval: 500,
+    });
+  });
+
+  it('Should call useDashboardVariables with correct parameters for latency if not specified', () => {
     const deviceVariable = createVariable({ name: 'device' });
 
     mockUseDashboardVariables.mockReturnValue({
@@ -131,6 +152,29 @@ describe('useRuntimeVariables', () => {
       toState: expect.any(Function),
       getOne: expect.any(Function),
       initial: {},
+      refreshCheckCount: 5,
+      refreshCheckInterval: 500,
+    });
+  });
+
+  it('Should call useDashboardVariables with correct parameters for latency', () => {
+    const deviceVariable = createVariable({ name: 'device' });
+
+    mockUseDashboardVariables.mockReturnValue({
+      variable: deviceVariable,
+      getVariable: jest.fn(),
+    } as any);
+
+    renderHook(() => useRuntimeVariables(eventBus, 'device', RequestLatencyMode.HIGH));
+
+    expect(mockUseDashboardVariables).toHaveBeenCalledWith({
+      eventBus,
+      variableName: 'device',
+      toState: expect.any(Function),
+      getOne: expect.any(Function),
+      initial: {},
+      refreshCheckCount: 20,
+      refreshCheckInterval: 1500,
     });
   });
 
@@ -143,7 +187,7 @@ describe('useRuntimeVariables', () => {
       getVariable: jest.fn(),
     } as any);
 
-    renderHook(() => useRuntimeVariables(eventBus, 'device'));
+    renderHook(() => useRuntimeVariables(eventBus, 'device', RequestLatencyMode.LOW));
 
     /**
      * Get the getOne function that was passed to useDashboardVariables

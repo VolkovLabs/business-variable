@@ -1,4 +1,11 @@
-import { DisplayMode, FavoritesConfig, FavoritesStorage, MinimizeOutputFormat, PanelOptions } from '../types';
+import {
+  DisplayMode,
+  FavoritesConfig,
+  FavoritesStorage,
+  MinimizeOutputFormat,
+  PanelOptions,
+  RequestLatencyMode,
+} from '../types';
 
 /**
  * Create Favorites Config
@@ -54,6 +61,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   browserTabNamePattern: '',
   isMinimizeForTable: false,
   alertCustomMessage: '',
+  requestLatency: RequestLatencyMode.LOW,
   selectedValues: {
     showSelected: false,
     maxCount: 0,
