@@ -104,6 +104,27 @@ export const getMigratedOptions = async (
   }
 
   /**
+   * Normalize isMinimizeViewShowCustomIcon
+   */
+  if (normalizedOptions.isMinimizeViewShowCustomIcon === undefined) {
+    normalizedOptions.isMinimizeViewShowCustomIcon = false;
+  }
+
+  /**
+   * Normalize minimizeViewNativeIcon
+   */
+  if (normalizedOptions.minimizeViewNativeIcon === undefined) {
+    normalizedOptions.minimizeViewNativeIcon = 'gf-movepane-right';
+  }
+
+  /**
+   * Normalize minimizeViewCustomIcon
+   */
+  if (normalizedOptions.minimizeViewCustomIcon === undefined) {
+    normalizedOptions.minimizeViewCustomIcon = '';
+  }
+
+  /**
    * Pin/Unpin functionality for tabs
    */
   if (normalizedOptions.isPinTabsEnabled === undefined) {

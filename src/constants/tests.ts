@@ -11,6 +11,7 @@ export const TEST_IDS = {
     root: 'data-testid panel',
     tab: (name: string) => `data-testid panel tab-${name}`,
     buttonOpenDrawer: 'data-testid table-view button open-drawer',
+    buttonOpenDrawerCustomIcon: 'data-testid table-view button open-drawer-custom-icon',
     buttonCloseDrawer: selectors.components.Drawer.General.close,
     pinButton: (groupName: string) => `data-testid-pin-button-${groupName}`,
     outsideElement: 'data-testid outside-element',

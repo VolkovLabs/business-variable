@@ -7,6 +7,7 @@ import {
   TypedVariableModel,
 } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
+import { getAvailableIcons } from '@grafana/ui';
 import { DatasourceEditor } from '@volkovlabs/components';
 
 import { DatasourcePayloadEditor, GroupsEditor, StatusStyleEditor, VariablePanel } from './components';
@@ -118,6 +119,19 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       (config.minimizeOutputFormat === MinimizeOutputFormat.DATETIME ||
         config.minimizeOutputFormat === MinimizeOutputFormat.TIMESTAMP ||
         config.minimizeOutputFormat === MinimizeOutputFormat.DATE);
+
+    /**
+     * Icon Options
+     */
+    const iconOptions = getAvailableIcons()
+      .sort((a, b) => a.localeCompare(b))
+      .map((icon) => {
+        return {
+          value: icon,
+          label: icon,
+          icon: icon,
+        };
+      });
 
     /**
      * Common Options
@@ -273,6 +287,32 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         defaultValue: false,
         showIf: showForTableView,
       })
+      .addBooleanSwitch({
+        path: 'isMinimizeViewShowCustomIcon',
+        name: 'Show Custom Icon',
+        description: 'Show custom icon for the minimize view.',
+        showIf: (config) => showForTableView(config) && config.isMinimizeForTable,
+        defaultValue: false,
+      })
+      .addSelect({
+        path: 'minimizeViewNativeIcon',
+        name: 'Native Icon',
+        description: 'Use native icon for the minimize view.',
+        showIf: (config) =>
+          showForTableView(config) && config.isMinimizeForTable && !config.isMinimizeViewShowCustomIcon,
+        settings: {
+          options: iconOptions,
+        },
+        defaultValue: 'gf-movepane-right',
+      })
+      .addTextInput({
+        path: 'minimizeViewCustomIcon',
+        name: 'Custom Icon URL',
+        description: 'Custom icon for the minimize view.',
+        showIf: (config) =>
+          showForTableView(config) && config.isMinimizeForTable && config.isMinimizeViewShowCustomIcon,
+        defaultValue: '',
+      })
       .addRadio({
         path: 'isPinTabsEnabled',
         name: 'Pin/Unpin functionality for tabs',
@@ -281,7 +321,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         showIf: showForTableView,
-      })
+      });
 
     /**
      * Header

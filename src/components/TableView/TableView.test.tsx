@@ -454,6 +454,49 @@ describe('Table View', () => {
     expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
   });
 
+  it('Should open and close drawer with custom icon for query variable', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.QUERY } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            isMinimizeForTable: true,
+            isMinimizeViewShowCustomIcon: true,
+            minimizeViewCustomIcon: 'https://example.com/custom-icon.png',
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.buttonOpenDrawerCustomIcon()).toBeInTheDocument();
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonOpenDrawerCustomIcon());
+
+    expect(selectors.drawerMockTableView()).toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
+
+    fireEvent.click(selectors.buttonCloseDrawer());
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+  });
+
   it('Should not display minimize if variable not valid type', async () => {
     jest.mocked(useTable).mockImplementation(() => ({
       tableData: [
@@ -482,6 +525,41 @@ describe('Table View', () => {
       )
     );
 
+    expect(selectors.buttonOpenDrawer(true)).not.toBeInTheDocument();
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
+  });
+
+  it('Should not display custom icon button when isMinimizeViewShowCustomIcon is true but minimizeViewCustomIcon is empty', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.QUERY } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            isMinimizeForTable: true,
+            isMinimizeViewShowCustomIcon: true,
+            minimizeViewCustomIcon: '',
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.buttonOpenDrawerCustomIcon(true)).not.toBeInTheDocument();
     expect(selectors.buttonOpenDrawer(true)).not.toBeInTheDocument();
     expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
   });
@@ -987,11 +1065,7 @@ describe('Table View', () => {
           )
         );
 
-        const tabs = [
-          selectors.tab(false, 'group3'),
-          selectors.tab(false, 'group1'),
-          selectors.tab(false, 'group2'),
-        ];
+        const tabs = [selectors.tab(false, 'group3'), selectors.tab(false, 'group1'), selectors.tab(false, 'group2')];
         expect(tabs[0]).toHaveTextContent('group3');
         expect(tabs[1]).toHaveTextContent('group1');
         expect(tabs[2]).toHaveTextContent('group2');
@@ -1028,10 +1102,7 @@ describe('Table View', () => {
           )
         );
 
-        const tabs = [
-          selectors.tab(false, 'group1'),
-          selectors.tab(false, 'group2'),
-        ];
+        const tabs = [selectors.tab(false, 'group1'), selectors.tab(false, 'group2')];
         expect(tabs[0]).toHaveTextContent('group1');
         expect(tabs[1]).toHaveTextContent('group2');
       });
@@ -1070,11 +1141,7 @@ describe('Table View', () => {
         )
       );
 
-      const tabs = [
-        selectors.tab(false, 'group1'),
-        selectors.tab(false, 'group2'),
-        selectors.tab(false, 'group3'),
-      ];
+      const tabs = [selectors.tab(false, 'group1'), selectors.tab(false, 'group2'), selectors.tab(false, 'group3')];
       expect(tabs[0]).toHaveTextContent('group1');
       expect(tabs[1]).toHaveTextContent('group2');
       expect(tabs[2]).toHaveTextContent('group3');

@@ -1,4 +1,4 @@
-import { BusEventBase } from '@grafana/data';
+import { BusEventBase, IconName } from '@grafana/data';
 
 /**
  * Display Mode
@@ -423,6 +423,27 @@ export interface PanelOptions extends TableViewOptions {
    * @type {boolean}
    */
   isMinimizeForTable: boolean;
+
+  /**
+   * Show Custom Icons in Minimize View
+   *
+   * @type {boolean}
+   */
+  isMinimizeViewShowCustomIcon: boolean
+
+  /**
+   * Minimize View Native Icon
+   *
+   * @type {IconName}
+   */
+  minimizeViewNativeIcon: IconName;
+
+  /**
+   * Minimize View Custom Icon
+   *
+   * @type {string}
+   */
+  minimizeViewCustomIcon: string;
 
   /**
    * Alert Custom Message
