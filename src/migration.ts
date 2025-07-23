@@ -114,7 +114,7 @@ export const getMigratedOptions = async (
    * Normalize minimizeViewNativeIcon
    */
   if (normalizedOptions.minimizeViewNativeIcon === undefined) {
-    normalizedOptions.minimizeViewNativeIcon = 'table';
+    normalizedOptions.minimizeViewNativeIcon = 'gf-movepane-right';
   }
 
   /**
@@ -123,7 +123,6 @@ export const getMigratedOptions = async (
   if (normalizedOptions.minimizeViewCustomIcon === undefined) {
     normalizedOptions.minimizeViewCustomIcon = '';
   }
-
 
   /**
    * Pin/Unpin functionality for tabs

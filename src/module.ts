@@ -298,17 +298,19 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         path: 'minimizeViewNativeIcon',
         name: 'Native Icon',
         description: 'Use native icon for the minimize view.',
-        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && !config.isMinimizeViewShowCustomIcon,
+        showIf: (config) =>
+          showForTableView(config) && config.isMinimizeForTable && !config.isMinimizeViewShowCustomIcon,
         settings: {
           options: iconOptions,
         },
-        defaultValue: 'table',
+        defaultValue: 'gf-movepane-right',
       })
       .addTextInput({
         path: 'minimizeViewCustomIcon',
         name: 'Custom Icon URL',
         description: 'Custom icon for the minimize view.',
-        showIf: (config) => showForTableView(config) && config.isMinimizeForTable && config.isMinimizeViewShowCustomIcon,
+        showIf: (config) =>
+          showForTableView(config) && config.isMinimizeForTable && config.isMinimizeViewShowCustomIcon,
         defaultValue: '',
       })
       .addRadio({
@@ -319,7 +321,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         },
         defaultValue: false,
         showIf: showForTableView,
-      })
+      });
 
     /**
      * Header

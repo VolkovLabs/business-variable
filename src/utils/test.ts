@@ -54,7 +54,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   browserTabNamePattern: '',
   isMinimizeForTable: false,
   isMinimizeViewShowCustomIcon: false,
-  minimizeViewNativeIcon: 'table',
+  minimizeViewNativeIcon: 'gf-movepane-right',
   minimizeViewCustomIcon: '',
   alertCustomMessage: '',
   selectedValues: {
