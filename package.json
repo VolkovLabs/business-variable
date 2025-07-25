@@ -3,7 +3,7 @@
   "dependencies": {
     "@emotion/css": "^11.13.5",
     "@grafana/data": "^12.0.1",
-    "@grafana/runtime": "^12.0.2",
+    "@grafana/runtime": "^12.0.1",
     "@grafana/scenes": "^5.42.0",
     "@grafana/ui": "^12.0.1",
     "@tanstack/react-table": "^8.21.3",
