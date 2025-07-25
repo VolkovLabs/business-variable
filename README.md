@@ -69,13 +69,6 @@ Opt for [Business Suite Enterprise](https://volkovlabs.io/pricing/) to access pr
 - In-person consultations
 - Access to a Business Intelligence platform
 
-## Community & Feedback
-
-We value your input! Connect with us and share your thoughts:
-
-- Report issues, request features, or ask questions on [GitHub Issues](https://github.com/volkovlabs/business-variable/issues)
-- Subscribe to our [YouTube Channel](https://youtube.com/@volkovlabs) for tutorials and updates
-
 ## License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](https://github.com/volkovlabs/business-variable/blob/main/LICENSE) file for details.
