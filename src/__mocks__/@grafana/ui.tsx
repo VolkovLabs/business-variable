@@ -118,6 +118,25 @@ const DrawerMock = ({ title, children, onClose }: any) => {
 const Drawer = jest.fn(DrawerMock);
 
 /**
+ * Icon Mock
+ *
+ */
+const IconMock = ({ name, onClick, ...restProps }: any) => {
+  return (
+    <div
+      onClick={(event) => onClick?.(event)}
+      data-testid={restProps['data-testid']}
+      className={restProps['className']}
+      aria-label={restProps['aria-label']}
+    >
+      {name}
+    </div>
+  );
+};
+
+const Icon = jest.fn(IconMock);
+
+/**
  * Set mocks
  */
 beforeEach(() => {
@@ -126,6 +145,7 @@ beforeEach(() => {
   ToolbarButtonRow.mockImplementation(ToolbarButtonRowMock);
   DatePickerWithInput.mockImplementation(DatePickerWithInputMock);
   Drawer.mockImplementation(DrawerMock);
+  Icon.mockImplementation(IconMock);
 });
 
 module.exports = {
@@ -135,4 +155,5 @@ module.exports = {
   DateTimePicker,
   DatePickerWithInput,
   Drawer,
+  Icon,
 };
