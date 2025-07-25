@@ -48,6 +48,15 @@ export enum FavoritesStorage {
 }
 
 /**
+ * Break Option
+ */
+export enum BreakOption {
+  WORD = 'break-word',
+  NORMAL = 'normal',
+  SYMBOL = 'break-all',
+}
+
+/**
  * Data Source Query
  */
 type DatasourceQuery = Record<string, unknown>;
@@ -429,7 +438,7 @@ export interface PanelOptions extends TableViewOptions {
    *
    * @type {boolean}
    */
-  isMinimizeViewShowCustomIcon: boolean
+  isMinimizeViewShowCustomIcon: boolean;
 
   /**
    * Minimize View Native Icon
@@ -451,6 +460,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   alertCustomMessage: string;
+
+  /**
+   * Word break option
+   *
+   * @type {BreakOption}
+   */
+  wordBreak: BreakOption;
 }
 
 /**
@@ -458,10 +474,10 @@ export interface PanelOptions extends TableViewOptions {
  */
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
-  ? Array<RecursivePartial<U>>
-  : T[P] extends object | undefined
-  ? RecursivePartial<T[P]>
-  : T[P];
+    ? Array<RecursivePartial<U>>
+    : T[P] extends object | undefined
+      ? RecursivePartial<T[P]>
+      : T[P];
 };
 
 /**

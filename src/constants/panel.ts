@@ -1,6 +1,6 @@
 import { SelectableValue } from '@grafana/data';
 
-import { DisplayMode, FavoritesStorage, MinimizeOutputFormat } from '../types';
+import { BreakOption, DisplayMode, FavoritesStorage, MinimizeOutputFormat } from '../types';
 
 /**
  * Display Mode Options
@@ -52,6 +52,15 @@ export const AUTO_SCROLL_OPTIONS = [
 export const TABLE_MINIMIZE_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show the table in minimized view. The tree view opens in a drawer.' },
   { value: false, label: 'Disabled', description: 'Show tree view in the panel.' },
+];
+
+/**
+ * Table Wrap Options
+ */
+export const TABLE_WRAP_OPTIONS = [
+  { value: BreakOption.WORD, label: 'Word', description: 'Break value by words.' },
+  { value: BreakOption.NORMAL, label: 'Normal', description: 'Use the default line break rule.' },
+  { value: BreakOption.SYMBOL, label: 'Symbol', description: 'Break between any two characters.' },
 ];
 
 /**
