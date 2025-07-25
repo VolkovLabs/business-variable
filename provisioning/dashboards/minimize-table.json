@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 17,
+  "id": 9,
   "links": [],
   "panels": [
     {
@@ -44,8 +44,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -68,10 +67,13 @@
       },
       "id": 3,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -86,13 +88,19 @@
         "filter": true,
         "groupSelection": false,
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -153,8 +161,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -177,10 +184,13 @@
       },
       "id": 4,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "minimize",
         "emptyValue": false,
@@ -195,13 +205,19 @@
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 20,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": true,
         "showName": false,
@@ -262,8 +278,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -286,10 +301,13 @@
       },
       "id": 5,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -304,13 +322,19 @@
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -371,8 +395,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -395,10 +418,13 @@
       },
       "id": 6,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -436,13 +462,19 @@
           }
         ],
         "header": false,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -532,8 +564,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -552,10 +583,13 @@
       },
       "id": 10,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "minimize",
         "emptyValue": false,
@@ -570,13 +604,19 @@
         "filter": false,
         "groupSelection": false,
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 20,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": true,
         "showName": false,
@@ -612,8 +652,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -636,10 +675,13 @@
       },
       "id": 7,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -690,13 +732,19 @@
           }
         ],
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": false,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -815,8 +863,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -839,10 +886,13 @@
       },
       "id": 11,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "angle-double-right",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -893,13 +943,19 @@
           }
         ],
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": true,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -998,7 +1054,7 @@
           }
         }
       ],
-      "title": "Metrics",
+      "title": "Minimize view of Metrics with custom icon",
       "type": "volkovlabs-variable-panel"
     },
     {
@@ -1049,8 +1105,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",
@@ -1157,8 +1212,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -1181,10 +1235,13 @@
       },
       "id": 12,
       "options": {
+        "alertCustomMessage": "",
         "alwaysVisibleFilter": false,
         "autoScroll": false,
         "browserTabNamePattern": "",
         "collapsedByDefault": false,
+        "columnManagerCustomIcon": "",
+        "columnManagerNativeIcon": "table",
         "customValue": false,
         "displayMode": "table",
         "emptyValue": false,
@@ -1200,13 +1257,19 @@
         "groupSelection": false,
         "groups": [],
         "header": true,
+        "isMinimizeViewShowCustomIcon": false,
         "isMinimizeForTable": true,
+        "isPinTabsEnabled": false,
         "isUseLocalTime": false,
         "minimizeOutputFormat": "text",
         "padding": 10,
         "persistent": false,
         "saveSelectedGroup": false,
         "saveSelectedGroupKey": "",
+        "selectedValues": {
+          "maxCount": 0,
+          "showSelected": false
+        },
         "showGroupTotal": false,
         "showLabel": false,
         "showName": false,
@@ -1277,8 +1340,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",
@@ -1416,8 +1478,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
-                "value": null
+                "color": "text"
               },
               {
                 "color": "#9d70f9",
@@ -1510,7 +1571,7 @@
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": [

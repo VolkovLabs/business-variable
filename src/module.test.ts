@@ -41,6 +41,7 @@ describe('plugin', () => {
     addSliderInput: jest.fn().mockImplementation(() => builder),
     addTextInput: jest.fn().mockImplementation(() => builder),
     addNumberInput: jest.fn().mockImplementation(() => builder),
+    addBooleanSwitch: jest.fn().mockImplementation(() => builder),
   };
 
   it('Should be instance of PanelPlugin', () => {
@@ -63,6 +64,7 @@ describe('plugin', () => {
     expect(builder.addSliderInput).toHaveBeenCalled();
     expect(builder.addTextInput).toHaveBeenCalled();
     expect(builder.addNumberInput).toHaveBeenCalled();
+    expect(builder.addBooleanSwitch).toHaveBeenCalled();
   });
 
   describe('Input Visibility', () => {
@@ -245,6 +247,59 @@ describe('plugin', () => {
           'favorites.deleteQuery',
         ])
       );
+    });
+
+    it('Should show isMinimizeViewShowCustomIcon when table view and minimize for table enabled', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addBooleanSwitch.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            displayMode: DisplayMode.TABLE,
+            isMinimizeForTable: true,
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['isMinimizeViewShowCustomIcon']));
+    });
+
+    it('Should show minimizeViewNativeIcon when table view, minimize for table enabled, and custom icon disabled', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addSelect.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            displayMode: DisplayMode.TABLE,
+            isMinimizeForTable: true,
+            isMinimizeViewShowCustomIcon: false,
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeViewNativeIcon']));
+    });
+
+    it('Should show minimizeViewCustomIcon when table view, minimize for table enabled, and custom icon enabled', () => {
+      const shownOptionsPaths: string[] = [];
+
+      builder.addTextInput.mockImplementation(
+        addInputImplementation(
+          createPanelOptions({
+            displayMode: DisplayMode.TABLE,
+            isMinimizeForTable: true,
+            isMinimizeViewShowCustomIcon: true,
+          }),
+          shownOptionsPaths
+        )
+      );
+      plugin['optionsSupplier'](builder);
+
+      expect(shownOptionsPaths).toEqual(expect.arrayContaining(['minimizeViewCustomIcon']));
     });
   });
 

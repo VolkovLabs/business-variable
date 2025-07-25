@@ -69,6 +69,13 @@ export const getStyles = (theme: GrafanaTheme2) => {
     openDrawerButton: css`
       margin-left: ${theme.spacing(1)};
     `,
+    openDrawerButtonCustomIcon: css`
+      width: 24px;
+      height: 24px;
+      margin: ${theme.spacing(0.5)} ${theme.spacing(1)};
+      vertical-align: middle;
+      cursor: pointer;
+    `,
     minimizeTableView: css`
       margin-top: ${theme.spacing(1)};
       margin-right: ${theme.spacing(1)};
