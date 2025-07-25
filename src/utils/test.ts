@@ -1,4 +1,11 @@
-import { DisplayMode, FavoritesConfig, FavoritesStorage, MinimizeOutputFormat, PanelOptions } from '../types';
+import {
+  BreakOption,
+  DisplayMode,
+  FavoritesConfig,
+  FavoritesStorage,
+  MinimizeOutputFormat,
+  PanelOptions,
+} from '../types';
 
 /**
  * Create Favorites Config
@@ -57,6 +64,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   minimizeViewNativeIcon: 'gf-movepane-right',
   minimizeViewCustomIcon: '',
   alertCustomMessage: '',
+  wordBreak: BreakOption.NORMAL,
   selectedValues: {
     showSelected: false,
     maxCount: 0,
