@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Updated ESLint configuration
+- Updated ESLint configuration ([#286](https://github.com/volkovlabs/business-variable/issues/286)).
 
 ## [4.0.0] - 2025-06-03
 
