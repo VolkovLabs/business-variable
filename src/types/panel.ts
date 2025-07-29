@@ -21,6 +21,16 @@ export enum MinimizeOutputFormat {
 }
 
 /**
+ * Request Latency Mode
+ */
+export enum RequestLatencyMode {
+  LOW = 'low',
+  NORMAL = 'normal',
+  HIGH = 'high',
+  UNSTABLE = 'unstable',
+}
+
+/**
  * Data Source Config
  */
 export interface DatasourceConfig {
@@ -467,6 +477,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {BreakOption}
    */
   wordBreak: BreakOption;
+
+  /**
+   * Request latency mode
+   *
+   * @type {string}
+   */
+  requestLatency: RequestLatencyMode;
 }
 
 /**

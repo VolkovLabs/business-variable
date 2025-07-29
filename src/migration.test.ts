@@ -2,7 +2,7 @@ import { getBackendSrv } from '@grafana/runtime';
 
 import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
-import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions } from './types';
+import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
 import { createFavoritesConfig } from './utils';
 
 /**
@@ -247,6 +247,7 @@ describe('Migration', () => {
           expect.objectContaining({
             displayMode: DisplayMode.MINIMIZE,
             browserTabNamePattern: '',
+            requestLatency: RequestLatencyMode.LOW,
           })
         );
       });

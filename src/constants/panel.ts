@@ -1,6 +1,6 @@
 import { SelectableValue } from '@grafana/data';
 
-import { BreakOption, DisplayMode, FavoritesStorage, MinimizeOutputFormat } from '../types';
+import { BreakOption, DisplayMode, FavoritesStorage, MinimizeOutputFormat, RequestLatencyMode } from '../types';
 
 /**
  * Display Mode Options
@@ -118,6 +118,32 @@ export const FAVORITES_STORAGE_OPTIONS = [
     label: 'Data Source',
     description: 'Saved data with the selected data source.',
     icon: 'database',
+  },
+];
+
+/**
+ * Request latency options
+ */
+export const REQUEST_LATENCY_OPTIONS = [
+  {
+    value: RequestLatencyMode.LOW,
+    label: 'Low',
+    description: 'Default latency 2.5 seconds',
+  },
+  {
+    value: RequestLatencyMode.NORMAL,
+    label: 'Normal',
+    description: 'Increased latency 10 seconds',
+  },
+  {
+    value: RequestLatencyMode.HIGH,
+    label: 'High',
+    description: 'High latency 30 seconds',
+  },
+  {
+    value: RequestLatencyMode.UNSTABLE,
+    label: 'Unstable',
+    description: 'Long-running latency 60 seconds',
   },
 ];
 

@@ -5,6 +5,7 @@ import {
   FavoritesStorage,
   MinimizeOutputFormat,
   PanelOptions,
+  RequestLatencyMode,
 } from '../types';
 
 /**
@@ -65,6 +66,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   minimizeViewCustomIcon: '',
   alertCustomMessage: '',
   wordBreak: BreakOption.NORMAL,
+  requestLatency: RequestLatencyMode.LOW,
   selectedValues: {
     showSelected: false,
     maxCount: 0,

@@ -53,7 +53,11 @@ export const useTable = ({
    * Runtime Variable
    */
   const variable = levels?.length ? levels[levels.length - 1]?.name : options.variable;
-  const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(eventBus, variable);
+  const { variable: runtimeVariable, getVariable: getRuntimeVariable } = useRuntimeVariables(
+    eventBus,
+    variable,
+    options.requestLatency
+  );
 
   /**
    * Favorites

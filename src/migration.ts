@@ -3,7 +3,7 @@ import { getBackendSrv } from '@grafana/runtime';
 import semver from 'semver';
 
 import { FAVORITES_KEY } from './constants';
-import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions } from './types';
+import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
 
 /**
  * Outdated Panel Options
@@ -146,6 +146,10 @@ export const getMigratedOptions = async (
       showSelected: false,
       maxCount: 0,
     };
+  }
+
+  if (!normalizedOptions.hasOwnProperty('requestLatency')) {
+    normalizedOptions.requestLatency = RequestLatencyMode.LOW;
   }
 
   return normalizedOptions;

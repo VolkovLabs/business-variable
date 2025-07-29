@@ -27,6 +27,7 @@ import {
   NO_VARIABLE_DEFAULT_MESSAGE,
   PERSISTENT_OPTIONS,
   PIN_TAB_OPTIONS,
+  REQUEST_LATENCY_OPTIONS,
   ROW_COUNT_OPTIONS,
   SELECTED_GROUP_OPTIONS,
   SHOW_LABEL_OPTIONS,
@@ -47,6 +48,7 @@ import {
   FavoritesStorage,
   MinimizeOutputFormat,
   PanelOptions,
+  RequestLatencyMode,
   StatusStyleMode,
   VariableType,
 } from './types';
@@ -667,6 +669,16 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           placeholder: '${variable} ${__dashboard.title}',
         },
+        category: ['Advanced'],
+      })
+      .addRadio({
+        path: 'requestLatency',
+        name: 'Set request latency to refresh dashboard variables',
+        defaultValue: RequestLatencyMode.LOW,
+        settings: {
+          options: REQUEST_LATENCY_OPTIONS,
+        },
+        showIf: (config) => showForTableView(config),
         category: ['Advanced'],
       });
 
