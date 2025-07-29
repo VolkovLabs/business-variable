@@ -4,18 +4,23 @@ All notable changes to the **Business Variable Panel** for Grafana are documente
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.1.0] - 2025-07-29
+# [4.1.0] - 2025-07-29
 
-### Added
+## Overview
 
-- Added ability to pin/unpin group filters ([#274](https://github.com/volkovlabs/business-variable/issues/274)).
-- Added the ability to select native/custom icon for the minimized variable panel ([#281](https://github.com/volkovlabs/business-variable/issues/281)).
-- Add Latency Request Option ([#283](https://github.com/volkovlabs/business-variable/issues/283)).
+This release introduces new features and enhancements to improve user experience and functionality in the Business Variable plugin. Key additions include pinning group filters, custom icons for minimized panels, and new options for latency requests and tree view. Alongside these, we've made important updates to dependencies and configurations.
 
-### Changed
+## Added
 
-- Updated useDatasourceRequest hook from packages ([#282](https://github.com/volkovlabs/business-variable/issues/282)).
-- Updated ESLint configuration ([#286](https://github.com/volkovlabs/business-variable/issues/286)).
+- **Pin/Unpin Group Filters**: Added the ability to pin or unpin group filters for better customization and usability ([#274](https://github.com/volkovlabs/business-variable/issues/274)).
+- **Custom Icons for Minimized Panels**: Introduced the option to select native or custom icons for minimized variable panels ([#281](https://github.com/volkovlabs/business-variable/issues/281)).
+- **Latency Request Option**: Added a new option to configure latency requests for improved performance tuning ([#283](https://github.com/volkovlabs/business-variable/issues/283)).
+- **Tree View Values Wrap**: Implemented wrapping options for values in Tree View to enhance readability ([#285](https://github.com/volkovlabs/business-variable/issues/285)).
+
+## Changed
+
+- **Updated `useDatasourceRequest` Hook**: Improved the `useDatasourceRequest` hook by integrating updates from related packages ([#282](https://github.com/volkovlabs/business-variable/issues/282)).
+- **Updated ESLint Configuration**: Revised ESLint settings to ensure better code quality and consistency ([#286](https://github.com/volkovlabs/business-variable/issues/286)).
 
 ## [4.0.0] - 2025-06-03
 
