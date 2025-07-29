@@ -662,11 +662,12 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'requestLatency',
-        name: 'Set request latency option',
+        name: 'Set request latency to refresh dashboard variables',
         defaultValue: RequestLatencyMode.LOW,
         settings: {
           options: REQUEST_LATENCY_OPTIONS,
         },
+        showIf: (config) => showForTableView(config),
         category: ['Advanced'],
       });
 
