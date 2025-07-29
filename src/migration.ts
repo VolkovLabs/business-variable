@@ -3,7 +3,7 @@ import { getBackendSrv } from '@grafana/runtime';
 import semver from 'semver';
 
 import { FAVORITES_KEY } from './constants';
-import { DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
+import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
 
 /**
  * Outdated Panel Options
@@ -129,6 +129,13 @@ export const getMigratedOptions = async (
    */
   if (normalizedOptions.isPinTabsEnabled === undefined) {
     normalizedOptions.isPinTabsEnabled = false;
+  }
+
+  /**
+   * Word break for table view
+   */
+  if (normalizedOptions.wordBreak === undefined) {
+    normalizedOptions.wordBreak = BreakOption.NORMAL;
   }
 
   /**

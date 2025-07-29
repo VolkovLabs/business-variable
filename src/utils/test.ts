@@ -1,4 +1,5 @@
 import {
+  BreakOption,
   DisplayMode,
   FavoritesConfig,
   FavoritesStorage,
@@ -64,6 +65,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   minimizeViewNativeIcon: 'gf-movepane-right',
   minimizeViewCustomIcon: '',
   alertCustomMessage: '',
+  wordBreak: BreakOption.NORMAL,
   requestLatency: RequestLatencyMode.LOW,
   selectedValues: {
     showSelected: false,

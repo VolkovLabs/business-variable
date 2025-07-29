@@ -2,7 +2,7 @@ import { getBackendSrv } from '@grafana/runtime';
 
 import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
-import { DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
+import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
 import { createFavoritesConfig } from './utils';
 
 /**
@@ -339,6 +339,46 @@ describe('Migration', () => {
             showSelected: true,
             maxCount: 1,
           },
+        })
+      );
+    });
+  });
+
+  describe('v4.1.0', () => {
+    it('Should update wordBreak options if not specified', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        wordBreak: undefined,
+      };
+
+      expect(
+        await getMigratedOptions({
+          pluginVersion: '3.3.0',
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          wordBreak: BreakOption.NORMAL,
+        })
+      );
+    });
+
+    it('Should not update wordBreak options if specified', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        wordBreak: BreakOption.SYMBOL,
+      };
+
+      expect(
+        await getMigratedOptions({
+          pluginVersion: '3.3.0',
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          wordBreak: BreakOption.SYMBOL,
         })
       );
     });

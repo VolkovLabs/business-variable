@@ -4,6 +4,7 @@ import {
   Alert,
   ClickOutsideWrapper,
   Drawer,
+  Icon,
   IconButton,
   ToolbarButton,
   ToolbarButtonRow,
@@ -307,7 +308,7 @@ export const TableView: React.FC<Props> = ({
                   <span className={styles.tabContent}>
                     <span className={styles.tabText}>{group.name}</span>
                     {options.isPinTabsEnabled && (
-                      <IconButton
+                      <Icon
                         name="gf-pin"
                         size="sm"
                         onClick={(e) => {
@@ -317,7 +318,7 @@ export const TableView: React.FC<Props> = ({
                         className={cx(styles.pinButton, {
                           [styles.pinButtonActive]: isPinned,
                         })}
-                        tooltip={isPinned ? 'Unpin tab' : 'Pin tab'}
+                        title={isPinned ? 'Unpin tab' : 'Pin tab'}
                         data-testid={TEST_IDS.tableView.pinButton(group.name)}
                         aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
                       />

@@ -37,11 +37,13 @@ import {
   STATUS_SORT_OPTIONS,
   STICKY_OPTIONS,
   TABLE_MINIMIZE_OPTIONS,
+  TABLE_WRAP_OPTIONS,
   TABS_ORDER_OPTIONS,
   TIME_TRANSFORMATION_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
 import {
+  BreakOption,
   DisplayMode,
   FavoritesStorage,
   MinimizeOutputFormat,
@@ -287,6 +289,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: TABLE_MINIMIZE_OPTIONS,
         },
         defaultValue: false,
+        showIf: showForTableView,
+      })
+      .addRadio({
+        path: 'wordBreak',
+        name: 'Word wrap for values',
+        settings: {
+          options: TABLE_WRAP_OPTIONS,
+        },
+        defaultValue: BreakOption.NORMAL,
         showIf: showForTableView,
       })
       .addBooleanSwitch({

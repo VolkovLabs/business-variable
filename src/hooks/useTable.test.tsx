@@ -1298,6 +1298,87 @@ describe('Use Table Hook', () => {
       expect(screen.queryByTestId(TEST_IDS.table.cell('device2', 1))).not.toBeInTheDocument();
     });
 
+    it('Should display normal word break if not specified', () => {
+      const variable = createRuntimeVariableMock({
+        multi: true,
+        includeAll: true,
+        type: VariableType.CUSTOM,
+        options: [
+          {
+            text: ALL_VALUE,
+            value: ALL_VALUE_PARAMETER,
+            selected: false,
+          },
+          {
+            text: 'device1',
+            value: 'device1',
+            selected: true,
+          },
+        ],
+      } as any);
+      jest.mocked(useRuntimeVariables).mockImplementation(
+        () =>
+          ({
+            variable,
+            getVariable: jest.fn(() => variable),
+          }) as any
+      );
+      const dataFrame = toDataFrame({
+        fields: [
+          {
+            name: 'country',
+            values: ['USA', 'Japan'],
+          },
+          {
+            name: 'device',
+            values: ['device1', 'device2'],
+          },
+        ],
+        refId: 'A',
+      });
+
+      /**
+       * Use Table
+       */
+      const { result } = renderHook(() =>
+        useTable({
+          data: { series: [dataFrame] } as any,
+          options: createPanelOptions({
+            wordBreak: undefined,
+            favorites: createFavoritesConfig({
+              enabled: true,
+            }),
+          }),
+          eventBus: null as any,
+          levels: [
+            { name: 'country', source: 'A' },
+            { name: 'device', source: 'A' },
+          ],
+          panelEventBus: null as any,
+          replaceVariables: jest.fn(),
+        })
+      );
+
+      /**
+       * Render rows
+       */
+      render(
+        <Rows data={result.current.tableData} columns={result.current.columns} getSubRows={result.current.getSubRows} />
+      );
+
+      /**
+       * Check if country row is not selectable
+       */
+      const usaRow = screen.getByTestId(TEST_IDS.table.cell('USA', 0));
+      expect(usaRow).toBeInTheDocument();
+      expect(within(usaRow).queryByTestId(TEST_IDS.table.control)).not.toBeInTheDocument();
+
+      const labels = screen.getAllByTestId(TEST_IDS.table.label);
+      const span = labels[0].querySelector('span');
+      expect(span?.textContent).toBe('USA');
+      expect(span).toHaveStyle('word-break: normal');
+    });
+
     it('Should show variable names', () => {
       const deviceVariable = createRuntimeVariableMock({
         multi: true,

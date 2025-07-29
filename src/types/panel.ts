@@ -58,6 +58,15 @@ export enum FavoritesStorage {
 }
 
 /**
+ * Break Option
+ */
+export enum BreakOption {
+  WORD = 'break-word',
+  NORMAL = 'normal',
+  SYMBOL = 'break-all',
+}
+
+/**
  * Data Source Query
  */
 type DatasourceQuery = Record<string, unknown>;
@@ -461,6 +470,13 @@ export interface PanelOptions extends TableViewOptions {
    * @type {string}
    */
   alertCustomMessage: string;
+
+  /**
+   * Word break option
+   *
+   * @type {BreakOption}
+   */
+  wordBreak: BreakOption;
 
   /**
    * Request latency mode

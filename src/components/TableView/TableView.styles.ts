@@ -118,7 +118,8 @@ export const getStyles = (theme: GrafanaTheme2) => {
 
       &:hover {
         opacity: 1;
-        color: ${theme.colors.text.primary};
+        color: ${theme.colors.text.link};
+        background: ${theme.colors.border.weak};
       }
 
       &:focus-visible {

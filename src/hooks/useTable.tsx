@@ -482,6 +482,7 @@ export const useTable = ({
                   )}
                   <span
                     style={{
+                      wordBreak: options.wordBreak ?? 'normal',
                       fontWeight: row.original.selected
                         ? theme.typography.fontWeightBold
                         : theme.typography.fontWeightRegular,
@@ -575,6 +576,7 @@ export const useTable = ({
     options.showTotal,
     options.groupSelection,
     options.showGroupTotal,
+    options.wordBreak,
     options.showName,
     styles.selectControl,
     styles.expandButton,
