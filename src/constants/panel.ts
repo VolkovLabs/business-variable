@@ -119,19 +119,22 @@ export const REQUEST_LATENCY_OPTIONS = [
   {
     value: RequestLatencyMode.LOW,
     label: 'Low',
-    description: 'Default latency',
+    description: 'Default latency 2.5 seconds',
   },
   {
     value: RequestLatencyMode.NORMAL,
     label: 'Normal',
+    description: 'Increased latency 10 seconds',
   },
   {
     value: RequestLatencyMode.HIGH,
     label: 'High',
+    description: 'High latency 30 seconds',
   },
   {
     value: RequestLatencyMode.UNSTABLE,
     label: 'Unstable',
+    description: 'Long-running latency 60 seconds',
   },
 ];
 

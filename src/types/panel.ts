@@ -21,7 +21,7 @@ export enum MinimizeOutputFormat {
 }
 
 /**
- * Minimize Display Mode
+ * Request Latency Mode
  */
 export enum RequestLatencyMode {
   LOW = 'low',
@@ -439,7 +439,7 @@ export interface PanelOptions extends TableViewOptions {
    *
    * @type {boolean}
    */
-  isMinimizeViewShowCustomIcon: boolean
+  isMinimizeViewShowCustomIcon: boolean;
 
   /**
    * Minimize View Native Icon
