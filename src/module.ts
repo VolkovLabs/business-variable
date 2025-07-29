@@ -293,7 +293,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
       })
       .addRadio({
         path: 'wordBreak',
-        name: 'Wrap',
+        name: 'Word wrap for values',
         settings: {
           options: TABLE_WRAP_OPTIONS,
         },
