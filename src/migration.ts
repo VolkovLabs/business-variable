@@ -132,7 +132,7 @@ export const getMigratedOptions = async (
   }
 
   /**
-   * Minimize view for table view
+   * Word break for table view
    */
   if (normalizedOptions.wordBreak === undefined) {
     normalizedOptions.wordBreak = BreakOption.NORMAL;
