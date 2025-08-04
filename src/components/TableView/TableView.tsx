@@ -284,12 +284,21 @@ export const TableView: React.FC<Props> = ({
   }, [currentGroupNoDataMessage, options.alertCustomMessage, runtimeVariable, tableData.length]);
 
   /**
+   * Key use for correct rerender row when tabs is changed in live
+   */
+  const toolbarRowKey = useMemo(() => {
+    const groupNames = sortedGroups.map((srtGroup) => srtGroup.name).join();
+    const key = currentGroup + groupNames;
+    return key;
+  }, [currentGroup, sortedGroups]);
+
+  /**
    * Table toolbar
    */
   const renderTableToolbar = () => {
     return (
       <div ref={headerRef} className={styles.header}>
-        <ToolbarButtonRow alignment="left" key={currentGroup} className={styles.toolbar}>
+        <ToolbarButtonRow alignment="left" key={toolbarRowKey} className={styles.toolbar}>
           {sortedGroups.map((group) => {
             const isPinned = safePinnedGroups.includes(group.name);
             const isActive = currentGroup === group.name;
