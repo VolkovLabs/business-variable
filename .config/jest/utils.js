@@ -26,6 +26,7 @@ const grafanaESModules = [
   'marked',
   'mimic-function',
   'get-user-locale',
+  'react-calendar',
   'memoize',
   '@wojtekmaj',
 ];
