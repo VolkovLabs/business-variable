@@ -23,6 +23,11 @@ const grafanaESModules = [
   'react-colorful',
   'rxjs',
   'uuid',
+  'marked',
+  'mimic-function',
+  'get-user-locale',
+  'memoize',
+  '@wojtekmaj',
 ];
 
 module.exports = {
