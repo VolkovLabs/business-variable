@@ -60,15 +60,6 @@ The Business Variable panel is a component of the **Business Suite**, a set of o
 
 [![Explore the Business Suite](https://raw.githubusercontent.com/VolkovLabs/.github/main/business.png)](https://volkovlabs.io/plugins/)
 
-### Enterprise Support
-
-Opt for [Business Suite Enterprise](https://volkovlabs.io/pricing/) to access premium support:
-
-- Dedicated support via Zendesk
-- Priority handling for feature requests and bug fixes
-- In-person consultations
-- Access to a Business Intelligence platform
-
 ## License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](https://github.com/volkovlabs/business-variable/blob/main/LICENSE) file for details.
