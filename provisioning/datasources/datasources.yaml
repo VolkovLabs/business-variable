@@ -20,6 +20,7 @@ datasources:
     url: timescale:5432
     user: postgres
     jsonData:
+      database: postgres
       postgresVersion: 1200
       sslmode: disable
     secureJsonData:
