@@ -81,7 +81,6 @@ export const TEST_IDS = {
   },
   optionsVariable: {
     root: 'options-variable',
-    option: (name: string) => `options-variable option-${name}`,
   },
   textVariable: {
     root: 'data-testid text-variable',
