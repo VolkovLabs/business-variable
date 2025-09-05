@@ -67,6 +67,16 @@ export enum BreakOption {
 }
 
 /**
+ * Table View Position
+ */
+export enum TableViewPosition {
+  NORMAL = 'normal',
+  STICKY = 'sticky',
+  DOCKED = 'docked',
+  MINIMIZE = 'minimize',
+}
+
+/**
  * Data Source Query
  */
 type DatasourceQuery = Record<string, unknown>;
@@ -219,6 +229,14 @@ export interface TableViewOptions {
    * @type {boolean}
    */
   sticky: boolean;
+
+  /**
+   * Table view position
+   * new feature instead sticky position
+   *
+   * @type {TableViewPosition}
+   */
+  tableViewPosition: TableViewPosition;
 
   /**
    * Values Filter

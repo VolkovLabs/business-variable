@@ -1,23 +1,16 @@
 import { css, cx } from '@emotion/css';
 import { EventBus, PanelProps } from '@grafana/data';
-import {
-  Alert,
-  ClickOutsideWrapper,
-  Drawer,
-  Icon,
-  IconButton,
-  ToolbarButton,
-  ToolbarButtonRow,
-  useTheme2,
-} from '@grafana/ui';
+import { ClickOutsideWrapper, Drawer, Icon, Tooltip, useTheme2 } from '@grafana/ui';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import ReactDOM from 'react-dom';
 
-import { NO_VARIABLE_DEFAULT_MESSAGE, TEST_IDS } from '../../constants';
-import { useContentPosition, useContentSizes, useSavedState, useTable } from '../../hooks';
-import { PanelOptions, VariableType } from '../../types';
-import { OptionsVariable } from '../OptionsVariable';
+import { TEST_IDS } from '../../constants';
+import { useContentPosition, useContentSizes, useDockMenuPosition, useSavedState, useTable } from '../../hooks';
+import { PanelOptions, TableViewPosition } from '../../types';
+import { prepareSafePinnedGroups, prepareSortedGroups, prepareTableSizes } from '../../utils';
 import { Table } from '../Table';
-import { DrawerTable } from './components';
+import { DrawerTable, TableErrorMessage, TableMinimizeView, TableToolbar, ToggleDockMenuButtons } from './components';
 import { getStyles } from './TableView.styles';
 
 /**
@@ -48,6 +41,11 @@ export const TableView: React.FC<Props> = ({
    */
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const { dockedMenuSize, dockMenuToggle, isDockMenuDisplay, dockMenuPosition, buttonTogglePosition, forceRerender } =
+    useDockMenuPosition({
+      position: options.tableViewPosition,
+    });
+
   /**
    * Current group
    */
@@ -71,16 +69,7 @@ export const TableView: React.FC<Props> = ({
    * Safe pinned groups
    */
   const safePinnedGroups = useMemo(() => {
-    if (!options.isPinTabsEnabled) {
-      return [];
-    }
-    if (Array.isArray(pinnedGroups)) {
-      return pinnedGroups;
-    }
-    if (pinnedGroups && typeof pinnedGroups === 'object') {
-      return Object.values(pinnedGroups).filter((value) => typeof value === 'string') as string[];
-    }
-    return [];
+    return prepareSafePinnedGroups(pinnedGroups, options.isPinTabsEnabled);
   }, [pinnedGroups, options.isPinTabsEnabled]);
 
   /**
@@ -92,19 +81,6 @@ export const TableView: React.FC<Props> = ({
     }
     return;
   }, [options.groups, currentGroup]);
-
-  /**
-   * Error message for current group
-   */
-  const currentGroupNoDataMessage = useMemo(() => {
-    if (options.groups?.length && currentGroup) {
-      const groupMessage = options.groups.find((group) => group.name === currentGroup)?.noDataCustomMessage;
-
-      return groupMessage || '';
-    }
-
-    return '';
-  }, [currentGroup, options.groups]);
 
   /**
    * Validate current group
@@ -129,31 +105,6 @@ export const TableView: React.FC<Props> = ({
   }, [options.groups, safePinnedGroups, setPinnedGroups, pinnedLoaded, pinnedGroups]);
 
   /**
-   * Toggle pin status for a group
-   * If group is already pinned - remove it from pinned list
-   * If group is not pinned - add it to the end of pinned list
-   * @param groupName - Name of the group to pin/unpin
-   */
-  const togglePinGroup = useCallback(
-    (groupName: string) => {
-      setPinnedGroups((previousPinnedGroups) => {
-        const currentPinned = Array.isArray(previousPinnedGroups)
-          ? previousPinnedGroups
-          : typeof previousPinnedGroups === 'object' && previousPinnedGroups !== null
-            ? (Object.values(previousPinnedGroups).filter((value) => typeof value === 'string') as string[])
-            : [];
-
-        if (currentPinned.includes(groupName)) {
-          return currentPinned.filter((name) => name !== groupName);
-        } else {
-          return [...currentPinned, groupName];
-        }
-      });
-    },
-    [setPinnedGroups]
-  );
-
-  /**
    * Table config
    */
   const { tableData, columns, getSubRows, runtimeVariable } = useTable({
@@ -164,6 +115,14 @@ export const TableView: React.FC<Props> = ({
     panelEventBus,
     replaceVariables,
   });
+
+  const treeViewContainerSizes = useMemo(() => {
+    return prepareTableSizes({
+      tableViewPosition: options.tableViewPosition,
+      dockedMenuSizes: dockedMenuSize,
+      panelSizes: { width, height },
+    });
+  }, [dockedMenuSize, height, options.tableViewPosition, width]);
 
   /**
    * Content Sizes
@@ -180,9 +139,9 @@ export const TableView: React.FC<Props> = ({
    * Sticky position
    */
   const { containerRef, style } = useContentPosition({
-    width,
-    height,
-    sticky: options.sticky,
+    width: treeViewContainerSizes.width,
+    height: treeViewContainerSizes.height,
+    sticky: options.tableViewPosition === TableViewPosition.STICKY,
     scrollableContainerRef,
     eventBus,
   });
@@ -209,43 +168,15 @@ export const TableView: React.FC<Props> = ({
    * If tabsInOrder is enabled, active group is shown after pinned groups
    */
   const sortedGroups = useMemo(() => {
-    if (!options.groups) {
-      return [];
-    }
-    if (!options.isPinTabsEnabled) {
-      return options.groups;
-    }
-    if (!pinnedLoaded) {
-      return options.groups;
-    }
-
-    const all = [...options.groups];
-
-    const pinnedGroups = safePinnedGroups
-      .map((pinnedName) => all.find((group) => group.name === pinnedName))
-      .filter(Boolean) as typeof all;
-
-    if (options.tabsInOrder) {
-      const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name));
-      return [...pinnedGroups, ...unpinnedGroups];
-    }
-
-    const activeGroup = all.find((group) => group.name === currentGroup);
-
-    const isActiveGroupPinned = activeGroup && safePinnedGroups.includes(activeGroup.name);
-
-    const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name) && group.name !== currentGroup);
-
-    const result = [...pinnedGroups];
-
-    if (activeGroup && !isActiveGroupPinned) {
-      result.push(activeGroup);
-    }
-
-    result.push(...unpinnedGroups);
-
-    return result;
-  }, [options.groups, safePinnedGroups, pinnedLoaded, currentGroup, options.tabsInOrder, options.isPinTabsEnabled]);
+    return prepareSortedGroups({
+      groups: options.groups,
+      isPinTabsEnabled: options.isPinTabsEnabled,
+      pinnedLoaded: pinnedLoaded,
+      safePinnedGroups: safePinnedGroups,
+      tabsInOrder: options.tabsInOrder,
+      currentGroup: currentGroup,
+    });
+  }, [currentGroup, options.groups, options.isPinTabsEnabled, options.tabsInOrder, pinnedLoaded, safePinnedGroups]);
 
   /**
    * On after scroll
@@ -258,86 +189,76 @@ export const TableView: React.FC<Props> = ({
    * Error alert message
    */
   const errorMessage = useMemo(() => {
-    /**
-     * Check variable
-     */
-    if (!runtimeVariable) {
-      return (
-        <Alert data-testid={TEST_IDS.tableView.infoMessage} severity="info" title="Variable">
-          {options.alertCustomMessage || NO_VARIABLE_DEFAULT_MESSAGE}
-        </Alert>
-      );
-    }
-
-    /**
-     * Check table data
-     */
-    if (!tableData.length) {
-      return (
-        <Alert data-testid={TEST_IDS.tableView.noDataMessage} severity="info" title="Variable">
-          {currentGroupNoDataMessage || `The table currently contains no data to display.`}
-        </Alert>
-      );
-    }
-
-    return <></>;
-  }, [currentGroupNoDataMessage, options.alertCustomMessage, runtimeVariable, tableData.length]);
-
-  /**
-   * Key use for correct rerender row when tabs is changed in live
-   */
-  const toolbarRowKey = useMemo(() => {
-    const groupNames = sortedGroups.map((srtGroup) => srtGroup.name).join();
-    const key = currentGroup + groupNames;
-    return key;
-  }, [currentGroup, sortedGroups]);
-
-  /**
-   * Table toolbar
-   */
-  const renderTableToolbar = () => {
     return (
-      <div ref={headerRef} className={styles.header}>
-        <ToolbarButtonRow alignment="left" key={toolbarRowKey} className={styles.toolbar}>
-          {sortedGroups.map((group) => {
-            const isPinned = safePinnedGroups.includes(group.name);
-            const isActive = currentGroup === group.name;
+      <TableErrorMessage
+        runtimeVariable={runtimeVariable}
+        options={options}
+        tableData={tableData}
+        currentGroup={currentGroup}
+      />
+    );
+  }, [currentGroup, options, runtimeVariable, tableData]);
 
-            return (
-              <div key={group.name} className={styles.tabWithPin}>
-                <ToolbarButton
-                  variant={isActive ? 'active' : 'default'}
-                  onClick={() => {
-                    setCurrentGroup(group.name);
-                    shouldScroll.current = true;
-                  }}
-                  data-testid={TEST_IDS.tableView.tab(group.name)}
-                  className={cx(styles.toolbarButton)}
-                >
-                  <span className={styles.tabContent}>
-                    <span className={styles.tabText}>{group.name}</span>
-                    {options.isPinTabsEnabled && (
-                      <Icon
-                        name="gf-pin"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          togglePinGroup(group.name);
-                        }}
-                        className={cx(styles.pinButton, {
-                          [styles.pinButtonActive]: isPinned,
-                        })}
-                        title={isPinned ? 'Unpin tab' : 'Pin tab'}
-                        data-testid={TEST_IDS.tableView.pinButton(group.name)}
-                        aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
-                      />
-                    )}
-                  </span>
-                </ToolbarButton>
-              </div>
-            );
-          })}
-        </ToolbarButtonRow>
+  const renderToolbar = useMemo(() => {
+    return (
+      <TableToolbar
+        options={options}
+        headerRef={headerRef}
+        sortedGroups={sortedGroups}
+        currentGroup={currentGroup}
+        safePinnedGroups={safePinnedGroups}
+        setCurrentGroup={setCurrentGroup}
+        shouldScroll={shouldScroll}
+        setPinnedGroups={setPinnedGroups}
+      />
+    );
+  }, [currentGroup, headerRef, options, safePinnedGroups, setCurrentGroup, setPinnedGroups, sortedGroups]);
+
+  const renderMainTableContent = () => {
+    return (
+      <div
+        data-testid={TEST_IDS.tableView.root}
+        className={cx(
+          styles.wrapper,
+          css`
+            width: ${treeViewContainerSizes.width}px;
+            height: ${treeViewContainerSizes.height}px;
+          `
+        )}
+        ref={containerRef}
+        onMouseDown={() => {
+          isFocused.current = true;
+        }}
+      >
+        {errorMessage}
+        <div
+          style={style}
+          className={styles.content}
+          ref={scrollableContainerRef}
+          data-testid={TEST_IDS.tableView.content}
+        >
+          {sortedGroups.length > 1 && renderToolbar}
+          <Table
+            forceRerender={forceRerender}
+            key={currentGroup}
+            tableViewPosition={options.tableViewPosition}
+            columns={columns}
+            data={tableData}
+            getSubRows={getSubRows}
+            showHeader={options.header}
+            tableRef={tableRef}
+            tableHeaderRef={tableHeaderRef}
+            topOffset={tableTopOffset}
+            scrollableContainerRef={scrollableContainerRef}
+            alwaysVisibleFilter={options.alwaysVisibleFilter}
+            isFocused={isFocused}
+            autoScroll={options.autoScroll}
+            shouldScroll={shouldScroll}
+            onAfterScroll={onAfterScroll}
+            collapsedByDefault={options.collapsedByDefault}
+            eventBus={panelEventBus}
+          />
+        </div>
       </div>
     );
   };
@@ -354,91 +275,39 @@ export const TableView: React.FC<Props> = ({
       }}
       useCapture={true}
     >
-      <div
-        data-testid={TEST_IDS.tableView.root}
-        className={cx(
-          styles.wrapper,
-          css`
-            width: ${width}px;
-            height: ${height}px;
-          `
+      {options.tableViewPosition === TableViewPosition.MINIMIZE && (
+        <TableMinimizeView
+          runtimeVariable={runtimeVariable}
+          options={options}
+          setIsDrawerOpen={setIsDrawerOpen}
+          panelEventBus={panelEventBus}
+        />
+      )}
+      {(options.tableViewPosition === TableViewPosition.NORMAL ||
+        options.tableViewPosition === TableViewPosition.STICKY) &&
+        renderMainTableContent()}
+      {options.tableViewPosition === TableViewPosition.DOCKED &&
+        dockMenuPosition.current &&
+        ReactDOM.createPortal(renderMainTableContent(), dockMenuPosition.current)}
+
+      {options.tableViewPosition === TableViewPosition.DOCKED &&
+        buttonTogglePosition.current &&
+        ReactDOM.createPortal(
+          <ToggleDockMenuButtons isDockMenuDisplay={isDockMenuDisplay} dockMenuToggle={dockMenuToggle} />,
+          buttonTogglePosition.current
         )}
-        ref={containerRef}
-        onMouseDown={() => {
-          isFocused.current = true;
-        }}
-      >
-        {errorMessage}
-        {options.isMinimizeForTable &&
-          !!runtimeVariable &&
-          (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (
-            <div className={styles.minimizeTableView}>
-              {!options.isMinimizeViewShowCustomIcon && (
-                <IconButton
-                  className={styles.openDrawerButton}
-                  name={options.minimizeViewNativeIcon}
-                  aria-label="Open tree view"
-                  onClick={() => setIsDrawerOpen(true)}
-                  size="xl"
-                  data-testid={TEST_IDS.tableView.buttonOpenDrawer}
-                />
-              )}
-
-              {options.isMinimizeViewShowCustomIcon &&
-                options.minimizeViewCustomIcon &&
-                !!options.minimizeViewCustomIcon.length && (
-                  <img
-                    src={options.minimizeViewCustomIcon}
-                    alt="Open tree view"
-                    className={styles.openDrawerButtonCustomIcon}
-                    onClick={() => setIsDrawerOpen(true)}
-                    data-testid={TEST_IDS.tableView.buttonOpenDrawerCustomIcon}
-                  />
-                )}
-
-              <OptionsVariable
-                variable={runtimeVariable}
-                emptyValue={false}
-                persistent={false}
-                customValue={false}
-                panelEventBus={panelEventBus}
-                maxVisibleValues={2}
-              />
-            </div>
-          )}
-        {!options.isMinimizeForTable && (
-          <div
-            style={style}
-            className={styles.content}
-            ref={scrollableContainerRef}
-            data-testid={TEST_IDS.tableView.content}
-          >
-            {sortedGroups.length > 1 && renderTableToolbar()}
-            <Table
-              key={currentGroup}
-              columns={columns}
-              data={tableData}
-              getSubRows={getSubRows}
-              showHeader={options.header}
-              tableRef={tableRef}
-              tableHeaderRef={tableHeaderRef}
-              topOffset={tableTopOffset}
-              scrollableContainerRef={scrollableContainerRef}
-              alwaysVisibleFilter={options.alwaysVisibleFilter}
-              isFocused={isFocused}
-              autoScroll={options.autoScroll}
-              shouldScroll={shouldScroll}
-              onAfterScroll={onAfterScroll}
-              collapsedByDefault={options.collapsedByDefault}
-              eventBus={panelEventBus}
-            />
-          </div>
-        )}
-      </div>
-
+      {options.tableViewPosition === TableViewPosition.DOCKED && (
+        <div style={{ marginLeft: '8px' }} {...TEST_IDS.tableView.dockedIcon.apply()}>
+          <Tooltip content={<span>The tree view is displayed in the docked menu.</span>}>
+            <Icon name="exclamation-triangle" size="md" />
+          </Tooltip>
+        </div>
+      )}
       {isDrawerOpen && (
-        <Drawer title={sortedGroups.length > 1 && <>{renderTableToolbar()}</>} onClose={() => setIsDrawerOpen(false)}>
+        <Drawer title={sortedGroups.length > 1 && <>{renderToolbar}</>} onClose={() => setIsDrawerOpen(false)}>
           <DrawerTable
+            forceRerender={forceRerender}
+            tableViewPosition={options.tableViewPosition}
             currentGroup={currentGroup}
             columns={columns}
             tableData={tableData}

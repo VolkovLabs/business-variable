@@ -1,11 +1,15 @@
 import { addRow, DataFrame, FieldType, toDataFrame } from '@grafana/data';
 
-import { StatusStyleMode, TableItem } from '../types';
+import { LevelsGroup, StatusStyleMode, TableItem, TableViewPosition } from '../types';
 import {
   convertTreeToPlain,
   favoriteFilter,
   getFirstSelectedRowIndex,
   getRows,
+  preparedPinnedGroups,
+  prepareSafePinnedGroups,
+  prepareSortedGroups,
+  prepareTableSizes,
   selectedFilters,
   statusSort,
   valueFilter,
@@ -980,6 +984,198 @@ describe('Table Utils', () => {
           },
         ] as any)
       ).toEqual(2);
+    });
+  });
+
+  describe('prepareTableSizes', () => {
+    const dockedMenuSizes = { width: 300, height: 200 };
+    const panelSizes = { width: 800, height: 600 };
+
+    it('Should return dockedMenuSizes with adjusted height when position is DOCKED', () => {
+      const result = prepareTableSizes({
+        tableViewPosition: TableViewPosition.DOCKED,
+        dockedMenuSizes,
+        panelSizes,
+      });
+
+      expect(result).toEqual({
+        width: 300,
+        height: 190, // 200 - 10
+      });
+    });
+
+    it.each([TableViewPosition.NORMAL, TableViewPosition.STICKY, TableViewPosition.MINIMIZE])(
+      'Should return panelSizes when position is %s',
+      (position) => {
+        const result = prepareTableSizes({
+          tableViewPosition: position,
+          dockedMenuSizes,
+          panelSizes,
+        });
+
+        expect(result).toEqual({
+          width: 800,
+          height: 600,
+        });
+      }
+    );
+  });
+
+  describe('PreparedPinnedGroups', () => {
+    it('Should add groupName when not present in array', () => {
+      const result = preparedPinnedGroups(['a', 'b'], 'c');
+      expect(result).toEqual(['a', 'b', 'c']);
+    });
+
+    it('Should remove groupName when already present in array', () => {
+      const result = preparedPinnedGroups(['a', 'b', 'c'], 'b');
+      expect(result).toEqual(['a', 'c']);
+    });
+
+    it('Should work with object: add new groupName', () => {
+      const result = preparedPinnedGroups({ one: 'a', two: 'b' } as any, 'c');
+      expect(result).toEqual(['a', 'b', 'c']);
+    });
+
+    it('Should work with object: remove existing groupName', () => {
+      const result = preparedPinnedGroups({ one: 'a', two: 'b' } as any, 'a');
+      expect(result).toEqual(['b']);
+    });
+
+    it('Should return only groupName when previousPinnedGroups is invalid', () => {
+      const result = preparedPinnedGroups(null as any, 'x');
+      expect(result).toEqual(['x']);
+    });
+
+    it('Should ignore non-string values in object', () => {
+      const result = preparedPinnedGroups({ one: 'a', two: 123, three: null } as any, 'b');
+      expect(result).toEqual(['a', 'b']);
+    });
+  });
+
+  describe('prepareSortedGroups', () => {
+    const makeGroup = (name: string): LevelsGroup => ({
+      name,
+      items: [],
+    });
+
+    const groups = [makeGroup('A'), makeGroup('B'), makeGroup('C')];
+
+    it('Should return [] when groups is undefined', () => {
+      const result = prepareSortedGroups({
+        groups: undefined as any,
+        isPinTabsEnabled: true,
+        pinnedLoaded: true,
+        safePinnedGroups: [],
+        tabsInOrder: true,
+        currentGroup: 'A',
+      });
+      expect(result).toEqual([]);
+    });
+
+    it('Should return groups when isPinTabsEnabled = false', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: false,
+        pinnedLoaded: true,
+        safePinnedGroups: ['A'],
+        tabsInOrder: true,
+        currentGroup: 'A',
+      });
+      expect(result).toEqual(groups);
+    });
+
+    it('Should return groups when pinnedLoaded = false', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: true,
+        pinnedLoaded: false,
+        safePinnedGroups: ['A'],
+        tabsInOrder: true,
+        currentGroup: 'A',
+      });
+      expect(result).toEqual(groups);
+    });
+
+    it('Should put pinned groups first when tabsInOrder = true', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: true,
+        pinnedLoaded: true,
+        safePinnedGroups: ['C'],
+        tabsInOrder: true,
+        currentGroup: 'B',
+      });
+      expect(result.map((g: { name: any }) => g.name)).toEqual(['C', 'A', 'B']);
+    });
+
+    it('Should include currentGroup if not pinned when tabsInOrder = false', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: true,
+        pinnedLoaded: true,
+        safePinnedGroups: ['A'],
+        tabsInOrder: false,
+        currentGroup: 'C',
+      });
+      expect(result.map((g: { name: any }) => g.name)).toEqual(['A', 'C', 'B']);
+    });
+
+    it('Should not duplicate currentGroup if already pinned', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: true,
+        pinnedLoaded: true,
+        safePinnedGroups: ['B'],
+        tabsInOrder: false,
+        currentGroup: 'B',
+      });
+      expect(result.map((g: { name: any }) => g.name)).toEqual(['B', 'A', 'C']);
+    });
+
+    it('Should handle empty safePinnedGroups', () => {
+      const result = prepareSortedGroups({
+        groups,
+        isPinTabsEnabled: true,
+        pinnedLoaded: true,
+        safePinnedGroups: [],
+        tabsInOrder: false,
+        currentGroup: 'A',
+      });
+      expect(result.map((g: { name: any }) => g.name)).toEqual(['A', 'B', 'C']);
+    });
+  });
+
+  describe('prepareSafePinnedGroups', () => {
+    it('Should return [] when isPinTabsEnabled = false', () => {
+      expect(prepareSafePinnedGroups(['a', 'b'], false)).toEqual([]);
+    });
+
+    it('Should return pinnedGroups array when provided and isPinTabsEnabled = true', () => {
+      expect(prepareSafePinnedGroups(['a', 'b'], true)).toEqual(['a', 'b']);
+    });
+
+    it('Should extract string values from object', () => {
+      const result = prepareSafePinnedGroups({ one: 'a', two: 'b' } as any, true);
+      expect(result).toEqual(['a', 'b']);
+    });
+
+    it('Should ignore non-string values from object', () => {
+      const result = prepareSafePinnedGroups({ one: 'a', two: 123, three: null } as any, true);
+      expect(result).toEqual(['a']);
+    });
+
+    it('Should return [] when pinnedGroups is null', () => {
+      expect(prepareSafePinnedGroups(null as any, true)).toEqual([]);
+    });
+
+    it('Should return [] when pinnedGroups is a primitive', () => {
+      expect(prepareSafePinnedGroups(123 as any, true)).toEqual([]);
+      expect(prepareSafePinnedGroups('test' as any, true)).toEqual([]);
+    });
+
+    it('Should return [] when pinnedGroups is undefined', () => {
+      expect(prepareSafePinnedGroups(undefined as any, true)).toEqual([]);
     });
   });
 });

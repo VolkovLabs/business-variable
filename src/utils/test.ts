@@ -6,6 +6,7 @@ import {
   MinimizeOutputFormat,
   PanelOptions,
   RequestLatencyMode,
+  TableViewPosition,
 } from '../types';
 
 /**
@@ -67,6 +68,7 @@ export const createPanelOptions = (options: Partial<PanelOptions> = {}): PanelOp
   alertCustomMessage: '',
   wordBreak: BreakOption.NORMAL,
   requestLatency: RequestLatencyMode.LOW,
+  tableViewPosition: TableViewPosition.NORMAL,
   selectedValues: {
     showSelected: false,
     maxCount: 0,

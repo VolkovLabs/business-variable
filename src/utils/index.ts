@@ -1,4 +1,7 @@
+export * from './dock-menu';
+export * from './dom-utils';
 export * from './editor';
+export * from './event-utils';
 export * from './options-variable';
 export * from './table';
 export * from './test';
