@@ -3,6 +3,7 @@ export * from './useChangeTabTitle';
 export * from './useContentPosition';
 export * from './useContentSizes';
 export * from './useDashboardRedirect';
+export * from './useDockMenuPosition';
 export * from './useLocalStorage';
 export * from './usePersistentStorage';
 export * from './usePersistentValues';

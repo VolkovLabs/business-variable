@@ -20,7 +20,7 @@ import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'rea
 import { getFirstSelectedRowIndex } from 'utils';
 
 import { TEST_IDS } from '../../constants';
-import { TableItem, VariableType } from '../../types';
+import { TableItem, TableViewPosition, VariableType } from '../../types';
 import { TextVariable } from '../TextVariable';
 import { Filter } from './Filter';
 import { getStyles } from './Table.styles';
@@ -120,6 +120,16 @@ interface Props<TTableData extends TableItem> {
    * Panel Event Bus
    */
   eventBus: EventBus;
+
+  /**
+   * Number of force rerenders for docked view
+   */
+  forceRerender: number;
+
+  /**
+   * tableViewPosition
+   */
+  tableViewPosition: TableViewPosition;
 }
 
 /**
@@ -143,6 +153,8 @@ export const Table = <TTableData extends TableItem>({
   onAfterScroll,
   collapsedByDefault,
   eventBus,
+  forceRerender,
+  tableViewPosition,
 }: Props<TTableData>) => {
   /**
    * Styles
@@ -196,6 +208,12 @@ export const Table = <TTableData extends TableItem>({
     measureElement: useCallback((el: HTMLElement | HTMLTableRowElement) => el.offsetHeight, []),
     overscan: 10,
   });
+
+  useEffect(() => {
+    if (tableViewPosition === TableViewPosition.DOCKED) {
+      rowVirtualizer.measure();
+    }
+  }, [forceRerender, rowVirtualizer, tableViewPosition]);
 
   /**
    * Virtualized instance options

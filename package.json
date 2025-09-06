@@ -32,6 +32,7 @@
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.1.0",
     "@types/react-beautiful-dnd": "^13.1.8",
+    "@types/react-dom": "^19.1.9",
     "@types/semver": "^7.7.0",
     "@volkovlabs/eslint-config": "^2.0.0",
     "@volkovlabs/jest-selectors": "^1.5.0",

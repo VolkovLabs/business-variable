@@ -35,8 +35,8 @@ import {
   SHOW_RESET_BUTTON_OPTIONS,
   SHOW_SELECTED_OPTIONS,
   STATUS_SORT_OPTIONS,
-  STICKY_OPTIONS,
   TABLE_MINIMIZE_OPTIONS,
+  TABLE_VIEW_POSITION_OPTIONS,
   TABLE_WRAP_OPTIONS,
   TABS_ORDER_OPTIONS,
   TIME_TRANSFORMATION_OPTIONS,
@@ -50,6 +50,7 @@ import {
   PanelOptions,
   RequestLatencyMode,
   StatusStyleMode,
+  TableViewPosition,
   VariableType,
 } from './types';
 
@@ -264,13 +265,13 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
      */
     builder
       .addRadio({
-        path: 'sticky',
-        name: 'Sticky position',
-        description: 'Variables will follow when scrolling.',
+        path: 'tableViewPosition',
+        name: 'Position',
+        description: 'Position and behavior',
         settings: {
-          options: STICKY_OPTIONS,
+          options: TABLE_VIEW_POSITION_OPTIONS,
         },
-        defaultValue: false,
+        defaultValue: TableViewPosition.NORMAL,
         showIf: showForTableView,
       })
       .addRadio({

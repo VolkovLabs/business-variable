@@ -1,4 +1,5 @@
 import { selectors } from '@grafana/e2e-selectors';
+import { createSelector } from '@volkovlabs/jest-selectors';
 
 /**
  * Test Identifiers
@@ -6,15 +7,27 @@ import { selectors } from '@grafana/e2e-selectors';
 export const TEST_IDS = {
   tableView: {
     content: 'data-testid panel content',
-    infoMessage: 'data-testid panel info',
-    noDataMessage: 'data-testid table-view no-data-message',
     root: 'data-testid panel',
-    tab: (name: string) => `data-testid panel tab-${name}`,
-    buttonOpenDrawer: 'data-testid table-view button open-drawer',
-    buttonOpenDrawerCustomIcon: 'data-testid table-view button open-drawer-custom-icon',
+    dockedIcon: createSelector('data-testid docked-icon'),
     buttonCloseDrawer: selectors.components.Drawer.General.close,
-    pinButton: (groupName: string) => `data-testid-pin-button-${groupName}`,
     outsideElement: 'data-testid outside-element',
+  },
+  tableErrorMessage: {
+    infoMessage: 'data-testid table-error-message info',
+    noDataMessage: 'data-testid table-error-message no-data-message',
+  },
+  tableMinimizeView: {
+    buttonOpenDrawer: 'data-testid table-minimize-view button open-drawer',
+    buttonOpenDrawerCustomIcon: 'data-testid table-minimize-view open-drawer-custom-icon',
+  },
+  toggleDockMenuButtons: {
+    root: createSelector('data-testid toggle-dock-menu-buttons'),
+    buttonOption: createSelector((name: unknown) => `toggle-dock-menu button-option option-${name}`),
+  },
+  tableToolbar: {
+    root: createSelector('data-testid table-toolbar root'),
+    tab: createSelector((name: unknown) => `data-testid table-toolbar tab-${name}`),
+    pinButton: createSelector((groupName: unknown) => `data-testid table-toolbar pin-button-${groupName}`),
   },
   table: {
     allControl: 'data-testid table all-control',
@@ -68,7 +81,6 @@ export const TEST_IDS = {
   },
   optionsVariable: {
     root: 'options-variable',
-    option: (name: string) => `options-variable option-${name}`,
   },
   textVariable: {
     root: 'data-testid text-variable',

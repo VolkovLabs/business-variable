@@ -4,6 +4,7 @@ import { TEST_IDS } from '../../src/constants/tests';
 import { getLocatorSelectors, LocatorSelectors } from './selectors';
 
 const getTablePanelSelectors = getLocatorSelectors(TEST_IDS.tableView);
+const getErrorSelectors = getLocatorSelectors(TEST_IDS.tableErrorMessage);
 const getTableSelectors = getLocatorSelectors(TEST_IDS.table);
 const getButtonSelectors = getLocatorSelectors(TEST_IDS.buttonView);
 const getMinimizeSelectors = getLocatorSelectors(TEST_IDS.minimizeView);
@@ -154,13 +155,22 @@ class TableHeaderHelper {
  */
 class TableViewHelper {
   public selectors: LocatorSelectors<typeof TEST_IDS.tableView>;
-
+  public errorSelectors: LocatorSelectors<typeof TEST_IDS.tableErrorMessage>;
   constructor(public readonly locator: Locator) {
     this.selectors = this.getSelectors(locator);
+    this.errorSelectors = this.getErrorSelectors(locator);
   }
 
   private getMsg(msg: string): string {
     return `Table: ${msg}`;
+  }
+
+  private getSelectors(locator: Locator) {
+    return getTablePanelSelectors(locator);
+  }
+
+  private getErrorSelectors(locator: Locator) {
+    return getErrorSelectors(locator);
   }
 
   public async checkPresence() {
@@ -168,7 +178,7 @@ class TableViewHelper {
   }
 
   public async checkAlert() {
-    return expect(this.selectors.infoMessage()).toBeVisible();
+    return expect(this.errorSelectors.infoMessage()).toBeVisible();
   }
 
   public getContent() {
@@ -177,10 +187,6 @@ class TableViewHelper {
 
   public async checkStyleProperty(property: string, value: string) {
     return expect(this.selectors.content().first(), this.getMsg('Check style property')).toHaveCSS(property, value);
-  }
-
-  private getSelectors(locator: Locator) {
-    return getTablePanelSelectors(locator);
   }
 
   public getTable() {
@@ -316,6 +322,9 @@ class MinimizeViewHelper {
     return getTextSelectors(locator);
   }
 
+  public getFocusOnView = () => {
+    this.selectors.root().focus();
+  };
   public getTextInput() {
     return new TextVariableHelper(this.locator);
   }

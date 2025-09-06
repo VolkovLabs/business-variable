@@ -3,10 +3,11 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { useSavedState, useTable } from '../../hooks';
-import { StatusStyleMode, VariableType } from '../../types';
-import { Table } from '../Table';
+import { useDockMenuPosition, useSavedState, useTable } from '../../hooks';
+import { StatusStyleMode, TableViewPosition, VariableType } from '../../types';
 import { TableView } from './TableView';
+import { TableMinimizeView, TableToolbar } from './components';
+import { Table } from '../Table';
 
 /**
  * Mock hooks
@@ -24,6 +25,14 @@ jest.mock('../../hooks', () => ({
     remove: jest.fn(),
   })),
   useSavedState: jest.fn(jest.requireActual('../../hooks/useSavedState').useSavedState),
+  useDockMenuPosition: jest.fn(() => ({
+    dockedMenuSize: { width: 300, height: 400 },
+    dockMenuToggle: jest.fn(),
+    isDockMenuDisplay: true,
+    dockMenuPosition: { current: null },
+    buttonTogglePosition: { current: null },
+    forceRerender: 0,
+  })),
 }));
 
 /**
@@ -31,6 +40,10 @@ jest.mock('../../hooks', () => ({
  */
 const InTestIds = {
   drawerMockTableView: 'data-testid drawer-mock-table-view',
+  tableErrorMessage: 'data-testid table-error-message-mock',
+  tableToolbar: 'data-testid table-toolbar-mock',
+  tableToggleDockMenuButtons: 'data-testid table-toggle-dock-menu-buttons-mock',
+  tableMinimizeView: 'data-testid table-minimize-view-mock',
 };
 
 /**
@@ -50,8 +63,38 @@ jest.mock('../OptionsVariable', () => ({
 /**
  * Mock DrawerTable
  */
-jest.mock('./components', () => ({
+jest.mock('./components/TableErrorMessage', () => ({
   DrawerTable: jest.fn(() => <div data-testid={InTestIds.drawerMockTableView}>Drawer Table Mock</div>),
+}));
+
+/**
+ * Mock TableErrorMessage
+ */
+jest.mock('./components/TableErrorMessage', () => ({
+  TableErrorMessage: jest.fn(() => <div data-testid={InTestIds.tableErrorMessage}>Error Message</div>),
+}));
+
+/**
+ * Mock TableToolbar
+ */
+jest.mock('./components/TableToolbar', () => ({
+  TableToolbar: jest.fn(() => <div data-testid={InTestIds.tableToolbar}>Table Toolbar Mock</div>),
+}));
+
+/**
+ * Mock ToggleDockMenuButtons
+ */
+jest.mock('./components/ToggleDockMenuButtons', () => ({
+  ToggleDockMenuButtons: jest.fn(() => (
+    <div data-testid={InTestIds.tableToggleDockMenuButtons}>Table Toggle Buttons Mock</div>
+  )),
+}));
+
+/**
+ * Mock TableMinimizeView
+ */
+jest.mock('./components/TableMinimizeView', () => ({
+  TableMinimizeView: jest.fn(() => <div data-testid={InTestIds.tableMinimizeView}>Table minimize view</div>),
 }));
 
 /**
@@ -89,13 +132,292 @@ describe('Table View', () => {
   });
 
   it('Should find component', async () => {
-    await act(async () => render(getComponent({})));
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.NORMAL,
+          } as any,
+        })
+      )
+    );
     expect(selectors.root()).toBeInTheDocument();
   });
 
   it('Should show info message if no variables', async () => {
-    await act(async () => render(getComponent({})));
-    expect(selectors.infoMessage()).toBeInTheDocument();
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.NORMAL,
+          } as any,
+        })
+      )
+    );
+    expect(selectors.tableErrorMessage()).toBeInTheDocument();
+  });
+
+  it('Should open and close drawer for variable', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.QUERY } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            tableViewPosition: TableViewPosition.MINIMIZE,
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(TableMinimizeView).toHaveBeenCalled();
+    const props = jest.mocked(TableMinimizeView).mock.calls[0][0];
+    expect(typeof props.setIsDrawerOpen).toEqual('function');
+
+    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+
+    act(() => {
+      props.setIsDrawerOpen(true);
+    });
+
+    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
+
+    act(() => {
+      fireEvent.click(selectors.buttonCloseDrawer());
+    });
+
+    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
+  });
+
+  it('Should call on AfterScroll', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [{ id: 'value', accessorKey: 'value' }],
+      getSubRows: () => undefined,
+      runtimeVariable: { type: VariableType.QUERY } as any,
+    }));
+
+    await act(async () =>
+      render(
+        getComponent({
+          id: 15,
+          options: {
+            tableViewPosition: TableViewPosition.NORMAL,
+            groups: [
+              { name: 'group1', items: [{ name: '1' }] },
+              { name: 'group2', items: [{ name: '2' }] },
+              { name: 'group3', items: [{ name: '3' }] },
+            ],
+            saveSelectedGroup: true,
+            saveSelectedGroupKey: 'myKey',
+          } as any,
+        })
+      )
+    );
+
+    expect(TableToolbar).toHaveBeenCalled();
+    const propsToolbar = jest.mocked(TableToolbar).mock.calls[0][0];
+
+    expect(propsToolbar.shouldScroll.current).toBeFalsy();
+
+    const tableProps = jest.mocked(Table).mock.calls[0][0];
+
+    act(() => {
+      tableProps.onAfterScroll();
+    });
+  });
+
+  it('Should display as minimize view', async () => {
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.MINIMIZE,
+          } as any,
+        })
+      )
+    );
+    expect(selectors.tableMinimizeView()).toBeInTheDocument();
+  });
+
+  it('Should display as components in docked view', async () => {
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.DOCKED,
+          } as any,
+        })
+      )
+    );
+
+    expect(selectors.tableMinimizeView(true)).not.toBeInTheDocument();
+    expect(selectors.dockedIcon()).toBeInTheDocument();
+  });
+
+  it('Should not render portal content when dockMenuPosition.current is null in DOCKED view', async () => {
+    /**
+     * Mock useDockMenuPosition to return null refs
+     */
+    jest.mocked(useDockMenuPosition).mockReturnValue({
+      dockedMenuSize: { width: 300, height: 400 },
+      dockMenuToggle: jest.fn(),
+      isDockMenuDisplay: true,
+      dockMenuPosition: { current: null },
+      buttonTogglePosition: { current: null },
+      forceRerender: 0,
+    });
+
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.DOCKED,
+            groups: [{ name: 'group1', items: [] }],
+          } as any,
+        })
+      )
+    );
+
+    /**
+     * Check that only docked icon is rendered, no portal content
+     */
+    expect(selectors.dockedIcon()).toBeInTheDocument();
+    expect(selectors.root(true)).not.toBeInTheDocument();
+  });
+
+  it('Should render only main table portal when dockMenuPosition exists but buttonTogglePosition is null', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [],
+      getSubRows: jest.fn(),
+      runtimeVariable: { name: 'Variable' } as any,
+    }));
+    /**
+     * Create mock DOM element only for main table
+     */
+    const mockDockMenuElement = document.createElement('div');
+    document.body.appendChild(mockDockMenuElement);
+
+    /**
+     * Mock useDockMenuPosition with only dockMenuPosition
+     */
+    jest.mocked(useDockMenuPosition).mockReturnValue({
+      dockedMenuSize: { width: 300, height: 400 },
+      dockMenuToggle: jest.fn(),
+      isDockMenuDisplay: true,
+      dockMenuPosition: { current: mockDockMenuElement },
+      buttonTogglePosition: { current: null },
+      forceRerender: 0,
+    });
+
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.DOCKED,
+            groups: [
+              { name: 'group1', items: [] },
+              { name: 'group2', items: [] },
+            ],
+          } as any,
+        })
+      )
+    );
+
+    /**
+     * Check that only main table portal is rendered
+     */
+    expect(mockDockMenuElement).toContainHTML('data-testid="data-testid table header"');
+    expect(selectors.dockedIcon()).toBeInTheDocument();
+
+    /**
+     * Check that toggle buttons are not rendered in any portal
+     */
+    expect(document.body).not.toContainHTML('data-testid="table-toggle-dock-menu-buttons-mock"');
+
+    /**
+     * Clean up
+     */
+    document.body.removeChild(mockDockMenuElement);
+  });
+
+  it('Should render portal content when dockMenuPosition.current exists in DOCKED view', async () => {
+    jest.mocked(useTable).mockImplementation(() => ({
+      tableData: [
+        { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
+      ],
+      columns: [],
+      getSubRows: jest.fn(),
+      runtimeVariable: { name: 'Variable' } as any,
+    }));
+
+    /**
+     * Create mock DOM elements for portals
+     */
+    const mockDockMenuElement = document.createElement('div');
+    const mockButtonToggleElement = document.createElement('div');
+
+    document.body.appendChild(mockDockMenuElement);
+    document.body.appendChild(mockButtonToggleElement);
+
+    /**
+     * Mock useDockMenuPosition to return elements
+     */
+    jest.mocked(useDockMenuPosition).mockReturnValue({
+      dockedMenuSize: { width: 300, height: 400 },
+      dockMenuToggle: jest.fn(),
+      isDockMenuDisplay: true,
+      dockMenuPosition: { current: mockDockMenuElement },
+      buttonTogglePosition: { current: mockButtonToggleElement },
+      forceRerender: 0,
+    });
+
+    await act(async () =>
+      render(
+        getComponent({
+          options: {
+            tableViewPosition: TableViewPosition.DOCKED,
+            groups: [
+              { name: 'group1', items: [] },
+              { name: 'group2', items: [] },
+            ],
+          } as any,
+        })
+      )
+    );
+
+    /**
+     * Check that portal content is rendered
+     */
+    expect(mockDockMenuElement).toContainHTML('data-testid="data-testid table header"');
+    expect(selectors.dockedIcon()).toBeInTheDocument();
+
+    /**
+     * Clean up
+     */
+    document.body.removeChild(mockDockMenuElement);
+    document.body.removeChild(mockButtonToggleElement);
   });
 
   it('Should use first group', async () => {
@@ -197,373 +519,6 @@ describe('Table View', () => {
     );
   });
 
-  it('Should switch groups and scroll to selected', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { name: 'Variable' } as any,
-    }));
-
-    /**
-     * Mock table
-     */
-    let onAfterScroll: any;
-    jest.mocked(Table).mockImplementationOnce((props) => {
-      onAfterScroll = props.onAfterScroll;
-
-      return jest.requireActual('../Table').Table(props);
-    });
-
-    const { rerender } = await act(async () =>
-      render(
-        getComponent({
-          options: {
-            groups: [
-              {
-                name: 'group1',
-                items: [
-                  {
-                    name: 'group1Field',
-                  },
-                ],
-              },
-              {
-                name: 'group2',
-                items: [
-                  {
-                    name: 'group2Field',
-                  },
-                ],
-              },
-            ],
-          } as any,
-        })
-      )
-    );
-
-    /**
-     * Select group2
-     */
-    fireEvent.click(selectors.tab(false, 'group2'));
-
-    /**
-     * Check if group selected
-     */
-    expect(useTable).toHaveBeenCalledWith(
-      expect.objectContaining({
-        levels: [
-          {
-            name: 'group2Field',
-          },
-        ],
-      })
-    );
-
-    /**
-     * Check if scroll enabled
-     */
-    expect(Table).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shouldScroll: {
-          current: true,
-        },
-      }),
-      expect.anything()
-    );
-
-    /**
-     * Simulate table scroll
-     */
-    onAfterScroll();
-
-    /**
-     * Re-render to check if scroll disabled
-     */
-    await act(async () =>
-      rerender(
-        getComponent({
-          options: {
-            groups: [
-              {
-                name: 'group1',
-                items: [
-                  {
-                    name: 'group1Field',
-                  },
-                ],
-              },
-              {
-                name: 'group2',
-                items: [
-                  {
-                    name: 'group2Field',
-                  },
-                ],
-              },
-            ],
-          } as any,
-        })
-      )
-    );
-
-    /**
-     * Check if scroll disabled
-     */
-    expect(Table).toHaveBeenCalledWith(
-      expect.objectContaining({
-        shouldScroll: {
-          current: false,
-        },
-      }),
-      expect.anything()
-    );
-  });
-
-  it('Should display custom error message if no data', async () => {
-    const replaceVariables = jest.fn((string: string) => string);
-
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { name: 'Variable' } as any,
-    }));
-
-    /**
-     * Mock table
-     */
-
-    jest.mocked(Table).mockImplementationOnce((props) => {
-      return jest.requireActual('../Table').Table(props);
-    });
-
-    await act(async () =>
-      render(
-        getComponent({
-          replaceVariables,
-          options: {
-            groups: [
-              {
-                name: 'group1',
-                items: [
-                  {
-                    name: 'group1Field',
-                  },
-                ],
-                noDataCustomMessage: 'Custom message no data',
-              },
-              {
-                name: 'group2',
-                items: [
-                  {
-                    name: 'group2Field',
-                  },
-                ],
-              },
-            ],
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.noDataMessage()).toBeInTheDocument();
-  });
-
-  it('Should open and close drawer for QUERY variable', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { type: VariableType.QUERY } as any,
-    }));
-
-    await act(async () =>
-      render(
-        getComponent({
-          id: 15,
-          options: {
-            isMinimizeForTable: true,
-            groups: [
-              { name: 'group1', items: [{ name: '1' }] },
-              { name: 'group2', items: [{ name: '2' }] },
-              { name: 'group3', items: [{ name: '3' }] },
-            ],
-            saveSelectedGroup: true,
-            saveSelectedGroupKey: 'myKey',
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.buttonOpenDrawer()).toBeInTheDocument();
-    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonOpenDrawer());
-
-    expect(selectors.drawerMockTableView()).toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonCloseDrawer());
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-  });
-
-  it('Should open and close drawer for CUSTOM variable', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { type: VariableType.CUSTOM } as any,
-    }));
-
-    await act(async () =>
-      render(
-        getComponent({
-          id: 15,
-          options: {
-            isMinimizeForTable: true,
-            groups: [
-              { name: 'group1', items: [{ name: '1' }] },
-              { name: 'group2', items: [{ name: '2' }] },
-              { name: 'group3', items: [{ name: '3' }] },
-            ],
-            saveSelectedGroup: true,
-            saveSelectedGroupKey: 'myKey',
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.buttonOpenDrawer()).toBeInTheDocument();
-    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonOpenDrawer());
-
-    expect(selectors.drawerMockTableView()).toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonCloseDrawer());
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-  });
-
-  it('Should open and close drawer with custom icon for query variable', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { type: VariableType.QUERY } as any,
-    }));
-
-    await act(async () =>
-      render(
-        getComponent({
-          id: 15,
-          options: {
-            isMinimizeForTable: true,
-            isMinimizeViewShowCustomIcon: true,
-            minimizeViewCustomIcon: 'https://example.com/custom-icon.png',
-            groups: [
-              { name: 'group1', items: [{ name: '1' }] },
-              { name: 'group2', items: [{ name: '2' }] },
-              { name: 'group3', items: [{ name: '3' }] },
-            ],
-            saveSelectedGroup: true,
-            saveSelectedGroupKey: 'myKey',
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.buttonOpenDrawerCustomIcon()).toBeInTheDocument();
-    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonOpenDrawerCustomIcon());
-
-    expect(selectors.drawerMockTableView()).toBeInTheDocument();
-    expect(selectors.buttonCloseDrawer()).toBeInTheDocument();
-
-    fireEvent.click(selectors.buttonCloseDrawer());
-    expect(selectors.buttonCloseDrawer(true)).not.toBeInTheDocument();
-  });
-
-  it('Should not display minimize if variable not valid type', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { type: VariableType.TEXTBOX } as any,
-    }));
-
-    await act(async () =>
-      render(
-        getComponent({
-          id: 15,
-          options: {
-            isMinimizeForTable: true,
-            groups: [
-              { name: 'group1', items: [{ name: '1' }] },
-              { name: 'group2', items: [{ name: '2' }] },
-              { name: 'group3', items: [{ name: '3' }] },
-            ],
-            saveSelectedGroup: true,
-            saveSelectedGroupKey: 'myKey',
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.buttonOpenDrawer(true)).not.toBeInTheDocument();
-    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
-  });
-
-  it('Should not display custom icon button when isMinimizeViewShowCustomIcon is true but minimizeViewCustomIcon is empty', async () => {
-    jest.mocked(useTable).mockImplementation(() => ({
-      tableData: [
-        { value: 'device1', selected: false, showStatus: false, label: 'Device 1', statusMode: StatusStyleMode.COLOR },
-      ],
-      columns: [{ id: 'value', accessorKey: 'value' }],
-      getSubRows: () => undefined,
-      runtimeVariable: { type: VariableType.QUERY } as any,
-    }));
-
-    await act(async () =>
-      render(
-        getComponent({
-          id: 15,
-          options: {
-            isMinimizeForTable: true,
-            isMinimizeViewShowCustomIcon: true,
-            minimizeViewCustomIcon: '',
-            groups: [
-              { name: 'group1', items: [{ name: '1' }] },
-              { name: 'group2', items: [{ name: '2' }] },
-              { name: 'group3', items: [{ name: '3' }] },
-            ],
-            saveSelectedGroup: true,
-            saveSelectedGroupKey: 'myKey',
-          } as any,
-        })
-      )
-    );
-
-    expect(selectors.buttonOpenDrawerCustomIcon(true)).not.toBeInTheDocument();
-    expect(selectors.buttonOpenDrawer(true)).not.toBeInTheDocument();
-    expect(selectors.drawerMockTableView(true)).not.toBeInTheDocument();
-  });
-
   describe('Pinned groups functionality', () => {
     /**
      * Mock useSavedState for pinned groups
@@ -581,83 +536,6 @@ describe('Table View', () => {
 
     afterEach(() => {
       mockSetPinnedGroups.mockClear();
-    });
-
-    describe('Safe pinned groups', () => {
-      it('Should return array if pinnedGroups is already an array', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [['group1', 'group2'], mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        expect(selectors.tab(false, 'group1')).toBeInTheDocument();
-      });
-
-      it('Should convert object to array if pinnedGroups is an object', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [{ 0: 'group1', 1: 'group2', other: 123 }, mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        expect(selectors.tab(false, 'group1')).toBeInTheDocument();
-      });
-
-      it('Should return empty array if pinnedGroups is null or undefined', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [null, mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        expect(selectors.tab(false, 'group1')).toBeInTheDocument();
-      });
     });
 
     describe('Clean up pinned groups', () => {
@@ -752,434 +630,6 @@ describe('Table View', () => {
         expect(mockSetPinnedGroups).toHaveBeenCalledWith(['group1']);
       });
     });
-
-    describe('Toggle pin group', () => {
-      it('Should pin a group when clicking pin button', async () => {
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const pinButton = selectors.pinButton(false, 'group1');
-        fireEvent.click(pinButton);
-
-        expect(mockSetPinnedGroups).toHaveBeenCalled();
-        const updateFunction = mockSetPinnedGroups.mock.calls[0][0];
-        expect(updateFunction([])).toEqual(['group1']);
-      });
-
-      it('Should unpin a group when clicking pin button on pinned group', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [['group1'], mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const pinButton = selectors.pinButton(false, 'group1');
-        fireEvent.click(pinButton);
-
-        expect(mockSetPinnedGroups).toHaveBeenCalled();
-        const updateFunction = mockSetPinnedGroups.mock.calls[0][0];
-        expect(updateFunction(['group1'])).toEqual([]);
-      });
-
-      it('Should handle object state when toggling pin', async () => {
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const pinButton = selectors.pinButton(false, 'group1');
-        fireEvent.click(pinButton);
-
-        const updateFunction = mockSetPinnedGroups.mock.calls[0][0];
-        expect(updateFunction({ 0: 'group2', other: 123 })).toEqual(['group2', 'group1']);
-      });
-
-      it('Should stop propagation when clicking pin button', async () => {
-        const mockSetCurrentGroup = jest.fn();
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [[], mockSetPinnedGroups, true] as any;
-          }
-          return ['group1', mockSetCurrentGroup, true] as any;
-        });
-
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const pinButton = selectors.pinButton(false, 'group1');
-        fireEvent.click(pinButton);
-
-        expect(mockSetCurrentGroup).not.toHaveBeenCalled();
-      });
-
-      it('Should handle primitive values (string, number, boolean) when toggling pin', async () => {
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const pinButton = selectors.pinButton(false, 'group1');
-        fireEvent.click(pinButton);
-
-        const updateFunction = mockSetPinnedGroups.mock.calls[0][0];
-
-        expect(updateFunction('some-string')).toEqual(['group1']);
-        expect(updateFunction(123)).toEqual(['group1']);
-        expect(updateFunction(true)).toEqual(['group1']);
-        expect(updateFunction(undefined)).toEqual(['group1']);
-        expect(updateFunction(null)).toEqual(['group1']);
-      });
-
-      describe('TabsInOrder functionality', () => {
-        const mockSetPinnedGroups = jest.fn();
-
-        beforeEach(() => {
-          jest.mocked(useSavedState).mockImplementation((config: any) => {
-            if (config.key.includes('pinned')) {
-              return [['group2'], mockSetPinnedGroups, true] as any;
-            }
-            return ['group1', jest.fn(), true] as any;
-          });
-
-          jest.mocked(useTable).mockImplementation(() => ({
-            tableData: [
-              { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-            ],
-            columns: [],
-            getSubRows: jest.fn(),
-            runtimeVariable: { name: 'Variable' } as any,
-          }));
-        });
-
-        afterEach(() => {
-          mockSetPinnedGroups.mockClear();
-        });
-
-        it('Should use new logic when tabsInOrder is true', async () => {
-          await act(async () =>
-            render(
-              getComponent({
-                options: {
-                  isPinTabsEnabled: true,
-                  tabsInOrder: true,
-                  groups: [
-                    { name: 'group1', items: [] },
-                    { name: 'group2', items: [] },
-                    { name: 'group3', items: [] },
-                    { name: 'group4', items: [] },
-                  ],
-                } as any,
-              })
-            )
-          );
-
-          const tabs = [
-            selectors.tab(false, 'group2'),
-            selectors.tab(false, 'group1'),
-            selectors.tab(false, 'group3'),
-            selectors.tab(false, 'group4'),
-          ];
-          expect(tabs[0]).toHaveTextContent('group2');
-          expect(tabs[1]).toHaveTextContent('group1');
-          expect(tabs[2]).toHaveTextContent('group3');
-          expect(tabs[3]).toHaveTextContent('group4');
-        });
-      });
-    });
-
-    describe('Sorted groups', () => {
-      it('Should show pinned groups first', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [['group2', 'group3'], mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                  { name: 'group3', items: [] },
-                  { name: 'group4', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const tabs = [
-          selectors.tab(false, 'group2'),
-          selectors.tab(false, 'group3'),
-          selectors.tab(false, 'group1'),
-          selectors.tab(false, 'group4'),
-        ];
-        expect(tabs[0]).toHaveTextContent('group2');
-        expect(tabs[1]).toHaveTextContent('group3');
-        expect(tabs[2]).toHaveTextContent('group1');
-        expect(tabs[3]).toHaveTextContent('group4');
-      });
-
-      it('Should maintain pin order', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [['group3', 'group1'], mockSetPinnedGroups, true] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                  { name: 'group3', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const tabs = [selectors.tab(false, 'group3'), selectors.tab(false, 'group1'), selectors.tab(false, 'group2')];
-        expect(tabs[0]).toHaveTextContent('group3');
-        expect(tabs[1]).toHaveTextContent('group1');
-        expect(tabs[2]).toHaveTextContent('group2');
-      });
-
-      it('Should show all groups when pinned not loaded yet', async () => {
-        jest.mocked(useSavedState).mockImplementation((config: any) => {
-          if (config.key.includes('pinned')) {
-            return [['group2'], mockSetPinnedGroups, false] as any;
-          }
-          return [config.initialValue, jest.fn(), true] as any;
-        });
-
-        jest.mocked(useTable).mockImplementation(() => ({
-          tableData: [
-            { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-          ],
-          columns: [],
-          getSubRows: jest.fn(),
-          runtimeVariable: { name: 'Variable' } as any,
-        }));
-
-        await act(async () =>
-          render(
-            getComponent({
-              options: {
-                isPinTabsEnabled: true,
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })
-          )
-        );
-
-        const tabs = [selectors.tab(false, 'group1'), selectors.tab(false, 'group2')];
-        expect(tabs[0]).toHaveTextContent('group1');
-        expect(tabs[1]).toHaveTextContent('group2');
-      });
-    });
-  });
-
-  describe('Pin tabs disabled (isPinTabsEnabled = false)', () => {
-    it('Should render tabs in original order regardless of pinnedGroups', async () => {
-      jest.mocked(useSavedState).mockImplementation((config: any) => {
-        if (config.key.includes('pinned')) {
-          return [['group2', 'group1'], jest.fn(), true] as any;
-        }
-        return [config.initialValue, jest.fn(), true] as any;
-      });
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-        ],
-        columns: [],
-        getSubRows: jest.fn(),
-        runtimeVariable: { name: 'Variable' } as any,
-      }));
-
-      await act(async () =>
-        render(
-          getComponent({
-            options: {
-              isPinTabsEnabled: false,
-              groups: [
-                { name: 'group1', items: [] },
-                { name: 'group2', items: [] },
-                { name: 'group3', items: [] },
-              ],
-            } as any,
-          })
-        )
-      );
-
-      const tabs = [selectors.tab(false, 'group1'), selectors.tab(false, 'group2'), selectors.tab(false, 'group3')];
-      expect(tabs[0]).toHaveTextContent('group1');
-      expect(tabs[1]).toHaveTextContent('group2');
-      expect(tabs[2]).toHaveTextContent('group3');
-    });
-
-    it('Should not call setPinnedGroups when pin tabs is disabled', async () => {
-      const mockSetPinnedGroups = jest.fn();
-      jest.mocked(useSavedState).mockImplementation((config: any) => {
-        if (config.key.includes('pinned')) {
-          return [['group2', 'group1'], mockSetPinnedGroups, true] as any;
-        }
-        return [config.initialValue, jest.fn(), true] as any;
-      });
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-        ],
-        columns: [],
-        getSubRows: jest.fn(),
-        runtimeVariable: { name: 'Variable' } as any,
-      }));
-
-      await act(async () =>
-        render(
-          getComponent({
-            options: {
-              isPinTabsEnabled: false,
-              groups: [
-                { name: 'group1', items: [] },
-                { name: 'group2', items: [] },
-              ],
-            } as any,
-          })
-        )
-      );
-
-      expect(mockSetPinnedGroups).not.toHaveBeenCalled();
-    });
   });
 
   describe('Focus handling', () => {
@@ -1198,6 +648,7 @@ describe('Table View', () => {
           <>
             {getComponent({
               options: {
+                tableViewPosition: TableViewPosition.NORMAL,
                 groups: [
                   { name: 'group1', items: [] },
                   { name: 'group2', items: [] },
@@ -1214,107 +665,6 @@ describe('Table View', () => {
       fireEvent.mouseDown(rootElement);
 
       const outsideElement = selectors.outsideElement();
-      fireEvent.click(outsideElement, { bubbles: true });
-
-      expect(rootElement).toBeInTheDocument();
-    });
-
-    it('Should not affect component when clicking outside without prior focus', async () => {
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-        ],
-        columns: [],
-        getSubRows: jest.fn(),
-        runtimeVariable: { name: 'Variable' } as any,
-      }));
-
-      await act(async () =>
-        render(
-          <>
-            {getComponent({
-              options: {
-                groups: [{ name: 'group1', items: [] }],
-              } as any,
-            })}
-            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
-          </>
-        )
-      );
-
-      const outsideElement = selectors.outsideElement();
-      fireEvent.click(outsideElement, { bubbles: true });
-
-      expect(selectors.root()).toBeInTheDocument();
-    });
-
-    it('Should maintain focus when clicking inside the component', async () => {
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-        ],
-        columns: [],
-        getSubRows: jest.fn(),
-        runtimeVariable: { name: 'Variable' } as any,
-      }));
-
-      await act(async () =>
-        render(
-          <>
-            {getComponent({
-              options: {
-                groups: [
-                  { name: 'group1', items: [] },
-                  { name: 'group2', items: [] },
-                ],
-              } as any,
-            })}
-            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
-          </>
-        )
-      );
-
-      const rootElement = selectors.root();
-
-      fireEvent.mouseDown(rootElement);
-
-      const tab = selectors.tab(false, 'group1');
-      fireEvent.click(tab);
-
-      expect(rootElement).toBeInTheDocument();
-      expect(tab).toBeInTheDocument();
-    });
-
-    it('Should handle multiple focus/unfocus cycles', async () => {
-      jest.mocked(useTable).mockImplementation(() => ({
-        tableData: [
-          { value: 'test', selected: false, showStatus: false, label: 'Test', statusMode: StatusStyleMode.COLOR },
-        ],
-        columns: [],
-        getSubRows: jest.fn(),
-        runtimeVariable: { name: 'Variable' } as any,
-      }));
-
-      await act(async () =>
-        render(
-          <>
-            {getComponent({
-              options: {
-                groups: [{ name: 'group1', items: [] }],
-              } as any,
-            })}
-            <div data-testid={TEST_IDS.tableView.outsideElement}>Outside</div>
-          </>
-        )
-      );
-
-      const rootElement = selectors.root();
-      const outsideElement = selectors.outsideElement();
-
-      fireEvent.mouseDown(rootElement);
-      fireEvent.click(outsideElement, { bubbles: true });
-
-      fireEvent.mouseDown(rootElement);
       fireEvent.click(outsideElement, { bubbles: true });
 
       expect(rootElement).toBeInTheDocument();

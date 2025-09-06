@@ -1,6 +1,13 @@
 import { SelectableValue } from '@grafana/data';
 
-import { BreakOption, DisplayMode, FavoritesStorage, MinimizeOutputFormat, RequestLatencyMode } from '../types';
+import {
+  BreakOption,
+  DisplayMode,
+  FavoritesStorage,
+  MinimizeOutputFormat,
+  RequestLatencyMode,
+  TableViewPosition,
+} from '../types';
 
 /**
  * Display Mode Options
@@ -36,6 +43,28 @@ export const HEADER_OPTIONS = [
 export const STICKY_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Follow when scrolling.' },
   { value: false, label: 'Disabled', description: 'Scroll with dashboard.' },
+];
+
+/**
+ * Table view position options
+ */
+export const TABLE_VIEW_POSITION_OPTIONS = [
+  {
+    value: TableViewPosition.NORMAL,
+    label: 'Normal',
+    description: 'Scroll with dashboard and displayed in the panel.',
+  },
+  {
+    value: TableViewPosition.STICKY,
+    label: 'Sticky',
+    description: 'Variables will follow when scrolling. Scroll with dashboard.',
+  },
+  {
+    value: TableViewPosition.MINIMIZE,
+    label: 'Minimize',
+    description: 'Variables shows in drawer by click',
+  },
+  { value: TableViewPosition.DOCKED, label: 'Docked', description: 'The tree view is displayed in the docked menu.' },
 ];
 
 /**

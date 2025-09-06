@@ -124,7 +124,9 @@ const Drawer = jest.fn(DrawerMock);
 const IconMock = ({ name, onClick, ...restProps }: any) => {
   return (
     <div
-      onClick={(event) => onClick?.(event)}
+      onClick={(event) => {
+        onClick?.(event);
+      }}
       data-testid={restProps['data-testid']}
       className={restProps['className']}
       aria-label={restProps['aria-label']}
@@ -137,6 +139,20 @@ const IconMock = ({ name, onClick, ...restProps }: any) => {
 const Icon = jest.fn(IconMock);
 
 /**
+ * Tooltip
+ */
+const TooltipMock = ({ content, children, placement, ...restProps }: any) => {
+  return (
+    <div data-testid={restProps['data-testid']}>
+      <div>{content}</div>
+      {children}
+    </div>
+  );
+};
+
+const Tooltip = jest.fn(TooltipMock);
+
+/**
  * Set mocks
  */
 beforeEach(() => {
@@ -145,6 +161,7 @@ beforeEach(() => {
   ToolbarButtonRow.mockImplementation(ToolbarButtonRowMock);
   DatePickerWithInput.mockImplementation(DatePickerWithInputMock);
   Drawer.mockImplementation(DrawerMock);
+  Tooltip.mockImplementation(TooltipMock);
   Icon.mockImplementation(IconMock);
 });
 
@@ -155,5 +172,6 @@ module.exports = {
   DateTimePicker,
   DatePickerWithInput,
   Drawer,
+  Tooltip,
   Icon,
 };

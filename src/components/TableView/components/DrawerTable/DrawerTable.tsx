@@ -3,7 +3,7 @@ import { ColumnDef, TableOptions } from '@tanstack/react-table';
 import React, { RefObject, useLayoutEffect, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../../../constants';
-import { TableItem } from '../../../../types';
+import { TableItem, TableViewPosition } from '../../../../types';
 import { Table } from '../../../Table';
 
 /**
@@ -110,6 +110,16 @@ interface Props<TTableData extends TableItem> {
    * Panel Event Bus
    */
   eventBus: EventBus;
+
+  /**
+   * Number of force rerenders for docked view
+   */
+  forceRerender: number;
+
+  /**
+   * tableViewPosition
+   */
+  tableViewPosition: TableViewPosition;
 }
 
 /**
@@ -131,6 +141,8 @@ export const DrawerTable = <TTableData extends TableItem>({
   onAfterScroll,
   collapsedByDefault,
   eventBus,
+  forceRerender,
+  tableViewPosition,
   ...restProps
 }: Props<TTableData>) => {
   /**
@@ -152,6 +164,8 @@ export const DrawerTable = <TTableData extends TableItem>({
       <div ref={scrollDrawerContainer}>
         {isReady && (
           <Table
+            forceRerender={forceRerender}
+            tableViewPosition={tableViewPosition}
             key={currentGroup}
             columns={columns}
             data={tableData}
