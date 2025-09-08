@@ -301,7 +301,7 @@ export const TableView: React.FC<Props> = ({
         <div className={styles.dockedMinimizeView}>
           <div className={styles.dockedAlertIcon} {...TEST_IDS.tableView.dockedIcon.apply()}>
             <Tooltip content={<span>The tree view is displayed in the docked menu.</span>}>
-              <Icon name="exclamation-triangle" size="md" />
+              <Icon name="web-section-alt" size="md" />
             </Tooltip>
           </div>
           <TableMinimizeView
