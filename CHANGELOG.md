@@ -4,7 +4,11 @@ All notable changes to the **Business Variable Panel** for Grafana are documente
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.2.0] - Unreleased
+## [5.0.0] - Unreleased
+
+### Breaking Changes
+
+- Requires Scenes framework in Grafana 11.5 or Grafana 12.
 
 ### Changed
 
