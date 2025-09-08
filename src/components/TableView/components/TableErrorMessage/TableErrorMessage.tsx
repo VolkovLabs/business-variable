@@ -6,7 +6,7 @@ import { PanelOptions, RuntimeVariable, TableItem } from '../../../../types';
 
 interface TableErrorMessageProps {
   /**
-   * runtimeVariable
+   * Runtime Variable
    */
   runtimeVariable: RuntimeVariable | undefined;
 

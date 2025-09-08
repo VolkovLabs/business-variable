@@ -16,7 +16,7 @@ interface ToggleDockMenuButtonsProps {
 }
 
 /**
- * ToggleDockMenuButtons
+ * Toggle Dock Menu Buttons
  */
 export const ToggleDockMenuButtons = ({ isDockMenuDisplay, dockMenuToggle }: ToggleDockMenuButtonsProps) => {
   return (

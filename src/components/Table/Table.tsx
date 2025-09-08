@@ -127,7 +127,7 @@ interface Props<TTableData extends TableItem> {
   forceRerender: number;
 
   /**
-   * tableViewPosition
+   * Table View Position
    */
   tableViewPosition: TableViewPosition;
 }
