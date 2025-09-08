@@ -40,7 +40,7 @@ describe('Table Minimize View', () => {
    * Get Tested Component
    */
   const getComponent = ({ options = {} as any, ...restProps }: Partial<Props>) => {
-    return <TableMinimizeView options={options} {...(restProps as any)} />;
+    return <TableMinimizeView options={options} enableDrawerOpen={true} {...(restProps as any)} />;
   };
 
   it('Should Render open Drawer button and open drawer for query variable', async () => {

@@ -269,7 +269,7 @@ describe('Table View', () => {
       )
     );
 
-    expect(selectors.tableMinimizeView(true)).not.toBeInTheDocument();
+    expect(selectors.tableMinimizeView()).toBeInTheDocument();
     expect(selectors.dockedIcon()).toBeInTheDocument();
   });
 

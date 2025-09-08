@@ -281,6 +281,7 @@ export const TableView: React.FC<Props> = ({
           options={options}
           setIsDrawerOpen={setIsDrawerOpen}
           panelEventBus={panelEventBus}
+          enableDrawerOpen={true}
         />
       )}
       {(options.tableViewPosition === TableViewPosition.NORMAL ||
@@ -297,10 +298,19 @@ export const TableView: React.FC<Props> = ({
           buttonTogglePosition.current
         )}
       {options.tableViewPosition === TableViewPosition.DOCKED && (
-        <div style={{ marginLeft: '8px' }} {...TEST_IDS.tableView.dockedIcon.apply()}>
-          <Tooltip content={<span>The tree view is displayed in the docked menu.</span>}>
-            <Icon name="exclamation-triangle" size="md" />
-          </Tooltip>
+        <div className={styles.dockedMinimizeView}>
+          <div className={styles.dockedAlertIcon} {...TEST_IDS.tableView.dockedIcon.apply()}>
+            <Tooltip content={<span>The tree view is displayed in the docked menu.</span>}>
+              <Icon name="exclamation-triangle" size="md" />
+            </Tooltip>
+          </div>
+          <TableMinimizeView
+            runtimeVariable={runtimeVariable}
+            options={options}
+            setIsDrawerOpen={setIsDrawerOpen}
+            panelEventBus={panelEventBus}
+            enableDrawerOpen={false}
+          />
         </div>
       )}
       {isDrawerOpen && (

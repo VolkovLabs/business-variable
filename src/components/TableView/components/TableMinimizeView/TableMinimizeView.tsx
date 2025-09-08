@@ -14,7 +14,7 @@ interface MinimizeViewProps {
   panelEventBus: EventBus;
 
   /**
-   * Open drawer
+   * Open drawer action
    */
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -24,12 +24,23 @@ interface MinimizeViewProps {
   options: PanelOptions;
 
   /**
-   * Panel Options
+   * Runtime variable
    */
   runtimeVariable: RuntimeVariable | undefined;
+
+  /**
+   * Display or hide buttons for opening the drawer
+   */
+  enableDrawerOpen: boolean;
 }
 
-export const TableMinimizeView = ({ runtimeVariable, options, setIsDrawerOpen, panelEventBus }: MinimizeViewProps) => {
+export const TableMinimizeView = ({
+  runtimeVariable,
+  options,
+  setIsDrawerOpen,
+  panelEventBus,
+  enableDrawerOpen,
+}: MinimizeViewProps) => {
   /**
    * Styles and Theme
    */
@@ -40,7 +51,7 @@ export const TableMinimizeView = ({ runtimeVariable, options, setIsDrawerOpen, p
     !!runtimeVariable &&
     (runtimeVariable.type === VariableType.QUERY || runtimeVariable.type === VariableType.CUSTOM) && (
       <div className={styles.minimizeTableView}>
-        {!options.isMinimizeViewShowCustomIcon && (
+        {!options.isMinimizeViewShowCustomIcon && enableDrawerOpen && (
           <IconButton
             className={styles.openDrawerButton}
             name={options.minimizeViewNativeIcon}
@@ -53,7 +64,8 @@ export const TableMinimizeView = ({ runtimeVariable, options, setIsDrawerOpen, p
 
         {options.isMinimizeViewShowCustomIcon &&
           options.minimizeViewCustomIcon &&
-          !!options.minimizeViewCustomIcon.length && (
+          !!options.minimizeViewCustomIcon.length &&
+          enableDrawerOpen && (
             <img
               src={options.minimizeViewCustomIcon}
               alt="Open tree view"
