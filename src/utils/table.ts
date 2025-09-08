@@ -2,7 +2,7 @@ import { DataFrame, PanelData } from '@grafana/data';
 import { FilterFn, Row, SortingFn } from '@tanstack/react-table';
 
 import { ALL_VALUE_PARAMETER } from '../constants';
-import { Level, RuntimeVariable, Status, StatusStyleMode, TableItem } from '../types';
+import { Level, LevelsGroup, RuntimeVariable, Status, StatusStyleMode, TableItem, TableViewPosition } from '../types';
 import { isVariableWithOptions } from './variable';
 
 /**
@@ -368,4 +368,125 @@ export const getFirstSelectedRowIndex = <TTableData extends TableItem>(rows: Arr
   }
 
   return -1;
+};
+
+/**
+ * prepare Table Sizes
+ */
+export const prepareTableSizes = ({
+  tableViewPosition,
+  dockedMenuSizes,
+  panelSizes,
+}: {
+  tableViewPosition: TableViewPosition;
+  dockedMenuSizes: { width: number; height: number };
+  panelSizes: { width: number; height: number };
+}): {
+  width: number;
+  height: number;
+} => {
+  if (tableViewPosition === TableViewPosition.DOCKED) {
+    return {
+      width: dockedMenuSizes.width,
+      height: dockedMenuSizes.height - 10,
+    };
+  }
+
+  return {
+    width: panelSizes.width,
+    height: panelSizes.height,
+  };
+};
+
+/**
+ * prepare Sorted Groups
+ */
+export const prepareSortedGroups = ({
+  groups,
+  isPinTabsEnabled,
+  pinnedLoaded,
+  safePinnedGroups,
+  tabsInOrder,
+  currentGroup,
+}: {
+  groups: LevelsGroup[];
+  isPinTabsEnabled?: boolean | undefined;
+  pinnedLoaded: boolean;
+  safePinnedGroups: string[];
+  tabsInOrder: boolean;
+  currentGroup: string;
+}) => {
+  if (!groups) {
+    return [];
+  }
+  if (!isPinTabsEnabled) {
+    return groups;
+  }
+  if (!pinnedLoaded) {
+    return groups;
+  }
+
+  const all: LevelsGroup[] = [...groups];
+
+  const pinnedGroups = safePinnedGroups
+    .map((pinnedName) => all.find((group) => group.name === pinnedName))
+    .filter(Boolean) as typeof all;
+
+  if (tabsInOrder) {
+    const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name));
+    return [...pinnedGroups, ...unpinnedGroups];
+  }
+
+  const activeGroup = all.find((group) => group.name === currentGroup);
+
+  const isActiveGroupPinned = activeGroup && safePinnedGroups.includes(activeGroup.name);
+
+  const unpinnedGroups = all.filter((group) => !safePinnedGroups.includes(group.name) && group.name !== currentGroup);
+
+  const result = [...pinnedGroups];
+
+  if (activeGroup && !isActiveGroupPinned) {
+    result.push(activeGroup);
+  }
+
+  result.push(...unpinnedGroups);
+
+  return result;
+};
+
+/**
+ * Prepared Pinned Groups
+ * @param previousPinnedGroups
+ * @param groupName
+ */
+export const preparedPinnedGroups = (previousPinnedGroups: string[], groupName: string) => {
+  const currentPinned = Array.isArray(previousPinnedGroups)
+    ? previousPinnedGroups
+    : typeof previousPinnedGroups === 'object' && previousPinnedGroups !== null
+      ? (Object.values(previousPinnedGroups).filter((value) => typeof value === 'string') as string[])
+      : [];
+
+  if (currentPinned.includes(groupName)) {
+    return currentPinned.filter((name) => name !== groupName);
+  } else {
+    return [...currentPinned, groupName];
+  }
+};
+
+/**
+ * Prepared Pinned Groups
+ * @param pinnedGroups
+ * @param isPinTabsEnabled
+ */
+export const prepareSafePinnedGroups = (pinnedGroups: string[], isPinTabsEnabled?: boolean) => {
+  if (!isPinTabsEnabled) {
+    return [];
+  }
+  if (Array.isArray(pinnedGroups)) {
+    return pinnedGroups;
+  }
+  if (pinnedGroups && typeof pinnedGroups === 'object') {
+    return Object.values(pinnedGroups).filter((value) => typeof value === 'string') as string[];
+  }
+  return [];
 };

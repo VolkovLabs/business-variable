@@ -2,7 +2,14 @@ import { getBackendSrv } from '@grafana/runtime';
 
 import { FAVORITES_KEY } from './constants';
 import { getMigratedOptions } from './migration';
-import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
+import {
+  BreakOption,
+  DisplayMode,
+  FavoritesStorage,
+  PanelOptions,
+  RequestLatencyMode,
+  TableViewPosition,
+} from './types';
 import { createFavoritesConfig } from './utils';
 
 /**
@@ -379,6 +386,84 @@ describe('Migration', () => {
         expect.objectContaining({
           displayMode: DisplayMode.TABLE,
           wordBreak: BreakOption.SYMBOL,
+        })
+      );
+    });
+  });
+
+  describe('v4.2.0', () => {
+    it('Should update tableViewPosition not specified', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        tableViewPosition: undefined,
+      };
+
+      expect(
+        await getMigratedOptions({
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          tableViewPosition: TableViewPosition.NORMAL,
+        })
+      );
+    });
+
+    it('Should update tableViewPosition not specified but sticky was enabled', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        tableViewPosition: undefined,
+        sticky: true,
+      };
+
+      expect(
+        await getMigratedOptions({
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          tableViewPosition: TableViewPosition.STICKY,
+        })
+      );
+    });
+
+    it('Should update tableViewPosition not specified but isMinimizeForTable was enabled', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        tableViewPosition: undefined,
+        isMinimizeForTable: true,
+      };
+
+      expect(
+        await getMigratedOptions({
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          tableViewPosition: TableViewPosition.MINIMIZE,
+        })
+      );
+    });
+
+    it('Should update tableViewPosition not specified but sticky and isMinimizeForTable was enabled', async () => {
+      const options: Partial<PanelOptions> = {
+        displayMode: DisplayMode.TABLE,
+        tableViewPosition: undefined,
+        isMinimizeForTable: true,
+        sticky: true,
+      };
+
+      expect(
+        await getMigratedOptions({
+          options: options,
+        } as any)
+      ).toEqual(
+        expect.objectContaining({
+          displayMode: DisplayMode.TABLE,
+          tableViewPosition: TableViewPosition.MINIMIZE,
         })
       );
     });

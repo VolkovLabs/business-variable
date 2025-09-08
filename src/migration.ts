@@ -3,7 +3,14 @@ import { getBackendSrv } from '@grafana/runtime';
 import semver from 'semver';
 
 import { FAVORITES_KEY } from './constants';
-import { BreakOption, DisplayMode, FavoritesStorage, PanelOptions, RequestLatencyMode } from './types';
+import {
+  BreakOption,
+  DisplayMode,
+  FavoritesStorage,
+  PanelOptions,
+  RequestLatencyMode,
+  TableViewPosition,
+} from './types';
 
 /**
  * Outdated Panel Options
@@ -136,6 +143,19 @@ export const getMigratedOptions = async (
    */
   if (normalizedOptions.wordBreak === undefined) {
     normalizedOptions.wordBreak = BreakOption.NORMAL;
+  }
+
+  /**
+   * Normalize Table view position
+   */
+  if (normalizedOptions.tableViewPosition === undefined) {
+    const tableViewPositionCurrent =
+      normalizedOptions.isMinimizeForTable !== undefined && !!normalizedOptions.isMinimizeForTable
+        ? TableViewPosition.MINIMIZE
+        : normalizedOptions.sticky !== undefined && !!normalizedOptions.sticky
+          ? TableViewPosition.STICKY
+          : TableViewPosition.NORMAL;
+    normalizedOptions.tableViewPosition = tableViewPositionCurrent;
   }
 
   /**

@@ -5,7 +5,7 @@ import { getJestSelectors } from '@volkovlabs/jest-selectors';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { TEST_IDS } from '../../constants';
-import { VariableType } from '../../types';
+import { TableViewPosition, VariableType } from '../../types';
 import { Table } from './Table';
 
 /**
@@ -915,5 +915,95 @@ describe('Table', () => {
     );
 
     expect(scrollToIndex).not.toHaveBeenCalled();
+  });
+
+  it('Should not call measure when tableViewPosition is not DOCKED', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const measure = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        measure,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 1),
+        scrollToIndex: jest.fn(),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        getSubRows: (row: any) => row.children,
+        tableViewPosition: TableViewPosition.NORMAL,
+        forceRerender: 0,
+      })
+    );
+
+    expect(measure).not.toHaveBeenCalled();
+  });
+
+  it('Should call measure when tableViewPosition is DOCKED and forceRerender changes', () => {
+    const data = [
+      {
+        value: '1',
+        children: [
+          {
+            value: '1-1',
+          },
+        ],
+      },
+    ];
+    const columns: Array<ColumnDef<typeof data>> = [
+      {
+        id: 'value',
+        accessorKey: 'value',
+        cell: ({ getValue, row }) => (
+          <div data-testid={InTestIds.cell(getValue() as string, row.depth)}>{getValue() as string}</div>
+        ),
+      },
+    ];
+
+    const measure = jest.fn();
+
+    jest.mocked(useVirtualizer).mockImplementation(() => {
+      return {
+        measure,
+        getVirtualItems: jest.fn(() => []),
+        getTotalSize: jest.fn(() => 1),
+        scrollToIndex: jest.fn(),
+      } as any;
+    });
+
+    render(
+      getComponent({
+        data: data as any,
+        columns: columns as any,
+        getSubRows: (row: any) => row.children,
+        tableViewPosition: TableViewPosition.DOCKED,
+        forceRerender: 0,
+      })
+    );
+
+    expect(measure).toHaveBeenCalledTimes(2);
   });
 });

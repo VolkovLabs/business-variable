@@ -134,5 +134,18 @@ export const getStyles = (theme: GrafanaTheme2) => {
         color: ${theme.colors.primary.shade};
       }
     `,
+    dockedMinimizeView: css`
+      display: flex;
+      flex-wrap: wrap;
+      gap: ${theme.spacing(1)};
+      align-items: center;
+
+      > div {
+        margin: 0px;
+      }
+    `,
+    dockedAlertIcon: css`
+      margin-left: ${theme.spacing(1)} !important;
+    `,
   };
 };
