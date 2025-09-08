@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Requires Scenes framework in Grafana 11.5 or Grafana 12.
 
+### Added
+
+- Added display tree view in dock menu ([#291](https://github.com/volkovlabs/business-variable/issues/291)).
+
 ### Changed
 
 - Update menu dots layout to prevent overlap ([#288](https://github.com/volkovlabs/business-variable/issues/288)).
