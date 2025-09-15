@@ -2,7 +2,6 @@ import { EventBusSrv } from '@grafana/data';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import React, { useRef } from 'react';
 
-import { DashboardPanelsChangedEvent } from '../types';
 import { useContentPosition } from './useContentPosition';
 
 /**
@@ -190,50 +189,6 @@ describe('Use Content Position', () => {
     });
   });
 
-  it('Should recalculate position when DashboardPanelsChangedEvent is triggered', async () => {
-    await act(async () =>
-      render(
-        <ScrollableContainer style={{ height: 1000 }}>
-          <Component width={200} height={200} sticky={true} />
-        </ScrollableContainer>
-      )
-    );
-
-    const container = screen.getByTestId(InTestIds.container);
-    expect(container).toHaveStyle({ width: '200px', height: '200px' });
-
-    const content = screen.getByTestId(InTestIds.content);
-
-    expect(content).toHaveStyle({ transform: 'translateY(0px)' });
-
-    /**
-     * Simulate changes for element
-     */
-    container.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          y: -100,
-          height: 200,
-        }) as any
-    );
-
-    /**
-     * Publish event
-     */
-    act(() => {
-      eventBus.publish(new DashboardPanelsChangedEvent());
-    });
-
-    /**
-     * Await timer
-     */
-    act(() => {
-      jest.runOnlyPendingTimers();
-    });
-
-    expect(content).toHaveStyle({ transform: 'translateY(100px)' });
-  });
-
   it('Should recalculate position when observed element is resized', async () => {
     window.__grafanaSceneContext = {
       body: {
@@ -316,39 +271,6 @@ describe('Use Content Position', () => {
       height: '250px',
       transform: 'translateY(0px)',
     });
-  });
-
-  it('Should follow on scroll', async () => {
-    await act(async () =>
-      render(
-        <ScrollableContainer style={{ height: 1000 }}>
-          <Component width={200} height={200} sticky={true} />
-        </ScrollableContainer>
-      )
-    );
-
-    const scrollableElement = screen.getByTestId(InTestIds.scrollableElement);
-    const content = screen.getByTestId(InTestIds.content);
-
-    expect(content).toHaveStyle({ transform: 'translateY(0px)' });
-
-    content.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          y: -100,
-          height: 200,
-        }) as any
-    );
-    scrollableElement.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          top: 100,
-          height: 1000,
-        }) as any
-    );
-    fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
-
-    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(100px)' });
   });
 
   it('Should follow on scroll for scene dashboard', async () => {
@@ -455,56 +377,5 @@ describe('Use Content Position', () => {
 
     expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ width: '250px', height: '280px' });
     expect(content).toHaveStyle({ transform: 'translateY(270px)' });
-  });
-
-  it('Should add a spacing if grafana variable section with fixed position', async () => {
-    await act(async () =>
-      render(
-        <ScrollableContainer style={{ height: 1000 }}>
-          <>
-            <section
-              aria-label="Dashboard submenu"
-              data-testid={InTestIds.grafanaVariablesSection}
-              style={{ height: 80, position: 'fixed' }}
-            ></section>
-            <Component width={200} height={200} sticky={true} />
-          </>
-        </ScrollableContainer>
-      )
-    );
-
-    const scrollableElement = screen.getByTestId(InTestIds.scrollableElement);
-    const content = screen.getByTestId(InTestIds.content);
-    const grafanaVariablesSection = screen.getByTestId(InTestIds.grafanaVariablesSection);
-
-    /**
-     * Set client height to variables section
-     */
-    Object.defineProperty(grafanaVariablesSection, 'clientHeight', {
-      get() {
-        return 80;
-      },
-    });
-
-    expect(content).toHaveStyle({ transform: 'translateY(0px)' });
-
-    content.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          y: -100,
-          height: 200,
-        }) as any
-    );
-    scrollableElement.getBoundingClientRect = jest.fn(
-      () =>
-        ({
-          top: 100,
-          height: 1000,
-        }) as any
-    );
-
-    fireEvent.scroll(scrollableElement, { target: { scrollY: 100 } });
-
-    expect(screen.getByTestId(InTestIds.content)).toHaveStyle({ transform: 'translateY(180px)' });
   });
 });

@@ -523,13 +523,6 @@ export class VariableChangedEvent extends BusEventBase {
 }
 
 /**
- * Dashboard Panels Changed Event
- */
-export class DashboardPanelsChangedEvent extends BusEventBase {
-  static type = 'dashboard-panels-changed';
-}
-
-/**
  * Status Style Mode
  */
 export enum StatusStyleMode {
