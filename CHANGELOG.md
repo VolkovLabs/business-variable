@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added display tree view in dock menu ([#291](https://github.com/volkovlabs/business-variable/issues/291)).
 
+### Changed
+
+- Updated to min Grafana version 11.5.0 ([#292](https://github.com/volkovlabs/business-variable/issues/292)).
+
 ## [4.2.0] - 2025-08-31
 
 ### Changed

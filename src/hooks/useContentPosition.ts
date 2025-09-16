@@ -2,8 +2,6 @@ import { EventBus } from '@grafana/data';
 import { throttle } from 'lodash';
 import { CSSProperties, RefObject, useLayoutEffect, useRef, useState } from 'react';
 
-import { DashboardPanelsChangedEvent } from '../types';
-
 /**
  * Content Position
  */
@@ -51,22 +49,6 @@ export const useContentPosition = ({
       setStyle(style);
     }, 100)
   );
-
-  /**
-   * Get dashboard submenu sticky rect
-   */
-  const getDashboardSubmenuStickyRect = () => {
-    if (dashboardSubmenuRef.current) {
-      const styles = getComputedStyle(dashboardSubmenuRef.current);
-      const isSticky = styles.position === 'fixed' && styles.visibility !== 'hidden';
-
-      if (isSticky) {
-        return { enabled: true, height: dashboardSubmenuRef.current.clientHeight };
-      }
-    }
-
-    return { enabled: false, height: 0 };
-  };
 
   useLayoutEffect(() => {
     /**
@@ -158,43 +140,6 @@ export const useContentPosition = ({
 
         return;
       }
-
-      if (containerRef.current && dashboardScrollViewRef.current && !window.hasOwnProperty('__grafanaSceneContext')) {
-        if (sticky) {
-          /**
-           * Get dashboard submenu sticky rect
-           */
-          const dashboardSubmenuStickyRect = getDashboardSubmenuStickyRect();
-
-          const { y: startY, height } = containerRef.current.getBoundingClientRect();
-          const dashboardScrollViewRect = dashboardScrollViewRef.current.getBoundingClientRect();
-          const dashboardContentOffsetY = dashboardScrollViewRect.top + dashboardSubmenuStickyRect.height;
-          const relativeStartY = startY - dashboardContentOffsetY;
-          const transformY = Math.abs(Math.min(relativeStartY, 0));
-          const visibleHeight = dashboardScrollViewRect.height - startY + dashboardContentOffsetY;
-          const calculateHeight = Math.min(
-            Math.max(height - transformY, 0),
-            relativeStartY < 0 ? dashboardScrollViewRect.height : visibleHeight
-          );
-
-          /**
-           * Set styles directly to element to prevent flashing on scroll
-           */
-          if (scrollableContainerRef?.current) {
-            scrollableContainerRef.current.style.transform = `translateY(${transformY}px)`;
-            scrollableContainerRef.current.style.height = `${calculateHeight}px`;
-          }
-
-          /**
-           * Set styles
-           */
-          updateStateThrottle.current({ height: calculateHeight, transform: `translateY(${transformY}px)`, width });
-
-          return;
-        }
-
-        setStyle({ width, height });
-      }
     };
 
     calcPosition();
@@ -220,28 +165,6 @@ export const useContentPosition = ({
       return () => {
         document.removeEventListener('scroll', calcPosition);
         resizeObserver.disconnect();
-      };
-    }
-
-    /**
-     * Listen for Scroll events in non-Scenes
-     */
-    if (dashboardScrollViewRef.current && sticky && !window.hasOwnProperty('__grafanaSceneContext')) {
-      /**
-       * subscribe on Panels change event
-       * It is necessary to wait until the current container dimensions and positions are received after the event is called.
-       */
-      const subscription = eventBus.subscribe(DashboardPanelsChangedEvent, () => {
-        setTimeout(() => {
-          calcPosition();
-        }, 300);
-      });
-
-      dashboardScrollViewRef.current.addEventListener('scroll', calcPosition);
-
-      return () => {
-        dashboardScrollViewRef.current?.removeEventListener('scroll', calcPosition);
-        subscription.unsubscribe();
       };
     }
 
