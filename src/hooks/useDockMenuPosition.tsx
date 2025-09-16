@@ -4,6 +4,7 @@ import { MenuSize, TableViewPosition } from '../types';
 import {
   clearPositionElements,
   getButtonInfo,
+  handleResizeWindow,
   isMenuCloseAction,
   isMenuOpenAction,
   restoreNativeMenu,
@@ -117,6 +118,17 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
     [applyVariablesToDockedMenu, clearMenuElements, forceUpdate]
   );
 
+  const handleWindowResize = useCallback(() => {
+    handleResizeWindow({
+      position: position,
+      dockMenuPosition: dockMenuPosition,
+      buttonTogglePosition: buttonTogglePosition,
+      applyVariablesToDockedMenu,
+      clearMenuElements,
+      restoreNativeMenu: () => restoreNativeMenu(nativeDockMenu.current),
+    });
+  }, [applyVariablesToDockedMenu, clearMenuElements, position]);
+
   useLayoutEffect(() => {
     if (position !== TableViewPosition.DOCKED) {
       return;
@@ -124,12 +136,14 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
 
     applyVariablesToDockedMenu();
     document.addEventListener('click', handleMenuClick);
+    window.addEventListener('resize', handleWindowResize);
 
     return () => {
       document.removeEventListener('click', handleMenuClick);
+      window.removeEventListener('resize', handleWindowResize);
       restoreNativeMenu(nativeDockMenu.current);
     };
-  }, [position, handleMenuClick, applyVariablesToDockedMenu]);
+  }, [position, handleMenuClick, applyVariablesToDockedMenu, handleWindowResize]);
 
   /**
    * When switching menus, hide or show the corresponding menu.

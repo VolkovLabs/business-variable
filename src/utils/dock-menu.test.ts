@@ -1,6 +1,6 @@
 import * as domUtils from './dom-utils';
-import { MenuSize } from 'types';
-import { setupDockedMenuElements, clearPositionElements, restoreNativeMenu } from './dock-menu';
+import { MenuSize, TableViewPosition } from 'types';
+import { setupDockedMenuElements, clearPositionElements, restoreNativeMenu, handleResizeWindow } from './dock-menu';
 
 /**
  * Mock @grafana/e2e-selectors
@@ -207,6 +207,95 @@ describe('dock-menu utils', () => {
       expect(domUtils.getNavElementSize).toHaveBeenCalledWith(mockNav);
       expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'beforebegin');
       expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'append');
+    });
+  });
+
+  describe('resize-window utils', () => {
+    let mockDockElement: HTMLDivElement;
+    let mockApplyVariables: jest.Mock;
+    let mockClearMenuElements: jest.Mock;
+    let mockRestoreNativeMenu: jest.Mock;
+    let mockDockMenuPosition: React.RefObject<HTMLElement | null>;
+    let mockButtonTogglePosition: React.RefObject<HTMLDivElement | null>;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+
+      mockDockElement = document.createElement('div');
+
+      mockApplyVariables = jest.fn();
+      mockClearMenuElements = jest.fn();
+      mockRestoreNativeMenu = jest.fn();
+
+      mockDockMenuPosition = { current: null };
+      mockButtonTogglePosition = { current: null };
+
+      jest.mocked(domUtils.findElementByTestId).mockReturnValue(null);
+    });
+
+    describe('handleResizeWindow', () => {
+      describe('When position is DOCKED', () => {
+        it('Should apply variables when dock element exists and refs are null', () => {
+          const defaultParams = {
+            position: TableViewPosition.DOCKED,
+            dockMenuPosition: mockDockMenuPosition,
+            buttonTogglePosition: mockButtonTogglePosition,
+            applyVariablesToDockedMenu: mockApplyVariables,
+            clearMenuElements: mockClearMenuElements,
+            restoreNativeMenu: mockRestoreNativeMenu,
+          };
+
+          jest.mocked(domUtils.findElementByTestId).mockReturnValue(mockDockElement);
+          mockDockMenuPosition.current = null;
+          mockButtonTogglePosition.current = null;
+
+          handleResizeWindow(defaultParams);
+
+          expect(mockApplyVariables).toHaveBeenCalledTimes(1);
+          expect(mockClearMenuElements).not.toHaveBeenCalled();
+          expect(mockRestoreNativeMenu).not.toHaveBeenCalled();
+        });
+      });
+
+      it('Should not apply variables when dock element exists but refs are already set', () => {
+        const defaultParams = {
+          position: TableViewPosition.DOCKED,
+          dockMenuPosition: mockDockMenuPosition,
+          buttonTogglePosition: mockButtonTogglePosition,
+          applyVariablesToDockedMenu: mockApplyVariables,
+          clearMenuElements: mockClearMenuElements,
+          restoreNativeMenu: mockRestoreNativeMenu,
+        };
+
+        jest.mocked(domUtils.findElementByTestId).mockReturnValue(mockDockElement);
+        mockDockMenuPosition.current = document.createElement('div');
+        mockButtonTogglePosition.current = document.createElement('div');
+
+        handleResizeWindow(defaultParams);
+
+        expect(mockApplyVariables).not.toHaveBeenCalled();
+        expect(mockClearMenuElements).not.toHaveBeenCalled();
+        expect(mockRestoreNativeMenu).not.toHaveBeenCalled();
+      });
+
+      it('Should clear elements and restore menu when dock element does not exist', () => {
+        const defaultParams = {
+          position: TableViewPosition.DOCKED,
+          dockMenuPosition: mockDockMenuPosition,
+          buttonTogglePosition: mockButtonTogglePosition,
+          applyVariablesToDockedMenu: mockApplyVariables,
+          clearMenuElements: mockClearMenuElements,
+          restoreNativeMenu: mockRestoreNativeMenu,
+        };
+
+        jest.mocked(domUtils.findElementByTestId).mockReturnValue(null);
+
+        handleResizeWindow(defaultParams);
+
+        expect(mockClearMenuElements).toHaveBeenCalledTimes(1);
+        expect(mockRestoreNativeMenu).toHaveBeenCalledTimes(1);
+        expect(mockApplyVariables).not.toHaveBeenCalled();
+      });
     });
   });
 });

@@ -12,6 +12,7 @@ jest.mock('../utils/dock-menu', () => ({
   setupDockedMenuElements: jest.fn(),
   clearPositionElements: jest.fn(),
   restoreNativeMenu: jest.fn(),
+  handleResizeWindow: jest.fn(),
 }));
 
 /**
@@ -339,6 +340,55 @@ describe('useDockMenuPosition', () => {
        */
       const addListenerCalls = addEventListenerSpy.mock.calls.filter((call) => call[0] === 'click');
       expect(addListenerCalls.length).toEqual(1);
+    });
+  });
+
+  describe('Window resize ', () => {
+    it('Should handle window resize event for DOCKED position', () => {
+      const { result } = renderHook(() => useDockMenuPosition({ position: TableViewPosition.DOCKED }));
+
+      const resizeEvent = new Event('resize');
+
+      act(() => {
+        window.dispatchEvent(resizeEvent);
+      });
+
+      expect(dockMenuUtils.handleResizeWindow).toHaveBeenCalledWith({
+        position: TableViewPosition.DOCKED,
+        dockMenuPosition: result.current.dockMenuPosition,
+        buttonTogglePosition: result.current.buttonTogglePosition,
+        applyVariablesToDockedMenu: expect.any(Function),
+        clearMenuElements: expect.any(Function),
+        restoreNativeMenu: expect.any(Function),
+      });
+    });
+
+    it('Should not handle window resize when position is not DOCKED', () => {
+      renderHook(() => useDockMenuPosition({ position: TableViewPosition.MINIMIZE }));
+
+      const resizeEvent = new Event('resize');
+
+      act(() => {
+        window.dispatchEvent(resizeEvent);
+      });
+
+      expect(dockMenuUtils.handleResizeWindow).not.toHaveBeenCalled();
+    });
+
+    it('Should call restoreNativeMenu function in resize handler', () => {
+      jest.mocked(dockMenuUtils.handleResizeWindow).mockImplementation(({ restoreNativeMenu }) => {
+        restoreNativeMenu();
+      });
+
+      renderHook(() => useDockMenuPosition({ position: TableViewPosition.DOCKED }));
+
+      const resizeEvent = new Event('resize');
+
+      act(() => {
+        window.dispatchEvent(resizeEvent);
+      });
+
+      expect(dockMenuUtils.restoreNativeMenu).toHaveBeenCalledWith(mockNativeDockMenu);
     });
   });
 });
