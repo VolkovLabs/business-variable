@@ -1,5 +1,5 @@
 import * as domUtils from './dom-utils';
-import { MenuSize, TableViewPosition } from 'types';
+import { TableViewPosition } from 'types';
 import { setupDockedMenuElements, clearPositionElements, restoreNativeMenu, handleResizeWindow } from './dock-menu';
 
 /**
@@ -79,18 +79,15 @@ describe('dock-menu utils', () => {
        */
       jest.mocked(domUtils.findElementByTestId).mockReturnValue(null);
 
-      const currentSize: MenuSize = { width: 0, height: 0 };
-      const setDockedMenuSize = jest.fn();
-
-      const result = setupDockedMenuElements(currentSize, setDockedMenuSize);
+      const result = setupDockedMenuElements();
 
       expect(result).toEqual({
         dockMenuPosition: null,
         buttonTogglePosition: null,
         nativeDockMenu: null,
       });
+
       expect(domUtils.findElementByTestId).toHaveBeenCalledWith('nav-menu-test-id');
-      expect(setDockedMenuSize).not.toHaveBeenCalled();
     });
 
     it('Should prioritize docked button positioning over nav positioning', () => {
@@ -109,18 +106,13 @@ describe('dock-menu utils', () => {
       jest.mocked(domUtils.findElementByTestId).mockReturnValue(mockDockElement);
       jest.mocked(domUtils.findElementById).mockReturnValue(mockDockedButton);
 
-      const currentSize: MenuSize = { width: 0, height: 0 };
-      const setDockedMenuSize = jest.fn();
-
-      setupDockedMenuElements(currentSize, setDockedMenuSize);
+      setupDockedMenuElements();
 
       /**
        * Should call createAndInsertElement for both nav and docked button
        * Docked button call should override nav button positioning
        */
-      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'beforebegin');
-      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'append');
-      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockDockedButton, 'beforebegin');
+      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'prepend');
     });
   });
 
@@ -196,17 +188,12 @@ describe('dock-menu utils', () => {
 
       jest.mocked(domUtils.findElementByTestId).mockReturnValue(mockDockElement);
 
-      const currentSize: MenuSize = { width: 0, height: 0 };
-      const setDockedMenuSize = jest.fn();
-
-      setupDockedMenuElements(currentSize, setDockedMenuSize);
+      setupDockedMenuElements();
 
       /**
        * Should work with first nav element
        */
-      expect(domUtils.getNavElementSize).toHaveBeenCalledWith(mockNav);
-      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'beforebegin');
-      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'append');
+      expect(domUtils.createAndInsertElement).toHaveBeenCalledWith(mockNav, 'prepend');
     });
   });
 

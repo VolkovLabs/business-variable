@@ -9,15 +9,23 @@ import {
   toggleElementDisplay,
 } from './dom-utils';
 
+export const setContainerSize = (setDockedMenuSize: (size: MenuSize) => void) => {
+  const dockElementDataAttr = selectors.components.NavMenu.Menu;
+  const dockElementCurrent = findElementByTestId(dockElementDataAttr);
+  const nav = dockElementCurrent?.querySelector('nav');
+  const size = getNavElementSize(nav);
+
+  /**
+   * Update Sizes
+   */
+  setDockedMenuSize(size);
+};
 /**
  * Apply variables for docked menu and set up DOM elements
  * @param currentSize
  * @param setDockedMenuSize
  */
-export const setupDockedMenuElements = (
-  currentSize: MenuSize,
-  setDockedMenuSize: (size: MenuSize) => void
-): DockMenuElements => {
+export const setupDockedMenuElements = (): DockMenuElements => {
   const result: DockMenuElements = {
     dockMenuPosition: null,
     buttonTogglePosition: null,
@@ -35,20 +43,10 @@ export const setupDockedMenuElements = (
   const nav = dockElementCurrent.querySelector('nav');
 
   if (nav) {
-    const size = getNavElementSize(nav);
-
-    /**
-     * Update Sizes
-     */
-    if (currentSize.height === 0 || currentSize.width === 0) {
-      setDockedMenuSize(size);
-    }
-
     /**
      * Create elements for position
      */
-    result.buttonTogglePosition = createAndInsertElement(nav, 'beforebegin');
-    result.dockMenuPosition = createAndInsertElement(nav, 'append');
+    result.dockMenuPosition = createAndInsertElement(nav, 'prepend');
   }
 
   if (dockedButton) {

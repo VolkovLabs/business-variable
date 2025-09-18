@@ -8,6 +8,7 @@ import {
   isMenuCloseAction,
   isMenuOpenAction,
   restoreNativeMenu,
+  setContainerSize,
   setupDockedMenuElements,
   toggleElementDisplay,
 } from '../utils';
@@ -66,17 +67,21 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
   }, []);
 
   const applyVariablesToDockedMenu = useCallback(() => {
-    const elements = setupDockedMenuElements(dockedMenuSize, setDockedMenuSize);
+    const elements = setupDockedMenuElements();
 
     dockMenuPosition.current = elements.dockMenuPosition;
     buttonTogglePosition.current = elements.buttonTogglePosition;
     nativeDockMenu.current = elements.nativeDockMenu;
-  }, [dockedMenuSize]);
+  }, []);
 
   const clearMenuElements = useCallback(() => {
     const cleared = clearPositionElements();
     dockMenuPosition.current = cleared.dockMenuPosition;
     buttonTogglePosition.current = cleared.buttonTogglePosition;
+  }, []);
+
+  const updateSize = useCallback(() => {
+    setContainerSize(setDockedMenuSize);
   }, []);
 
   /**
@@ -109,13 +114,14 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
         if (isMenuOpenAction(buttonInfo.ariaLabel)) {
           applyVariablesToDockedMenu();
           forceUpdate();
+          updateSize();
         } else if (isMenuCloseAction(buttonInfo.ariaLabel)) {
           clearMenuElements();
           forceUpdate();
         }
       }
     },
-    [applyVariablesToDockedMenu, clearMenuElements, forceUpdate]
+    [applyVariablesToDockedMenu, clearMenuElements, forceUpdate, updateSize]
   );
 
   const handleWindowResize = useCallback(() => {
@@ -135,15 +141,34 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
     }
 
     applyVariablesToDockedMenu();
+
+    return () => {
+      restoreNativeMenu(nativeDockMenu.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    if (position !== TableViewPosition.DOCKED) {
+      return;
+    }
+
     document.addEventListener('click', handleMenuClick);
-    window.addEventListener('resize', handleWindowResize);
 
     return () => {
       document.removeEventListener('click', handleMenuClick);
-      window.removeEventListener('resize', handleWindowResize);
-      restoreNativeMenu(nativeDockMenu.current);
     };
-  }, [position, handleMenuClick, applyVariablesToDockedMenu, handleWindowResize]);
+  }, [applyVariablesToDockedMenu, handleMenuClick, position]);
+
+  useLayoutEffect(() => {
+    if (position !== TableViewPosition.DOCKED) {
+      return;
+    }
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [handleWindowResize, position]);
 
   /**
    * When switching menus, hide or show the corresponding menu.
@@ -164,6 +189,29 @@ export const useDockMenuPosition = ({ position }: HookProps) => {
       toggleElementDisplay(nativeDockMenu.current, 'none');
     }
   }, [isDockMenuDisplay]);
+
+  useLayoutEffect(() => {
+    if (position !== TableViewPosition.DOCKED) {
+      return;
+    }
+
+    if (dockedMenuSize.height === 0 && dockedMenuSize.width === 0) {
+      updateSize();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    if (position !== TableViewPosition.DOCKED) {
+      return;
+    }
+
+    window.addEventListener('resize', updateSize);
+
+    return () => {
+      window.removeEventListener('resize', updateSize);
+    };
+  }, [position, dockedMenuSize, updateSize]);
 
   return {
     dockedMenuSize,

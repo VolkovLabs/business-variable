@@ -47,7 +47,7 @@ describe('domUtils', () => {
       const targetElement = document.createElement('div');
       container.appendChild(targetElement);
 
-      const newElement = createAndInsertElement(targetElement, 'append');
+      const newElement = createAndInsertElement(targetElement, 'prepend');
 
       expect(newElement.tagName).toEqual('DIV');
       expect(targetElement.children[0]).toEqual(newElement);

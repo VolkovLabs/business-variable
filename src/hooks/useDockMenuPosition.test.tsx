@@ -13,6 +13,7 @@ jest.mock('../utils/dock-menu', () => ({
   clearPositionElements: jest.fn(),
   restoreNativeMenu: jest.fn(),
   handleResizeWindow: jest.fn(),
+  setContainerSize: jest.fn(),
 }));
 
 /**
@@ -294,52 +295,6 @@ describe('useDockMenuPosition', () => {
       expect(result.current.forceRerender).toEqual(initialRerenderCount);
       expect(dockMenuUtils.setupDockedMenuElements).toHaveBeenCalledTimes(1);
       expect(dockMenuUtils.clearPositionElements).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Menu Size Management', () => {
-    it('Should update dockedMenuSize when setup function provides new size', () => {
-      /**
-       * Mock setup to call setDockedMenuSize
-       */
-      const mockSize = { width: 320, height: 180 };
-      jest.mocked(dockMenuUtils.setupDockedMenuElements).mockImplementation((currentSize, setSize) => {
-        setSize(mockSize);
-        return {
-          dockMenuPosition: mockDockMenuPosition,
-          buttonTogglePosition: mockButtonTogglePosition,
-          nativeDockMenu: mockNativeDockMenu,
-        };
-      });
-
-      const { result } = renderHook(() => useDockMenuPosition({ position: TableViewPosition.DOCKED }));
-
-      expect(result.current.dockedMenuSize).toEqual(mockSize);
-    });
-  });
-
-  describe('Hook Cleanup', () => {
-    it('Should not setup event listeners when position changes from DOCKED to FLOATING', () => {
-      const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-      const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
-
-      const { rerender } = renderHook((props) => useDockMenuPosition(props), {
-        initialProps: { position: TableViewPosition.DOCKED },
-      });
-
-      /**
-       * Change position to MINIMIZE
-       */
-      rerender({ position: TableViewPosition.MINIMIZE });
-
-      expect(removeEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
-      expect(dockMenuUtils.restoreNativeMenu).toHaveBeenCalledWith(mockNativeDockMenu);
-
-      /**
-       * Should not add new event listeners for floating position
-       */
-      const addListenerCalls = addEventListenerSpy.mock.calls.filter((call) => call[0] === 'click');
-      expect(addListenerCalls.length).toEqual(1);
     });
   });
 
