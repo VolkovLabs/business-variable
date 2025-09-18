@@ -1,6 +1,12 @@
 import * as domUtils from './dom-utils';
-import { TableViewPosition } from 'types';
-import { setupDockedMenuElements, clearPositionElements, restoreNativeMenu, handleResizeWindow } from './dock-menu';
+import { MenuSize, TableViewPosition } from 'types';
+import {
+  setupDockedMenuElements,
+  clearPositionElements,
+  restoreNativeMenu,
+  handleResizeWindow,
+  setContainerSize,
+} from './dock-menu';
 
 /**
  * Mock @grafana/e2e-selectors
@@ -283,6 +289,25 @@ describe('dock-menu utils', () => {
         expect(mockRestoreNativeMenu).toHaveBeenCalledTimes(1);
         expect(mockApplyVariables).not.toHaveBeenCalled();
       });
+    });
+  });
+});
+
+describe('setContainerSize', () => {
+  let mockSetDockedMenuSize: jest.MockedFunction<(size: MenuSize) => void>;
+
+  beforeEach(() => {
+    mockSetDockedMenuSize = jest.fn();
+    jest.clearAllMocks();
+  });
+
+  describe('When dock element is found', () => {
+    it('Should call setDockedMenuSize with correct size when nav element exists', () => {
+      const mockNav = document.createElement('nav');
+      const mockDockElement = document.createElement('div');
+      mockDockElement.appendChild(mockNav);
+      setContainerSize(mockSetDockedMenuSize);
+      expect(mockSetDockedMenuSize).toHaveBeenCalled();
     });
   });
 });

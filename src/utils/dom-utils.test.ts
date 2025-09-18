@@ -64,6 +64,16 @@ describe('domUtils', () => {
       expect(size.width).toEqual(300);
       expect(size.height).toEqual(200);
     });
+
+    it('Should return default sizes if nav is undefined', () => {
+      const nav = document.createElement('nav');
+      container.appendChild(nav);
+
+      const size = getNavElementSize(undefined);
+
+      expect(size.width).toEqual(0);
+      expect(size.height).toEqual(0);
+    });
   });
 
   describe('findElementByTestId', () => {
