@@ -7,12 +7,12 @@ import { MenuSize } from '../types';
  */
 export const createAndInsertElement = (
   targetElement: HTMLElement,
-  position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend' | 'append'
+  position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend' | 'prepend'
 ): HTMLDivElement => {
   const newElement = document.createElement('div');
 
-  if (position === 'append') {
-    targetElement.append(newElement);
+  if (position === 'prepend') {
+    targetElement.prepend(newElement);
   } else {
     targetElement.insertAdjacentElement(position, newElement);
   }
@@ -24,8 +24,15 @@ export const createAndInsertElement = (
  * get nav element size
  * @param nav
  */
-export const getNavElementSize = (nav: HTMLElement): MenuSize => {
+export const getNavElementSize = (nav?: HTMLElement | null): MenuSize => {
+  if (!nav) {
+    return {
+      width: 0,
+      height: 0,
+    };
+  }
   const rect = nav.getBoundingClientRect();
+
   /**
    * 290 it is fallback width
    */

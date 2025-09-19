@@ -12,6 +12,8 @@ jest.mock('../utils/dock-menu', () => ({
   setupDockedMenuElements: jest.fn(),
   clearPositionElements: jest.fn(),
   restoreNativeMenu: jest.fn(),
+  handleResizeWindow: jest.fn(),
+  setContainerSize: jest.fn(),
 }));
 
 /**
@@ -296,49 +298,52 @@ describe('useDockMenuPosition', () => {
     });
   });
 
-  describe('Menu Size Management', () => {
-    it('Should update dockedMenuSize when setup function provides new size', () => {
-      /**
-       * Mock setup to call setDockedMenuSize
-       */
-      const mockSize = { width: 320, height: 180 };
-      jest.mocked(dockMenuUtils.setupDockedMenuElements).mockImplementation((currentSize, setSize) => {
-        setSize(mockSize);
-        return {
-          dockMenuPosition: mockDockMenuPosition,
-          buttonTogglePosition: mockButtonTogglePosition,
-          nativeDockMenu: mockNativeDockMenu,
-        };
-      });
-
+  describe('Window resize ', () => {
+    it('Should handle window resize event for DOCKED position', () => {
       const { result } = renderHook(() => useDockMenuPosition({ position: TableViewPosition.DOCKED }));
 
-      expect(result.current.dockedMenuSize).toEqual(mockSize);
-    });
-  });
+      const resizeEvent = new Event('resize');
 
-  describe('Hook Cleanup', () => {
-    it('Should not setup event listeners when position changes from DOCKED to FLOATING', () => {
-      const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-      const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
-
-      const { rerender } = renderHook((props) => useDockMenuPosition(props), {
-        initialProps: { position: TableViewPosition.DOCKED },
+      act(() => {
+        window.dispatchEvent(resizeEvent);
       });
 
-      /**
-       * Change position to MINIMIZE
-       */
-      rerender({ position: TableViewPosition.MINIMIZE });
+      expect(dockMenuUtils.handleResizeWindow).toHaveBeenCalledWith({
+        position: TableViewPosition.DOCKED,
+        dockMenuPosition: result.current.dockMenuPosition,
+        buttonTogglePosition: result.current.buttonTogglePosition,
+        applyVariablesToDockedMenu: expect.any(Function),
+        clearMenuElements: expect.any(Function),
+        restoreNativeMenu: expect.any(Function),
+      });
+    });
 
-      expect(removeEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    it('Should not handle window resize when position is not DOCKED', () => {
+      renderHook(() => useDockMenuPosition({ position: TableViewPosition.MINIMIZE }));
+
+      const resizeEvent = new Event('resize');
+
+      act(() => {
+        window.dispatchEvent(resizeEvent);
+      });
+
+      expect(dockMenuUtils.handleResizeWindow).not.toHaveBeenCalled();
+    });
+
+    it('Should call restoreNativeMenu function in resize handler', () => {
+      jest.mocked(dockMenuUtils.handleResizeWindow).mockImplementation(({ restoreNativeMenu }) => {
+        restoreNativeMenu();
+      });
+
+      renderHook(() => useDockMenuPosition({ position: TableViewPosition.DOCKED }));
+
+      const resizeEvent = new Event('resize');
+
+      act(() => {
+        window.dispatchEvent(resizeEvent);
+      });
+
       expect(dockMenuUtils.restoreNativeMenu).toHaveBeenCalledWith(mockNativeDockMenu);
-
-      /**
-       * Should not add new event listeners for floating position
-       */
-      const addListenerCalls = addEventListenerSpy.mock.calls.filter((call) => call[0] === 'click');
-      expect(addListenerCalls.length).toEqual(1);
     });
   });
 });

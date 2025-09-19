@@ -47,7 +47,7 @@ describe('domUtils', () => {
       const targetElement = document.createElement('div');
       container.appendChild(targetElement);
 
-      const newElement = createAndInsertElement(targetElement, 'append');
+      const newElement = createAndInsertElement(targetElement, 'prepend');
 
       expect(newElement.tagName).toEqual('DIV');
       expect(targetElement.children[0]).toEqual(newElement);
@@ -63,6 +63,16 @@ describe('domUtils', () => {
 
       expect(size.width).toEqual(300);
       expect(size.height).toEqual(200);
+    });
+
+    it('Should return default sizes if nav is undefined', () => {
+      const nav = document.createElement('nav');
+      container.appendChild(nav);
+
+      const size = getNavElementSize(undefined);
+
+      expect(size.width).toEqual(0);
+      expect(size.height).toEqual(0);
     });
   });
 
