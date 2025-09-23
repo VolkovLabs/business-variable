@@ -7,6 +7,7 @@ import {
   MinimizeOutputFormat,
   RequestLatencyMode,
   TableViewPosition,
+  ToolbarMode,
 } from '../types';
 
 /**
@@ -130,6 +131,14 @@ export const FAVORITES_ENABLED_OPTIONS = [
 export const SHOW_SELECTED_OPTIONS = [
   { value: true, label: 'Enabled', description: 'Show button in header', icon: 'eye' },
   { value: false, label: 'Disabled', description: 'Hide Button in header.', icon: 'eye-slash' },
+];
+
+/**
+ * Toolbar mode options
+ */
+export const TOOLBAR_MODE_OPTIONS = [
+  { value: ToolbarMode.BUTTONS, label: 'Buttons' },
+  { value: ToolbarMode.SELECT, label: 'Select' },
 ];
 
 /**

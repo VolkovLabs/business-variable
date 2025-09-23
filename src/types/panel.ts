@@ -31,6 +31,14 @@ export enum RequestLatencyMode {
 }
 
 /**
+ * Toolbar mode
+ */
+export enum ToolbarMode {
+  BUTTONS = 'buttons',
+  SELECT = 'select',
+}
+
+/**
  * Data Source Config
  */
 export interface DatasourceConfig {
@@ -307,6 +315,13 @@ export interface TableViewOptions {
    * @type {boolean}
    */
   isPinTabsEnabled?: boolean;
+
+  /**
+   * Toolbar mode
+   *
+   * @type {ToolbarMode}
+   */
+  toolbarMode?: ToolbarMode;
 }
 
 /**

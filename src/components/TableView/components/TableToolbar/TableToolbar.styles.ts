@@ -72,5 +72,8 @@ export const getStyles = (theme: GrafanaTheme2) => {
         color: ${theme.colors.primary.shade};
       }
     `,
+    selectContainer: css`
+      padding: ${theme.spacing(1, 2, 0, 1)};
+    `,
   };
 };

@@ -28,6 +28,7 @@ export const TEST_IDS = {
     root: createSelector('data-testid table-toolbar root'),
     tab: createSelector((name: unknown) => `data-testid table-toolbar tab-${name}`),
     pinButton: createSelector((groupName: unknown) => `data-testid table-toolbar pin-button-${groupName}`),
+    fieldSelectGroup: 'field-select-group',
   },
   table: {
     allControl: 'data-testid table all-control',

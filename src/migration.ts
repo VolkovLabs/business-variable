@@ -10,6 +10,7 @@ import {
   PanelOptions,
   RequestLatencyMode,
   TableViewPosition,
+  ToolbarMode,
 } from './types';
 
 /**
@@ -136,6 +137,13 @@ export const getMigratedOptions = async (
    */
   if (normalizedOptions.isPinTabsEnabled === undefined) {
     normalizedOptions.isPinTabsEnabled = false;
+  }
+
+  /**
+   * Pin/Unpin functionality for tabs
+   */
+  if (normalizedOptions.toolbarMode === undefined) {
+    normalizedOptions.toolbarMode = ToolbarMode.BUTTONS;
   }
 
   /**

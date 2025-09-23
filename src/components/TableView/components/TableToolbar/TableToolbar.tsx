@@ -1,10 +1,10 @@
 import { cx } from '@emotion/css';
-import { Icon, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
+import { Icon, Select, ToolbarButton, ToolbarButtonRow, useTheme2 } from '@grafana/ui';
 import React, { useCallback, useMemo } from 'react';
 import { preparedPinnedGroups } from 'utils';
 
 import { TEST_IDS } from '../../../../constants';
-import { LevelsGroup, PanelOptions } from '../../../../types';
+import { LevelsGroup, PanelOptions, ToolbarMode } from '../../../../types';
 import { getStyles } from './TableToolbar.styles';
 
 /**
@@ -97,48 +97,70 @@ export const TableToolbar = ({
     [setPinnedGroups]
   );
 
+  /**
+   * Options for select view
+   */
+  const selectViewOptions = sortedGroups.map((group) => ({
+    label: group.name,
+    value: group.name,
+  }));
+
   return (
     <div ref={headerRef} className={styles.header} {...TEST_IDS.tableToolbar.root.apply()}>
-      <ToolbarButtonRow alignment="left" key={toolbarRowKey} className={styles.toolbar}>
-        {sortedGroups.map((group) => {
-          const isPinned = safePinnedGroups.includes(group.name);
-          const isActive = currentGroup === group.name;
+      {options.toolbarMode === ToolbarMode.BUTTONS && (
+        <ToolbarButtonRow alignment="left" key={toolbarRowKey} className={styles.toolbar}>
+          {sortedGroups.map((group) => {
+            const isPinned = safePinnedGroups.includes(group.name);
+            const isActive = currentGroup === group.name;
 
-          return (
-            <div key={group.name} className={styles.tabWithPin}>
-              <ToolbarButton
-                variant={isActive ? 'active' : 'default'}
-                onClick={() => {
-                  setCurrentGroup(group.name);
-                  shouldScroll.current = true;
-                }}
-                className={cx(styles.toolbarButton)}
-                {...TEST_IDS.tableToolbar.tab.apply(group.name)}
-              >
-                <span className={styles.tabContent}>
-                  <span className={styles.tabText}>{group.name}</span>
-                  {options.isPinTabsEnabled && (
-                    <Icon
-                      name="gf-pin"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        togglePinGroup(group.name);
-                      }}
-                      className={cx(styles.pinButton, {
-                        [styles.pinButtonActive]: isPinned,
-                      })}
-                      title={isPinned ? 'Unpin tab' : 'Pin tab'}
-                      aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
-                      {...TEST_IDS.tableToolbar.pinButton.apply(group.name)}
-                    />
-                  )}
-                </span>
-              </ToolbarButton>
-            </div>
-          );
-        })}
-      </ToolbarButtonRow>
+            return (
+              <div key={group.name} className={styles.tabWithPin}>
+                <ToolbarButton
+                  variant={isActive ? 'active' : 'default'}
+                  onClick={() => {
+                    setCurrentGroup(group.name);
+                    shouldScroll.current = true;
+                  }}
+                  className={cx(styles.toolbarButton)}
+                  {...TEST_IDS.tableToolbar.tab.apply(group.name)}
+                >
+                  <span className={styles.tabContent}>
+                    <span className={styles.tabText}>{group.name}</span>
+                    {options.isPinTabsEnabled && (
+                      <Icon
+                        name="gf-pin"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          togglePinGroup(group.name);
+                        }}
+                        className={cx(styles.pinButton, {
+                          [styles.pinButtonActive]: isPinned,
+                        })}
+                        title={isPinned ? 'Unpin tab' : 'Pin tab'}
+                        aria-label={isPinned ? 'Unpin tab' : 'Pin tab'}
+                        {...TEST_IDS.tableToolbar.pinButton.apply(group.name)}
+                      />
+                    )}
+                  </span>
+                </ToolbarButton>
+              </div>
+            );
+          })}
+        </ToolbarButtonRow>
+      )}
+      {options.toolbarMode === ToolbarMode.SELECT && (
+        <div className={styles.selectContainer}>
+          <Select
+            options={selectViewOptions}
+            value={currentGroup}
+            onChange={(event) => {
+              setCurrentGroup(event.value!);
+            }}
+            aria-label={TEST_IDS.tableToolbar.fieldSelectGroup}
+          />
+        </div>
+      )}
     </div>
   );
 };

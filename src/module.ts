@@ -40,6 +40,7 @@ import {
   TABLE_WRAP_OPTIONS,
   TABS_ORDER_OPTIONS,
   TIME_TRANSFORMATION_OPTIONS,
+  TOOLBAR_MODE_OPTIONS,
 } from './constants';
 import { getMigratedOptions } from './migration';
 import {
@@ -51,6 +52,7 @@ import {
   RequestLatencyMode,
   StatusStyleMode,
   TableViewPosition,
+  ToolbarMode,
   VariableType,
 } from './types';
 
@@ -334,6 +336,15 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: PIN_TAB_OPTIONS,
         },
         defaultValue: false,
+        showIf: showForTableView,
+      })
+      .addRadio({
+        path: 'toolbarMode',
+        name: 'Toolbar mode',
+        settings: {
+          options: TOOLBAR_MODE_OPTIONS,
+        },
+        defaultValue: ToolbarMode.BUTTONS,
         showIf: showForTableView,
       });
 

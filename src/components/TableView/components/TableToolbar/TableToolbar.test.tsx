@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 
 import { TEST_IDS } from '../../../../constants';
 
-import { TableViewPosition } from '../../../../types';
+import { TableViewPosition, ToolbarMode } from '../../../../types';
 import { TableToolbar } from './TableToolbar';
 
 /**
@@ -85,6 +85,7 @@ describe('Table Toolbar View', () => {
         currentGroup: 'group1',
         safePinnedGroups: [],
         options: {
+          toolbarMode: ToolbarMode.BUTTONS,
           tableViewPosition: TableViewPosition.NORMAL,
           groups: [
             {
@@ -138,6 +139,7 @@ describe('Table Toolbar View', () => {
         currentGroup: 'group1',
         safePinnedGroups: ['group1'],
         options: {
+          toolbarMode: ToolbarMode.BUTTONS,
           isPinTabsEnabled: true,
           tableViewPosition: TableViewPosition.NORMAL,
           groups: [
@@ -180,5 +182,58 @@ describe('Table Toolbar View', () => {
     const result = updateFunction(testPreviousGroups);
 
     expect(result).toBeDefined();
+  });
+
+  it('Should switch groups via Select', () => {
+    const setPinnedGroups = jest.fn();
+    const setCurrentGroup = jest.fn();
+
+    const shouldScroll = {
+      current: false,
+    };
+
+    render(
+      getComponent({
+        shouldScroll: shouldScroll,
+        setPinnedGroups: setPinnedGroups,
+        setCurrentGroup: setCurrentGroup,
+        sortedGroups: [
+          { name: 'group1', items: [{ name: 'group1Field' }] },
+          { name: 'group2', items: [{ name: 'group2Field' }] },
+        ] as any,
+        currentGroup: 'group1',
+        safePinnedGroups: [],
+        options: {
+          toolbarMode: ToolbarMode.SELECT,
+          tableViewPosition: TableViewPosition.NORMAL,
+          groups: [
+            {
+              name: 'group1',
+              items: [
+                {
+                  name: 'group1Field',
+                },
+              ],
+            },
+            {
+              name: 'group2',
+              items: [
+                {
+                  name: 'group2Field',
+                },
+              ],
+            },
+          ],
+        } as any,
+      })
+    );
+
+    expect(selectors.root()).toBeInTheDocument();
+    expect(selectors.fieldSelectGroup()).toBeInTheDocument();
+
+    fireEvent.change(selectors.fieldSelectGroup(), { target: { value: 'group2' } });
+
+    expect(setCurrentGroup).toHaveBeenCalled();
+    expect(setCurrentGroup).toHaveBeenCalledWith('group2');
   });
 });
