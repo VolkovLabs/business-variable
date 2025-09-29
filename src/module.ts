@@ -112,6 +112,8 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
     const showForMinimizeView = (config: PanelOptions) => config.displayMode === DisplayMode.MINIMIZE;
     const showForButtonView = (config: PanelOptions) => config.displayMode === DisplayMode.BUTTON;
     const showForTableView = (config: PanelOptions) => config.displayMode === DisplayMode.TABLE;
+    const showForTableTabsView = (config: PanelOptions) =>
+      config.displayMode === DisplayMode.TABLE && config.toolbarMode === ToolbarMode.TABS;
     const showForSliderView = (config: PanelOptions) => config.displayMode === DisplayMode.SLIDER;
     const isVariableSelected = (config: PanelOptions) => !!config.variable;
     const isFavoritesDatasourceShown = (config: PanelOptions) =>
@@ -336,7 +338,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
           options: PIN_TAB_OPTIONS,
         },
         defaultValue: false,
-        showIf: showForTableView,
+        showIf: showForTableTabsView,
       })
       .addRadio({
         path: 'toolbarMode',

@@ -8,16 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Breaking Changes
 
-- Requires Scenes framework in Grafana 11.5 or Grafana 12.
+- Requires the Scenes framework in Grafana 11.5 or Grafana 12.
 
 ### Added
 
-- Added display tree view in dock menu ([#291](https://github.com/volkovlabs/business-variable/issues/291)).
-- Added group listbox instead of tabs with 3-dots to expand ([#294](https://github.com/volkovlabs/business-variable/issues/294)).
+- Added display tree view in the dock menu ([#291](https://github.com/volkovlabs/business-variable/issues/291)).
+- Added group listbox instead of tabs with a 3-dot menu to expand ([#294](https://github.com/volkovlabs/business-variable/issues/294)).
 
 ### Changed
 
-- Updated to min Grafana version 11.5.0 ([#292](https://github.com/volkovlabs/business-variable/issues/292)).
+- Updated minimum Grafana version to 11.5.0 ([#292](https://github.com/volkovlabs/business-variable/issues/292)).
 - Updated panel in docked menu on window resize ([#293](https://github.com/volkovlabs/business-variable/issues/293)).
 
 ## [4.2.0] - 2025-08-31
