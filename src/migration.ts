@@ -143,7 +143,7 @@ export const getMigratedOptions = async (
    * Pin/Unpin functionality for tabs
    */
   if (normalizedOptions.toolbarMode === undefined) {
-    normalizedOptions.toolbarMode = ToolbarMode.BUTTONS;
+    normalizedOptions.toolbarMode = ToolbarMode.TABS;
   }
 
   /**

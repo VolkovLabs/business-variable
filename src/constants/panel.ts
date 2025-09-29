@@ -137,7 +137,7 @@ export const SHOW_SELECTED_OPTIONS = [
  * Toolbar mode options
  */
 export const TOOLBAR_MODE_OPTIONS = [
-  { value: ToolbarMode.BUTTONS, label: 'Buttons' },
+  { value: ToolbarMode.TABS, label: 'Tabs' },
   { value: ToolbarMode.SELECT, label: 'Select' },
 ];
 

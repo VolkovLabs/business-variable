@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Added display tree view in dock menu ([#291](https://github.com/volkovlabs/business-variable/issues/291)).
+- Added group listbox instead of tabs with 3-dots to expand ([#294](https://github.com/volkovlabs/business-variable/issues/294)).
 
 ### Changed
 

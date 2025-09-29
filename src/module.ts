@@ -344,7 +344,7 @@ export const plugin = new PanelPlugin<PanelOptions>(VariablePanel)
         settings: {
           options: TOOLBAR_MODE_OPTIONS,
         },
-        defaultValue: ToolbarMode.BUTTONS,
+        defaultValue: ToolbarMode.TABS,
         showIf: showForTableView,
       });
 

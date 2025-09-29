@@ -34,7 +34,7 @@ export enum RequestLatencyMode {
  * Toolbar mode
  */
 export enum ToolbarMode {
-  BUTTONS = 'buttons',
+  TABS = 'tabs',
   SELECT = 'select',
 }
 

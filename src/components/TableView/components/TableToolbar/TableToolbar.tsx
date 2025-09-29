@@ -107,7 +107,7 @@ export const TableToolbar = ({
 
   return (
     <div ref={headerRef} className={styles.header} {...TEST_IDS.tableToolbar.root.apply()}>
-      {options.toolbarMode === ToolbarMode.BUTTONS && (
+      {options.toolbarMode === ToolbarMode.TABS && (
         <ToolbarButtonRow alignment="left" key={toolbarRowKey} className={styles.toolbar}>
           {sortedGroups.map((group) => {
             const isPinned = safePinnedGroups.includes(group.name);

@@ -85,7 +85,7 @@ describe('Table Toolbar View', () => {
         currentGroup: 'group1',
         safePinnedGroups: [],
         options: {
-          toolbarMode: ToolbarMode.BUTTONS,
+          toolbarMode: ToolbarMode.TABS,
           tableViewPosition: TableViewPosition.NORMAL,
           groups: [
             {
@@ -139,7 +139,7 @@ describe('Table Toolbar View', () => {
         currentGroup: 'group1',
         safePinnedGroups: ['group1'],
         options: {
-          toolbarMode: ToolbarMode.BUTTONS,
+          toolbarMode: ToolbarMode.TABS,
           isPinTabsEnabled: true,
           tableViewPosition: TableViewPosition.NORMAL,
           groups: [
