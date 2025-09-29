@@ -16,6 +16,7 @@ The **Business Variable** panel transforms how you interact with Grafana dashboa
 
 ## Compatibility
 
+- **Version 5.x**: Grafana 11.5 or Grafana 12
 - **Version 4.x**: Grafana 11 or Grafana 12
 - **Version 3.x**: Grafana 10.3 or Grafana 11
 - **Versions 1.x, 2.x**: Grafana 9.2 or Grafana 10
